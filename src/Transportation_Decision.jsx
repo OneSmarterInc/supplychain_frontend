@@ -13,6 +13,7 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
+import NavBar from "./Components/NavBar";
 
 const Transportation_Decision = () => {
   const regions = ["Region 1", "Region 2"];
@@ -23,6 +24,7 @@ const Transportation_Decision = () => {
   };
   return (
     <div>
+      <NavBar/>
       <div className=" bg-slate-300">
         <h1 className="text-4xl text-start px-3 py-2 underline">
           Transportation Decision

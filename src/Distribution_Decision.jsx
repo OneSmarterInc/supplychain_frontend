@@ -13,11 +13,13 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
+import NavBar from "./Components/NavBar";
 const Distribution_Decision = () => {
   const regions = ["Region 1", "Region 2", "Region 3"];
   return (
     <div>
       <div>
+        <NavBar />
         <h1 className="text-4xl text-start px-3 py-2  underline">
           Distribution Decision
         </h1>
@@ -152,7 +154,6 @@ const Distribution_Decision = () => {
                       </Td>
                     ))}
                   </Tr>
-                  
                 </Tbody>
               </Table>
             </Box>
@@ -160,7 +161,7 @@ const Distribution_Decision = () => {
           <div className="rounded-2xl h-full bg-cover overflow-hidden bg-no-repeat">
             <Forecasting_infoimg />
           </div>
-       
+
           <div className="rounded-2xl h-96 relative">
             <HStack spacing={6} mt={10} ml={10}>
               <Select width="170px" border="1px solid black">

@@ -12,6 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import InfoImg from "./Components/InfoImg";
+import NavBar from "./Components/NavBar";
 const Manufacturing_Decisions = () => {
   const [values, setValues] = useState({
     Production: { productZero: 74000, hyperware: 74000, metaware: 74000 },
@@ -35,6 +36,7 @@ const Manufacturing_Decisions = () => {
   };
   return (
     <div>
+      <NavBar />
       <div className=" bg-slate-300">
         <h1 className="text-4xl text-start px-3 py-2 underline">
           Manufacturing Decisions

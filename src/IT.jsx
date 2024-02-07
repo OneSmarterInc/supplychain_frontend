@@ -3,11 +3,13 @@ import InfoImg from "./Components/InfoImg";
 import IT_suppliers from "./Components/IT_suppliers";
 import IT_reports from "./Components/IT_reports";
 import { HStack, Select } from "@chakra-ui/react";
+import NavBar from "./Components/NavBar";
 const IT = () => {
   document.body.style.backgroundColor= "#e0e2e4"
 
   return (
     <div >
+      <NavBar/>
       <h1 className="text-4xl text-start px-3 py-2 underline">Information Technology Decision</h1>
       <div className="sm:grid grid-cols-2  gap-3 m-1">
         <div className="rounded-2xl h-full  flex flex-col justify-center">

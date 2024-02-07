@@ -13,11 +13,13 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
+import NavBar from "./Components/NavBar";
 
 const Service_Decision = () => {
   const regions = ["Region 1", "Region 2", "Region 3"];
   return (
     <div>
+      <NavBar/>
       <div>
         <h1 className="text-4xl text-start px-3 py-2  underline">
           Service Decision
