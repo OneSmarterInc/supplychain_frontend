@@ -9,7 +9,7 @@ const NavBar = () => {
           <div class="relative flex h-16 items-center justify-between">
             <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
               <div class="flex flex-shrink-0 items-center">
-                <p className="text-2xl text-white font-bold">Supply Chain</p>
+                <p className="text-2xl text-white font-bold">Supplychain Simulation</p>
               </div>
               <div class="hidden sm:ml-6 sm:block">
                 <div class="flex space-x-4">

@@ -7,6 +7,9 @@ import Manufacturing_Decisions from "./Manufacturing_Decisions";
 import Procurement_Decisions from "./Procurement_Decisions";
 import Service_Decision from "./Service_Decision";
 import Transportation_Decision from "./Transportation_Decision";
+import Admin from "./Components/Admin";
+import Signin from "./Components/Signin";
+import Signup from "./Components/Signup";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 function App() {
   return (
@@ -107,6 +110,39 @@ function App() {
             element={
               <div className="it  h-screen">
                 <IT />{" "}
+              </div>
+            }
+          />
+        </Routes>
+        <Routes>
+          <Route
+            exact
+            path="/admin"
+            element={
+              <div className="admin  h-screen">
+                <Admin />{" "}
+              </div>
+            }
+          />
+        </Routes>
+        <Routes>
+          <Route
+            exact
+            path="/signin"
+            element={
+              <div className="signin  h-screen">
+                <Signin />{" "}
+              </div>
+            }
+          />
+        </Routes>
+        <Routes>
+          <Route
+            exact
+            path="/signup"
+            element={
+              <div className="signup  h-screen">
+                <Signup />{" "}
               </div>
             }
           />
