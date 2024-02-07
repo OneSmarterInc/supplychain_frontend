@@ -20,8 +20,8 @@ const Forecasting_sales = () => {
 
   return (
     <>
-    <Text><strong>Sales Volume Forecast</strong></Text>
-    <Table variant="striped" colorScheme="#C9D5DD" borderWidth="1px">
+    <Text className='p-5 py-3 text-2xl'><strong>Sales Volume Forecast</strong></Text>
+    <Table variant="striped" width={"650px"} colorScheme="#C9D5DD" borderWidth="0.5px" className='mx-3 bg-slate-200'>
         
       <Thead fontWeight='bold'>
         <Tr>

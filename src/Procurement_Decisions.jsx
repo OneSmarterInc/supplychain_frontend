@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import RawMaterial from "./Components/RawMaterial";
 import SupplyChainTable from "./Components/SupplyChainTable";
 import InfoImg from "./Components/InfoImg";
 import DataChart from "./Components/DataChart";
 
-const Home = () => {
-  const seriesData = [1,2,3,4,5,6,7,8]
+const Procurement_Decisions = () => {
+  let [newData, setNewData] = useState({})
+
   document.body.style.backgroundColor= "#e0e2e4"
   return (
     <div>
-      <h1 className="text-4xl text-center py-1 underline">Procurement Decision</h1>
+      <h1 className="text-4xl text-start px-3 py-2 underline">Procurement Decision</h1>
       <div className="sm:grid grid-cols-2  gap-3 m-1">
         <div className="rounded-2xl h-full  flex flex-col justify-center">
           <RawMaterial />
@@ -18,13 +19,13 @@ const Home = () => {
           <InfoImg />
         </div>
         <div className="rounded-2xl h-96  flex flex-col justify-center">
-          <SupplyChainTable />
+          <SupplyChainTable setNewData={setNewData}/>
         </div>
-        <div className="rounded-2xl h-96 "> <DataChart series={seriesData}/></div>
+        <div className="rounded-2xl h-96 "> 
+        <DataChart newData={newData}/></div>
       </div>
-      
     </div>
   );
 };
 
-export default Home;
+export default Procurement_Decisions;

@@ -5,15 +5,15 @@ import supplychainimg from "../assets/supplychainimg2.webp";
 const Forecasting_infoimg = () => {
   return (
     <div>
-      <div className="">
+      <div className="relative">
         <div
-          className=" h-64 bg-img bg-cover overflow-hidden bg-no-repeat "
+          className=" h-64 bg-img bg-cover overflow-hidden bg-no-repeat  "
           style={{
             backgroundImage: `url(${supplychainimg}) `,
             width: "900px",
           }}
         />
-        <div className="absolute top-12 right-0 flex w-56 flex-col py-2 justify-center">
+        <div className="absolute inset-y-0 right-0 flex w-56 flex-col py-2 justify-center z-20">
           <div className="bg-slate-300 h-20 m-1 rounded">
             <h2 className="text-lg p-2 pb-0 ">Aug-2023(8th Quarter)</h2>
             <h2 className="text-lg p-2 pt-0 ">Onesmarter Inc.</h2>

@@ -6,11 +6,11 @@ const Demand_hype_ch1 = () => {
 
   return (
       <Box>
-        <Text>
+        <Text className='p-5 py-3 pb-0 text-2xl'>
           <strong>Hyperware Channel 1</strong>
         </Text>
         <br />
-        <Table variant="simple">
+        <Table variant="simple" className='bg-slate-300 mx-3' width={"650px"}>
           <Thead>
             <Tr>
               <Th> </Th>

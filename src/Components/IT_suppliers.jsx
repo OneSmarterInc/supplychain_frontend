@@ -6,22 +6,22 @@ const IT_suppliers = () => {
 
   return (
     <Box>
-      <Text>
+      <Text className='p-5 py-1 text-2xl'>
         <strong>IT Synchronization with Suppliers?</strong>
       </Text>
       <br />
-      <Box display="grid" gridTemplateColumns="repeat(auto-fill, minmax(150px, 1fr))" gap={4}>
+      <div className='grid grid-cols-3 gap-3 pb-3'>
         {options.map((option) => (
-          <Box key={option}>
-            <Text>{option}</Text>
-            <Select placeholder="Select" fontSize={15} width="100%" border="1px solid black">
+          <Box key={option} className='flex '>
+            <Text className='pl-6 py-2 text-lg'>{option}</Text>
+            <Select placeholder="Select" fontSize={15} width="73%" border="1px solid black" className='ml-5'>
               <option value="supplier1">Supplier 1</option>
               <option value="supplier2">Supplier 2</option>
               <option value="supplier3">Supplier 3</option>
             </Select>
           </Box>
         ))}
-      </Box>
+      </div>
     </Box>
   );
 };
