@@ -11,8 +11,8 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
-import InfoImg from "./Components/InfoImg";
-import NavBar from "./Components/NavBar";
+import InfoImg from "../Components/InfoImg";
+import NavBar from "../Components/NavBar";
 const Manufacturing_Decisions = () => {
   const [values, setValues] = useState({
     Production: { productZero: 74000, hyperware: 74000, metaware: 74000 },

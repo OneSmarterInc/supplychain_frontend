@@ -1,9 +1,9 @@
 import React from "react";
-import Forecasting_infoimg from "./Components/Forecasting_infoimg";
-import Forecasting_sales from "./Components/Forecasting_sales";
-import Forecasting_sales2 from "./Components/Forecasting_sales2";
+import Forecasting_infoimg from "../Components/Forecasting_infoimg";
+import Forecasting_sales from "../Components/Forecasting_sales";
+import Forecasting_sales2 from "../Components/Forecasting_sales2";
 import { HStack, Select } from "@chakra-ui/react";
-import NavBar from "./Components/NavBar";
+import NavBar from "../Components/NavBar";
 const Forecast = () => {
   document.body.style.backgroundColor = "#e0e2e4";
 

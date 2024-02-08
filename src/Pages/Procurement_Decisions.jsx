@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import RawMaterial from "./Components/RawMaterial";
-import SupplyChainTable from "./Components/SupplyChainTable";
-import InfoImg from "./Components/InfoImg";
-import DataChart from "./Components/DataChart";
-import NavBar from "./Components/NavBar";
+import RawMaterial from "../Components/RawMaterial";
+import SupplyChainTable from "../Components/SupplyChainTable";
+import InfoImg from "../Components/InfoImg";
+import DataChart from "../Components/DataChart";
+import NavBar from "../Components/NavBar";
 
 const Procurement_Decisions = () => {
   let [newData, setNewData] = useState({});

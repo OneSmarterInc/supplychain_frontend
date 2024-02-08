@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Flex,
   Heading,
@@ -167,7 +167,7 @@ const Signup = () => {
                     _hover={{ color: "white" }}
                     onClick={(e) => signupHandler(e)}
                   >
-                    Sign up
+                    <Link to="/usersidelive">Sign Up</Link>
                   </Button>
                 </Stack>
               </form>

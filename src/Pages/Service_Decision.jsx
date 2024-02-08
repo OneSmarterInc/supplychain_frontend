@@ -1,5 +1,5 @@
 import React from "react";
-import Forecasting_infoimg from "./Components/Forecasting_infoimg";
+import Forecasting_infoimg from "../Components/Forecasting_infoimg";
 import {
   HStack,
   Select,
@@ -10,10 +10,9 @@ import {
   Tr,
   Th,
   Td,
-  Input,
   Text,
 } from "@chakra-ui/react";
-import NavBar from "./Components/NavBar";
+import NavBar from "../Components/NavBar";
 
 const Service_Decision = () => {
   const regions = ["Region 1", "Region 2", "Region 3"];

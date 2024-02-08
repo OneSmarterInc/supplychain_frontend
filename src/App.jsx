@@ -1,16 +1,20 @@
-import Demand_generation from "./Demand_generation";
-import Distribution_Decision from "./Distribution_Decision";
-import Forecast from "./Forecast";
-import Home from "./Home";
-import IT from "./IT";
-import Manufacturing_Decisions from "./Manufacturing_Decisions";
-import Procurement_Decisions from "./Procurement_Decisions";
-import Service_Decision from "./Service_Decision";
-import Transportation_Decision from "./Transportation_Decision";
+import Demand_generation from "./Pages/Demand_generation";
+import Distribution_Decision from "./Pages/Distribution_Decision";
+import Forecast from "./Pages/Forecast";
+import Home from "./Pages/Home";
+import IT from "./Pages/IT";
+import Manufacturing_Decisions from "./Pages/Manufacturing_Decisions";
+import Procurement_Decisions from "./Pages/Procurement_Decisions";
+import Service_Decision from "./Pages/Service_Decision";
+import Transportation_Decision from "./Pages/Transportation_Decision";
 import Admin from "./Components/Admin";
 import Signin from "./Components/Signin";
 import Signup from "./Components/Signup";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AdminSideLive from "./Pages/AdminSideLive";
+import AdminSideEnded from "./Pages/AdminSideEnded";
+import UserSideLive from "./Pages/UserSideLive";
+import UserSideEnded from "./Pages/UserSideEnded";
 function App() {
   return (
     <>
@@ -143,6 +147,50 @@ function App() {
             element={
               <div className="signup  h-screen">
                 <Signup />{" "}
+              </div>
+            }
+          />
+        </Routes>
+        <Routes>
+          <Route
+            exact
+            path="/adminsidelive"
+            element={
+              <div className="signup  h-screen">
+                <AdminSideLive />
+              </div>
+            }
+          />
+        </Routes>
+        <Routes>
+          <Route
+            exact
+            path="/adminsideended"
+            element={
+              <div className="signup  h-screen">
+                <AdminSideEnded />
+              </div>
+            }
+          />
+        </Routes>
+        <Routes>
+          <Route
+            exact
+            path="/usersidelive"
+            element={
+              <div className="signup  h-screen">
+               <UserSideLive/>
+              </div>
+            }
+          />
+        </Routes>
+        <Routes>
+          <Route
+            exact
+            path="/usersideended"
+            element={
+              <div className="signup  h-screen">
+               <UserSideEnded/>
               </div>
             }
           />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Flex,
   Heading,
@@ -163,6 +163,7 @@ const Signin = () => {
                       <Link>forgot password?</Link>
                     </FormHelperText>
                   </FormControl>
+
                   <Button
                     borderRadius={0}
                     type="submit"
@@ -173,7 +174,7 @@ const Signin = () => {
                     onClick={loginHandler}
                     _hover={{ color: "white" }}
                   >
-                    Login
+                    <Link to="/usersidelive">Login</Link>
                   </Button>
                 </Stack>
               </form>

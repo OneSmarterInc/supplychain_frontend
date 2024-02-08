@@ -1,30 +1,26 @@
 import React from "react";
-import Forecasting_infoimg from "./Components/Forecasting_infoimg";
-import Demand_hype_ch1 from "./Components/Demand_hype_ch1";
-import Demand_hype_ch2 from "./Components/Demand_hype_ch2";
-// import Demand_meta_ch1 from "./Components/Demand_meta_ch1";
-// import Demand_meta_ch2 from "./Components/Demand_meta_ch2";
+import InfoImg from "../Components/InfoImg";
+import IT_suppliers from "../Components/IT_suppliers";
+import IT_reports from "../Components/IT_reports";
 import { HStack, Select } from "@chakra-ui/react";
-import NavBar from "./Components/NavBar";
-
-const Demand_generation = () => {
-  document.body.style.backgroundColor = "#e0e2e4";
+import NavBar from "../Components/NavBar";
+const IT = () => {
+  document.body.style.backgroundColor= "#e0e2e4"
 
   return (
-    <div>
-      <NavBar />
-      <h1 className="text-4xl text-start px-3 py-2 underline">
-        Demand Generation Decision
-      </h1>
-      <div className="grid grid-cols-2 grid-flow-col gap-3  m-1">
-        <div className="row-span-2 rounded-2xl h-full  flex flex-col justify-center">
-          <Demand_hype_ch1 />
-          <Demand_hype_ch2 />
+    <div >
+      <NavBar/>
+      <h1 className="text-4xl text-start px-3 py-2 underline">Information Technology Decision</h1>
+      <div className="sm:grid grid-cols-2  gap-3 m-1">
+        <div className="rounded-2xl h-full  flex flex-col justify-center">
+          <IT_suppliers />
         </div>
         <div className="rounded-2xl h-full bg-cover overflow-hidden bg-no-repeat">
-          <Forecasting_infoimg />
+          <InfoImg/>
         </div>
-
+        <div className="rounded-2xl h-96  flex flex-col justify-center">
+          <IT_reports />
+        </div>
         <div className="rounded-2xl h-96 relative">
           <HStack spacing={6} mt={10} ml={10}>
             <Select width="170px" border="1px solid black">
@@ -52,8 +48,9 @@ const Demand_generation = () => {
           </div>
         </div>
       </div>
+      
     </div>
   );
 };
 
-export default Demand_generation;
+export default IT;
