@@ -15,17 +15,17 @@ const Procurement_Decisions = () => {
       <h1 className="text-4xl text-start px-3 py-2 underline">
         Procurement Decision
       </h1>
-      <div className="sm:grid grid-cols-2  gap-3 m-1">
-        <div className="rounded-2xl h-full  flex flex-col justify-center">
+      <div className="sm:grid grid-cols-2 gap-3 m-1">
+        <div className="rounded-lg -2xl h-full  flex flex-col justify-center">
           <RawMaterial />
         </div>
-        <div className="rounded-2xl h-full bg-cover overflow-hidden bg-no-repeat">
+        <div className="rounded-lg -2xl h-full bg-cover overflow-hidden bg-no-repeat">
           <InfoImg />
         </div>
-        <div className="rounded-2xl h-96  flex flex-col justify-center">
+        <div className="rounded-lg -2xl h-96  flex flex-col justify-center">
           <SupplyChainTable setNewData={setNewData} />
         </div>
-        <div className="rounded-2xl h-96 ">
+        <div className="rounded-lg -2xl h-96 ">
           <DataChart newData={newData} />
         </div>
       </div>

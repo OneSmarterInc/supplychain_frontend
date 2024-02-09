@@ -8,7 +8,6 @@ const Home = () => {
   return (
     <>
       <NavBar />
-
       <div style={{ display: "flex", height: "100%" }}>
         {/* Left side with image */}
         <div
