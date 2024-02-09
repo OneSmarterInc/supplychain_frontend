@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Flex,
   Heading,
@@ -171,7 +171,7 @@ const Admin = () => {
                     width="full"
                     onClick={loginHandler}
                   >
-                    <Link to="/adminsidelive">Login</Link>
+                    Login
                   </Button>
                 </Stack>
               </form>

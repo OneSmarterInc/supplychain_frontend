@@ -174,7 +174,7 @@ const Signin = () => {
                     onClick={loginHandler}
                     _hover={{ color: "white" }}
                   >
-                    <Link to="/usersidelive">Login</Link>
+                   Login
                   </Button>
                 </Stack>
               </form>
