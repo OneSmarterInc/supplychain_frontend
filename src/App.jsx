@@ -11,6 +11,7 @@ import Admin from "./Components/Admin";
 import Signin from "./Components/Signin";
 import Signup from "./Components/Signup";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Create_sim from "./Create_sim";
 function App() {
   return (
     <>
@@ -147,9 +148,25 @@ function App() {
             }
           />
         </Routes>
+        <Routes>
+          <Route
+            exact
+            path="/createsim"
+            element={
+              <div className="createsim  h-screen">
+                <Create_sim />{" "}
+              </div>
+            }
+          />
+        </Routes>
+
+        
       </Router>
     </>
   );
 }
 
 export default App;
+
+
+
