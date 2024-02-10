@@ -11,10 +11,14 @@ import Admin from "./Components/Admin";
 import Signin from "./Components/Signin";
 import Signup from "./Components/Signup";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Create_sim from "./Create_sim";
+
 import AdminSideLive from "./Pages/AdminSideLive";
 import AdminSideEnded from "./Pages/AdminSideEnded";
 import UserSideLive from "./Pages/UserSideLive";
 import UserSideEnded from "./Pages/UserSideEnded";
+
 function App() {
   return (
     <>
@@ -191,13 +195,32 @@ function App() {
             element={
               <div className="signup  h-screen">
                <UserSideEnded/>
+
               </div>
             }
           />
         </Routes>
+
+ <Routes>
+          <Route
+            exact
+
+            path="/createsim"
+            element={
+              <div className="createsim  h-screen">
+                <Create_sim />{" "}
+          </div>
+            }
+          />
+        </Routes>
+        
+
       </Router>
     </>
   );
 }
 
 export default App;
+
+
+

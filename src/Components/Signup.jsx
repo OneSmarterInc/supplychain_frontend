@@ -1,4 +1,6 @@
-import { useState } from "react";
+
+import { useContext, useEffect, useState } from "react";
+
 import {
   Flex,
   Heading,
@@ -19,6 +21,7 @@ import {
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import MyContext from "./ContextApi/MyContext";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
@@ -28,6 +31,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { api } = useContext(MyContext);
 
   const toast = useToast();
 
@@ -56,7 +60,7 @@ const Signup = () => {
           colorScheme: "red",
         });
       } else {
-        const response = await axios.post("url", data);
+        const response = await axios.post(`${api}/users/createuser/`, data);
 
         if (response.status === 201) {
           console.log("Signup successful");

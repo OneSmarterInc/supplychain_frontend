@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+
 import {
   Flex,
   Heading,
@@ -19,6 +20,7 @@ import {
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import MyContext from "./ContextApi/MyContext";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
@@ -27,6 +29,10 @@ const Admin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const toast = useToast();
+
+  const { api } = useContext(MyContext);
+  
+
 
   const loginHandler = async (e) => {
     e.preventDefault();
