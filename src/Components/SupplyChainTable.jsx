@@ -36,16 +36,16 @@ const SupplyChainTable = (props) => {
       units: "10000",
     },
   ]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const itemsPerPage = 3;
+  // const totalPages = Math.ceil(data.length / itemsPerPage);
+  // const indexOfLastItem = currentPage * itemsPerPage;
+  // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  // const paginate = (pageNumber) => {
+  //   setCurrentPage(pageNumber);
+  // };
 
   //new entry on change
   const onchange = (e) => {
@@ -66,9 +66,9 @@ const SupplyChainTable = (props) => {
     newDataToPush.push(newEntry);
     setData(newDataToPush);
 
-    const lastPage = Math.ceil(newDataToPush.length / itemsPerPage);
-    setCurrentPage(lastPage);
-    toggleModal();
+    // const lastPage = Math.ceil(newDataToPush.length / itemsPerPage);
+    // setCurrentPage(lastPage);
+    // toggleModal();
   };
 
   //supplierOptions
@@ -87,89 +87,94 @@ const SupplyChainTable = (props) => {
         <h2 className="text-center text-3xl py-2  ">
           Sub Assembly Components Plant & DC-1
         </h2>
-        <table className="table-auto w-full border-separate border-spacing-2">
-          <thead>
-            <tr className="bg-slate-300  ">
-              <th className="text-center py-3 text-2xl ">Name</th>
-              <th className="text-center py-3 text-2xl ">Supplier</th>
-              <th className="text-center py-3 text-2xl ">Medium</th>
-              <th className="text-center py-3 text-2xl ">Demands</th>
-              <th className="text-center py-3 text-2xl w-28">Units</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {currentItems.map((entry, index) => (
-              <tr className="bg-slate-300 " key={index}>
-                <td className="text-center w-28  text-xl">
-                  {/* {indexOfFirstItem + index + 1}  */}
-                  {entry.name}
-                </td>
-                <td className="text-center py-2 text-xl ">
-                  {/* {entry.supplier} */}
-                  <p className="flex justify-center">
-                    <select
-                      className=" p-2 pl-3 pr-2 w-32 mx-2   bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      name="supplier"
-                      onChange={onchange}
-                      value={newData.supplier}
-                    >
-                      <option value="supplier A">
-                        {supplierOptions[0].value}
-                      </option>
-                      <option value="supplier B">
-                        {supplierOptions[1].value}
-                      </option>
-                      <option value="supplier C">
-                        {supplierOptions[2].value}
-                      </option>
-                    </select>
-                  </p>
-                </td>
-                <td className="text-center  text-xl">
-                  {/* {entry.medium} */}
-                  <p className="flex justify-center">
-                    <select
-                      className=" p-2 pl-3 pr-2 mx-2  bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      name="medium"
-                      onChange={onchange}
-                      value={newData.medium}
-                    >
-                      <option value="Air">{mediumOptions[0].value}</option>
-                      <option value="Surface">{mediumOptions[1].value}</option>
-                    </select>
-                  </p>
-                </td>
-                <td className="text-center  text-xl">{entry.demand}</td>
-                <td className="text-center text-xl">
-                  {/* {entry.units} */}
-                  <input
-                    id="base-input"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-28 m-2   p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
-                    name="units"
-                    onChange={onchange}
-                    value={newData.units}
-                    required
-                  />
-                </td>
+        <div className="h-64 overflow-scroll">
+          <table className="table-auto w-full border-separate border-spacing-2 ">
+            <thead>
+              <tr className="bg-slate-300  ">
+                <th className="text-center py-3 text-2xl ">Name</th>
+                <th className="text-center py-3 text-2xl ">Supplier</th>
+                <th className="text-center py-3 text-2xl ">Medium</th>
+                <th className="text-center py-3 text-2xl ">Demands</th>
+                <th className="text-center py-3 text-2xl w-28">Units</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody className="h-40 overflow-scroll">
+              {data.map((entry, index) => (
+                <tr className="bg-slate-300 " key={index}>
+                  <td className="text-center w-28  text-xl">
+                    {/* {indexOfFirstItem + index + 1}  */}
+                    {entry.name}
+                  </td>
+                  <td className="text-center py-2 text-xl ">
+                    {/* {entry.supplier} */}
+                    <p className="flex justify-center">
+                      <select
+                        className=" p-2 pl-3 pr-2 w-32 mx-2   bg-white border border-gray-300 rounded-lg -md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        name="supplier"
+                        onChange={onchange}
+                        value={newData.supplier}
+                      >
+                        <option value="supplier A">
+                          {supplierOptions[0].value}
+                        </option>
+                        <option value="supplier B">
+                          {supplierOptions[1].value}
+                        </option>
+                        <option value="supplier C">
+                          {supplierOptions[2].value}
+                        </option>
+                      </select>
+                    </p>
+                  </td>
+                  <td className="text-center  text-xl">
+                    {/* {entry.medium} */}
+                    <p className="flex justify-center">
+                      <select
+                        className=" p-2 pl-3 pr-2 mx-2  bg-white border border-gray-300 rounded-lg -md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        name="medium"
+                        onChange={onchange}
+                        value={newData.medium}
+                      >
+                        <option value="Air">{mediumOptions[0].value}</option>
+                        <option value="Surface">
+                          {mediumOptions[1].value}
+                        </option>
+                      </select>
+                    </p>
+                  </td>
+                  <td className="text-center  text-xl">{entry.demand}</td>
+                  <td className="text-center text-xl">
+                    {/* {entry.units} */}
+                    <input
+                      id="base-input"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500 block w-28 m-2   p-2 text-center"
+                      type="text"
+                      name="units"
+                      onChange={onchange}
+                      placeholder="Enter Units"
+                      value={newData.units}
+                      required
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       {/* Paginate */}
       <div className=" h-16 flex justify-end items-center">
         <div className="pagination">
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <button
-              key={index}
-              className="h-10 bg-slate-400 rounded-lg p-2 text-black text-center text-xl cursor-pointer    place-items-start hover:cursor-pointer active:bg-violet-700 focus:bg-violet-500 active:outline-none hover:ring hover:ring-violet-400 mx-2"
-              onClick={() => paginate(index + 1)}
-            >
-              DC {index + 1}
-            </button>
-          ))}
+          {/* {Array.from({ length: totalPages }).map((_, index) => ( */}
+          <button
+            // key={index}
+            className="h-10  bg-gray-700 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5"
+            // onClick={() => paginate(index + 1)}
+          >
+            DC 1{/* {index + 1} */}
+          </button>
+          {/* ))} */}
         </div>
 
         {/* Add New Product */}
@@ -182,7 +187,7 @@ const SupplyChainTable = (props) => {
               onClick={toggleModal}
               data-modal-target="small-modal"
               data-modal-toggle="small-modal"
-              className="h-10 bg-slate-400 rounded-lg p-2 text-black text-center text-xl cursor-pointer    place-items-start hover:cursor-pointer active:bg-violet-700 focus:bg-violet-500 active:outline-none hover:ring hover:ring-violet-400 mx-2 p-auto"
+              className="h-10  bg-gray-700 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5 mx-2"
               type="button"
             >
               Add New
@@ -198,16 +203,16 @@ const SupplyChainTable = (props) => {
               >
                 <div className="relative p-4 w-96 max-w-2xl max-h-full">
                   {/* Modal content */}
-                  <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                  <div className="relative bg-white rounded-lg -lg shadow dark:bg-gray-700">
                     {/* Modal header */}
-                    <div className="flex items-center justify-between p-2 md:p-2 border-b rounded-t dark:border-gray-600">
+                    <div className="flex items-center justify-between p-2 md:p-2 border-b rounded-lg -t dark:border-gray-600">
                       <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                         Add a New Entry
                       </h3>
                       <button
                         onClick={toggleModal}
                         type="button"
-                        className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg -lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                         data-modal-hide="default-modal"
                       >
                         <span className="sr-only">Close modal</span>
@@ -226,9 +231,10 @@ const SupplyChainTable = (props) => {
 
                           <input
                             id="base-input"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[235px] p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500 block  w-[235px] p-2 text-center"
                             type="text"
                             name="name"
+                            placeholder="Enter name"
                             onChange={onchange}
                             value={newData.name}
                           />
@@ -242,7 +248,7 @@ const SupplyChainTable = (props) => {
                           </label>
                           <input
                             id="base-input"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             type="text"
                             name="supplier"
                             placeholder="select one"
@@ -250,7 +256,7 @@ const SupplyChainTable = (props) => {
                             readOnly
                           />
                           <select
-                            className="block w-full p-2 pl-3 pr-2 mx-2  bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="block w-full p-2 pl-3 pr-2 mx-2  bg-white border border-gray-300 rounded-lg -md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             name="supplier"
                             onChange={onchange}
                             value={newData.supplier}
@@ -275,7 +281,7 @@ const SupplyChainTable = (props) => {
                           </label>
                           <input
                             id="base-input"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             type="text"
                             placeholder="select one"
                             name="medium"
@@ -283,7 +289,7 @@ const SupplyChainTable = (props) => {
                             readOnly
                           />
                           <select
-                            className="block w-full p-2 pl-3 pr-2 mx-2  bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="block w-full p-2 pl-3 pr-2 mx-2  bg-white border border-gray-300 rounded-lg -md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             name="medium"
                             onChange={onchange}
                             value={newData.medium}
@@ -314,9 +320,10 @@ const SupplyChainTable = (props) => {
                           </label>
                           <input
                             id="base-input"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  w-[235px] p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500 block  w-[235px] p-2 text-center"
                             type="text"
                             name="units"
+                            placeholder="Enter Units"
                             onChange={onchange}
                             value={newData.units}
                             required
@@ -325,17 +332,17 @@ const SupplyChainTable = (props) => {
                       </div>
                     </form>
                     {/* Modal footer */}
-                    <div className="flex justify-end items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                    <div className="flex justify-end items-center p-4 md:p-5 border-t border-gray-200 rounded-lg -b dark:border-gray-600">
                       <button
                         onClick={onAddEntry}
-                        className=" h-10 bg-slate-400 rounded-lg p-2 text-black text-center text-xl cursor-pointer    place-items-start hover:cursor-pointer active:bg-violet-700 focus:bg-violet-500 active:outline-none hover:ring hover:ring-violet-400 mx-2 p-auto w-24 "
+                        className=" h-10  bg-gray-700 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5 w-24"
                       >
                         Add
                       </button>
                       <button
                         onClick={toggleModal}
                         type="button"
-                        className="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                        className="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg -lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                         data-modal-hide="default-modal"
                       >
                         Decline

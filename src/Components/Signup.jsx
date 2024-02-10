@@ -1,4 +1,6 @@
+
 import { useContext, useEffect, useState } from "react";
+
 import {
   Flex,
   Heading,
@@ -169,7 +171,7 @@ const Signup = () => {
                     _hover={{ color: "white" }}
                     onClick={(e) => signupHandler(e)}
                   >
-                    Sign up
+                  Sign Up
                   </Button>
                 </Stack>
               </form>
