@@ -1,22 +1,35 @@
 import React, { useState } from "react";
 import Chart from "react-apexcharts";
-import {
-  HStack,
-  Select,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Input,
-  Text,
-} from "@chakra-ui/react";
-const DataChart = ({ newData }) => {
+import { HStack, Select } from "@chakra-ui/react";
+import ProcurementPreview from "./Previews/ProcurementPreview";
+import ManufacturingPreview from "./Previews/ManufacturingPreview";
+import { useLocation } from "react-router-dom";
+import DistributionPreview from "./Previews/DistributionPreview";
+import ServicePreview from "./Previews/ServicePreview";
+import TransportationPreview from "./Previews/TransportationPreview";
+import ForecastPreview from "./Previews/ForecastPreview";
+const DataChart = ({
+  newsac_units,
+  submitProcurement,
+  submitManufacturing,
+  submitDistribution,
+  ManufacturingDataPreview,
+  DistributionDataPreview,
+  serviceDataPreview,
+  submitService,
+  submitForecast,
+  ForecastHyperware,
+  ForecastMetaware,
+  submitTransportation,
+  Dc1Data,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation();
+  const path = location.pathname;
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+    // console.log("newsac_units", newsac_units[0].name);
   };
   // eslint-disable-next-line
   const [options, setOptions] = useState({
@@ -47,6 +60,27 @@ const DataChart = ({ newData }) => {
       data: [50, 60, 70, 80, 70, 60, 55, 65, 80, 85, 90, 100],
     },
   ]);
+
+  const onSubmit = () => {
+    if (path === "/procurement") {
+      submitProcurement();
+    }
+    if (path === "/manufacturing") {
+      submitManufacturing();
+    }
+    if (path === "/distribution") {
+      submitDistribution();
+    }
+    if (path === "/service") {
+      submitService();
+    }
+    if (path === "/forecast") {
+      submitForecast();
+    }
+    if (path === "/transportation") {
+      submitTransportation();
+    }
+  };
   return (
     <div className="app">
       <div className="row mx-5">
@@ -60,7 +94,6 @@ const DataChart = ({ newData }) => {
 
             {/* Modal start */}
             <div className="modal-start flex flex-col">
-              {/* Modal toggle */}
               <button
                 onClick={toggleModal}
                 data-modal-target="small-modal"
@@ -70,94 +103,56 @@ const DataChart = ({ newData }) => {
               >
                 Preview
               </button>
-
               {/* Main modal */}
               {isModalOpen && (
-                <div
-                  id="default-modal"
-                  tabIndex="-1"
-                  aria-hidden="true"
-                  className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen"
-                >
-                  <div className="relative p-4 w-96 max-w-2xl max-h-full">
-                    {/* Modal content */}
-                    <div className="relative bg-white rounded-lg -lg shadow dark:bg-gray-700">
-                      {/* Modal header */}
-                      <div className="flex items-center justify-between p-2 border-b rounded-lg -t dark:border-gray-600">
-                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                          Details
-                        </h3>
-                        <button
-                          onClick={toggleModal}
-                          type="button"
-                          className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg -lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                          data-modal-hide="default-modal"
-                        >
-                          <span className="sr-only">Close modal</span>
-                        </button>
-                      </div>
-                      {/* Modal body */}
-                      <div className="p-4 py-2 md:p-5 md:py-2 space-y-3">
-                        <div className="text-base text-start leading-relaxed text-gray-500 dark:text-gray-400">
-                          <p className="text-xl py-2">
-                            <span className="underline font-bold pr-10">
-                              User:
-                            </span>{" "}
-                            <span>{newData.name}</span>
-                          </p>
-                          <p className="text-xl py-2">
-                            <span className="underline font-bold pr-1">
-                              Supplier:
-                            </span>{" "}
-                            <span>{newData.supplier}</span>
-                          </p>
-                          <p className="text-xl py-2">
-                            <span className="underline font-bold pr-2 ">
-                              Medium:
-                            </span>{" "}
-                            <span>{newData.medium}</span>
-                          </p>
-                          <p className="text-xl py-2">
-                            <span className="underline font-bold pr-1">
-                              Demand:
-                            </span>{" "}
-                            <span>15000</span>
-                          </p>
-                          <p className="text-xl py-2">
-                            <span className="underline font-bold pr-8">
-                              Units:
-                            </span>{" "}
-                            <span>{newData.units}</span>
-                          </p>
-                        </div>
-                      </div>
-                      {/* Modal footer */}
-                      <div className="flex justify-end items-center p-4 md:p-3 border-t border-gray-200 rounded-lg -b dark:border-gray-600">
-                        <button
-                          onClick={toggleModal}
-                          type="button"
-                          className="h-10 bg-slate-400 rounded-lg -lg p-2 text-black text-center text-xl cursor-pointer  ease-in duration-150  place-items-start hover:cursor-pointer active:bg-violet-700 focus:bg-violet-500 active:outline-none hover:ring hover:ring-violet-400 mx-2 p-auto"
-                          data-modal-hide="default-modal"
-                        >
-                          All Fine
-                        </button>
-                        <button
-                          onClick={toggleModal}
-                          type="button"
-                          className="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg -lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                          data-modal-hide="default-modal"
-                        >
-                          Decline
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <>
+                  {" "}
+                  {path === "/procurement" && (
+                    <ProcurementPreview
+                      toggleModal={toggleModal}
+                      newsac_units={newsac_units}
+                    />
+                  )}
+                  {path === "/manufacturing" && (
+                    <ManufacturingPreview
+                      toggleModal={toggleModal}
+                      ManufacturingDataPreview={ManufacturingDataPreview}
+                    />
+                  )}
+                  {path === "/distribution" && (
+                    <DistributionPreview
+                      toggleModal={toggleModal}
+                      DistributionDataPreview={DistributionDataPreview}
+                    />
+                  )}
+                  {path === "/service" && (
+                    <ServicePreview
+                      toggleModal={toggleModal}
+                      serviceDataPreview={serviceDataPreview}
+                    />
+                  )}
+                  {path === "/forecast" && (
+                    <ForecastPreview
+                      toggleModal={toggleModal}
+                      ForecastHyperware={ForecastHyperware}
+                      ForecastMetaware={ForecastMetaware}
+                    />
+                  )}
+                  {path === "/transportation" && (
+                    <TransportationPreview
+                      toggleModal={toggleModal}
+                      Dc1Data={Dc1Data}
+                    />
+                  )}
+                </>
               )}
 
-              <div className="h-10 w-28 bg-green-700 text-white text-center rounded-lg  p-1.5 hover:bg-green-800 m-2 text-xl cursor-pointer">
+              <button
+                onClick={onSubmit}
+                className="h-10 w-28 bg-green-700 text-white text-center rounded-lg  p-1.5 hover:bg-green-800 m-2 text-xl cursor-pointer"
+              >
                 Submit
-              </div>
+              </button>
             </div>
             {/* Modal ends */}
           </div>

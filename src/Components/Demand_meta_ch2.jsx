@@ -9,7 +9,7 @@ import {
   Td,
   Select,
   Input,
-  Text
+  Text,
 } from "@chakra-ui/react";
 
 const Demand_meta_ch2 = () => {
@@ -17,11 +17,11 @@ const Demand_meta_ch2 = () => {
 
   return (
     <Box>
-      <Text>
+      <Text className="p-5 py-3 pb-0 text-2xl">
         <strong>Metaware Channel 2</strong>
       </Text>
       <br />
-      <Table variant="simple">
+      <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>
         <Thead>
           <Tr>
             <Th> </Th>

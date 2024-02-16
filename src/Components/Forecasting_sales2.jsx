@@ -1,23 +1,26 @@
 import React, { useState } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, Input } from "@chakra-ui/react";
 
-const Forecasting_sales2 = () => {
-  const [values, setValues] = useState({
+const Forecasting_sales2 = ({ setForecastMetawaretopass }) => {
+  const [ForecastMetaware, setForecastMetaware] = useState({
     channel1: { region1: 74000, region2: 74000, region3: 74000 },
-    channel2: { region1: 74000, region2: 74000, region3: 74000 },
+    channel2: { region1: 74000, region2: 74000, region3: 7000 },
     // Add more channels and regions as needed
   });
 
   const handleChange = (channel, region, newValue) => {
-    setValues((prevValues) => ({
-      ...prevValues,
+    setForecastMetaware((prevForecastMetaware) => ({
+      ...prevForecastMetaware,
       [channel]: {
-        ...prevValues[channel],
+        ...prevForecastMetaware[channel],
         [region]: newValue,
       },
     }));
   };
 
+  setForecastMetawaretopass(ForecastMetaware);
+
+  // console.log("valuesch2", ForecastMetaware);
   return (
     <div>
       <Table
@@ -36,7 +39,7 @@ const Forecasting_sales2 = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {Object.keys(values).map((channel) => (
+          {Object.keys(ForecastMetaware).map((channel) => (
             <Tr key={channel}>
               <Td>
                 <strong>{channel}</strong>
@@ -44,7 +47,7 @@ const Forecasting_sales2 = () => {
               <Td>
                 <Input
                   type="number"
-                  value={values[channel].region1}
+                  value={ForecastMetaware[channel].region1}
                   onChange={(e) =>
                     handleChange(channel, "region1", e.target.value)
                   }
@@ -54,7 +57,7 @@ const Forecasting_sales2 = () => {
               <Td>
                 <Input
                   type="number"
-                  value={values[channel].region2}
+                  value={ForecastMetaware[channel].region2}
                   onChange={(e) =>
                     handleChange(channel, "region2", e.target.value)
                   }
@@ -64,7 +67,7 @@ const Forecasting_sales2 = () => {
               <Td>
                 <Input
                   type="number"
-                  value={values[channel].region3}
+                  value={ForecastMetaware[channel].region3}
                   onChange={(e) =>
                     handleChange(channel, "region3", e.target.value)
                   }

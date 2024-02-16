@@ -1,85 +1,78 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 const SupplyChainTable = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  //supplier and medium options
+  const supplierOptions = ["Select", "Supplier A", "Supplier B", "Supplier C"];
+  const mediumOptions = ["Select", "Air", "Surface"];
+  // let isEmpty = false;
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-  let newDataToPass = props.setNewData;
-  let [newData, setNewData] = useState({
-    name: "",
+
+  let newsac_unitsToPass = props.setNewsac_units;
+
+  let [newsac_units, setNewsac_units] = useState({
+    name: "Gamma",
     supplier: "",
     medium: "",
     units: "",
   });
-  const [data, setData] = useState([
+  const [sac_units, setsac_units] = useState([
     {
       name: "Gamma",
-      supplier: "Supplier A",
+      supplier: "Select",
       medium: "Air",
       demand: "74000",
-      units: "74000",
+      units: "15000",
     },
     {
       name: "Delta",
       supplier: "Supplier B",
-      medium: "Surface",
+      medium: "Select",
       demand: "74000",
-      units: "74000",
+      units: "",
     },
     {
       name: "Epsilon",
-      supplier: "Supplier B",
+      supplier: "Select",
       medium: "Surface",
       demand: "10000",
-      units: "10000",
+      units: "20000",
     },
   ]);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 3;
-  // const totalPages = Math.ceil(data.length / itemsPerPage);
-  // const indexOfLastItem = currentPage * itemsPerPage;
-  // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
-  // const paginate = (pageNumber) => {
-  //   setCurrentPage(pageNumber);
-  // };
+  const handleInputChange = (index, key, value) => {
+    const newsac_units = [...sac_units];
+    newsac_units[index][key] = value;
+    setsac_units(newsac_units);
+  };
 
   //new entry on change
+  let ref = useRef();
   const onchange = (e) => {
-    setNewData({ ...newData, [e.target.name]: [e.target.value] });
+    let { name, value } = e.target;
+    if (value >= 0 && !value.includes("-")) {
+      setNewsac_units({ ...newsac_units, [name]: value });
+    }
   };
-  // console.log("name", newData);
   const onAddEntry = () => {
     const newEntry = {
-      name: newData.name,
-      supplier: newData.supplier,
-      medium: newData.medium,
+      name: newsac_units.name,
+      supplier: newsac_units.supplier,
+      medium: newsac_units.medium,
       demand: "15000",
-      units: newData.units,
+      units: newsac_units.units,
     };
-    newDataToPass(newEntry);
 
-    const newDataToPush = [...data];
-    newDataToPush.push(newEntry);
-    setData(newDataToPush);
-
-    // const lastPage = Math.ceil(newDataToPush.length / itemsPerPage);
-    // setCurrentPage(lastPage);
-    // toggleModal();
+    const newsac_unitsToPush = [...sac_units];
+    newsac_unitsToPush.push(newEntry);
+    setsac_units(newsac_unitsToPush);
+    ref.current.click();
+    alert("New Entry Added");
   };
-
-  //supplierOptions
-  const supplierOptions = [
-    { value: "Supplier A" },
-    { value: "Supplier B" },
-    { value: "Supplier C" },
-  ];
-
-  const mediumOptions = [{ value: "Air" }, { value: "Surface" }];
-
+  newsac_unitsToPass(sac_units);
   return (
     <div className="flex h-full flex-col justify-between bg-slate-200">
       {" "}
@@ -100,7 +93,7 @@ const SupplyChainTable = (props) => {
             </thead>
 
             <tbody className="h-40 overflow-scroll">
-              {data.map((entry, index) => (
+              {sac_units.map((entry, index) => (
                 <tr className="bg-slate-300 " key={index}>
                   <td className="text-center w-28  text-xl">
                     {/* {indexOfFirstItem + index + 1}  */}
@@ -110,20 +103,22 @@ const SupplyChainTable = (props) => {
                     {/* {entry.supplier} */}
                     <p className="flex justify-center">
                       <select
-                        className=" p-2 pl-3 pr-2 w-32 mx-2   bg-white border border-gray-300 rounded-lg -md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className={` p-2 pl-3 pr-2 w-32 mx-2   bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
+                          entry.supplier.trim() === "Select"
+                            ? "border-red-500 outline-red-500"
+                            : " border-green-500 outline-green-500"
+                        } placeholder:text-red-400`}
                         name="supplier"
-                        onChange={onchange}
-                        value={newData.supplier}
+                        value={entry.supplier}
+                        onChange={(e) =>
+                          handleInputChange(index, "supplier", e.target.value)
+                        }
                       >
-                        <option value="supplier A">
-                          {supplierOptions[0].value}
-                        </option>
-                        <option value="supplier B">
-                          {supplierOptions[1].value}
-                        </option>
-                        <option value="supplier C">
-                          {supplierOptions[2].value}
-                        </option>
+                        {supplierOptions.map((option, i) => (
+                          <option key={i} value={option}>
+                            {option}
+                          </option>
+                        ))}
                       </select>
                     </p>
                   </td>
@@ -131,15 +126,22 @@ const SupplyChainTable = (props) => {
                     {/* {entry.medium} */}
                     <p className="flex justify-center">
                       <select
-                        className=" p-2 pl-3 pr-2 mx-2  bg-white border border-gray-300 rounded-lg -md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className={`p-2 pl-3 pr-2 mx-2  bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm  ${
+                          entry.medium.trim() === "Select"
+                            ? "border-red-500 outline-red-500"
+                            : " border-green-500 outline-green-500"
+                        } placeholder:text-red-400`}
                         name="medium"
-                        onChange={onchange}
-                        value={newData.medium}
+                        value={entry.medium}
+                        onChange={(e) =>
+                          handleInputChange(index, "medium", e.target.value)
+                        }
                       >
-                        <option value="Air">{mediumOptions[0].value}</option>
-                        <option value="Surface">
-                          {mediumOptions[1].value}
-                        </option>
+                        {mediumOptions.map((option, i) => (
+                          <option key={i} value={option}>
+                            {option}
+                          </option>
+                        ))}
                       </select>
                     </p>
                   </td>
@@ -148,12 +150,18 @@ const SupplyChainTable = (props) => {
                     {/* {entry.units} */}
                     <input
                       id="base-input"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500 block w-28 m-2   p-2 text-center"
-                      type="text"
+                      className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500 block w-28 m-2 p-2 text-center  ${
+                        !entry.units.trim()
+                          ? "border-red-500 outline-red-500"
+                          : " border-green-500 outline-green-500"
+                      } placeholder:text-red-400`}
+                      type="number"
                       name="units"
-                      onChange={onchange}
                       placeholder="Enter Units"
-                      value={newData.units}
+                      value={entry.units}
+                      onChange={(e) =>
+                        handleInputChange(index, "units", e.target.value)
+                      }
                       required
                     />
                   </td>
@@ -166,27 +174,30 @@ const SupplyChainTable = (props) => {
       {/* Paginate */}
       <div className=" h-16 flex justify-end items-center">
         <div className="pagination">
-          {/* {Array.from({ length: totalPages }).map((_, index) => ( */}
-          <button
-            // key={index}
-            className="h-10  bg-gray-700 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5"
-            // onClick={() => paginate(index + 1)}
-          >
-            DC 1{/* {index + 1} */}
+          <button className="h-10  bg-gray-700 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5">
+            DC 1
           </button>
-          {/* ))} */}
         </div>
 
-        {/* Add New Product */}
+        <div className="text-center">
+          {/* temp preview btn */}
+          {/* <button
+            onClick={handleSubmitForPreview}
+            className="h-10  bg-green-700 text-white  hover:bg-green-800 text-xl text-center cursor-pointer rounded-lg mx-2   p-1.5"
+          >
+            Submit for preview
+          </button> */}
+        </div>
 
+        {/* Add New entries */}
         <div className="flex flex-row w-30 justify-center">
           {/* Modal start */}
           <div className="modal-start">
             {/* Modal toggle */}
             <button
               onClick={toggleModal}
-              data-modal-target="small-modal"
-              data-modal-toggle="small-modal"
+              sac_units-modal-target="small-modal"
+              sac_units-modal-toggle="small-modal"
               className="h-10  bg-gray-700 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5 mx-2"
               type="button"
             >
@@ -213,7 +224,7 @@ const SupplyChainTable = (props) => {
                         onClick={toggleModal}
                         type="button"
                         className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg -lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="default-modal"
+                        sac_units-modal-hide="default-modal"
                       >
                         <span className="sr-only">Close modal</span>
                       </button>
@@ -228,7 +239,6 @@ const SupplyChainTable = (props) => {
                           >
                             Name:
                           </span>
-
                           <input
                             id="base-input"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500 block  w-[235px] p-2 text-center"
@@ -236,7 +246,7 @@ const SupplyChainTable = (props) => {
                             name="name"
                             placeholder="Enter name"
                             onChange={onchange}
-                            value={newData.name}
+                            value={newsac_units.name}
                           />
                         </div>
                         <p className="text-xl flex justify-between  py-2">
@@ -252,24 +262,20 @@ const SupplyChainTable = (props) => {
                             type="text"
                             name="supplier"
                             placeholder="select one"
-                            value={newData.supplier}
+                            value={newsac_units.supplier}
                             readOnly
                           />
                           <select
                             className="block w-full p-2 pl-3 pr-2 mx-2  bg-white border border-gray-300 rounded-lg -md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             name="supplier"
                             onChange={onchange}
-                            value={newData.supplier}
+                            value={newsac_units.supplier}
                           >
-                            <option value="supplier A">
-                              {supplierOptions[0].value}
-                            </option>
-                            <option value="supplier B">
-                              {supplierOptions[1].value}
-                            </option>
-                            <option value="supplier C">
-                              {supplierOptions[2].value}
-                            </option>
+                            {supplierOptions.map((option, i) => (
+                              <option key={i} value={option}>
+                                {option}
+                              </option>
+                            ))}
                           </select>
                         </p>
                         <p className="text-xl flex justify-between  py-2">
@@ -285,21 +291,20 @@ const SupplyChainTable = (props) => {
                             type="text"
                             placeholder="select one"
                             name="medium"
-                            value={newData.medium}
+                            value={newsac_units.medium}
                             readOnly
                           />
                           <select
                             className="block w-full p-2 pl-3 pr-2 mx-2  bg-white border border-gray-300 rounded-lg -md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             name="medium"
                             onChange={onchange}
-                            value={newData.medium}
+                            value={newsac_units.medium}
                           >
-                            <option value="Air">
-                              {mediumOptions[0].value}
-                            </option>
-                            <option value="Surface">
-                              {mediumOptions[1].value}
-                            </option>
+                            {mediumOptions.map((option, i) => (
+                              <option key={i} value={option}>
+                                {option}
+                              </option>
+                            ))}
                           </select>
                         </p>
                         <p className="text-xl flex justify-start  py-2">
@@ -325,7 +330,7 @@ const SupplyChainTable = (props) => {
                             name="units"
                             placeholder="Enter Units"
                             onChange={onchange}
-                            value={newData.units}
+                            value={newsac_units.units}
                             required
                           />
                         </p>
@@ -343,7 +348,8 @@ const SupplyChainTable = (props) => {
                         onClick={toggleModal}
                         type="button"
                         className="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg -lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                        data-modal-hide="default-modal"
+                        sac_units-modal-hide="default-modal"
+                        ref={ref}
                       >
                         Decline
                       </button>

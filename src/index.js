@@ -1,17 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import {ChakraProvider} from "@chakra-ui/react"
-import MyProvider from './Components/ContextApi/MyProvider';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { ChakraProvider } from "@chakra-ui/react";
+import MyProvider from "./Components/ContextApi/MyProvider";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
- <MyProvider>
-  <ChakraProvider>
-    <App />
-  </ChakraProvider>
+  <MyProvider>
+    <ChakraProvider>
+      <App />
+    </ChakraProvider>
   </MyProvider>
 );
 

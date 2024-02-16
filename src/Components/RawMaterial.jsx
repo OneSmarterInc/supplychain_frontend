@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 
-const RawMaterial = () => {
-  let [newData, setNewData] = useState([
-    {
-      alpha: "87654",
-    },
-    { beta: "12345" },
-  ]);
-  const onchange = (e) => {
-    setNewData({ ...newData, [e.target.name]: [e.target.value] });
-    // console.log("alpha", newData.alpha, " beta", newData.beta);
+const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
+  const [newData, setNewData] = useState({
+    alpha_quantity: "",
+    beta_quantity: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (value >= 0 && !value.includes("-")) {
+      setNewData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
+  setAlpha_quantity(newData.alpha_quantity);
+  setBeta_quantity(newData.beta_quantity);
+
   return (
     <div>
       <h2 className="text-center text-3xl py-1 ">Raw Material</h2>
@@ -28,15 +35,18 @@ const RawMaterial = () => {
             <td className="text-center py-3 text-xl ">Alpha</td>
             <td className="text-center py-3 text-xl ">15000 </td>
             <td className="text-center py-3 text-xl ">
-              {" "}
               <input
-                id="base-input"
-                className="bg-gray-50 border text-center border-gray-300 text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500  w-32 mx-auto  p-2 "
-                type="text"
-                name="alpha"
-                onChange={onchange}
+                id="alpha-input"
+                className={`bg-gray-50 border  text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none w-32 mx-auto  p-2 ${
+                  !newData.alpha_quantity.trim()
+                    ? "border-red-500 outline-red-500"
+                    : " border-green-500 outline-green-500"
+                }`}
+                type="number"
+                name="alpha_quantity"
+                onChange={handleChange}
                 placeholder="Enter Units"
-                value={newData.units}
+                value={newData.alpha_quantity}
                 required
               />
             </td>
@@ -46,15 +56,18 @@ const RawMaterial = () => {
             <td className="text-center py-3 text-xl ">Beta</td>
             <td className="text-center py-3 text-xl ">10000</td>
             <td className="text-center py-3 text-xl ">
-              {" "}
               <input
-                id="base-input"
-                className="bg-gray-50 border text-center border-gray-300 text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500  w-32 mx-auto  p-2 "
-                type="text"
-                name="beta"
+                id="beta-input"
+                className={`bg-gray-50 border text-center text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500  w-32 mx-auto  p-2 ${
+                  !newData.beta_quantity.trim()
+                    ? "border-red-500 outline-red-500"
+                    : " border-green-500 outline-green-500"
+                }`}
+                type="number"
+                name="beta_quantity"
                 placeholder="Enter Units"
-                onChange={onchange}
-                value={newData.units}
+                onChange={handleChange}
+                value={newData.beta_quantity}
                 required
               />
             </td>

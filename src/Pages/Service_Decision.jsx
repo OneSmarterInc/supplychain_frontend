@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
   HStack,
   Select,
@@ -14,9 +14,38 @@ import {
 import NavBar from "../Components/NavBar";
 import DataChart from "../Components/DataChart";
 import InfoImg from "../Components/InfoImg";
-
+import axios from "axios";
+import MyContext from "../Components/ContextApi/MyContext";
 const Service_Decision = () => {
-  const regions = ["Region 1", "Region 2", "Region 3"];
+  const regions = ["region1", "region2", "region3"];
+
+  const [serviceValue, setServiceValue] = useState({
+    region1: "",
+    region2: "",
+    region3: "",
+  });
+
+  const handleChange = (region, value) => {
+    setServiceValue({ ...serviceValue, [region]: value });
+  };
+
+  const { api } = useContext(MyContext);
+  const submitService = async () => {
+    try {
+      const response = await axios.post(`${api}/decision/service/`, {
+        firm_key: "123",
+        service_region_one: serviceValue.region1,
+        service_region_two: serviceValue.region2,
+        service_region_three: serviceValue.region3,
+      });
+      console.log("POST request successful", response.data);
+    } catch (error) {
+      console.error("Error making POST request: Service", error);
+    }
+  };
+
+  console.log("servicevalue", serviceValue);
+
   return (
     <div>
       <NavBar />
@@ -26,8 +55,6 @@ const Service_Decision = () => {
         </h1>
         <div className="grid grid-cols-2 grid-flow-col gap-3  m-1">
           <div className="row-span-2 rounded-lg -2xl h-full  flex flex-col justify-start">
-            {/* <Demand_hype_ch1 />
-             */}
             <Box>
               <Text className="p-5 py-3 pb-0 text-2xl">
                 <strong>Service</strong>
@@ -56,11 +83,12 @@ const Service_Decision = () => {
                           fontSize={15}
                           width="100%"
                           border="1px solid black"
+                          onChange={(e) => handleChange(region, e.target.value)}
+                          value={serviceValue[region]}
                         >
                           <option value="1">1</option>
-                          <option value="1">2</option>
-                          <option value="1">3</option>
-                          <option value="1">4</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
                         </Select>
                       </Td>
                     ))}
@@ -73,7 +101,10 @@ const Service_Decision = () => {
             <InfoImg />
           </div>
 
-          <DataChart />
+          <DataChart
+            submitService={submitService}
+            serviceDataPreview={serviceValue}
+          />
         </div>
       </div>
     </div>

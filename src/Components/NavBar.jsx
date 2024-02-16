@@ -39,17 +39,18 @@ const NavBar = () => {
                   >
                     Distribution
                   </Link>
-                  <Link
-                    to="/transportation"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
-                  >
-                    Transportation
-                  </Link>
+
                   <Link
                     to="/service"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
                   >
                     Service
+                  </Link>
+                  <Link
+                    to="/forecast"
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
+                  >
+                    Forecast
                   </Link>
                   <Link
                     to="/demand"
@@ -58,11 +59,12 @@ const NavBar = () => {
                     Demand
                   </Link>
                   <Link
-                    to="/forecast"
+                    to="/transportation"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
                   >
-                    Forecast
+                    Transportation
                   </Link>
+
                   <Link
                     to="/it"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"

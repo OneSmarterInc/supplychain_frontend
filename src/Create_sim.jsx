@@ -1,11 +1,24 @@
 import React, { useContext, useState } from "react";
-import { Avatar, Box, Button, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+} from "@chakra-ui/react";
 import axios from "axios";
 import MyContext from "./Components/ContextApi/MyContext";
 
 const Create_sim = () => {
-    const { api } = useContext(MyContext);
-    const [selectedFirmIndex, setSelectedFirmIndex] = useState(null);
+  const { api } = useContext(MyContext);
+  const [selectedFirmIndex, setSelectedFirmIndex] = useState(null);
   const [simulationData, setSimulationData] = useState({
     name: "",
     quarters: "",
@@ -17,8 +30,7 @@ const Create_sim = () => {
     decision_close: "",
   });
 
-
-  console.log(simulationData);
+  // console.log(simulationData);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSimulationData((prev) => ({
@@ -111,7 +123,6 @@ const Create_sim = () => {
         p={5}
         bgColor="gray.200"
         mt={5}
-        
       >
         <label htmlFor="">
           <strong>Please specify the Name for simulation.</strong>
@@ -153,73 +164,99 @@ const Create_sim = () => {
           type="number"
           onChange={handleInputChange}
         />
-        <Box border='1px solid black' p={5} mb={10} borderRadius={5}>
-        {simulationData.firm_data.map((firm, index) => (
-        <Box key={index} display="flex" gap={3} mb={10}>
-          <Box>
-            <label htmlFor="">
-              <strong>Enter firm name</strong>
-            </label>
-            <Input
-              name={`firmName-${index}`}
-              bgColor="white"
-              placeholder={`Firm ${index + 1} Name`}
-              value={firm.firmName}
-              onChange={(e) =>
-                handlefirm_dataChange(index, "firmName", e.target.value)
-              }
-            />
-          </Box>
-          <Box>
-            <label htmlFor="">
-              <strong>Enter email of participant</strong>
-            </label>
-            <Box display='flex' gap={3}>
-            <Input
-              name={`email-${index}`}
-              bgColor="white"
-              placeholder={`Firm ${index + 1} Email`}
-              value={firm.email}
-              onChange={(e) =>
-                handlefirm_dataChange(index, "email", e.target.value)
-              }
-            />
-            <Button onClick={() => handleAddEmail(index)} bgColor='#72EB6F '>Add</Button>
-            </Box>
-          </Box>
-          
-        </Box>
-      ))}
-      {/* Display emails */}
-      {simulationData.firm_data.map((firm, index) => (
-    <Button key={index} onClick={() => setSelectedFirmIndex(index)}>
-      View Emails for Firm {index + 1}
-    </Button>
-  ))}
-
-  {/* Modal for displaying emails */}
-  {selectedFirmIndex !== null && (
-    <Modal isOpen={selectedFirmIndex !== null} onClose={() => setSelectedFirmIndex(null)}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Emails for Firm {selectedFirmIndex + 1}</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          {simulationData.firm_data[selectedFirmIndex].emails.map((email, emailIndex) => (
-            <Box key={emailIndex} display="flex" justifyContent="space-between" alignItems="center">
-              {email}
-              <Button onClick={() => handleRemoveEmail(selectedFirmIndex, emailIndex)}>X</Button>
+        <Box border="1px solid black" p={5} mb={10} borderRadius={5}>
+          {simulationData.firm_data.map((firm, index) => (
+            <Box key={index} display="flex" gap={3} mb={10}>
+              <Box>
+                <label htmlFor="">
+                  <strong>Enter firm name</strong>
+                </label>
+                <Input
+                  name={`firmName-${index}`}
+                  bgColor="white"
+                  placeholder={`Firm ${index + 1} Name`}
+                  value={firm.firmName}
+                  onChange={(e) =>
+                    handlefirm_dataChange(index, "firmName", e.target.value)
+                  }
+                />
+              </Box>
+              <Box>
+                <label htmlFor="">
+                  <strong>Enter email of participant</strong>
+                </label>
+                <Box display="flex" gap={3}>
+                  <Input
+                    name={`email-${index}`}
+                    bgColor="white"
+                    placeholder={`Firm ${index + 1} Email`}
+                    value={firm.email}
+                    onChange={(e) =>
+                      handlefirm_dataChange(index, "email", e.target.value)
+                    }
+                  />
+                  <Button
+                    onClick={() => handleAddEmail(index)}
+                    bgColor="#72EB6F "
+                  >
+                    Add
+                  </Button>
+                </Box>
+              </Box>
             </Box>
           ))}
-        </ModalBody>
-        <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={() => setSelectedFirmIndex(null)}>
-            Close
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  )}
+          {/* Display emails */}
+          {simulationData.firm_data.map((firm, index) => (
+            <Button key={index} onClick={() => setSelectedFirmIndex(index)}>
+              View Emails for Firm {index + 1}
+            </Button>
+          ))}
+
+          {/* Modal for displaying emails */}
+          {selectedFirmIndex !== null && (
+            <Modal
+              isOpen={selectedFirmIndex !== null}
+              onClose={() => setSelectedFirmIndex(null)}
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>
+                  Emails for Firm {selectedFirmIndex + 1}
+                </ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  {simulationData.firm_data[selectedFirmIndex].emails.map(
+                    (email, emailIndex) => (
+                      <Box
+                        key={emailIndex}
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        {email}
+                        <Button
+                          onClick={() =>
+                            handleRemoveEmail(selectedFirmIndex, emailIndex)
+                          }
+                        >
+                          X
+                        </Button>
+                      </Box>
+                    )
+                  )}
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    colorScheme="blue"
+                    mr={3}
+                    onClick={() => setSelectedFirmIndex(null)}
+                  >
+                    Close
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+          )}
         </Box>
 
         <Box mb={10}>
@@ -259,19 +296,20 @@ const Create_sim = () => {
           </strong>
         </label>
         <Box display="flex" gap={3}>
-
           <Input
             name="decision_open"
             type="time"
-            placeholder="HH:MM:SS"  title="Time format should be HH:MM:SS"
+            placeholder="HH:MM:SS"
+            title="Time format should be HH:MM:SS"
             bgColor="white"
             mt={5}
             onChange={handleInputChange}
             required
           />
           <Input
-          type="time" 
-          placeholder="HH:MM:SS"  title="Time format should be HH:MM:SS"
+            type="time"
+            placeholder="HH:MM:SS"
+            title="Time format should be HH:MM:SS"
             name="decision_close"
             bgColor="white"
             mt={5}

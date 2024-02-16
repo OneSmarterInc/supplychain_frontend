@@ -183,7 +183,7 @@ function App() {
             path="/usersidelive"
             element={
               <div className="signup  h-screen">
-               <UserSideLive/>
+                <UserSideLive />
               </div>
             }
           />
@@ -194,33 +194,27 @@ function App() {
             path="/usersideended"
             element={
               <div className="signup  h-screen">
-               <UserSideEnded/>
-
+                <UserSideEnded />
               </div>
             }
           />
         </Routes>
 
- <Routes>
+        <Routes>
           <Route
             exact
-
             path="/createsim"
             element={
-              <div className="createsim  h-screen">
-                <Create_sim />{" "}
-          </div>
+              <div className="createsim h-screen">
+                <Create_sim />
+                {""}
+              </div>
             }
           />
         </Routes>
-        
-
       </Router>
     </>
   );
 }
 
 export default App;
-
-
-

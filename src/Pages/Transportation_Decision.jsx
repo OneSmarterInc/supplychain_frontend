@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-
+import React, { useContext, useState } from "react";
 import {
   HStack,
   Select,
@@ -16,17 +15,47 @@ import {
 import NavBar from "../Components/NavBar";
 import DataChart from "../Components/DataChart";
 import InfoImg from "../Components/InfoImg";
+import axios from "axios";
+import MyContext from "../Components/ContextApi/MyContext";
 
 const Transportation_Decision = () => {
-  const regions = ["Region 1", "Region 2"];
-  let [value, setValue] = useState({});
+  const { api } = useContext(MyContext);
+  const regions = ["carrier", "medium"];
+  const [Dc1Data, setDc1Data] = useState({
+    row1: { product: "", carrier: "", medium: "", units: "" },
+    row2: { product: "", carrier: "", medium: "", units: "" },
+    row3: { product: "", carrier: "", medium: "", units: "" },
+    row4: { product: "", carrier: "", medium: "", units: "" },
+    row5: { product: "", carrier: "", medium: "", units: "" },
+    row6: { product: "", carrier: "", medium: "", units: "" },
+  });
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
+  const handleChange = (rowId, field, value) => {
+    setDc1Data((prevDc1Data) => ({
+      ...prevDc1Data,
+      [rowId]: {
+        ...prevDc1Data[rowId],
+        [field]: value,
+      },
+    }));
   };
+  // console.log("row5", Dc1Data.row5);
+
+  const submitTransportation = async () => {
+    try {
+      const response = await axios.post(`${api}/decision/transportation/`, {
+        firm_key: "123",
+        quarter: null,
+      });
+      console.log("POST request successful", response.data);
+    } catch (error) {
+      console.error("Error making POST request: Transportation", error);
+    }
+  };
+
   return (
     <div>
-      <NavBar/>
+      <NavBar />
       <div className=" ">
         <h1 className="text-4xl text-start px-3 py-2 underline">
           Transportation Decision
@@ -52,251 +81,73 @@ const Transportation_Decision = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td>
-                      <Select
-                        placeholder="Select"
-                        fontSize={15}
-                        width="100%"
-                        border="1px solid black"
-                      >
-                        <option value="1">Product 1</option>
-                        <option value="1">Product 2</option>
-                        <option value="1">Product 3</option>
-                        <option value="1">Product 4</option>
-                      </Select>
-                    </Td>
-                    {regions.map((region) => (
-                      <Td key={region}>
+                  {Object.entries(Dc1Data).map(([rowId, rowData]) => (
+                    <Tr key={rowId}>
+                      <Td>
                         <Select
                           placeholder="Select"
                           fontSize={15}
                           width="100%"
                           border="1px solid black"
+                          value={rowData.product}
+                          onChange={(e) =>
+                            handleChange(rowId, "product", e.target.value)
+                          }
                         >
-                          <option value="1">1</option>
-                          <option value="1">2</option>
-                          <option value="1">3</option>
-                          <option value="1">4</option>
+                          <option value="Product 0">Product 0</option>
+                          <option value="Product 1">Product 1</option>
+                          <option value="Product 2">Product 2</option>
                         </Select>
                       </Td>
-                    ))}
-                    <Td>
-                      {" "}
-                      <Input
-                        width={"100px"}
-                        type="number"
-                        value={value}
-                        onChange={(e) => handleChange(e)}
-                        border="1px solid black"
-                      />
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    {" "}
-                    <Td>
-                      <Select
-                        placeholder="Select"
-                        fontSize={15}
-                        width="100%"
-                        border="1px solid black"
-                      >
-                        <option value="1">Product 1</option>
-                        <option value="1">Product 2</option>
-                        <option value="1">Product 3</option>
-                        <option value="1">Product 4</option>
-                      </Select>
-                    </Td>
-                    {regions.map((region) => (
-                      <Td key={region}>
+
+                      <Td>
                         <Select
                           placeholder="Select"
                           fontSize={15}
                           width="100%"
                           border="1px solid black"
+                          onChange={(e) =>
+                            handleChange(rowId, "carrier", e.target.value)
+                          }
+                          value={rowData.carrier}
                         >
-                          <option value="1">1</option>
-                          <option value="1">2</option>
-                          <option value="1">3</option>
-                          <option value="1">4</option>
+                          <option value="">Select</option>
+                          <option value="I">I</option>
+                          <option value="J">J</option>
+                          <option value="K">K</option>
+                          <option value="L">L</option>
+                          <option value="K">N</option>
                         </Select>
                       </Td>
-                    ))}
-                    <Td>
-                      {" "}
-                      <Input
-                        width={"100px"}
-                        type="number"
-                        value={value}
-                        onChange={(e) => handleChange(e)}
-                        border="1px solid black"
-                      />
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    {" "}
-                    <Td>
-                      <Select
-                        placeholder="Select"
-                        fontSize={15}
-                        width="100%"
-                        border="1px solid black"
-                      >
-                        <option value="1">Product 1</option>
-                        <option value="1">Product 2</option>
-                        <option value="1">Product 3</option>
-                        <option value="1">Product 4</option>
-                      </Select>
-                    </Td>
-                    {regions.map((region) => (
-                      <Td key={region}>
+                      <Td>
                         <Select
                           placeholder="Select"
                           fontSize={15}
                           width="100%"
                           border="1px solid black"
+                          onChange={(e) =>
+                            handleChange(rowId, "medium", e.target.value)
+                          }
+                          value={rowData.medium}
                         >
-                          <option value="1">1</option>
-                          <option value="1">2</option>
-                          <option value="1">3</option>
-                          <option value="1">4</option>
+                          <option value="">Select</option>
+                          <option value="Surface">Surface</option>
+                          <option value="Air">Air</option>
                         </Select>
                       </Td>
-                    ))}
-                    <Td>
-                      {" "}
-                      <Input
-                        width={"100px"}
-                        type="number"
-                        value={value}
-                        onChange={(e) => handleChange(e)}
-                        border="1px solid black"
-                      />
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    {" "}
-                    <Td>
-                      <Select
-                        placeholder="Select"
-                        fontSize={15}
-                        width="100%"
-                        border="1px solid black"
-                      >
-                        <option value="1">Product 1</option>
-                        <option value="1">Product 2</option>
-                        <option value="1">Product 3</option>
-                        <option value="1">Product 4</option>
-                      </Select>
-                    </Td>
-                    {regions.map((region) => (
-                      <Td key={region}>
-                        <Select
-                          placeholder="Select"
-                          fontSize={15}
-                          width="100%"
+                      <Td>
+                        <Input
+                          width={"100px"}
+                          type="number"
+                          value={rowData.units}
+                          onChange={(e) =>
+                            handleChange(rowId, "units", e.target.value)
+                          }
                           border="1px solid black"
-                        >
-                          <option value="1">1</option>
-                          <option value="1">2</option>
-                          <option value="1">3</option>
-                          <option value="1">4</option>
-                        </Select>
+                        />
                       </Td>
-                    ))}
-                    <Td>
-                      {" "}
-                      <Input
-                        width={"100px"}
-                        type="number"
-                        value={value}
-                        onChange={(e) => handleChange(e)}
-                        border="1px solid black"
-                      />
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    {" "}
-                    <Td>
-                      <Select
-                        placeholder="Select"
-                        fontSize={15}
-                        width="100%"
-                        border="1px solid black"
-                      >
-                        <option value="1">Product 1</option>
-                        <option value="1">Product 2</option>
-                        <option value="1">Product 3</option>
-                        <option value="1">Product 4</option>
-                      </Select>
-                    </Td>
-                    {regions.map((region) => (
-                      <Td key={region}>
-                        <Select
-                          placeholder="Select"
-                          fontSize={15}
-                          width="100%"
-                          border="1px solid black"
-                        >
-                          <option value="1">1</option>
-                          <option value="1">2</option>
-                          <option value="1">3</option>
-                          <option value="1">4</option>
-                        </Select>
-                      </Td>
-                    ))}
-                    <Td>
-                      {" "}
-                      <Input
-                        width={"100px"}
-                        type="number"
-                        value={value}
-                        onChange={(e) => handleChange(e)}
-                        border="1px solid black"
-                      />
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    {" "}
-                    <Td>
-                      <Select
-                        placeholder="Select"
-                        fontSize={15}
-                        width="100%"
-                        border="1px solid black"
-                      >
-                        <option value="1">Product 1</option>
-                        <option value="1">Product 2</option>
-                        <option value="1">Product 3</option>
-                        <option value="1">Product 4</option>
-                      </Select>
-                    </Td>
-                    {regions.map((region) => (
-                      <Td key={region}>
-                        <Select
-                          placeholder="Select"
-                          fontSize={15}
-                          width="100%"
-                          border="1px solid black"
-                        >
-                          <option value="1">1</option>
-                          <option value="1">2</option>
-                          <option value="1">3</option>
-                          <option value="1">4</option>
-                        </Select>
-                      </Td>
-                    ))}
-                    <Td>
-                      {" "}
-                      <Input
-                        width={"100px"}
-                        type="number"
-                        value={value}
-                        onChange={(e) => handleChange(e)}
-                        border="1px solid black"
-                      />
-                    </Td>
-                  </Tr>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
             </Box>
@@ -304,8 +155,11 @@ const Transportation_Decision = () => {
           <div className="rounded-lg -2xl h-full bg-cover overflow-hidden bg-no-repeat">
             <InfoImg />
           </div>
-       
-          <DataChart/>
+
+          <DataChart
+            submitTransportation={submitTransportation}
+            Dc1Data={Dc1Data}
+          />
         </div>
       </div>
     </div>
