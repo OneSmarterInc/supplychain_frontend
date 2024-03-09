@@ -1,23 +1,21 @@
-import Demand_generation from "./Pages/Demand_generation";
-import Distribution_Decision from "./Pages/Distribution_Decision";
-import Forecast from "./Pages/Forecast";
+import Demand_generation from "./decisions/Demand_generation";
+import Distribution_Decision from "./decisions/Distribution_Decision";
+import Forecast from "./decisions/Forecast";
 import Home from "./Pages/Home";
-import IT from "./Pages/IT";
-import Manufacturing_Decisions from "./Pages/Manufacturing_Decisions";
-import Procurement_Decisions from "./Pages/Procurement_Decisions";
-import Service_Decision from "./Pages/Service_Decision";
-import Transportation_Decision from "./Pages/Transportation_Decision";
+import IT from "./decisions/IT";
+import Manufacturing_Decisions from "./decisions/Manufacturing_Decisions";
+import Procurement_Decisions from "./decisions/Procurement_Decisions";
+import Service_Decision from "./decisions/Service_Decision";
+import Transportation_Decision from "./decisions/Transportation_Decision";
 import Admin from "./Components/Admin";
 import Signin from "./Components/Signin";
 import Signup from "./Components/Signup";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import Create_sim from "./Create_sim";
-
-import AdminSideLive from "./Pages/AdminSideLive";
-import AdminSideEnded from "./Pages/AdminSideEnded";
-import UserSideLive from "./Pages/UserSideLive";
-import UserSideEnded from "./Pages/UserSideEnded";
+import AdminSideLive from "./admin/AdminSideLive";
+import AdminSideEnded from "./admin/AdminSideEnded";
+import UserSideLive from "./user/UserSideLive";
+import UserSideEnded from "./user/UserSideEnded";
 
 function App() {
   return (
@@ -167,7 +165,7 @@ function App() {
           />
         </Routes>
         <Routes>
-          <Route
+          <Route        
             exact
             path="/adminsideended"
             element={

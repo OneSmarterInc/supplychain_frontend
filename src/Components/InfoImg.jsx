@@ -1,5 +1,5 @@
 import React from "react";
-import supplychainimg from "../assets/supplychainimg2.webp";
+import supplychainimg from "../assets/img.png";
 const InfoImg = () => {
   return (
     <div>

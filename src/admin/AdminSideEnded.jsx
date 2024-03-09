@@ -42,7 +42,7 @@ const AdminSideEnded = () => {
       <div className="flex h-80 bg-slate-200 justify-around items-center mx-10 rounded-lg  border-2 border-neutral-600">
         <div className="info">
           <h2 className="text-3xl p-2 underline underline-offset-1">
-            MBA-Batch 2023 |<span className="text-3xl p-2">Ended</span>
+            MBA-Batch 2022 |<span className="text-3xl p-2">Ended</span>
           </h2>
 
           <div className="buttons my-2">
@@ -51,7 +51,7 @@ const AdminSideEnded = () => {
                 Firm 1
               </button>
               <button className="w-28 h-10 rounded-lg  bg-green-600 text-white text-center p-2  hover:bg-green-700">
-                Firm 1
+                Firm 2
               </button>
             </div>
             <button className="w-56 mx-1.5 h-10 rounded-lg bg-sky-900 text-white text-center p-2 hover:bg-sky-950">

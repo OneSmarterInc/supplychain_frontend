@@ -56,7 +56,7 @@ const Admin = () => {
           colorScheme: "red",
         });
       } else {
-        const response = await axios.post("url", data);
+        const response = await axios.post(api, data);
 
         if (response.status === 200) {
           console.log("Login successful");

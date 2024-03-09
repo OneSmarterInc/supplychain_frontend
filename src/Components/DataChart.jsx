@@ -45,11 +45,7 @@ const DataChart = ({
         "May",
         "Jun",
         "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
+        
       ],
     },
   });
@@ -57,7 +53,7 @@ const DataChart = ({
   const [series, setSeries] = useState([
     {
       name: "Units Sold",
-      data: [50, 60, 70, 80, 70, 60, 55, 65, 80, 85, 90, 100],
+      data: [1500, 1560, 1700, 1880, 1970, 2160, 1955],
     },
   ]);
 
@@ -88,9 +84,7 @@ const DataChart = ({
           <Chart options={options} series={series} type="area" width="510" />
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
-            <div className="h-10 w-28 bg-gray-700 text-white rounded-lg  p-1.5 hover:bg-slate-800 m-2 text-xl text-center mt-10 cursor-pointer">
-              Reports
-            </div>
+           
 
             {/* Modal start */}
             <div className="modal-start flex flex-col">
@@ -103,7 +97,7 @@ const DataChart = ({
               >
                 Preview
               </button>
-              {/* Main modal */}
+
               {isModalOpen && (
                 <>
                   {" "}

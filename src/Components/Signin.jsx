@@ -19,18 +19,19 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import MyContext from "./ContextApi/MyContext";
-
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const toast = useToast();
   const {api} = useContext(MyContext);
+  const navigate = useNavigate();
 
   const loginHandler = async (e) => {
     e.preventDefault();
@@ -39,7 +40,6 @@ const Signin = () => {
       email,
       password,
     };
-    console.log(data);
 
     try {
       if (!email || !password) {
@@ -60,7 +60,7 @@ const Signin = () => {
         );
           console.log(response.status);
         if (response.status === 200) {
-          console.log("Login successful");
+          
           toast({
             title: "Login successful",
             status: "success",
@@ -69,6 +69,10 @@ const Signin = () => {
             position: "top",
           });
           console.log(response.data);
+          const serializedValue = JSON.stringify(response.data);
+          localStorage.setItem("user", serializedValue);
+          navigate("/createsim");
+
         } else {
           console.log("Login failed");
           console.log(response.data);

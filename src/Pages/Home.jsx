@@ -1,5 +1,5 @@
 import React from "react";
-import homeimg from "../assets/homeimg.png";
+import homeimg from "../assets/img.png";
 import { Link } from "react-router-dom";
 import NavBar from "../Components/NavBar";
 import { Box, Button, Heading } from "@chakra-ui/react";

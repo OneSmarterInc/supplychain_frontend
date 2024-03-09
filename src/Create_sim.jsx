@@ -15,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import MyContext from "./Components/ContextApi/MyContext";
+import NavBar from "./Components/NavBar";
+import AdminNavBar from "./Components/AdminNavBar";
 
 const Create_sim = () => {
   const { api } = useContext(MyContext);
@@ -85,33 +87,7 @@ const Create_sim = () => {
   };
   return (
     <>
-      <Box
-        h={20}
-        bgColor="black"
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Box ml="10">
-          <Text fontWeight="bold" fontSize={30} color="white">
-            Supply Chain Simulation
-          </Text>
-        </Box>
-        <Box
-          fontWeight="bold"
-          display="flex"
-          gap={10}
-          mr={5}
-          color="white"
-          alignItems="center"
-        >
-          <Text>Start New</Text>
-          <Text>Live</Text>
-          <Text>Historical</Text>
-          <Avatar />
-        </Box>
-      </Box>
-
+      <AdminNavBar />
       <Text width="50%" m="auto" fontSize={20} fontWeight="bold" mt={5}>
         Create New Simulation
       </Text>
@@ -208,7 +184,7 @@ const Create_sim = () => {
           {/* Display emails */}
           {simulationData.firm_data.map((firm, index) => (
             <Button key={index} onClick={() => setSelectedFirmIndex(index)}>
-              View Emails for Firm {index + 1}
+                              View Emails for {firm.firmName || `Firm ${index + 1}`}
             </Button>
           ))}
 
@@ -221,7 +197,7 @@ const Create_sim = () => {
               <ModalOverlay />
               <ModalContent>
                 <ModalHeader>
-                  Emails for Firm {selectedFirmIndex + 1}
+                Emails for {simulationData.firm_data[selectedFirmIndex].firmName || `Firm ${selectedFirmIndex + 1}`}
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>

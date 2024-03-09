@@ -7,12 +7,15 @@ import NavBar from "../Components/NavBar";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 
+
+import {   useToast } from "@chakra-ui/react";
+
 const Procurement_Decisions = () => {
   const { api } = useContext(MyContext);
   let [sac_units, setNewsac_units] = useState({});
   let [alpha_quantity, setAlpha_quantity] = useState({});
   let [beta_quantity, setBeta_quantity] = useState({});
-
+  const toast = useToast();
   // console.log(
   //   "beta_quantity pro",
   //   typeof Number(alpha_quantity),
@@ -42,6 +45,13 @@ const Procurement_Decisions = () => {
         sac_units: sac_units,
       });
       console.log("POST request successful", response.data);
+      toast({
+        title: "Entries Saved successful",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       console.error("Error making POST request:", error);
     }
