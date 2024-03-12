@@ -13,10 +13,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
-import DataChart from "../Components/DataChart";
+// import DataChart from "../Components/DataChart";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
+import TransportationDataChart from "../DataChartsOfDecisions/Transportation/TransportationDataChart";
 
 const Transportation_Decision = () => {
   const { api } = useContext(MyContext);
@@ -156,7 +157,7 @@ const Transportation_Decision = () => {
             <InfoImg />
           </div>
 
-          <DataChart
+          <TransportationDataChart
             submitTransportation={submitTransportation}
             Dc1Data={Dc1Data}
           />

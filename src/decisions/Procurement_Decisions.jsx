@@ -2,13 +2,13 @@ import React, { useContext, useState } from "react";
 import RawMaterial from "../Components/RawMaterial";
 import SupplyChainTable from "../Components/SupplyChainTable";
 import InfoImg from "../Components/InfoImg";
-import DataChart from "../Components/DataChart";
+// import DataChart from "../Components/DataChart";
 import NavBar from "../Components/NavBar";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 
-
-import {   useToast } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
+import ProcurementDataChart from "../DataChartsOfDecisions/Procurement/ProcurementDataChart";
 
 const Procurement_Decisions = () => {
   const { api } = useContext(MyContext);
@@ -78,7 +78,7 @@ const Procurement_Decisions = () => {
           <SupplyChainTable setNewsac_units={setNewsac_units} />
         </div>
         <div className="rounded-lg -2xl h-96 ">
-          <DataChart
+          <ProcurementDataChart
             newsac_units={sac_units}
             submitProcurement={submitProcurement}
           />

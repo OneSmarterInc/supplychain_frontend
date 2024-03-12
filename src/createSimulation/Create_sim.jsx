@@ -14,11 +14,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import axios from "axios";
-import MyContext from "./Components/ContextApi/MyContext";
-import NavBar from "./Components/NavBar";
-import AdminNavBar from "./Components/AdminNavBar";
+import MyContext from "../Components/ContextApi/MyContext";
+import AdminNavBar from "../Components/AdminNavBar";
+import { useNavigate } from "react-router";
 
-const Create_sim = () => {
+const Create_sim = ({ setNoOfQuarters }) => {
+  const navigate = useNavigate();
   const { api } = useContext(MyContext);
   const [selectedFirmIndex, setSelectedFirmIndex] = useState(null);
   const [simulationData, setSimulationData] = useState({
@@ -84,6 +85,10 @@ const Create_sim = () => {
     } catch (error) {
       console.error("Error submitting form:", error);
     }
+
+    // temporary navigate without conditions
+    setNoOfQuarters(simulationData.quarters);
+    navigate("/quarterdetails");
   };
   return (
     <>
@@ -184,7 +189,7 @@ const Create_sim = () => {
           {/* Display emails */}
           {simulationData.firm_data.map((firm, index) => (
             <Button key={index} onClick={() => setSelectedFirmIndex(index)}>
-                              View Emails for {firm.firmName || `Firm ${index + 1}`}
+              View Emails for {firm.firmName || `Firm ${index + 1}`}
             </Button>
           ))}
 
@@ -197,7 +202,9 @@ const Create_sim = () => {
               <ModalOverlay />
               <ModalContent>
                 <ModalHeader>
-                Emails for {simulationData.firm_data[selectedFirmIndex].firmName || `Firm ${selectedFirmIndex + 1}`}
+                  Emails for{" "}
+                  {simulationData.firm_data[selectedFirmIndex].firmName ||
+                    `Firm ${selectedFirmIndex + 1}`}
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
@@ -305,7 +312,7 @@ const Create_sim = () => {
             simulation.
           </Text>
           <Button bgColor="#A5F0A3" onClick={handleSubmit}>
-            Create
+            Next
           </Button>
         </Box>
       </Box>

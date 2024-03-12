@@ -11,13 +11,16 @@ import Admin from "./Components/Admin";
 import Signin from "./Components/Signin";
 import Signup from "./Components/Signup";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Create_sim from "./Create_sim";
+import Create_sim from "../src/createSimulation/Create_sim";
 import AdminSideLive from "./admin/AdminSideLive";
 import AdminSideEnded from "./admin/AdminSideEnded";
 import UserSideLive from "./user/UserSideLive";
 import UserSideEnded from "./user/UserSideEnded";
+import { useState } from "react";
+import QuarterDetails from "./createSimulation/QuarterDetails";
 
 function App() {
+  const [noOfQuarters, setNoOfQuarters] = useState();
   return (
     <>
       <Router>
@@ -165,7 +168,7 @@ function App() {
           />
         </Routes>
         <Routes>
-          <Route        
+          <Route
             exact
             path="/adminsideended"
             element={
@@ -204,7 +207,19 @@ function App() {
             path="/createsim"
             element={
               <div className="createsim h-screen">
-                <Create_sim />
+                <Create_sim setNoOfQuarters={setNoOfQuarters} />
+                {""}
+              </div>
+            }
+          />
+        </Routes>
+        <Routes>
+          <Route
+            exact
+            path="/quarterdetails"
+            element={
+              <div className="createsim h-screen">
+                <QuarterDetails noOfQuarters={noOfQuarters} />
                 {""}
               </div>
             }
