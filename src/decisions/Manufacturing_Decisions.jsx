@@ -2,9 +2,10 @@ import React, { useContext, useState } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, Input, Text } from "@chakra-ui/react";
 import InfoImg from "../Components/InfoImg";
 import NavBar from "../Components/NavBar";
-import DataChart from "../Components/DataChart";
+// import DataChart from "../Components/DataChart";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
+import ManufacturingDataChart from "../DataChartsOfDecisions/Manufacturing/ManufacturingDataChart";
 
 const Manufacturing_Decisions = () => {
   const { api } = useContext(MyContext);
@@ -154,7 +155,7 @@ const Manufacturing_Decisions = () => {
             <InfoImg />
           </div>
 
-          <DataChart
+          <ManufacturingDataChart
             submitManufacturing={submitManufacturing}
             ManufacturingDataPreview={values}
           />

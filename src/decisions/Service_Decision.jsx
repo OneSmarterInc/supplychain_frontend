@@ -12,10 +12,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
-import DataChart from "../Components/DataChart";
+// import DataChart from "../Components/DataChart";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
+import ServiceDataChart from "../DataChartsOfDecisions/Service/ServiceDataChart";
 const Service_Decision = () => {
   const regions = ["region1", "region2", "region3"];
 
@@ -101,7 +102,7 @@ const Service_Decision = () => {
             <InfoImg />
           </div>
 
-          <DataChart
+          <ServiceDataChart
             submitService={submitService}
             serviceDataPreview={serviceValue}
           />

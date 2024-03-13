@@ -12,10 +12,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
-import DataChart from "../Components/DataChart";
+// import DataChart from "../Components/DataChart";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
+import DistributionDataChart from "../DataChartsOfDecisions/Distribution/DistributionDataChart";
 
 const Distribution_Decision = () => {
   const { api } = useContext(MyContext);
@@ -142,7 +143,7 @@ const Distribution_Decision = () => {
           <div className="rounded-lg -2xl h-full bg-cover overflow-hidden bg-no-repeat">
             <InfoImg />
           </div>
-          <DataChart
+          <DistributionDataChart
             submitDistribution={submitDistribution}
             DistributionDataPreview={values}
           />

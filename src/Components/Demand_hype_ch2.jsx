@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Table,
@@ -12,13 +12,33 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const Demand_hype_ch2 = () => {
-  const regions = ["Region 1", "Region 2", "Region 3"];
+const Demand_hype_ch2 = ({ setHypeCh2ValuetoParent }) => {
+  const regions = ["region1", "region2", "region3"];
+  const [hypeCh2Value, sethypeCh2Value] = useState({
+    Active: { region1: 74000, region2: 74000, region3: null },
+    Price: { region1: 74000, region2: null, region3: 74000 },
+    MarketSpending: { region1: 74000, region2: 74000, region3: 74000 },
+    // Add more channels and regions as needed
+  });
+
+  // console.log("meta ch1 ", hypeCh2Value);
+
+  const handleInputChange = (channel, region, value) => {
+    sethypeCh2Value((prevState) => ({
+      ...prevState,
+      [channel]: {
+        ...prevState[channel],
+        [region]: value,
+      },
+    }));
+  };
+
+  setHypeCh2ValuetoParent(hypeCh2Value);
 
   return (
     <Box>
       <Text className="p-5 py-3 pb-0 text-2xl">
-        <strong>Hyperware Channel 2</strong>
+        <strong>Hypeware Channel 2</strong>
       </Text>
       <br />
       <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>
@@ -31,52 +51,52 @@ const Demand_hype_ch2 = () => {
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
-            <Td>Active</Td>
-            {regions.map((region) => (
-              <Td key={region}>
-                <Select
-                  placeholder="Select"
-                  fontSize={15}
-                  width="100%"
-                  border="1px solid black"
-                >
-                  <option value="1">1</option>
-                  {/* Add more options as needed */}
-                </Select>
-              </Td>
-            ))}
-          </Tr>
-          <Tr>
-            <Td>Price</Td>
-            {regions.map((region) => (
-              <Td key={region}>
-                <Input
-                  type="number"
-                  placeholder="Enter Price"
-                  defaultValue="74000"
-                  fontSize={15}
-                  width="100%"
-                  border="1px solid black"
-                />
-              </Td>
-            ))}
-          </Tr>
-          <Tr>
-            <Td>Market spending</Td>
-            {regions.map((region) => (
-              <Td key={region}>
-                <Input
-                  type="number"
-                  placeholder="Enter Spending"
-                  defaultValue="74000"
-                  fontSize={15}
-                  width="100%"
-                  border="1px solid black"
-                />
-              </Td>
-            ))}
-          </Tr>
+          {Object.keys(hypeCh2Value).map((channel) => (
+            <Tr key={channel}>
+              <Td>{channel}</Td>
+              {regions.map((region) => (
+                <Td key={region}>
+                  {channel === "Active" ? (
+                    <Select
+                      placeholder="Select"
+                      fontSize={15}
+                      width="100%"
+                      border="1px solid black"
+                      value={hypeCh2Value[channel][region]}
+                      onChange={(e) =>
+                        handleInputChange(
+                          channel,
+                          region,
+                          parseInt(e.target.value)
+                        )
+                      }
+                    >
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      {/* Add more options as needed */}
+                    </Select>
+                  ) : (
+                    <Input
+                      type="number"
+                      placeholder={`Enter ${channel}`}
+                      value={hypeCh2Value[channel][region] || ""}
+                      fontSize={15}
+                      width="100%"
+                      border="1px solid black"
+                      onChange={(e) =>
+                        handleInputChange(
+                          channel,
+                          region,
+                          parseInt(e.target.value)
+                        )
+                      }
+                    />
+                  )}
+                </Td>
+              ))}
+            </Tr>
+          ))}
         </Tbody>
       </Table>
     </Box>
