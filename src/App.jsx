@@ -18,6 +18,9 @@ import UserSideLive from "./user/UserSideLive";
 import UserSideEnded from "./user/UserSideEnded";
 import { useState } from "react";
 import QuarterDetails from "./createSimulation/QuarterDetails";
+import Stepper from "./createSimulation/Steps";
+import Steps from "./createSimulation/Steps";
+import AdminNavBar from "./Components/AdminNavBar";
 
 function App() {
   const [noOfQuarters, setNoOfQuarters] = useState();
@@ -200,19 +203,40 @@ function App() {
             }
           />
         </Routes>
-
         <Routes>
           <Route
             exact
             path="/createsim"
             element={
               <div className="createsim h-screen">
+                <div className="navbar pb-4">
+                  {" "}
+                  <AdminNavBar />
+                </div>
+
+                <Steps
+                  setNoOfQuarters={setNoOfQuarters}
+                  noOfQuarters={noOfQuarters}
+                />
+                {""}
+              </div>
+            }
+          />
+        </Routes>
+        {/* <Routes>
+          <Route
+            exact
+            path="/createsim"
+            element={
+              <div className="createsim h-screen">
+              <Steps/>
                 <Create_sim setNoOfQuarters={setNoOfQuarters} />
                 {""}
               </div>
             }
           />
         </Routes>
+ 
         <Routes>
           <Route
             exact
@@ -224,7 +248,7 @@ function App() {
               </div>
             }
           />
-        </Routes>
+        </Routes> */}
       </Router>
     </>
   );

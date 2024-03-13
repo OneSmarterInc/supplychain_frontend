@@ -76,23 +76,30 @@ const Create_sim = ({ setNoOfQuarters }) => {
   };
 
   const handleSubmit = async () => {
-    try {
-      const response = await axios.post(
-        `${api}/simulations/simulation/`,
-        simulationData
-      );
-      console.log("Success:", response.data);
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    if (simulationData.quarters) {
+      try {
+        const response = await axios.post(
+          `${api}/simulations/simulation/`,
+          simulationData
+        );
+        console.log("Success:", response.data);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
+    } else {
+      alert("Please Enter Quarters");
     }
 
     // temporary navigate without conditions
     setNoOfQuarters(simulationData.quarters);
-    navigate("/quarterdetails");
+
+    if (simulationData.quarters) {
+      navigate("/createsim?step=2");
+    }
   };
   return (
     <>
-      <AdminNavBar />
+      {/* <AdminNavBar /> */}
       <Text width="50%" m="auto" fontSize={20} fontWeight="bold" mt={5}>
         Create New Simulation
       </Text>
@@ -129,6 +136,7 @@ const Create_sim = ({ setNoOfQuarters }) => {
           mb={10}
           placeholder="Number of Quarters"
           onChange={handleInputChange}
+          required={true}
         />
         <label htmlFor="">
           <strong>
@@ -311,9 +319,12 @@ const Create_sim = ({ setNoOfQuarters }) => {
             with an access link, so they can start working on the assigned
             simulation.
           </Text>
-          <Button bgColor="#A5F0A3" onClick={handleSubmit}>
+          <button
+            onClick={handleSubmit}
+            className="w-28 h-10 py-2 px-4 mx-2 rounded-lg text-center text-xl bg-green-500 hover:bg-green-700 text-white "
+          >
             Next
-          </Button>
+          </button>
         </Box>
       </Box>
     </>

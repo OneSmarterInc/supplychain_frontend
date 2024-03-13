@@ -39,6 +39,14 @@ const QuarterDetails = ({ noOfQuarters }) => {
     });
   };
 
+  const handleSubmit = () => {
+    try {
+      //here we have to sumbit post request using axios
+    } catch (error) {
+      console.log("Error", error.message);
+    }
+  };
+
   return (
     <div className="p-6 mx-auto bg-slate-200 rounded-xl shadow-md flex flex-col items-center">
       {quarters.map((quarter, index) => (
@@ -163,18 +171,20 @@ const QuarterDetails = ({ noOfQuarters }) => {
                     className="form-input h-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
-
-                {/* //tmpporary button for each quarter */}
-                <div className="relative flex justify-end">
-                  <button className="w-28 h-10 rounded-xl text-center text-xl bg-green-500 text-white ">
-                    Submit
-                  </button>
-                </div>
               </div>
             </div>
           </div>
         </>
       ))}
+      {/* //tmpporary button for each quarter */}
+      <div className="relative flex justify-end">
+        <button
+          onClick={handleSubmit}
+          className="w-28 h-10 rounded-xl text-center text-xl bg-green-500 text-white "
+        >
+          Submit
+        </button>
+      </div>
     </div>
   );
 };
