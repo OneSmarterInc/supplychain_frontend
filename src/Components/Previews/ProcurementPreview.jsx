@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProcurementPreview = ({ toggleModal, newsac_units }) => {
+const ProcurementPreview = ({ toggleModal, updatedDCData }) => {
   return (
     <div>
       <div
@@ -27,61 +27,56 @@ const ProcurementPreview = ({ toggleModal, newsac_units }) => {
               </button>
             </div>
             {/* Modal body */}
-            <table className="table-auto w-[700px] mx-auto">
-              <thead>
-                <tr className="bg-slate-300  ">
-                  <th className="text-center py-3 text-2xl ">Name</th>
-                  <th className="text-center py-3 text-2xl ">Supplier</th>
-                  <th className="text-center py-3 text-2xl ">Medium</th>
-                  <th className="text-center py-3 text-2xl ">Demands</th>
-                  <th className="text-center py-3 text-2xl w-28">Units</th>
-                </tr>
-              </thead>
-              <tbody className="h-40 overflow-scroll">
-                {newsac_units.map((entry, index) => (
-                  <tr className="bg-slate-300 " key={index}>
-                    <td className="text-center w-28  text-xl">
-                      {/* {indexOfFirstItem + index + 1}  */}
-                      {entry.name}
-                    </td>
-                    <td className="text-center py-2 text-xl ">
-                      {/* {entry.supplier} */}
-                      <p className="flex justify-center">
-                        <span
-                          className=" p-2 pl-3 pr-2 w-32 mx-2   bg-white border border-gray-300 rounded-lg -md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          name="supplier"
-                        >
-                          {entry.supplier}
-                        </span>
-                      </p>
-                    </td>
-                    <td className="text-center  text-xl">
-                      {/* {entry.medium} */}
-                      <p className="flex justify-center">
-                        <span
-                          className=" p-2 pl-3 pr-2 w-32 mx-2   bg-white border border-gray-300 rounded-lg -md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          name="supplier"
-                        >
-                          {entry.medium}
-                        </span>
-                      </p>
-                    </td>
-                    <td className="text-center  text-xl">{entry.demand}</td>
-                    <td className="text-center text-xl">
-                      {/* {entry.units} */}
-                      <p
-                        id="base-input"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500 block w-28 m-2   p-2 text-center"
-                        type="text"
-                        name="units"
-                      >
-                        {entry.units}
-                      </p>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="overflow-y-auto h-96">
+              {Object.keys(updatedDCData).map((key, index) => (
+                <div key={index} className="bg-slate-200 overflow-y-auto">
+                  {updatedDCData[key] !== "closed" && (
+                    <h2 className="text-xl mt-4 mb-2 font-semibold mx-3">
+                      {key}
+                    </h2>
+                  )}
+                  {updatedDCData[key] !== "closed" && (
+                    <table className="table-auto w-[700px] mx-auto">
+                      <thead className="text-2xl">
+                        <tr className="bg-slate-300  ">
+                          <th className="text-center py-3 text-xl ">Name</th>
+                          <th className="text-center py-3 text-xl ">
+                            Supplier
+                          </th>
+                          <th className="text-center py-3 text-xl ">Medium</th>
+                          <th className="text-center py-3 text-xl ">Demands</th>
+                          <th className="text-center py-3 text-xl w-28">
+                            Units
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="h-40 overflow-scroll">
+                        {updatedDCData[key] !== "closed" &&
+                          updatedDCData[key].map((entry, index) => (
+                            <tr key={index} className="bg-slate-300 ">
+                              <td className="text-center w-28 text-xl">
+                                {entry.name}
+                              </td>
+                              <td className="text-center py-2 text-xl">
+                                {entry.supplier}
+                              </td>
+                              <td className="text-center py-2 text-xl">
+                                {entry.medium}
+                              </td>
+                              <td className="text-center py-2 text-xl">
+                                {entry.demand}
+                              </td>
+                              <td className="text-center py-2 text-xl">
+                                {entry.units}
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              ))}
+            </div>
             {/* Modal footer */}
             <div className="flex justify-end items-center p-4 md:p-3 border-t border-gray-200 rounded-lg -b dark:border-gray-600">
               <button
