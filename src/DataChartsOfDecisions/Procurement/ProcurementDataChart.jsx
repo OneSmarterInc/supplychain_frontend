@@ -5,14 +5,13 @@ import { useLocation } from "react-router-dom";
 
 import ProcurementPreview from "../../Components/Previews/ProcurementPreview";
 
-const ProcurementDataChart = ({ newsac_units, submitProcurement }) => {
+const ProcurementDataChart = ({ updatedDCData, submitProcurement }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
   const path = location.pathname;
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
-    // console.log("newsac_units", newsac_units[0].name);
   };
   // eslint-disable-next-line
   const [options, setOptions] = useState({
@@ -61,7 +60,7 @@ const ProcurementDataChart = ({ newsac_units, submitProcurement }) => {
                   {path === "/procurement" && (
                     <ProcurementPreview
                       toggleModal={toggleModal}
-                      newsac_units={newsac_units}
+                      updatedDCData={updatedDCData}
                     />
                   )}
                 </>

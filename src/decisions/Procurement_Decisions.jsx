@@ -12,16 +12,24 @@ import ProcurementDataChart from "../DataChartsOfDecisions/Procurement/Procureme
 
 const Procurement_Decisions = () => {
   const { api } = useContext(MyContext);
-  let [sac_units, setNewsac_units] = useState({});
+  let [updatedDCData, setUpdatedDCData] = useState();
   let [alpha_quantity, setAlpha_quantity] = useState({});
   let [beta_quantity, setBeta_quantity] = useState({});
   const toast = useToast();
-  // console.log(
-  //   "beta_quantity pro",
-  //   typeof Number(alpha_quantity),
-  //   "alpa_quantity pro",
-  //   alpha_quantity
-  // );
+
+  console.log("Updated DC data", updatedDCData)
+
+  const [getDcData, setGetDcData] = useState({});
+
+  const getDCDATA = async () => {
+    try {
+      const response = await axios.get(`${api}/decision/procurement/`);
+      setGetDcData(response.data);
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+
   const submitProcurement = async () => {
     try {
       if (!alpha_quantity) {
@@ -42,7 +50,7 @@ const Procurement_Decisions = () => {
         quarter: 8,
         alpha_quantity: Number(alpha_quantity),
         beta_quantity: Number(beta_quantity),
-        sac_units: sac_units,
+        sac_units: updatedDCData,
       });
       console.log("POST request successful", response.data);
       toast({
@@ -75,11 +83,14 @@ const Procurement_Decisions = () => {
           <InfoImg />
         </div>
         <div className="rounded-lg -2xl h-96  flex flex-col justify-center">
-          <SupplyChainTable setNewsac_units={setNewsac_units} />
+          <SupplyChainTable
+            getDcdata={getDcData}
+            setUpdatedDCData={setUpdatedDCData}
+          />
         </div>
         <div className="rounded-lg -2xl h-96 ">
           <ProcurementDataChart
-            newsac_units={sac_units}
+            updatedDCData={updatedDCData}
             submitProcurement={submitProcurement}
           />
         </div>
