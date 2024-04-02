@@ -70,6 +70,7 @@ const Signin = () => {
           });
           console.log(response.data);
           const serializedValue = JSON.stringify(response.data);
+          console.log(serializedValue)
           localStorage.setItem("user", serializedValue);
           navigate("/createsim");
 

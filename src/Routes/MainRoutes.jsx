@@ -24,13 +24,12 @@ const MainRoutes = () => {
   const [noOfQuarters, setNoOfQuarters] = useState();
   return (
     <Routes>
-        
       <Route
         exact
         path="/"
         element={
           <div className="home h-screen">
-          <PrivateRoute><Home />{" "}</PrivateRoute>  
+            <Home />{" "}
           </div>
         }
       />
@@ -40,9 +39,9 @@ const MainRoutes = () => {
         path="/procurement"
         element={
           <div className="procurement  h-screen">
-
             <PrivateRoute>
-            <Procurement_Decisions />{" "}</PrivateRoute>
+              <Procurement_Decisions />{" "}
+            </PrivateRoute>
           </div>
         }
       />
@@ -52,7 +51,9 @@ const MainRoutes = () => {
         path="/manufacturing"
         element={
           <div className="manufacturing  h-screen ">
-            <PrivateRoute><Manufacturing_Decisions /></PrivateRoute>  {" "}
+            <PrivateRoute>
+              <Manufacturing_Decisions />
+            </PrivateRoute>{" "}
           </div>
         }
       />
@@ -62,7 +63,9 @@ const MainRoutes = () => {
         path="/distribution"
         element={
           <div className="distribution  h-screen ">
-             <PrivateRoute><Distribution_Decision /></PrivateRoute> {" "}
+            <PrivateRoute>
+              <Distribution_Decision />
+            </PrivateRoute>{" "}
           </div>
         }
       />
@@ -72,7 +75,9 @@ const MainRoutes = () => {
         path="/transportation"
         element={
           <div className="transportation  h-screen ">
-             <PrivateRoute><Transportation_Decision /></PrivateRoute> {" "}
+            <PrivateRoute>
+              <Transportation_Decision />
+            </PrivateRoute>{" "}
           </div>
         }
       />
@@ -82,7 +87,10 @@ const MainRoutes = () => {
         path="/service"
         element={
           <div className="service  h-screen">
-             <PrivateRoute> <Service_Decision /></PrivateRoute>{" "}
+            <PrivateRoute>
+              {" "}
+              <Service_Decision />
+            </PrivateRoute>{" "}
           </div>
         }
       />
@@ -92,7 +100,9 @@ const MainRoutes = () => {
         path="/demand"
         element={
           <div className="demand  h-screen ">
-             <PrivateRoute><Demand_generation /></PrivateRoute> {" "}
+            <PrivateRoute>
+              <Demand_generation />
+            </PrivateRoute>{" "}
           </div>
         }
       />
@@ -102,7 +112,9 @@ const MainRoutes = () => {
         path="/forecast"
         element={
           <div className="forecast  h-screen ">
-            <PrivateRoute><Forecast /></PrivateRoute>  {" "}
+            <PrivateRoute>
+              <Forecast />
+            </PrivateRoute>{" "}
           </div>
         }
       />
@@ -112,7 +124,9 @@ const MainRoutes = () => {
         path="/it"
         element={
           <div className="it  h-screen">
-             <PrivateRoute><IT /></PrivateRoute> {" "}
+            <PrivateRoute>
+              <IT />
+            </PrivateRoute>{" "}
           </div>
         }
       />
@@ -122,7 +136,7 @@ const MainRoutes = () => {
         path="/admin"
         element={
           <div className="admin  h-screen">
-             <PrivateRoute><Admin /></PrivateRoute> {" "}
+            <Admin />
           </div>
         }
       />
@@ -132,7 +146,7 @@ const MainRoutes = () => {
         path="/signin"
         element={
           <div className="signin  h-screen">
-             <Signin />{" "}
+            <Signin />{" "}
           </div>
         }
       />
@@ -142,7 +156,7 @@ const MainRoutes = () => {
         path="/signup"
         element={
           <div className="signup  h-screen">
-         <Signup />{" "}
+            <Signup />{" "}
           </div>
         }
       />
@@ -152,7 +166,9 @@ const MainRoutes = () => {
         path="/adminsidelive"
         element={
           <div className="signup  h-screen">
-              <PrivateRoute><AdminSideLive /></PrivateRoute>
+            <PrivateRoute>
+              <AdminSideLive />
+            </PrivateRoute>
           </div>
         }
       />
@@ -162,7 +178,9 @@ const MainRoutes = () => {
         path="/adminsideended"
         element={
           <div className="signup  h-screen">
-              <PrivateRoute><AdminSideEnded /></PrivateRoute>
+            <PrivateRoute>
+              <AdminSideEnded />
+            </PrivateRoute>
           </div>
         }
       />
@@ -172,7 +190,9 @@ const MainRoutes = () => {
         path="/usersidelive"
         element={
           <div className="signup  h-screen">
-              <PrivateRoute><UserSideLive /></PrivateRoute>
+            <PrivateRoute>
+              <UserSideLive />
+            </PrivateRoute>
           </div>
         }
       />
@@ -182,7 +202,9 @@ const MainRoutes = () => {
         path="/usersideended"
         element={
           <div className="signup  h-screen">
-              <PrivateRoute><UserSideEnded /></PrivateRoute>
+            <PrivateRoute>
+              <UserSideEnded />
+            </PrivateRoute>
           </div>
         }
       />
@@ -194,7 +216,9 @@ const MainRoutes = () => {
           <div className="createsim h-screen">
             <div className="navbar pb-4">
               {" "}
-              <PrivateRoute><AdminNavBar /></PrivateRoute> 
+              <PrivateRoute>
+                <AdminNavBar />
+              </PrivateRoute>
             </div>
 
             <Steps

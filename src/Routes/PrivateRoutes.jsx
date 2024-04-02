@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
 export const PrivateRoute = ({ children }) => {
-  let isToken = JSON.parse(localStorage.getItem("token")) || null;
+  let isToken = JSON.parse(localStorage.getItem("user")) || null;
   const location = useLocation();
 
   if (isToken !== null) {
@@ -10,5 +10,5 @@ export const PrivateRoute = ({ children }) => {
 
     return children;
   }
-  return <Navigate to={"/signin"} state={location.pathname} replace />;
+  return <Navigate to={"/"} state={location.pathname} replace />;
 };
