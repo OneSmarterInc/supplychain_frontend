@@ -7,7 +7,7 @@ import { Box, Button, Heading } from "@chakra-ui/react";
 const Home = () => {
   return (
     <>
-      <NavBar />
+      {/* <NavBar /> */}
       <div style={{ display: "flex", height: "100%" }}>
         {/* Left side with image */}
         <div
