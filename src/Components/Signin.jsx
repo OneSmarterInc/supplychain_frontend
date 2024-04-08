@@ -1,4 +1,3 @@
-
 import { useContext, useEffect, useState } from "react";
 
 import {
@@ -30,7 +29,7 @@ const Signin = () => {
   const [password, setPassword] = useState("");
 
   const toast = useToast();
-  const {api} = useContext(MyContext);
+  const { api } = useContext(MyContext);
   const navigate = useNavigate();
 
   const loginHandler = async (e) => {
@@ -54,13 +53,9 @@ const Signin = () => {
           colorScheme: "red",
         });
       } else {
-        const response = await axios.post(
-          `${api}/users/login/`,
-          data
-        );
-          console.log(response.status);
-        if (response.status === 200) {
-          
+        const response = await axios.post(`${api}/users/login/`, data);
+        console.log(response.status);
+        if (response.status === 200 && response.data.isadmin) {
           toast({
             title: "Login successful",
             status: "success",
@@ -70,13 +65,22 @@ const Signin = () => {
           });
           console.log(response.data);
           const serializedValue = JSON.stringify(response.data);
-          console.log(serializedValue)
-          localStorage.setItem("user", serializedValue);
-          navigate("/createsim");
-
+          console.log(serializedValue);
+          if (response.data.isadmin) {
+            localStorage.setItem("admin", serializedValue);
+            navigate("/createsim");
+          }
         } else {
           console.log("Login failed");
-          console.log(response.data);
+          toast({
+            title: "User is Not Admin",
+            description: "Please sign up.",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+            position: "top",
+          });
+          console.log(response.data)
         }
       }
     } catch (error) {
@@ -107,7 +111,6 @@ const Signin = () => {
   };
 
   const [showPassword, setShowPassword] = useState(false);
-
   const handleShowClick = () => setShowPassword(!showPassword);
 
   return (
@@ -183,7 +186,7 @@ const Signin = () => {
                     onClick={loginHandler}
                     _hover={{ color: "white" }}
                   >
-                   Login
+                    Login
                   </Button>
                 </Stack>
               </form>
