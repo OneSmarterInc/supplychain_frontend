@@ -32,11 +32,11 @@ const Home = () => {
           <div>
             <Heading>Welcome to Supplychain Simulation</Heading>
             <Box display="flex" gap={10} justifyContent="center" mt={20}>
-              <Link to="/admin">
+              {/* <Link to="/admin">
                 <Button>Admin</Button>
-              </Link>
+              </Link> */}
               <Link to="/signin">
-                <Button>User</Button>
+                <Button>Login</Button>
               </Link>
             </Box>
           </div>
