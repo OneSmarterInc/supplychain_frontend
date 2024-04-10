@@ -2,13 +2,29 @@ import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
 export const PrivateRoute = ({ children }) => {
-  let isAdminToken = JSON.parse(localStorage.getItem("admin")) || null;
-
+  const userData = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
 
-  if (isAdminToken !== null) {
-    //temporary , actual must be (isToken !== null)
-    return children;
+  if (userData) {
+    if (location.pathname === "/signin") {
+      return <Navigate to="/createsim" replace />;
+    } else {
+      if (userData.isadmin) {
+        return children;
+      } else {
+        if (location.pathname === "/createsim") {
+          return <Navigate to="/" replace />;
+        } else {
+          return children;
+        }
+      }
+    }
+  } else {
+    // Redirect invalid users to the signin page
+    if (location.pathname !== "/signin") {
+      return <Navigate to="/signin" replace />;
+    } else {
+      return children;
+    }
   }
-  return <Navigate to={"/"} state={location.pathname} replace />;
 };

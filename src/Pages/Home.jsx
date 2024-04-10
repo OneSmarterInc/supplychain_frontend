@@ -1,10 +1,16 @@
 import React from "react";
 import homeimg from "../assets/img.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../Components/NavBar";
 import { Box, Button, Heading } from "@chakra-ui/react";
 
 const Home = () => {
+  const userData = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+  const handleLogOut = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
   return (
     <>
       {/* <NavBar /> */}
@@ -30,14 +36,18 @@ const Home = () => {
           }}
         >
           <div>
-            <Heading>Welcome to Supplychain Simulation</Heading>
+            <Heading className="m-4">Welcome to Supplychain Simulation</Heading>
             <Box display="flex" gap={10} justifyContent="center" mt={20}>
-              {/* <Link to="/admin">
-                <Button>Admin</Button>
-              </Link> */}
-              <Link to="/signin">
-                <Button>Login</Button>
-              </Link>
+              {/* temporary  */}
+              {userData ? (
+                <Button color={"red"} onClick={handleLogOut}>
+                  LogOut {userData.isadmin ? "Admin" : "User"}
+                </Button>
+              ) : (
+                <Link to="/signin">
+                  <Button>Login</Button>
+                </Link>
+              )}
             </Box>
           </div>
         </div>
