@@ -55,32 +55,44 @@ const Signin = () => {
       } else {
         const response = await axios.post(`${api}/users/login/`, data);
         console.log(response.status);
-        if (response.status === 200 && response.data.isadmin) {
+        if (response.status === 200) {
           toast({
             title: "Login successful",
             status: "success",
-            duration: 9000,
+            duration: 2000,
             isClosable: true,
             position: "top",
           });
           console.log(response.data);
           const serializedValue = JSON.stringify(response.data);
-          console.log(serializedValue);
+          console.log("serializedValue,", serializedValue);
+          localStorage.setItem("user", serializedValue);
           if (response.data.isadmin) {
-            localStorage.setItem("admin", serializedValue);
             navigate("/createsim");
+            setTimeout(function () {
+              toast({
+                title: "Welcome Admin",
+                status: "info",
+                duration: 7000,
+                isClosable: true,
+                position: "top",
+              });
+            }, 2000);
+          } else {
+            navigate("/");
+            setTimeout(function () {
+              toast({
+                title: "Welcome User",
+                status: "info",
+                duration: 7000,
+                isClosable: true,
+                position: "top",
+              });
+            }, 2000);
           }
         } else {
           console.log("Login failed");
-          toast({
-            title: "User is Not Admin",
-            description: "Please sign up.",
-            status: "error",
-            duration: 9000,
-            isClosable: true,
-            position: "top",
-          });
-          console.log(response.data)
+          console.log(response.data);
         }
       }
     } catch (error) {

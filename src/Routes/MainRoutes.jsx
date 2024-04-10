@@ -146,7 +146,9 @@ const MainRoutes = () => {
         path="/signin"
         element={
           <div className="signin  h-screen">
-            <Signin />{" "}
+            <PrivateRoute>
+              <Signin />{" "}
+            </PrivateRoute>
           </div>
         }
       />
