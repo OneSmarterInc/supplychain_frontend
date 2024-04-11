@@ -6,14 +6,17 @@ export const PrivateRoute = ({ children }) => {
   const location = useLocation();
 
   if (userData) {
-    if (location.pathname === "/signin") {
+    if (location.pathname === "/signin" && userData.isadmin) {
       return <Navigate to="/createsim" replace />;
     } else {
+      if (location.pathname === "/signin") {
+        return <Navigate to="/" replace />;
+      }
       if (userData.isadmin) {
         return children;
       } else {
         if (location.pathname === "/createsim") {
-          return <Navigate to="/" replace />;
+          return <Navigate to="/usersidelive" replace />;
         } else {
           return children;
         }
