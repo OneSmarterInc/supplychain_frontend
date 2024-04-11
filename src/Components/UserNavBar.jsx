@@ -1,6 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 const UserNavBar = () => {
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    localStorage.removeItem("user");
+    navigate("/signin");
+  };
+
   return (
     <div>
       <nav className="bg-gray-800">
@@ -21,12 +29,6 @@ const UserNavBar = () => {
                     Home
                   </Link>
                   <Link
-                    to="/procurement"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
-                  >
-                    Start New
-                  </Link>
-                  <Link
                     to="/usersidelive"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
                   >
@@ -39,6 +41,13 @@ const UserNavBar = () => {
                     Ended
                   </Link>
                 </div>
+              </div>
+              <div
+                className="p-2 bg-red-700 text-white cursor-pointer rounded-md"
+                onClick={handleLogOut}
+              >
+                {" "}
+                LogOut
               </div>
             </div>
           </div>

@@ -79,7 +79,7 @@ const Signin = () => {
               });
             }, 2000);
           } else {
-            navigate("/");
+            navigate("/usersidelive");
             setTimeout(function () {
               toast({
                 title: "Welcome User",

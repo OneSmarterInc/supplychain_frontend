@@ -3,6 +3,7 @@ import homeimg from "../assets/img.png";
 import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../Components/NavBar";
 import { Box, Button, Heading } from "@chakra-ui/react";
+import UserNavBar from "../Components/UserNavBar";
 
 const Home = () => {
   const userData = JSON.parse(localStorage.getItem("user"));
@@ -14,6 +15,7 @@ const Home = () => {
   return (
     <>
       {/* <NavBar /> */}
+      {/* <UserNavBar/> */}
       <div style={{ display: "flex", height: "100%" }}>
         {/* Left side with image */}
         <div
