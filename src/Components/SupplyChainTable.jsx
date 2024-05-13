@@ -1,3 +1,4 @@
+import { Toast } from "@chakra-ui/react";
 import React, { useRef, useState, useEffect } from "react";
 
 const SupplyChainTable = (props) => {
@@ -106,7 +107,7 @@ const SupplyChainTable = (props) => {
     if (tableRef.current) {
       tableRef.current.scrollTop = tableRef.current.scrollHeight;
     }
-    alert("New Entry is Added, Scroll to bottom of table");
+    
   };
   // // Scroll to the bottom of the table when a new entry is added
   // useEffect(() => {
@@ -124,7 +125,7 @@ const SupplyChainTable = (props) => {
         <h2 className="text-center text-3xl py-2  ">
           Sub Assembly Components Plant & {activeDC}
         </h2>
-        <div ref={tableRef} className="h-64 ml-2 overflow-scroll border-2 border-opacity-50 border-blue-gray-200">
+        <div ref={tableRef} className="h-100 ml-2 overflow-scroll border-2 border-opacity-50 border-blue-gray-200">
           {/* Conditionally render tables based on activeDC */}
           {activeDC === "DC1" && dcData.DC1 !== "closed" && (
             <table className="table-auto w-full border-separate border-spacing-2 ">

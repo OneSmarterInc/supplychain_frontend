@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, Thead, Tbody, Tr, Th, Td, Input } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Input, Text } from "@chakra-ui/react";
 
 const Forecasting_sales2 = ({ setForecastMetawaretopass }) => {
   const [ForecastMetaware, setForecastMetaware] = useState({
@@ -23,6 +23,10 @@ const Forecasting_sales2 = ({ setForecastMetawaretopass }) => {
   // console.log("valuesch2", ForecastMetaware);
   return (
     <div>
+      <Text className="p-5 py-3 text-2xl">
+        <strong>Sales Volume Forecast Product : Metaware</strong>
+      </Text>
+    
       <Table
         variant="striped"
         width={"650px"}

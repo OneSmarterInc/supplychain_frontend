@@ -15,7 +15,7 @@ const Home = () => {
   return (
     <>
       {/* <NavBar /> */}
-      {/* <UserNavBar/> */}
+      <UserNavBar/>
       <div style={{ display: "flex", height: "100%" }}>
         {/* Left side with image */}
         <div

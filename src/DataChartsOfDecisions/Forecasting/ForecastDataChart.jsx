@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Chart from "react-apexcharts";
 import { HStack, Select } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import ForecastPreview from "../../Components/Previews/ForecastPreview";
+import MyContext from "../../Components/ContextApi/MyContext";
+import ReportModal from "../../report/ReportModal";
 
 
 const ForecastDataChart = ({
@@ -10,15 +12,43 @@ const ForecastDataChart = ({
   ForecastHyperware,
   ForecastMetaware,
 }) => {
+
+
+  
+  
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [firstDropdownValue, setFirstDropdownValue] = useState('1');
+  const [secondDropdownValue, setSecondDropdownValue] = useState('cpl');
+  const { api } = useContext(MyContext);
+
   const location = useLocation();
   const path = location.pathname;
+ 
+  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ 
+ 
+ 
+  let simData = localStorage.getItem("selectedSim");
+  simData = JSON.parse(simData);
+  let user = localStorage.getItem('user');
+  user = JSON.parse(user);
+  user = user.email;
+  
+
+  const option = [];
+  for (let i = 1; i <= simData[0].current_quarter; i++) {
+    option.push(
+      <option key={i} value={i}>
+        Select Quarter {i}
+      </option>
+    );
+  }
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
-    // console.log("newsac_units", newsac_units[0].name);
   };
-  // eslint-disable-next-line
+
   const [options, setOptions] = useState({
     chart: {
       id: "area-chart",
@@ -27,7 +57,6 @@ const ForecastDataChart = ({
       categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
     },
   });
-  // eslint-disable-next-line
   const [series, setSeries] = useState([
     {
       name: "Units Sold",
@@ -40,6 +69,31 @@ const ForecastDataChart = ({
       submitForecast();
     }
   };
+  console.log(secondDropdownValue);
+  const handleButtonClick = async () => {
+    // Construct the query parameters
+    const queryParams = new URLSearchParams({
+      simulation_id: simData[0].simulation_id,
+      quarter: firstDropdownValue,
+      firm: simData[0].firm_data[user]
+    }).toString();
+  
+    // Append the query parameters to the URL
+    const url = `${api}/reports/${secondDropdownValue}/?${queryParams}`;
+  
+    // Make a GET request with the constructed URL
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  
+    const data = await response.json();
+    console.log(data);  // Process your data here
+  };
+  
+
   return (
     <div className="app">
       <div className="row mx-5">
@@ -81,20 +135,27 @@ const ForecastDataChart = ({
             {/* Modal ends */}
           </div>
         </div>
+
         <HStack spacing={3} ml={9}>
-          <Select width="165px" border="1px solid black">
-            <option value="">Select Quarter 1</option>
-            <option value="">Select Quarter 2</option>
-            <option value="">Select Quarter 3</option>
+          <Select width="165px" border="1px solid black" onChange={(e) => setFirstDropdownValue(e.target.value)}>
+            {option}
           </Select>
-          <Select width="165px" border="1px solid black">
-            <option value="">Select Report 1</option>
-            <option value="">Select Report 2</option>
-            <option value="">Select Report 3</option>
+          <Select width="165px" border="1px solid black" onChange={(e) => setSecondDropdownValue(e.target.value)}>
+            <option value="cpl">Corporate P&L Statement </option>
+            <option value="hpl">Historical Corporate P&L Statement</option>
+            <option value="hpls">Hyperware P&L Statement</option>
+            <option value="mpls">Metaware P&L Statement</option>
+            <option value="bl">Balance Sheet</option>
+            <option value="cfar">Cash FLow Analysis Report</option>
+            <option value="fgir">FINISHED GOODS INVENTORY REPORT</option>
+            <option value="pir">PROCUREMENT INVENTORY REPORT</option>
+            <option value="odvr">OTHER DECISION VARIABLES REPORT</option>
+            <option value="far">FORECASTING ACCURACY REPORT</option>
           </Select>
-          <button className="h-10  bg-gray-700 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5 w-24 ">
+          {/* <button className="h-10  bg-gray-700 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5 w-24 " onClick={handleButtonClick}>
             View
-          </button>
+          </button> */}
+      <ReportModal />
         </HStack>
       </div>
     </div>

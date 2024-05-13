@@ -23,14 +23,14 @@ const Create_sim = ({ setNoOfQuarters }) => {
   const { api } = useContext(MyContext);
   const [selectedFirmIndex, setSelectedFirmIndex] = useState(null);
   const [simulationData, setSimulationData] = useState({
-    name: "",
-    quarters: "",
-    firms: 0,
-    firm_data: [], // Changed to firm_data here
-    start_date: "",
-    end_date: "",
-    decision_open: "",
-    decision_close: "",
+    name: "temp",
+    quarters: "1",
+    firms: 1,
+    firm_data: [{"1smarterinc@gmail.com":"Onesmarter inc"}], // Changed to firm_data here ,
+    start_date: "2024-04-05",
+    end_date: "2024-04-05",
+    decision_open: "01:59:00",
+    decision_close: "01:59:00",
   });
 
   // console.log(simulationData);

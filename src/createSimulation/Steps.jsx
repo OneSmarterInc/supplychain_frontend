@@ -3,8 +3,10 @@ import { Stepper, Step, Typography, Button } from "@material-tailwind/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Create_sim from "./Create_sim";
 import QuarterDetails from "./QuarterDetails";
+import { Box, Text, Flex, useToast } from "@chakra-ui/react";
 
 export default function Steps({ setNoOfQuarters, noOfQuarters }) {
+  const toast = useToast();
   const location = useLocation();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -37,6 +39,24 @@ export default function Steps({ setNoOfQuarters, noOfQuarters }) {
       navigate(`?step=${step}`);
     }
   };
+
+  const HandleAdmin = ()=>{
+    const address= "http://localhost:3000/createsim?step=3";
+    window.location.href = `http://localhost:5173/?address=${address}`;
+  }
+
+  const HandleCreateSimulation=()=>{
+    toast({
+      title: "Simulation Created successful",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+      position: "top",
+    });
+
+
+    navigate('/usersidelive')
+  }
 
   return (
     <>
@@ -109,6 +129,23 @@ export default function Steps({ setNoOfQuarters, noOfQuarters }) {
         {steps === 1 && <Create_sim setNoOfQuarters={setNoOfQuarters} />}
         {steps === 2 && noOfQuarters && (
           <QuarterDetails noOfQuarters={noOfQuarters} />
+        )}
+
+        {steps === 3 && (
+          <>
+          <Flex h="50vh" justify="center" align="center">
+            <Box  alignContent={"center"} flex={"column"}>
+              <Text>Edit Rules and Default values of First Quarter </Text>
+              <Button alignContent={"center"} flex={"column"} onClick={HandleAdmin}>Edit</Button>
+            </Box>
+            </Flex>
+
+            <Flex h="10vh" justify="center" align="center">
+            <Box alignContent={"center"} flex={"column"}>
+            <Button color="green" onClick={HandleCreateSimulation}>Create Simulation </Button>
+            </Box>
+          </Flex>
+          </> 
         )}
       </div>
     </>

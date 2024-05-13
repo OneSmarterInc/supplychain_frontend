@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Table, Thead, Tbody, Tr, Th, Td, Input, Text } from "@chakra-ui/react";
 
 const AdminNavBar = () => {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const AdminNavBar = () => {
                 </div>
               </div>
               <div
-                className="p-2 bg-red-700 text-white cursor-pointer rounded-md"
+                className="p-2 bg-red-700 text-white cursor-pointer rounded-md "
                 onClick={handleLogOut}
               >
                 {" "}

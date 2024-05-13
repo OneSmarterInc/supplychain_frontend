@@ -1,6 +1,18 @@
+import { useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const QuarterDetails = ({ noOfQuarters }) => {
+  const navigate = useNavigate();
+  const toast = useToast();
+  toast({
+    title: "Email Sent successful",
+    status: "success",
+    duration: 2000,
+    isClosable: true,
+    position: "top",
+  });
   const initialQuarterState = {
     is_procurement: false,
     is_manufacturing: false,
@@ -42,6 +54,7 @@ const QuarterDetails = ({ noOfQuarters }) => {
   const handleSubmit = () => {
     try {
       //here we have to sumbit post request using axios
+      navigate("/createsim?step=3");
     } catch (error) {
       console.log("Error", error.message);
     }
