@@ -23,17 +23,19 @@ const Create_sim = ({ setNoOfQuarters }) => {
   const { api } = useContext(MyContext);
   const [selectedFirmIndex, setSelectedFirmIndex] = useState(null);
   const [simulationData, setSimulationData] = useState({
-    name: "temp",
-    quarters: "1",
+    
+    name: "Test Simulation",
+    total_quarters:4,
     firms: 1,
-    firm_data: [{"1smarterinc@gmail.com":"Onesmarter inc"}], // Changed to firm_data here ,
+    admin_id:3,
+    firm_data: [{"1smarterinc@gmail.com":"Onesmarter inc","nachiketrtekade@gmail.com":"Onesmarter inc", "kunal.kalpande@onesmarter.com":"Onesmarter inc","nachiket.tekade@onesmarter.com":"test","avinash.kalmegh@onesmarter.com":"test"}], // Changed to firm_data here ,
     start_date: "2024-04-05",
     end_date: "2024-04-05",
     decision_open: "01:59:00",
     decision_close: "01:59:00",
   });
 
-  // console.log(simulationData);
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSimulationData((prev) => ({
@@ -76,7 +78,7 @@ const Create_sim = ({ setNoOfQuarters }) => {
   };
 
   const handleSubmit = async () => {
-    if (simulationData.quarters) {
+    if (simulationData.total_quarters) {
       try {
         const response = await axios.post(
           `${api}/simulations/simulation/`,
@@ -91,9 +93,9 @@ const Create_sim = ({ setNoOfQuarters }) => {
     }
 
     // temporary navigate without conditions
-    setNoOfQuarters(simulationData.quarters);
+    setNoOfQuarters(simulationData.total_quarters);
 
-    if (simulationData.quarters) {
+    if (simulationData.total_quarters) {
       navigate("/createsim?step=2");
     }
   };
@@ -130,7 +132,7 @@ const Create_sim = ({ setNoOfQuarters }) => {
           </strong>
         </label>
         <Input
-          name="quarters"
+          name="total_quarters"
           bgColor="white"
           mt={5}
           mb={10}
