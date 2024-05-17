@@ -53,14 +53,27 @@ const Transportation_Decision = () => {
       console.error("Error making POST request: Transportation", error);
     }
   };
+  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div>
       <NavBar />
       <div className=" ">
-        <h1 className="text-4xl text-start px-3 py-2 underline">
-          Transportation Decision
-        </h1>
+        <div className="flex justify-between">
+          <h1 className="text-4xl text-start px-3 py-2 ">
+            Transportation Decision
+          </h1>
+
+          <div className="flex">
+            {" "}
+            <h1 className="text-2xl text-start px-3 py-2 text-blue-500">
+              MBA-JUN-24
+            </h1>{" "}
+            <h1 className="text-2xl text-start px-3 py-2 text-gray-600 ">
+              {user.username}
+            </h1>
+          </div>
+        </div>
         <div className="grid grid-cols-2 grid-flow-col gap-3  m-1">
           <div className="row-span-2 rounded-lg -2xl h-full  flex flex-col justify-center">
             <Box>

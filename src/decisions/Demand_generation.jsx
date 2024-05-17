@@ -15,13 +15,26 @@ const Demand_generation = () => {
   const [hypeCh2Value, setHypeCh2Value] = useState({});
 
   // console.log("hypeCh1Value", hypeCh1Value);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div>
       <NavBar />
-      <h1 className="text-4xl text-start px-3 py-2 underline">
-        Demand Generation Decision
-      </h1>
+      <div className="flex justify-between">
+        <h1 className="text-4xl text-start px-3 py-2 ">
+          Demand Genetation Decision
+        </h1>
+
+        <div className="flex">
+          {" "}
+          <h1 className="text-2xl text-start px-3 py-2 text-blue-500">
+            MBA-JUN-24
+          </h1>{" "}
+          <h1 className="text-2xl text-start px-3 py-2 text-gray-600 ">
+            {user.username}
+          </h1>
+        </div>
+      </div>
       <div className="grid grid-cols-2 grid-flow-col gap-3  m-1 ">
         <div className="row-span-2 rounded-lg -2xl  flex flex-col justify-center overflow-scroll h-[600px] scroll-pt-96">
           <div className="mt-[720px]"></div>

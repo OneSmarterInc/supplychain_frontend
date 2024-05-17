@@ -66,12 +66,26 @@ const Procurement_Decisions = () => {
   };
 
   document.body.style.backgroundColor = "#e0e2e4";
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <div>
       <NavBar />
-      <h1 className="text-4xl text-start px-3 py-2 underline">
-        Procurement Decision
-      </h1>
+      <div className="flex justify-between">
+        <h1 className="text-4xl text-start px-3 py-2 ">
+          Procurement Decision
+        </h1>
+
+        <div className="flex">
+          {" "}
+          <h1 className="text-2xl text-start px-3 py-2 text-blue-500">
+            MBA-JUN-24
+          </h1>{" "}
+          <h1 className="text-2xl text-start px-3 py-2 text-gray-600 ">
+            {user.username}
+          </h1>
+        </div>
+      </div>
       <div className="sm:grid grid-cols-2 gap-3 m-1">
         <div className="rounded-lg -2xl h-full  flex flex-col justify-center">
           <RawMaterial

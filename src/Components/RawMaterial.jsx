@@ -20,24 +20,22 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
 
   return (
     <div>
-      <h2 className="text-center text-3xl py-1 ">Raw Material</h2>
+      <h2 className="text-center pr-20 text-3xl py-1 ">Raw Material</h2>
 
       <table className="table-auto w-full border-separate border-spacing-2  ">
         <thead>
           <tr className="bg-slate-300  ">
             <th className="text-center py-3 text-2xl ">Entries</th>
-            <th className="text-center py-3 text-2xl ">Demands</th>
             <th className="text-center py-3 text-2xl ">Units</th>
           </tr>
         </thead>
         <tbody>
           <tr className="bg-slate-300 ">
             <td className="text-center py-3 text-xl ">Alpha</td>
-            <td className="text-center py-3 text-xl ">15000 </td>
             <td className="text-center py-3 text-xl ">
               <input
                 id="alpha-input"
-                className={`bg-gray-50 border  text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none w-32 mx-auto  p-2 ${
+                className={`bg-gray-50 border  text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none mx-auto  p-2 ${
                   !newData.alpha_quantity.trim()
                     ? "border-red-500 outline-red-500"
                     : " border-green-500 outline-green-500"
@@ -54,11 +52,10 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
 
           <tr className="bg-slate-300 ">
             <td className="text-center py-3 text-xl ">Beta</td>
-            <td className="text-center py-3 text-xl ">10000</td>
             <td className="text-center py-3 text-xl ">
               <input
                 id="beta-input"
-                className={`bg-gray-50 border text-center text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500  w-32 mx-auto  p-2 ${
+                className={`bg-gray-50 border text-center text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500  mx-auto  p-2 ${
                   !newData.beta_quantity.trim()
                     ? "border-red-500 outline-red-500"
                     : " border-green-500 outline-green-500"
