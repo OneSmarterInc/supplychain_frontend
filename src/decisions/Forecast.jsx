@@ -30,29 +30,48 @@ const Forecast = () => {
       console.error("Error making POST request: Forecast", error);
     }
   };
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+
   return (
-    <div className=" ">
+    <div style={{ fontFamily: "ABeeZee" }} className=" ">
       <NavBar />
-      <h1 className="text-4xl text-start px-3 py-2 underline">
-        Forecasting Decision
-      </h1>
+      <div className="flex justify-between">
+        <h1 className="text-2xl text-start pl-6 py-2 ">Forecast Decision</h1>
+
+        <div className="flex">
+          {" "}
+          <h1 className="text-xl text-start px-3 py-2 text-blue-500">
+            {selectedSim[0].name}
+          </h1>{" "}
+          <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
+          <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
+            {user.username}
+          </h1>
+        </div>
+      </div>
       <div className="sm:grid grid-cols-2  gap-3 m-1">
-        <div className="rounded-lg -2xl h-full  flex flex-col justify-center">
+        <div className="m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-start">
           <Forecasting_sales
             setForecastHyperwaretopass={setForecastHyperware}
-          />
+          />{" "}
+          <div className="py-5">
+            <Forecasting_sales2
+              setForecastMetawaretopass={setForecastMetaware}
+            />
+          </div>
         </div>
-        <div className="rounded-lg -2xl h-full bg-cover overflow-hidden bg-no-repeat">
+
+        <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
           <InfoImg />
+          <div className="py-10">
+            <ForecastDataChart
+              submitForecast={submitForecast}
+              ForecastHyperware={ForecastHyperware}
+              ForecastMetaware={ForecastMetaware}
+            />{" "}
+          </div>
         </div>
-        <div className="rounded-lg -2xl h-96  flex flex-col justify-center">
-          <Forecasting_sales2 setForecastMetawaretopass={setForecastMetaware} />
-        </div>
-        <ForecastDataChart
-          submitForecast={submitForecast}
-          ForecastHyperware={ForecastHyperware}
-          ForecastMetaware={ForecastMetaware}
-        />
       </div>
     </div>
   );

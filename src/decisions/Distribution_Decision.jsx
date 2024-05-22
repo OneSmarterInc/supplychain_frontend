@@ -10,9 +10,9 @@ import {
   Th,
   Td,
   Text,
+  Button,
 } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
-// import DataChart from "../Components/DataChart";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
@@ -24,12 +24,20 @@ const Distribution_Decision = () => {
     distribution_center: {},
     rfid: {},
     emergency_carrier: {},
-    cross_docking: {},
+    cross_docking: [],
     fgi_surface_shipping: {},
     sac_surface_shipping: {},
   });
+  console.log("Distribution Values:---", values);
 
-  // console.log("values", values);
+  const [availableCarriers, setAvailableCarriers] = useState([
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+  ]);
 
   const handleChange = (channel, region, newValue) => {
     setValues((prevValues) => ({
@@ -41,12 +49,39 @@ const Distribution_Decision = () => {
     }));
   };
 
-  const regions = ["Region1", "Region2", "Region3"];
+  const handleCrossDockingChange = (index, region, newValue) => {
+    setValues((prevValues) => {
+      const newCrossDocking = [...prevValues.cross_docking];
+      newCrossDocking[index] = {
+        ...newCrossDocking[index],
+        [region]: newValue,
+      };
+      return {
+        ...prevValues,
+        cross_docking: newCrossDocking,
+      };
+    });
+  };
+
+  const addCrossDockingCarrier = (carrier) => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      cross_docking: [
+        ...prevValues.cross_docking,
+        { carrier, region1: "", region2: "", region3: "" },
+      ],
+    }));
+    setAvailableCarriers((prevCarriers) =>
+      prevCarriers.filter((c) => c !== carrier)
+    );
+  };
+
+  const regions = ["region1", "region2", "region3"];
   const options = {
     distribution_centerOpt: [0, 1, 2],
     rfidOpt: [0, 1],
     emergency_carrierOpt: ["I", "J", "K", "L", "M", "N"],
-    cross_dockingOpt: [0, 1],
+    cross_dockingOpt: ["I", "J", "K", "L", "M", "N"],
     fgi_surface_shippingOpt: [1, 2, 3],
     sac_surface_shippingOpt: [1, 2, 3],
   };
@@ -68,17 +103,35 @@ const Distribution_Decision = () => {
     }
   };
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+
   return (
     <div>
-      <div>
+      <div style={{ fontFamily: "ABeeZee" }}>
         <NavBar />
-        <h1 className="text-4xl text-start px-3 py-2  underline">
-          Distribution Decision
-        </h1>
+        <div className="flex justify-between">
+          <h1
+            style={{ fontFamily: "ABeeZee" }}
+            className="text-2xl text-start pl-6 py-2 "
+          >
+            Distribution Decision
+          </h1>
+
+          <div className="flex">
+            <h1 className="text-xl text-start px-3 py-2 text-blue-500">
+              {selectedSim[0].name}
+            </h1>
+            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>
+            <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
+              {user.username}
+            </h1>
+          </div>
+        </div>
         <div className="grid grid-cols-2 grid-flow-col gap-3  m-1">
-          <div className="row-span-2 rounded-lg -2xl h-full  flex flex-col justify-center">
+          <div className="row-span-2 m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-start">
             <Box>
-              <Text className="p-5 py-3 pb-0 text-2xl">
+              <Text className="p-5 py-3 pb-0 text-xl">
                 <strong>Distribution</strong>
               </Text>
               <br />
@@ -91,62 +144,124 @@ const Distribution_Decision = () => {
                   <Tr>
                     <Th> </Th>
                     {regions.map((region) => (
-                      <Th key={region}>{region}</Th>
+                      <Th key={region}>
+                        {region.charAt(0).toUpperCase() + region.slice(1)}
+                      </Th>
                     ))}
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {Object.keys(values).map((channel, index) => (
-                    <Tr key={channel}>
-                      <Td>
-                        <strong>{channel}</strong>
-                      </Td>
-                      {regions.map((region) => (
-                        <Td key={region}>
-                          <Select
-                            placeholder="Select"
-                            value={values[channel][region.toLowerCase()]}
-                            onChange={(e) =>
-                              handleChange(
-                                channel,
-                                region.toLowerCase(),
-                                e.target.value
-                              )
-                            }
-                            border={`1px solid ${
-                              !values[channel][region.toLowerCase()]
-                                ? "red"
-                                : "green"
-                            }`}
-                            className={`border placeholder:text-red-400`}
-                            fontSize={15}
-                            width="100px"
-                          >
-                            {options[channel + "Opt"].map((option) => (
-                              <option key={option} value={option}>
-                                {option}
-                              </option>
-                            ))}
-                            {/* 
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option> */}
-                          </Select>
+                  {Object.keys(values).map((channel, index) =>
+                    channel !== "cross_docking" ? (
+                      <Tr key={channel}>
+                        <Td>
+                          <strong>{channel}</strong>
                         </Td>
-                      ))}
-                    </Tr>
-                  ))}
+                        {regions.map((region) => (
+                          <Td key={region}>
+                            <Select
+                              placeholder="Select"
+                              value={values[channel][region.toLowerCase()]}
+                              onChange={(e) =>
+                                handleChange(
+                                  channel,
+                                  region.toLowerCase(),
+                                  e.target.value
+                                )
+                              }
+                              border={`1px solid ${
+                                !values[channel][region.toLowerCase()]
+                                  ? "red"
+                                  : "green"
+                              }`}
+                              className={`border placeholder:text-red-400`}
+                              fontSize={15}
+                              width="100px"
+                            >
+                              {options[channel + "Opt"].map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </Select>
+                          </Td>
+                        ))}
+                      </Tr>
+                    ) : (
+                      <React.Fragment key={channel}>
+                        <Tr>
+                          <Td colSpan={regions.length + 1}>
+                            <strong>{channel}</strong>
+                          </Td>
+                        </Tr>
+                        {values.cross_docking.map((row, rowIndex) => (
+                          <Tr key={rowIndex}>
+                            <Td>Carrier {row.carrier}</Td>
+                            {regions.map((region) => (
+                              <Td key={region}>
+                                <Select
+                                  placeholder="Select"
+                                  value={row[region]}
+                                  onChange={(e) =>
+                                    handleCrossDockingChange(
+                                      rowIndex,
+                                      region,
+                                      e.target.value
+                                    )
+                                  }
+                                  border={`1px solid ${
+                                    !row[region] ? "red" : "green"
+                                  }`}
+                                  className={`border placeholder:text-red-400`}
+                                  fontSize={15}
+                                  width="100px"
+                                >
+                                  {[0, 1].map((option) => (
+                                    <option key={option} value={option}>
+                                      {option}
+                                    </option>
+                                  ))}
+                                </Select>
+                              </Td>
+                            ))}
+                          </Tr>
+                        ))}
+                        {availableCarriers.length > 0 && (
+                          <Tr>
+                            <Td colSpan={regions.length + 1}>
+                              <Select
+                                placeholder="Add Carrier"
+                                onChange={(e) =>
+                                  addCrossDockingCarrier(e.target.value)
+                                }
+                                width="150px"
+                              >
+                                {availableCarriers.map((carrier) => (
+                                  <option key={carrier} value={carrier}>
+                                    Carrier {carrier}
+                                  </option>
+                                ))}
+                              </Select>
+                            </Td>
+                          </Tr>
+                        )}
+                      </React.Fragment>
+                    )
+                  )}
                 </Tbody>
               </Table>
             </Box>
           </div>
-          <div className="rounded-lg -2xl h-full bg-cover overflow-hidden bg-no-repeat">
+          <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
             <InfoImg />
+            <div className="py-10">
+              {" "}
+              <DistributionDataChart
+                submitDistribution={submitDistribution}
+                DistributionDataPreview={values}
+              />
+            </div>
           </div>
-          <DistributionDataChart
-            submitDistribution={submitDistribution}
-            DistributionDataPreview={values}
-          />
         </div>
       </div>
     </div>

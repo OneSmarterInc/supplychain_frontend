@@ -37,7 +37,7 @@ const Demand_meta_ch2 = ({setMetaCh2ValuetoParent}) => {
 
   return (
     <Box>
-      <Text className="p-5 py-3 pb-0 text-2xl">
+      <Text className="p-5 py-3 pb-0 text-xl">
         <strong>Metaware Channel 2</strong>
       </Text>
       <br />

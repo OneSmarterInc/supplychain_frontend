@@ -56,17 +56,36 @@ const Manufacturing_Decisions = () => {
     }));
   };
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+
   return (
     <div>
       <NavBar />
-      <div className=" ">
-        <h1 className="text-4xl text-start px-3 py-2 underline">
-          Manufacturing Decisions
-        </h1>
+      <div style={{ fontFamily: "ABeeZee" }} className=" ">
+        <div className="flex justify-between">
+          <h1
+            style={{ fontFamily: "ABeeZee" }}
+            className="text-2xl text-start pl-6 py-2 "
+          >
+            Manufacturing Decision
+          </h1>
+
+          <div className="flex">
+            {" "}
+            <h1 className="text-xl text-start px-3 py-2 text-blue-500">
+              {selectedSim[0].name}
+            </h1>{" "}
+            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
+            <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
+              {user.username}
+            </h1>
+          </div>
+        </div>
         <div className="grid grid-cols-2 grid-flow-col gap-3 m-1">
-          <div className="row-span-2 rounded-lg -2xl h-full  flex flex-col justify-center">
+          <div className="m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-center">
             <div className="">
-              <Text className="p-5 py-3 text-2xl">
+              <Text className="p-5 py-3 text-xl">
                 <strong>Report</strong>
               </Text>
               <Table
@@ -138,27 +157,28 @@ const Manufacturing_Decisions = () => {
               </Table>
             </div>
             <div className="rounded-lg -2xl h-96  flex flex-col justify-start">
-              <Text className="p-5 pb-2 pt-6 text-2xl">
+              <Text className="p-5 pb-2 pt-6 text-xl">
                 <strong>Sales Volume Forecast:</strong>
               </Text>
-              <Text className="p-5 py-1  pl-8 text-3xl ">
+              <Text className="p-5 py-1  pl-8 text-2xl ">
                 <strong className="text-green-600">Hyperware: </strong>
                 <span>179000</span>
               </Text>
-              <Text className="p-5 py-1 pl-8 text-3xl ">
+              <Text className="p-5 py-1 pl-8 text-2xl ">
                 <strong className="text-green-600">Metaware: </strong>
                 <span>171000</span>
               </Text>
             </div>
           </div>
-          <div className="rounded-lg -2xl h-64 bg-cover overflow-hidden bg-no-repeat">
+          <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
             <InfoImg />
+            <div className="py-10">
+              <ManufacturingDataChart
+                submitManufacturing={submitManufacturing}
+                ManufacturingDataPreview={values}
+              />
+            </div>
           </div>
-
-          <ManufacturingDataChart
-            submitManufacturing={submitManufacturing}
-            ManufacturingDataPreview={values}
-          />
         </div>
       </div>
     </div>

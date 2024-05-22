@@ -17,7 +17,7 @@ const Procurement_Decisions = () => {
   let [beta_quantity, setBeta_quantity] = useState({});
   const toast = useToast();
 
-  console.log("Updated DC data", updatedDCData)
+  console.log("Updated DC data", updatedDCData);
 
   const [getDcData, setGetDcData] = useState({});
 
@@ -66,33 +66,50 @@ const Procurement_Decisions = () => {
   };
 
   document.body.style.backgroundColor = "#e0e2e4";
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+
   return (
-    <div>
+    <div style={{ fontFamily: "ABeeZee" }}>
       <NavBar />
-      <h1 className="text-4xl text-start px-3 py-2 underline">
-        Procurement Decision
-      </h1>
+      <div className="flex justify-between">
+        <h1 className="text-2xl text-start pl-6 py-2 ">Procurement Decision</h1>
+
+        <div className="flex">
+          {" "}
+          <h1 className="text-xl text-start px-3 py-2 text-blue-500">
+            {selectedSim[0].name}
+          </h1>{" "}
+          <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
+          <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
+            {user.username}
+          </h1>
+        </div>
+      </div>
       <div className="sm:grid grid-cols-2 gap-3 m-1">
-        <div className="rounded-lg -2xl h-full  flex flex-col justify-center">
-          <RawMaterial
-            setAlpha_quantity={setAlpha_quantity}
-            setBeta_quantity={setBeta_quantity}
-          />
+        <div className="m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-center">
+          <div className="rounded-lg -2xl h-full  flex flex-col justify-center">
+            <RawMaterial
+              setAlpha_quantity={setAlpha_quantity}
+              setBeta_quantity={setBeta_quantity}
+            />
+          </div>
+          <div className="rounded-lg -2xl h-96  flex flex-col justify-center">
+            <SupplyChainTable
+              getDcdata={getDcData}
+              setUpdatedDCData={setUpdatedDCData}
+            />
+          </div>
         </div>
-        <div className="rounded-lg -2xl h-full bg-cover overflow-hidden bg-no-repeat">
+        <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
           <InfoImg />
-        </div>
-        <div className="rounded-lg -2xl h-96  flex flex-col justify-center">
-          <SupplyChainTable
-            getDcdata={getDcData}
-            setUpdatedDCData={setUpdatedDCData}
-          />
-        </div>
-        <div className="rounded-lg -2xl h-96 ">
-          <ProcurementDataChart
-            updatedDCData={updatedDCData}
-            submitProcurement={submitProcurement}
-          />
+          <div className="rounded-lg py-10 ">
+            <ProcurementDataChart
+              updatedDCData={updatedDCData}
+              submitProcurement={submitProcurement}
+            />
+          </div>
         </div>
       </div>
     </div>

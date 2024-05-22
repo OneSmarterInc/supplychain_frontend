@@ -6,25 +6,40 @@ import { HStack, Select } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
 import DataChart from "../Components/DataChart";
 const IT = () => {
-
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
 
   return (
-    <div >
-      <NavBar/>
-      <h1 className="text-4xl text-start px-3 py-2 underline">Information Technology Decision</h1>
+    <div>
+      <NavBar />
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-semibold text-start pl-6 py-2 ">
+          Information Technology Decision
+        </h1>
+
+        <div style={{ fontFamily: "ABeeZee" }} className="flex">
+          {" "}
+          <h1 className="text-xl text-start px-3 py-2 text-blue-500">
+            {selectedSim[0].name}
+          </h1>{" "}
+          <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
+          <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
+            {user.username}
+          </h1>
+        </div>
+      </div>
       <div className="sm:grid grid-cols-2  gap-3 m-1">
-        <div className="rounded-lg -2xl h-full  flex flex-col justify-center">
+        <div className="m-3 rounded-xl  h-screen bg-white p-2  flex flex-col justify-start">
           <IT_suppliers />
-        </div>
-        <div className="rounded-lg -2xl h-full bg-cover overflow-hidden bg-no-repeat">
-          <InfoImg/>
-        </div>
-        <div className="rounded-lg -2xl h-96  flex flex-col justify-center">
           <IT_reports />
         </div>
-        <DataChart/>
+        <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
+          <InfoImg />
+          <div className="py-10">
+            <DataChart />
+          </div>
+        </div>
       </div>
-      
     </div>
   );
 };

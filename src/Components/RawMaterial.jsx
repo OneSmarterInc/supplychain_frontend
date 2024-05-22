@@ -19,25 +19,29 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
   setBeta_quantity(newData.beta_quantity);
 
   return (
-    <div>
-      <h2 className="text-center text-3xl py-1 ">Raw Material</h2>
+    <div style={{ fontFamily: "ABeeZee" }}>
+      <h2 className="text-start text-xl py-1 font-semibold px-2 ">
+        Raw Material
+      </h2>
 
-      <table className="table-auto w-full border-separate border-spacing-2  ">
+      <table className=" w-full table-fixed border-separate border-spacing-2 bg-blue-gray-50 ">
         <thead>
           <tr className="bg-slate-300  ">
-            <th className="text-center py-3 text-2xl ">Entries</th>
-            <th className="text-center py-3 text-2xl ">Demands</th>
-            <th className="text-center py-3 text-2xl ">Units</th>
+            <th className="text-center py-3 text-lg font-medium ">Entries</th>
+            {/* <th className="text-center py-3 text-lg ">Demands</th> */}
+            <th className="text-center py-3 text-lg font-medium">Units</th>
           </tr>
         </thead>
         <tbody>
           <tr className="bg-slate-300 ">
-            <td className="text-center py-3 text-xl ">Alpha</td>
-            <td className="text-center py-3 text-xl ">15000 </td>
-            <td className="text-center py-3 text-xl ">
+            <td className="text-center py-0 text-lg bg-blue-gray-100 rounded-md ">
+              Alpha
+            </td>
+            {/* <td className="text-center py-3 text-lg ">15000 </td> */}
+            <td className="text-center py-3 text-lg ">
               <input
                 id="alpha-input"
-                className={`bg-gray-50 border  text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none w-32 mx-auto  p-2 ${
+                className={`bg-gray-50 border  text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none mx-auto  p-2 ${
                   !newData.alpha_quantity.trim()
                     ? "border-red-500 outline-red-500"
                     : " border-green-500 outline-green-500"
@@ -53,12 +57,14 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
           </tr>
 
           <tr className="bg-slate-300 ">
-            <td className="text-center py-3 text-xl ">Beta</td>
-            <td className="text-center py-3 text-xl ">10000</td>
-            <td className="text-center py-3 text-xl ">
+            <td className="text-center py-3 text-lg bg-blue-gray-100 rounded-md ">
+              Beta
+            </td>
+            {/* <td className="text-center py-3 text-lg ">10000</td> */}
+            <td className="text-center py-3 text-lg ">
               <input
                 id="beta-input"
-                className={`bg-gray-50 border text-center text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500  w-32 mx-auto  p-2 ${
+                className={`bg-gray-50 border text-center text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500  mx-auto  p-2 ${
                   !newData.beta_quantity.trim()
                     ? "border-red-500 outline-red-500"
                     : " border-green-500 outline-green-500"
