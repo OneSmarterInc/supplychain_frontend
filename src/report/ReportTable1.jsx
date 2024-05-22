@@ -1,13 +1,10 @@
 import React from "react";
-import {
- 
-  PDFDownloadLink,
- 
-} from "@react-pdf/renderer";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Button } from "@material-tailwind/react";
 import { SalesPDFDocument } from "./SalesPDFDocument";
 
 const ReportTable1 = () => {
+
   const salesData = {
     "Sales Volume": {
       "All Products": 50235,

@@ -47,18 +47,32 @@ const Service_Decision = () => {
 
   console.log("servicevalue", serviceValue);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+
   return (
     <div>
       <NavBar />
-      <div>
-        <h1 className="text-4xl text-start px-3 py-2  underline">
-          Service Decision
-        </h1>
+      <div style={{ fontFamily: "ABeeZee" }}>
+        <div className="flex justify-between">
+          <h1 className="text-2xl text-start pl-6 py-2 ">Service Decision</h1>
+
+          <div className="flex">
+            {" "}
+            <h1 className="text-xl text-start px-3 py-2 text-blue-500">
+              {selectedSim[0].name}
+            </h1>{" "}
+            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
+            <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
+              {user.username}
+            </h1>
+          </div>
+        </div>
         <div className="grid grid-cols-2 grid-flow-col gap-3  m-1">
-          <div className="row-span-2 rounded-lg -2xl h-full  flex flex-col justify-start">
+          <div className="m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-start">
             <Box>
-              <Text className="p-5 py-3 pb-0 text-2xl">
-                <strong>Service</strong>
+              <Text className="p-5 font-semibold py-3 pb-0 text-xl">
+                Service
               </Text>
               <br />
               <Table
@@ -98,14 +112,15 @@ const Service_Decision = () => {
               </Table>
             </Box>
           </div>
-          <div className="rounded-lg -2xl h-full bg-cover overflow-hidden bg-no-repeat">
+          <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
             <InfoImg />
+            <div className="py-10">
+              <ServiceDataChart
+                submitService={submitService}
+                serviceDataPreview={serviceValue}
+              />
+            </div>
           </div>
-
-          <ServiceDataChart
-            submitService={submitService}
-            serviceDataPreview={serviceValue}
-          />
         </div>
       </div>
     </div>

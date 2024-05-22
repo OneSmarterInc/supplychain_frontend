@@ -12,7 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const Demand_hype_ch1 = ({setHypeCh1ValuetoParent}) => {
+const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {
   const regions = ["region1", "region2", "region3"];
   const [hypeCh1Value, sethypeCh1Value] = useState({
     Active: { region1: 74000, region2: 74000, region3: null },
@@ -33,11 +33,11 @@ const Demand_hype_ch1 = ({setHypeCh1ValuetoParent}) => {
     }));
   };
 
-  setHypeCh1ValuetoParent(hypeCh1Value)
+  setHypeCh1ValuetoParent(hypeCh1Value);
 
   return (
     <Box>
-      <Text className="p-5 py-3 pb-0 text-2xl">
+      <Text className="p-5 py-3 pb-0 text-xl">
         <strong>Hypeware Channel 1</strong>
       </Text>
       <br />

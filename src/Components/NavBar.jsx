@@ -19,93 +19,90 @@ const NavBar = () => {
 
   return (
     <div>
-      <nav className="bg-gray-800 w-full">
-        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-          <div className="relative flex h-16 items-center justify-between">
-            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-              <div className="flex flex-shrink-0 items-center">
-                <p className="text-2xl text-white font-bold">
-                  Supplychain Simulation
-                </p>
-              </div>
-              <div className="hidden sm:ml-6 sm:block">
-                <div className="flex space-x-4">
-                  <Link
-                    to="/"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
-                  >
-                    Home
-                  </Link>
-                  {decisions.is_forecasting === "True" && (
-                    <Link
-                      to="/forecast"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
-                    >
-                      Forecast
-                    </Link>
-                  )}
-                  {decisions.is_procurement === "True" && (
-                    <Link
-                      to="/procurement"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
-                    >
-                      Procurements
-                    </Link>
-                  )}
-                  {decisions.is_manufacturing === "True" && (
-                    <Link
-                      to="/manufacturing"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
-                    >
-                      Manufacturing
-                    </Link>
-                  )}
-                  {decisions.is_distribution === "True" && (
-                    <Link
-                      to="/distribution"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
-                    >
-                      Distribution
-                    </Link>
-                  )}
+      <nav style={{ fontFamily: "ABeeZee" }} className="">
+        <div className="flex flex-col items-center justify-center sm:items-stretch sm:justify-between">
+          <div className=" bg-gray-800 py-2 px-3 flex justify-between items-center  ">
+            <div className="text-2xl text-white font-bold ">
+              Supplychain Simulation
+            </div>
+            <div className="text-2xl w-32 flex justify-between mx-3 text-white font-bold pl-14">
+              <Link to="/" className="">
+                <i class="fa-solid fa-user cursor-pointer"></i>
+              </Link>
+              <Link to="/" className="">
+                <i class="fa-solid fa-house cursor-pointer"></i>
+              </Link>
+            </div>
+          </div>
+          <div className="hidden  bg-white sm:block">
+            <div className="flex justify-evenly space-x-4 py-1">
+              {decisions.is_forecasting === "True" && (
+                <Link
+                  to="/forecast"
+                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
+                >
+                  Forecast
+                </Link>
+              )}
+              {decisions.is_procurement === "True" && (
+                <Link
+                  to="/procurement"
+                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
+                >
+                  Procurements
+                </Link>
+              )}
+              {decisions.is_manufacturing === "True" && (
+                <Link
+                  to="/manufacturing"
+                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
+                >
+                  Manufacturing
+                </Link>
+              )}
+              {decisions.is_distribution === "True" && (
+                <Link
+                  to="/distribution"
+                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
+                >
+                  Distribution
+                </Link>
+              )}
 
-                  {decisions.is_transportation === "True" && (
-                    <Link
-                      to="/transportation"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
-                    >
-                      Transport
-                    </Link>
-                  )}
+              {decisions.is_transportation === "True" && (
+                <Link
+                  to="/transportation"
+                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
+                >
+                  Transport
+                </Link>
+              )}
 
-                  {decisions.is_service === "True" && (
-                    <Link
-                      to="/service"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
-                    >
-                      Service
-                    </Link>
-                  )}
-                  {decisions.is_demand_gen === "True" && (
-                    <Link
-                      to="/demand"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
-                    >
-                      Demand
-                    </Link>
-                  )}
-                
-                  
-                  {decisions.is_it === "True" && (
-                    <Link
-                      to="/it"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg -md px-3 py-2 text-sm font-medium"
-                    >
-                      IT
-                    </Link>
-                  )}
-                </div>
-              </div>
+              {decisions.is_service === "True" && (
+                <Link
+                  to="/service"
+                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
+                >
+                  Service
+                </Link>
+              )}
+              {decisions.is_demand_gen === "True" && (
+                <Link
+                  to="/demand"
+                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
+                >
+                  Demand
+                </Link>
+              )}
+
+              {decisions.is_it === "True" && (
+                <Link
+                  to="/it"
+                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
+                >
+                  IT
+                </Link>
+              )}
             </div>
           </div>
         </div>

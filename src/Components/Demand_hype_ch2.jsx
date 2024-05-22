@@ -37,7 +37,7 @@ const Demand_hype_ch2 = ({ setHypeCh2ValuetoParent }) => {
 
   return (
     <Box>
-      <Text className="p-5 py-3 pb-0 text-2xl">
+      <Text className="p-5 py-3 pb-0 text-xl">
         <strong>Hypeware Channel 2</strong>
       </Text>
       <br />

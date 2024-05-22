@@ -107,7 +107,6 @@ const SupplyChainTable = (props) => {
     if (tableRef.current) {
       tableRef.current.scrollTop = tableRef.current.scrollHeight;
     }
-    
   };
   // // Scroll to the bottom of the table when a new entry is added
   // useEffect(() => {
@@ -120,22 +119,28 @@ const SupplyChainTable = (props) => {
   props.setUpdatedDCData(dcData);
 
   return (
-    <div className="flex h-full flex-col justify-between bg-slate-200">
+    <div
+      style={{ fontFamily: "ABeeZee" }}
+      className="flex h-full flex-col justify-between bg-slate-200"
+    >
       <div className="">
-        <h2 className="text-center text-3xl py-2  ">
+        <h2 className="text-start text-xl py-1 font-semibold px-2  ">
           Sub Assembly Components Plant & {activeDC}
         </h2>
-        <div ref={tableRef} className="h-100 ml-2 overflow-scroll border-2 border-opacity-50 border-blue-gray-200">
+        <div
+          ref={tableRef}
+          className="h-100 ml-2 overflow-scroll border-2 border-opacity-50 border-blue-gray-200"
+        >
           {/* Conditionally render tables based on activeDC */}
           {activeDC === "DC1" && dcData.DC1 !== "closed" && (
             <table className="table-auto w-full border-separate border-spacing-2 ">
               <thead>
                 <tr className="bg-slate-300  ">
-                  <th className="text-center py-3 text-2xl ">Name</th>
-                  <th className="text-center py-3 text-2xl ">Supplier</th>
-                  <th className="text-center py-3 text-2xl ">Medium</th>
-                  <th className="text-center py-3 text-2xl ">Demands</th>
-                  <th className="text-center py-3 text-2xl w-28">Units</th>
+                  <th className="text-center py-3 text-lg ">Name</th>
+                  <th className="text-center py-3 text-lg ">Supplier</th>
+                  <th className="text-center py-3 text-lg ">Medium</th>
+                  <th className="text-center py-3 text-lg ">Demands</th>
+                  <th className="text-center py-3 text-lg w-28">Units</th>
                 </tr>
               </thead>
 
@@ -264,11 +269,11 @@ const SupplyChainTable = (props) => {
             <table className="table-auto w-full border-separate border-spacing-2 ">
               <thead>
                 <tr className="bg-slate-300  ">
-                  <th className="text-center py-3 text-2xl ">Name</th>
-                  <th className="text-center py-3 text-2xl ">Supplier</th>
-                  <th className="text-center py-3 text-2xl ">Medium</th>
-                  <th className="text-center py-3 text-2xl ">Demands</th>
-                  <th className="text-center py-3 text-2xl w-28">Units</th>
+                  <th className="text-center py-3 text-lg ">Name</th>
+                  <th className="text-center py-3 text-lg ">Supplier</th>
+                  <th className="text-center py-3 text-lg ">Medium</th>
+                  <th className="text-center py-3 text-lg ">Demands</th>
+                  <th className="text-center py-3 text-lg w-28">Units</th>
                 </tr>
               </thead>
 
@@ -276,7 +281,7 @@ const SupplyChainTable = (props) => {
                 {dcData[activeDC].map((entry, index) => (
                   <tr className="bg-slate-300 " key={index}>
                     <td className="text-center w-28 text-xl">
-                    <input
+                      <input
                         type="text"
                         className={`p-2 pl-3 pr-2 w-28 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
                           entry.demand.trim() === ""
@@ -396,11 +401,11 @@ const SupplyChainTable = (props) => {
             <table className="table-auto w-full border-separate border-spacing-2 ">
               <thead>
                 <tr className="bg-slate-300  ">
-                  <th className="text-center py-3 text-2xl ">Name</th>
-                  <th className="text-center py-3 text-2xl ">Supplier</th>
-                  <th className="text-center py-3 text-2xl ">Medium</th>
-                  <th className="text-center py-3 text-2xl ">Demands</th>
-                  <th className="text-center py-3 text-2xl w-28">Units</th>
+                  <th className="text-center py-3 text-lg ">Name</th>
+                  <th className="text-center py-3 text-lg ">Supplier</th>
+                  <th className="text-center py-3 text-lg ">Medium</th>
+                  <th className="text-center py-3 text-lg ">Demands</th>
+                  <th className="text-center py-3 text-lg w-28">Units</th>
                 </tr>
               </thead>
 

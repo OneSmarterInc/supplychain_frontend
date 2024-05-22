@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Stepper, Step, Typography, Button } from "@material-tailwind/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Create_sim from "./Create_sim";
@@ -12,6 +12,7 @@ export default function Steps({ setNoOfQuarters, noOfQuarters }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
   const [isFirstStep, setIsFirstStep] = React.useState(false);
+  const [simulationData, SetSimulationData] = useState();
   const searchParams = new URLSearchParams(location.search);
   const steps = parseInt(searchParams.get("step") || "1", 10);
   React.useEffect(() => {
@@ -40,12 +41,12 @@ export default function Steps({ setNoOfQuarters, noOfQuarters }) {
     }
   };
 
-  const HandleAdmin = ()=>{
-    const address= "http://localhost:3000/createsim?step=3";
+  const HandleAdmin = () => {
+    const address = "http://localhost:3000/createsim?step=3";
     window.location.href = `http://localhost:5173/?address=${address}`;
-  }
+  };
 
-  const HandleCreateSimulation=()=>{
+  const HandleCreateSimulation = () => {
     toast({
       title: "Simulation Created successful",
       status: "success",
@@ -54,9 +55,8 @@ export default function Steps({ setNoOfQuarters, noOfQuarters }) {
       position: "top",
     });
 
-
-    navigate('/usersidelive')
-  }
+    navigate("/usersidelive");
+  };
 
   return (
     <>
@@ -126,26 +126,42 @@ export default function Steps({ setNoOfQuarters, noOfQuarters }) {
         </div>
       </div>
       <div className="component">
-        {steps === 1 && <Create_sim setNoOfQuarters={setNoOfQuarters} />}
+        {steps === 1 && (
+          <Create_sim
+            setNoOfQuarters={setNoOfQuarters}
+            setSimulationDataFromSteps={SetSimulationData}
+          />
+        )}
         {steps === 2 && noOfQuarters && (
-          <QuarterDetails noOfQuarters={noOfQuarters} />
+          <QuarterDetails
+            noOfQuarters={noOfQuarters}
+            simulationData={simulationData}
+          />
         )}
 
         {steps === 3 && (
           <>
-          <Flex h="50vh" justify="center" align="center">
-            <Box  alignContent={"center"} flex={"column"}>
-              <Text>Edit Rules and Default values of First Quarter </Text>
-              <Button alignContent={"center"} flex={"column"} onClick={HandleAdmin}>Edit</Button>
-            </Box>
+            <Flex h="50vh" justify="center" align="center">
+              <Box alignContent={"center"} flex={"column"}>
+                <Text>Edit Rules and Default values of First Quarter </Text>
+                <Button
+                  alignContent={"center"}
+                  flex={"column"}
+                  onClick={HandleAdmin}
+                >
+                  Edit
+                </Button>
+              </Box>
             </Flex>
 
             <Flex h="10vh" justify="center" align="center">
-            <Box alignContent={"center"} flex={"column"}>
-            <Button color="green" onClick={HandleCreateSimulation}>Create Simulation </Button>
-            </Box>
-          </Flex>
-          </> 
+              <Box alignContent={"center"} flex={"column"}>
+                <Button color="green" onClick={HandleCreateSimulation}>
+                  Create Simulation{" "}
+                </Button>
+              </Box>
+            </Flex>
+          </>
         )}
       </div>
     </>

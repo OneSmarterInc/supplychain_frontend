@@ -5,7 +5,10 @@ import { useLocation } from "react-router-dom";
 
 import ManufacturingPreview from "../../Components/Previews/ManufacturingPreview";
 
-const ManufacturingDataChart = ({ submitManufacturing, ManufacturingDataPreview }) => {
+const ManufacturingDataChart = ({
+  submitManufacturing,
+  ManufacturingDataPreview,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
   const path = location.pathname;
@@ -40,7 +43,11 @@ const ManufacturingDataChart = ({ submitManufacturing, ManufacturingDataPreview 
     <div className="app">
       <div className="row mx-5">
         <div className="mixed-chart flex">
-          <Chart options={options} series={series} type="area" width="510" />
+          <div className="w-[510px] h-60">
+            {" "}
+            {/* temporary div, then remove */}
+          </div>
+          {/* <Chart options={options} series={series} type="area" width="510" /> */}
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}

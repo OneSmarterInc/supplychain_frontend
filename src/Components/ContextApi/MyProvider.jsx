@@ -1,12 +1,12 @@
 import MyContext from "./MyContext";
 
 const MyProvider = ({ children }) => {
-  const api = "http://127.0.0.1:8000/simulation"
-  // const api = "https://api.cyberbriefs.org/simulation"
+  // const api = "http://127.0.0.1:8000/simulation"
+  const api = "https://api.cyberbriefs.org/simulation";
   return (
     <MyContext.Provider
       value={{
-        api
+        api,
       }}
     >
       {children}

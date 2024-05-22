@@ -20,7 +20,7 @@ export default function ReportModal() {
       <Dialog size="lg" open={open} handler={handleOpen}>
         <DialogHeader>Report</DialogHeader>
         <DialogBody
-          style={{ height: "700px", overflowY: "auto" }}
+          style={{ height: "600px", overflowY: "auto" }}
           className="text-lg overflow-scroll "
         >
           <ReportTable1 />

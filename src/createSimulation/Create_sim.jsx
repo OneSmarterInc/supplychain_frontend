@@ -18,24 +18,30 @@ import MyContext from "../Components/ContextApi/MyContext";
 import AdminNavBar from "../Components/AdminNavBar";
 import { useNavigate } from "react-router";
 
-const Create_sim = ({ setNoOfQuarters }) => {
+const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
   const [selectedFirmIndex, setSelectedFirmIndex] = useState(null);
   const [simulationData, setSimulationData] = useState({
-    
     name: "Test Simulation",
-    total_quarters:4,
+    total_quarters: 4,
     firms: 1,
-    admin_id:3,
-    firm_data: [{"1smarterinc@gmail.com":"Onesmarter inc","nachiketrtekade@gmail.com":"Onesmarter inc", "kunal.kalpande@onesmarter.com":"Onesmarter inc","nachiket.tekade@onesmarter.com":"test","avinash.kalmegh@onesmarter.com":"test"}], // Changed to firm_data here ,
+    admin_id: 3,
+    firm_data: [
+      {
+        "1smarterinc@gmail.com": "Onesmarter inc",
+        "nachiketrtekade@gmail.com": "Onesmarter inc",
+        "kunal.kalpande@onesmarter.com": "Onesmarter inc",
+        "nachiket.tekade@onesmarter.com": "test",
+        "avinash.kalmegh@onesmarter.com": "test",
+      },
+    ], // Changed to firm_data here ,
     start_date: "2024-04-05",
     end_date: "2024-04-05",
     decision_open: "01:59:00",
     decision_close: "01:59:00",
   });
 
-  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSimulationData((prev) => ({
@@ -76,22 +82,8 @@ const Create_sim = ({ setNoOfQuarters }) => {
       return { ...prev, firm_data: newFirmData };
     });
   };
-
-  const handleSubmit = async () => {
-    if (simulationData.total_quarters) {
-      try {
-        const response = await axios.post(
-          `${api}/simulations/simulation/`,
-          simulationData
-        );
-        console.log("Success:", response.data);
-      } catch (error) {
-        console.error("Error submitting form:", error);
-      }
-    } else {
-      alert("Please Enter Quarters");
-    }
-
+  const handleSubmit = async () => {};
+  const handleNext = async () => {
     // temporary navigate without conditions
     setNoOfQuarters(simulationData.total_quarters);
 
@@ -99,6 +91,8 @@ const Create_sim = ({ setNoOfQuarters }) => {
       navigate("/createsim?step=2");
     }
   };
+
+  setSimulationDataFromSteps(simulationData);
   return (
     <>
       {/* <AdminNavBar /> */}
@@ -322,7 +316,7 @@ const Create_sim = ({ setNoOfQuarters }) => {
             simulation.
           </Text>
           <button
-            onClick={handleSubmit}
+            onClick={handleNext}
             className="w-28 h-10 py-2 px-4 mx-2 rounded-lg text-center text-xl bg-green-500 hover:bg-green-700 text-white "
           >
             Next

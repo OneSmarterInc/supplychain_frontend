@@ -1,11 +1,14 @@
 import { useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MyContext from "../Components/ContextApi/MyContext";
 
-
-const QuarterDetails = ({ noOfQuarters }) => {
+const QuarterDetails = ({ noOfQuarters, simulationData }) => {
   const navigate = useNavigate();
   const toast = useToast();
+
+  const { api } = useContext(MyContext);
   toast({
     title: "Email Sent successful",
     status: "success",
@@ -31,6 +34,8 @@ const QuarterDetails = ({ noOfQuarters }) => {
     Array.from({ length: noOfQuarters }, () => ({ ...initialQuarterState }))
   );
   console.log("quarters data", quarters);
+  const combineSimData = { ...simulationData, quartersData: quarters };
+  console.log("Combine Sim Data:--", combineSimData);
 
   const handleCheckboxChange = (index, field) => {
     setQuarters((prevQuarters) => {
@@ -51,7 +56,20 @@ const QuarterDetails = ({ noOfQuarters }) => {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (combineSimData.total_quarters) {
+      try {
+        const response = await axios.post(
+          `${api}/simulations/simulation/`,
+          combineSimData
+        );
+        console.log("Success:", response.data);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
+    } else {
+      alert("Please Enter Quarters");
+    }
     try {
       //here we have to sumbit post request using axios
       navigate("/createsim?step=3");

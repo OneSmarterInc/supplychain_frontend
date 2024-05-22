@@ -54,18 +54,34 @@ const Transportation_Decision = () => {
     }
   };
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+
   return (
     <div>
       <NavBar />
-      <div className=" ">
-        <h1 className="text-4xl text-start px-3 py-2 underline">
-          Transportation Decision
-        </h1>
-        <div className="grid grid-cols-2 grid-flow-col gap-3  m-1">
-          <div className="row-span-2 rounded-lg -2xl h-full  flex flex-col justify-center">
+      <div style={{ fontFamily: "ABeeZee" }} className=" ">
+        <div className="flex justify-between">
+          <h1 className="text-2xl text-start pl-6 py-2 ">
+            Transportation Decision
+          </h1>
+
+          <div className="flex">
+            {" "}
+            <h1 className="text-xl text-start px-3 py-2 text-blue-500">
+              {selectedSim[0].name}
+            </h1>{" "}
+            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
+            <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
+              {user.username}
+            </h1>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 grid-flow-col gap-2  m-1">
+          <div className="m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-start">
             <Box>
-              <Text className="p-5 py-3 pb-0 text-2xl">
-                <strong>DC 2</strong>
+              <Text className="p-5 px-8 py-3 font-semibold pb-0 text-xl">
+                DC 2
               </Text>
               <br />
               <Table
@@ -90,6 +106,8 @@ const Transportation_Decision = () => {
                           fontSize={15}
                           width="100%"
                           border="1px solid black"
+                          size={"sm"}
+                          rounded={"lg"}
                           value={rowData.product}
                           onChange={(e) =>
                             handleChange(rowId, "product", e.target.value)
@@ -107,6 +125,8 @@ const Transportation_Decision = () => {
                           fontSize={15}
                           width="100%"
                           border="1px solid black"
+                          size={"sm"}
+                          rounded={"lg"}
                           onChange={(e) =>
                             handleChange(rowId, "carrier", e.target.value)
                           }
@@ -125,6 +145,8 @@ const Transportation_Decision = () => {
                           placeholder="Select"
                           fontSize={15}
                           width="100%"
+                          size={"sm"}
+                          rounded={"lg"}
                           border="1px solid black"
                           onChange={(e) =>
                             handleChange(rowId, "medium", e.target.value)
@@ -140,6 +162,8 @@ const Transportation_Decision = () => {
                         <Input
                           width={"100px"}
                           type="number"
+                          size={"sm"}
+                          rounded={"lg"}
                           value={rowData.units}
                           onChange={(e) =>
                             handleChange(rowId, "units", e.target.value)
@@ -153,14 +177,15 @@ const Transportation_Decision = () => {
               </Table>
             </Box>
           </div>
-          <div className="rounded-lg -2xl h-full bg-cover overflow-hidden bg-no-repeat">
+          <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
             <InfoImg />
+            <div className="py-10">
+              <TransportationDataChart
+                submitTransportation={submitTransportation}
+                Dc1Data={Dc1Data}
+              />
+            </div>
           </div>
-
-          <TransportationDataChart
-            submitTransportation={submitTransportation}
-            Dc1Data={Dc1Data}
-          />
         </div>
       </div>
     </div>

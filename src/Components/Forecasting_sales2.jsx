@@ -23,10 +23,10 @@ const Forecasting_sales2 = ({ setForecastMetawaretopass }) => {
   // console.log("valuesch2", ForecastMetaware);
   return (
     <div>
-      <Text className="p-5 py-3 text-2xl">
+      <Text className="p-5 py-3 text-lg">
         <strong>Sales Volume Forecast Product : Metaware</strong>
       </Text>
-    
+
       <Table
         variant="striped"
         width={"650px"}

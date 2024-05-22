@@ -49,11 +49,11 @@ const UserSideLive = () => {
   console.log("SimData-", simData);
   const toast = useToast();
   const user = JSON.parse(localStorage.getItem("user"));
-  
+
   // const userId = user.userid;
   // const LogedInUserEmail = user.useremail;
-  
-  const userId = user.userid
+
+  const userId = user.userid;
   const LogedInUserEmail = "nachikettekade01@gmail.com";
 
   const getAllData = async () => {
@@ -75,22 +75,20 @@ const UserSideLive = () => {
     <div>
       <UserNavBar />
       <h2 className="text-3xl p-2 pl-10 ">Live Simulation</h2>
-     
-            {
-          
-                simData.filter((item) =>(item.is_active===true)).map((item, index) => (
-                   
-                  <PlayComponent key={index}
-                  id = {item.simulation_id}
-                  batch={item.name}
-                  startDate={item.start_date}
-                  endDate={item.end_date}
-                  time={item.time}
-                  currentQuarter={item.current_quarter}
-                  />
-                
-                ))}
-    
+      {simData
+        .filter((item) => item.is_active === true)
+        .reverse()
+        .map((item, index) => (
+          <PlayComponent
+            key={index}
+            id={item.simulation_id}
+            batch={item.name}
+            startDate={item.start_date}
+            endDate={item.end_date}
+            time={item.time}
+            currentQuarter={item.current_quarter}
+          />
+        ))}
     </div>
   );
 };

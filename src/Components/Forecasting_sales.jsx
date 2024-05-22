@@ -24,8 +24,8 @@ const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
 
   return (
     <>
-      <Text className="p-5 py-3 text-2xl">
-        <strong>Sales Volume Forecast Product :  Hyperware</strong>
+      <Text className="p-5 py-3 text-lg">
+        <strong>Sales Volume Forecast Product : Hyperware</strong>
       </Text>
       <Table
         variant="striped"

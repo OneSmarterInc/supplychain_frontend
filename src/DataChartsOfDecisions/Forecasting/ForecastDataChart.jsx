@@ -6,35 +6,26 @@ import ForecastPreview from "../../Components/Previews/ForecastPreview";
 import MyContext from "../../Components/ContextApi/MyContext";
 import ReportModal from "../../report/ReportModal";
 
-
 const ForecastDataChart = ({
   submitForecast,
   ForecastHyperware,
   ForecastMetaware,
 }) => {
-
-
-  
-  
-  
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [firstDropdownValue, setFirstDropdownValue] = useState('1');
-  const [secondDropdownValue, setSecondDropdownValue] = useState('cpl');
+  const [firstDropdownValue, setFirstDropdownValue] = useState("1");
+  const [secondDropdownValue, setSecondDropdownValue] = useState("cpl");
   const { api } = useContext(MyContext);
 
   const location = useLocation();
   const path = location.pathname;
- 
+
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
- 
- 
- 
+
   let simData = localStorage.getItem("selectedSim");
   simData = JSON.parse(simData);
-  let user = localStorage.getItem('user');
+  let user = localStorage.getItem("user");
   user = JSON.parse(user);
   user = user.email;
-  
 
   const option = [];
   for (let i = 1; i <= simData[0].current_quarter; i++) {
@@ -75,30 +66,33 @@ const ForecastDataChart = ({
     const queryParams = new URLSearchParams({
       simulation_id: simData[0].simulation_id,
       quarter: firstDropdownValue,
-      firm: simData[0].firm_data[user]
+      firm: simData[0].firm_data[user],
     }).toString();
-  
+
     // Append the query parameters to the URL
     const url = `${api}/reports/${secondDropdownValue}/?${queryParams}`;
-  
+
     // Make a GET request with the constructed URL
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     });
-  
+
     const data = await response.json();
-    console.log(data);  // Process your data here
+    console.log(data); // Process your data here
   };
-  
 
   return (
     <div className="app">
       <div className="row mx-5">
         <div className="mixed-chart flex">
-          <Chart options={options} series={series} type="area" width="510" />
+          <div className="w-[510px] h-60">
+            {" "}
+            {/* temporary div, then remove */}
+          </div>
+          {/* <Chart options={options} series={series} type="area" width="510" /> */}
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}
@@ -137,10 +131,18 @@ const ForecastDataChart = ({
         </div>
 
         <HStack spacing={3} ml={9}>
-          <Select width="165px" border="1px solid black" onChange={(e) => setFirstDropdownValue(e.target.value)}>
+          <Select
+            width="165px"
+            border="1px solid black"
+            onChange={(e) => setFirstDropdownValue(e.target.value)}
+          >
             {option}
           </Select>
-          <Select width="165px" border="1px solid black" onChange={(e) => setSecondDropdownValue(e.target.value)}>
+          <Select
+            width="165px"
+            border="1px solid black"
+            onChange={(e) => setSecondDropdownValue(e.target.value)}
+          >
             <option value="cpl">Corporate P&L Statement </option>
             <option value="hpl">Historical Corporate P&L Statement</option>
             <option value="hpls">Hyperware P&L Statement</option>
@@ -155,7 +157,7 @@ const ForecastDataChart = ({
           {/* <button className="h-10  bg-gray-700 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5 w-24 " onClick={handleButtonClick}>
             View
           </button> */}
-      <ReportModal />
+          <ReportModal />
         </HStack>
       </div>
     </div>
