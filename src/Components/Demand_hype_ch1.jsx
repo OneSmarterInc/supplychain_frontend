@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Table,
@@ -14,26 +14,26 @@ import {
 
 const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {
   const regions = ["region1", "region2", "region3"];
-  const [hypeCh1Value, sethypeCh1Value] = useState({
-    Active: { region1: 74000, region2: 74000, region3: null },
+  const [hypeCh1Value, setHypeCh1Value] = useState({
+    Active: { region1: "false", region2: "false", region3: "false" },
     Price: { region1: 74000, region2: null, region3: 74000 },
     MarketSpending: { region1: 74000, region2: 74000, region3: 74000 },
     // Add more channels and regions as needed
   });
 
-  // console.log("meta ch1 ", hypeCh1Value);
-
   const handleInputChange = (channel, region, value) => {
-    sethypeCh1Value((prevState) => ({
+    setHypeCh1Value((prevState) => ({
       ...prevState,
       [channel]: {
         ...prevState[channel],
-        [region]: value,
+        [region]: channel === "Active" ? value : parseInt(value),
       },
     }));
   };
 
-  setHypeCh1ValuetoParent(hypeCh1Value);
+  useEffect(() => {
+    setHypeCh1ValuetoParent(hypeCh1Value);
+  }, [hypeCh1Value, setHypeCh1ValuetoParent]);
 
   return (
     <Box>
@@ -64,17 +64,11 @@ const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {
                       border="1px solid black"
                       value={hypeCh1Value[channel][region]}
                       onChange={(e) =>
-                        handleInputChange(
-                          channel,
-                          region,
-                          parseInt(e.target.value)
-                        )
+                        handleInputChange(channel, region, e.target.value)
                       }
                     >
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      {/* Add more options as needed */}
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
                     </Select>
                   ) : (
                     <Input
@@ -85,11 +79,7 @@ const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {
                       width="100%"
                       border="1px solid black"
                       onChange={(e) =>
-                        handleInputChange(
-                          channel,
-                          region,
-                          parseInt(e.target.value)
-                        )
+                        handleInputChange(channel, region, e.target.value)
                       }
                     />
                   )}

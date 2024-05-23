@@ -1,8 +1,30 @@
 import { Box, Select, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const IT_suppliers = () => {
+const IT_suppliers = ({ setSuppliersFromDecision }) => {
   const options = ["A", "B", "C", "D", "E", "F", "G"];
+  const initialSuppliers = {
+    A: false,
+    B: false,
+    C: false,
+    D: false,
+    E: false,
+    F: false,
+    G: false,
+  };
+
+  const [suppliers, setSuppliers] = useState(initialSuppliers);
+
+  const handleChange = (event, option) => {
+    setSuppliers({
+      ...suppliers,
+      [option]: event.target.value === "true",
+    });
+  };
+
+  useEffect(() => {
+    setSuppliersFromDecision(suppliers);
+  }, [suppliers, setSuppliersFromDecision]);
 
   return (
     <Box>
@@ -12,7 +34,7 @@ const IT_suppliers = () => {
       <br />
       <div className="grid grid-cols-3 gap-3 pb-3">
         {options.map((option) => (
-          <Box key={option} className="flex ">
+          <Box key={option} className="flex">
             <Text className="pl-6 py-2 text-lg">{option}</Text>
             <Select
               placeholder="Select"
@@ -20,10 +42,11 @@ const IT_suppliers = () => {
               width="73%"
               border="1px solid black"
               className="ml-5"
+              value={suppliers[option] ? "true" : "false"}
+              onChange={(e) => handleChange(e, option)}
             >
-              <option value="supplier1">Supplier 1</option>
-              <option value="supplier2">Supplier 2</option>
-              <option value="supplier3">Supplier 3</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
             </Select>
           </Box>
         ))}
