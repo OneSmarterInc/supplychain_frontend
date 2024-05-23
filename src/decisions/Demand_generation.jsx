@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Demand_hype_ch1 from "../Components/Demand_hype_ch1";
 import Demand_hype_ch2 from "../Components/Demand_hype_ch2";
 import Demand_meta_ch1 from "../Components/Demand_meta_ch1";
@@ -7,6 +7,8 @@ import NavBar from "../Components/NavBar";
 // import DataChart from "../Components/DataChart";
 import InfoImg from "../Components/InfoImg";
 import DemandDataChart from "../DataChartsOfDecisions/Demand/DemandDataChart";
+import axios from "axios";
+import MyContext from "../Components/ContextApi/MyContext";
 
 const Demand_generation = () => {
   const [metaCh1Value, setMetaCh1Value] = useState({});
@@ -18,7 +20,33 @@ const Demand_generation = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
-
+  const submitDemand = async () => {
+    try {
+      const response = await axios.post(`${api}/decision/demand/`, {
+        simulation_id: null,
+        admin_id: null,
+        user_id: null,
+        firm_key: "123",
+        quarter: null,
+        hyperware_channel_one_active: hypeCh1Value.Active,
+        hyperware_channel_one_price: hypeCh1Value.Price,
+        hyperware_channel_one_market: hypeCh1Value.MarketSpending,
+        hyperware_channel_two_active: hypeCh2Value.Active,
+        hyperware_channel_two_price: hypeCh2Value.Price,
+        hyperware_channel_two_market: hypeCh2Value.MarketSpending,
+        metaware_channel_one_active: metaCh1Value.Active,
+        metaware_channel_one_price: metaCh1Value.Price,
+        metaware_channel_one_market: metaCh1Value.MarketSpending,
+        metaware_channel_two_active: metaCh2Value.Active,
+        metaware_channel_two_price: metaCh2Value.Price,
+        metaware_channel_two_market: metaCh2Value.MarketSpending,
+      });
+      console.log("POST request successful", response.data);
+    } catch (error) {
+      console.error("Error making POST request: Transportation", error);
+    }
+  };
+  const { api } = useContext(MyContext);
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
       <NavBar />
@@ -59,6 +87,7 @@ const Demand_generation = () => {
               metaCh2Value={metaCh2Value}
               hypeCh1Value={hypeCh1Value}
               hypeCh2Value={hypeCh2Value}
+              submitDemand={submitDemand}
             />
           </div>
         </div>

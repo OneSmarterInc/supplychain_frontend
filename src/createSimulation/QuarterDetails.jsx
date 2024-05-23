@@ -4,7 +4,8 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../Components/ContextApi/MyContext";
 
-const QuarterDetails = ({ noOfQuarters, simulationData }) => {
+const QuarterDetails = ({simulationData}) => {
+  const noOfQuarters = localStorage.getItem("noOfQuarters");
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -17,13 +18,13 @@ const QuarterDetails = ({ noOfQuarters, simulationData }) => {
     position: "top",
   });
   const initialQuarterState = {
-    is_procurement: false,
-    is_manufacturing: false,
-    is_distribution: false,
-    is_service: false,
-    is_demand_gen: false,
-    is_forecasting: false,
-    is_it: false,
+    is_procurement: true,
+    is_manufacturing: true,
+    is_distribution: true,
+    is_service: true,
+    is_demand_gen: true,
+    is_forecasting: true,
+    is_it: true,
     quarter_start_date: "",
     quarter_end_date: "",
     quarter_start_time: "0:00",

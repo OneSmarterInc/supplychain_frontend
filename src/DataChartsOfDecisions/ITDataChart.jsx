@@ -2,21 +2,8 @@ import React, { useState } from "react";
 import Chart from "react-apexcharts";
 import { HStack, Select } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
-// import DistributionPreview from "./Previews/DistributionPreview";
-// import ForecastPreview from "./Previews/ForecastPreview";
-// import ProcurementPreview from "../../Components/Previews/ForecastPreview";
-// import ManufacturingPreview from "../../Components/Previews/ForecastPreview";
-// import ServicePreview from "../../Components/Previews/ServicePreview";
-import TransportationPreview from "../../Components/Previews/TransportationPreview";
-import DemandPreview from "../../Components/Previews/DemandPreview";
 
-const DemandDataChart = ({
-  metaCh1Value,
-  metaCh2Value,
-  hypeCh1Value,
-  hypeCh2Value,
-  submitDemand
-}) => {
+const ITDataChart = ({ submitIt, suppliers, reportValues }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
   const path = location.pathname;
@@ -43,8 +30,8 @@ const DemandDataChart = ({
   ]);
 
   const onSubmit = () => {
-    if (path === "/demand") {
-      submitDemand();
+    if (path === "/it") {
+      submitIt();
     }
   };
   return (
@@ -70,20 +57,17 @@ const DemandDataChart = ({
                 Preview
               </button>
 
-              {isModalOpen && (
+              {/* {isModalOpen && (
                 <>
                   {" "}
-                  {path === "/demand" && (
-                    <DemandPreview
+                  {path === "/transportation" && (
+                    <TransportationPreview
                       toggleModal={toggleModal}
-                      metaCh1Value={metaCh1Value}
-                      metaCh2Value={metaCh2Value}
-                      hypeCh1Value={hypeCh1Value}
-                      hypeCh2Value={hypeCh2Value}
+                      Dc1Data={Dc1Data}
                     />
                   )}
                 </>
-              )}
+              )} */}
 
               <button
                 onClick={onSubmit}
@@ -115,4 +99,4 @@ const DemandDataChart = ({
   );
 };
 
-export default DemandDataChart;
+export default ITDataChart;

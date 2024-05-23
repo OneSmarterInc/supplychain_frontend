@@ -5,7 +5,8 @@ import Create_sim from "./Create_sim";
 import QuarterDetails from "./QuarterDetails";
 import { Box, Text, Flex, useToast } from "@chakra-ui/react";
 
-export default function Steps({ setNoOfQuarters, noOfQuarters }) {
+export default function Steps({ setNoOfQuarters }) {
+  const noOfQuarters = localStorage.getItem("noOfQuarters")
   const toast = useToast();
   const location = useLocation();
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ export default function Steps({ setNoOfQuarters, noOfQuarters }) {
 
     navigate("/usersidelive");
   };
+  localStorage.setItem("simulationData", simulationData)
 
   return (
     <>

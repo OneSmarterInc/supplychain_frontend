@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -24,7 +24,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
   const [selectedFirmIndex, setSelectedFirmIndex] = useState(null);
   const [simulationData, setSimulationData] = useState({
     name: "Test Simulation",
-    total_quarters: 4,
+    total_quarters: 0,
     firms: 1,
     admin_id: 3,
     firm_data: [
@@ -82,17 +82,18 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
       return { ...prev, firm_data: newFirmData };
     });
   };
-  const handleSubmit = async () => {};
+  setSimulationDataFromSteps(simulationData);
   const handleNext = async () => {
     // temporary navigate without conditions
     setNoOfQuarters(simulationData.total_quarters);
-
+    localStorage.setItem("noOfQuarters", [simulationData.total_quarters]);
     if (simulationData.total_quarters) {
       navigate("/createsim?step=2");
     }
   };
+  
 
-  setSimulationDataFromSteps(simulationData);
+
   return (
     <>
       {/* <AdminNavBar /> */}
