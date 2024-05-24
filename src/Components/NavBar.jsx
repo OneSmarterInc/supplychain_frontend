@@ -9,7 +9,7 @@ const NavBar = () => {
   const filteredSimulation = simData.filter(
     (item) => item.simulation_id === parseInt(id)
   );
-  localStorage.setItem("selectedSim", JSON.stringify(filteredSimulation));
+  
   let current_quarter = `quarter${filteredSimulation[0]["current_quarter"]}`;
   const decisions =
     filteredSimulation[0]["quarter_specific_decisions"][current_quarter];
@@ -27,10 +27,10 @@ const NavBar = () => {
             </div>
             <div className="text-2xl w-32 flex justify-between mx-3 text-white font-bold pl-14">
               <Link to="/" className="">
-                <i class="fa-solid fa-user cursor-pointer"></i>
+                <i className="fa-solid fa-user cursor-pointer"></i>
               </Link>
               <Link to="/" className="">
-                <i class="fa-solid fa-house cursor-pointer"></i>
+                <i className="fa-solid fa-house cursor-pointer"></i>
               </Link>
             </div>
           </div>

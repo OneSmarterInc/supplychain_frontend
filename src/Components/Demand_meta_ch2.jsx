@@ -13,12 +13,15 @@ import {
 } from "@chakra-ui/react";
 
 const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
+  const demandData = JSON.parse(localStorage.getItem("demandData"));
+  console.log("DEMANDDATA-FROM-METACH2:--", demandData);
   const regions = ["region1", "region2", "region3"];
+
+  // Correctly initialize metaCh2Value with nested objects
   const [metaCh2Value, setMetaCh2Value] = useState({
-    Active: { region1: "true", region2: "true", region3: "false" },
-    Price: { region1: 74000, region2: null, region3: 74000 },
-    MarketSpending: { region1: 74000, region2: 74000, region3: 74000 },
-    // Add more channels and regions as needed
+    Active: { ...demandData?.metaware_channel_two_active },
+    Price: { ...demandData?.metaware_channel_two_price },
+    MarketSpending: { ...demandData?.metaware_channel_two_market },
   });
 
   const handleInputChange = (channel, region, value) => {
@@ -26,7 +29,7 @@ const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
       ...prevState,
       [channel]: {
         ...prevState[channel],
-        [region]: channel === "Active" ? value : parseInt(value),
+        [region]: channel === "Active" ? value : parseInt(value, 10),
       },
     }));
   };
@@ -34,7 +37,9 @@ const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
   useEffect(() => {
     setMetaCh2ValuetoParent(metaCh2Value);
   }, [metaCh2Value, setMetaCh2ValuetoParent]);
-console.log("Meta ch2:", metaCh2Value)
+
+  console.log("Meta ch2:", metaCh2Value);
+
   return (
     <Box>
       <Text className="p-5 py-3 pb-0 text-xl">
@@ -54,7 +59,7 @@ console.log("Meta ch2:", metaCh2Value)
           {Object.keys(metaCh2Value).map((channel) => (
             <Tr key={channel}>
               <Td>{channel}</Td>
-              {regions.map((region) => (
+              {regions?.map((region) => (
                 <Td key={region}>
                   {channel === "Active" ? (
                     <Select

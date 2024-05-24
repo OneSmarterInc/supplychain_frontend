@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import RawMaterial from "../Components/RawMaterial";
 import SupplyChainTable from "../Components/SupplyChainTable";
 import InfoImg from "../Components/InfoImg";
@@ -15,16 +15,31 @@ const Procurement_Decisions = () => {
   let [updatedDCData, setUpdatedDCData] = useState();
   let [alpha_quantity, setAlpha_quantity] = useState({});
   let [beta_quantity, setBeta_quantity] = useState({});
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  console.log("selectedSim:==", Object.keys(selectedSim[0].firm_data)[0]);
+  const firm_data = Object.keys(selectedSim[0].firm_data)[0];
   const toast = useToast();
-
-  console.log("Updated DC data", updatedDCData);
-
-  const [getDcData, setGetDcData] = useState({});
-
-  const getDCDATA = async () => {
+  useEffect(() => {
+    getProcurement();
+  }, []);
+  const getProcurement = async () => {
     try {
-      const response = await axios.get(`${api}/decision/procurement/`);
-      setGetDcData(response.data);
+      const response = await axios.get(
+        `https://semantic.onesmarter.com/simulation/previous/`,
+        {
+          params: {
+            user_id: user.userid,
+            sim_id: selectedSim[0].simulation_id,
+            admin_id: selectedSim[0].admin_id,
+            current_decision: "Procurement",
+            current_quarter: selectedSim[0].current_quarter,
+            firm_key: firm_data,
+          },
+        }
+      );
+      const data = response.data;
+      localStorage.setItem("procurementData", JSON.stringify(data));
     } catch (error) {
       console.error("Error making GET request:", error);
     }
@@ -42,12 +57,11 @@ const Procurement_Decisions = () => {
       }
 
       const response = await axios.post(`${api}/decision/procurement/`, {
-        id: 3,
-        simulation_id: 123,
-        admin_id: 153,
-        user_id: null,
-        firm_key: "987",
-        quarter: 8,
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        user_id: user.user_id,
+        firm_key: firm_data,
+        quarter: selectedSim[0].current_quarter,
         alpha_quantity: Number(alpha_quantity),
         beta_quantity: Number(beta_quantity),
         sac_units: updatedDCData,
@@ -66,9 +80,6 @@ const Procurement_Decisions = () => {
   };
 
   document.body.style.backgroundColor = "#e0e2e4";
-
-  const user = JSON.parse(localStorage.getItem("user"));
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
 
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
@@ -96,10 +107,7 @@ const Procurement_Decisions = () => {
             />
           </div>
           <div className="rounded-lg -2xl h-96  flex flex-col justify-center">
-            <SupplyChainTable
-              getDcdata={getDcData}
-              setUpdatedDCData={setUpdatedDCData}
-            />
+            <SupplyChainTable setUpdatedDCData={setUpdatedDCData} />
           </div>
         </div>
         <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">

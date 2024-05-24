@@ -13,12 +13,13 @@ import {
 } from "@chakra-ui/react";
 
 const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {
+  const demandData = JSON.parse(localStorage.getItem("demandData"));
   const regions = ["region1", "region2", "region3"];
+
   const [hypeCh1Value, setHypeCh1Value] = useState({
-    Active: { region1: "false", region2: "false", region3: "false" },
-    Price: { region1: 74000, region2: null, region3: 74000 },
-    MarketSpending: { region1: 74000, region2: 74000, region3: 74000 },
-    // Add more channels and regions as needed
+    Active: { ...demandData?.hyperware_channel_one_active },
+    Price: { ...demandData?.hyperware_channel_one_price },
+    MarketSpending: { ...demandData?.hyperware_channel_one_market },
   });
 
   const handleInputChange = (channel, region, value) => {

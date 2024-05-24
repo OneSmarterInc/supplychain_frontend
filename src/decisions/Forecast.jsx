@@ -42,7 +42,7 @@ const Forecast = () => {
         <div className="flex">
           {" "}
           <h1 className="text-xl text-start px-3 py-2 text-blue-500">
-            {selectedSim[0].name}
+            {selectedSim[0]?.name}
           </h1>{" "}
           <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
           <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
