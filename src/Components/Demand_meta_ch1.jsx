@@ -13,12 +13,13 @@ import {
 } from "@chakra-ui/react";
 
 const Demand_meta_ch1 = ({ setMetaCh1ValuetoParent }) => {
+  const demandData = JSON.parse(localStorage.getItem("demandData"));
   const regions = ["region1", "region2", "region3"];
+
   const [metaCh1Value, setMetaCh1Value] = useState({
-    Active: { region1: "true", region2: "true", region3: "false" },
-    Price: { region1: 74000, region2: null, region3: 74000 },
-    MarketSpending: { region1: 74000, region2: 74000, region3: 74000 },
-    // Add more channels and regions as needed
+    Active: { ...demandData?.metaware_channel_one_active },
+    Price: { ...demandData?.metaware_channel_one_price },
+    MarketSpending: { ...demandData?.metaware_channel_one_market },
   });
 
   const handleInputChange = (channel, region, value) => {
@@ -26,7 +27,7 @@ const Demand_meta_ch1 = ({ setMetaCh1ValuetoParent }) => {
       ...prevState,
       [channel]: {
         ...prevState[channel],
-        [region]: channel === "Active" ? value : parseInt(value),
+        [region]: channel === "Active" ? value : parseInt(value, 10),
       },
     }));
   };

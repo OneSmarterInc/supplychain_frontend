@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   HStack,
   Select,
@@ -17,8 +17,12 @@ import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import ServiceDataChart from "../DataChartsOfDecisions/Service/ServiceDataChart";
+
 const Service_Decision = () => {
+  const { api } = useContext(MyContext);
   const regions = ["region1", "region2", "region3"];
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
 
   const [serviceValue, setServiceValue] = useState({
     region1: "",
@@ -30,15 +34,59 @@ const Service_Decision = () => {
     setServiceValue({ ...serviceValue, [region]: value });
   };
 
-  const { api } = useContext(MyContext);
+  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  const [ServiceData, setServiceData] = useState();
+  console.log("ServiceData:--", ServiceData);
+  useEffect(() => {
+    getService();
+  }, []);
+
+  useEffect(() => {
+    if (ServiceData) {
+      setServiceValue({
+        region1: ServiceData.service_region_one,
+        region2: ServiceData.service_region_two,
+        region3: ServiceData.service_region_three,
+      });
+    }
+  }, [ServiceData]);
+
+  const getService = async () => {
+    try {
+      const response = await axios.get(
+        `https://semantic.onesmarter.com/simulation/previous/`,
+        {
+          params: {
+            user_id: user.userid,
+            sim_id: selectedSim[0].simulation_id,
+            admin_id: selectedSim[0].admin_id,
+            current_decision: "Service",
+            current_quarter: selectedSim[0].current_quarter,
+            firm_key: firm_data,
+          },
+        }
+      );
+      const data = response.data;
+      setServiceData(data);
+      localStorage.setItem("ServiceData", JSON.stringify(data));
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+
   const submitService = async () => {
     try {
       const response = await axios.post(`${api}/decision/service/`, {
-        firm_key: "123",
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        user_id: user.userid,
+        firm_key: firm_data,
+        quarter: selectedSim[0].current_quarter,
         service_region_one: serviceValue.region1,
         service_region_two: serviceValue.region2,
         service_region_three: serviceValue.region3,
       });
+      getService();
       console.log("POST request successful", response.data);
     } catch (error) {
       console.error("Error making POST request: Service", error);
@@ -46,9 +94,6 @@ const Service_Decision = () => {
   };
 
   console.log("servicevalue", serviceValue);
-
-  const user = JSON.parse(localStorage.getItem("user"));
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
 
   return (
     <div>
@@ -101,9 +146,8 @@ const Service_Decision = () => {
                           onChange={(e) => handleChange(region, e.target.value)}
                           value={serviceValue[region]}
                         >
+                          <option value="0">0</option>
                           <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
                         </Select>
                       </Td>
                     ))}

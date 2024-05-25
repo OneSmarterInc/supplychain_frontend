@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import InfoImg from "../Components/InfoImg";
 import IT_suppliers from "../Components/IT_suppliers";
 import IT_reports from "../Components/IT_reports";
@@ -13,14 +13,56 @@ const IT = () => {
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const [reportValues, setReportValues] = useState();
   const [suppliers, setSuppliers] = useState();
-
   const { api } = useContext(MyContext);
+
+  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  const [ItData, setItData] = useState();
+  console.log("ItData:--", ItData);
+  useEffect(() => {
+    getIt();
+  }, []);
+
+  useEffect(() => {
+    if (ItData) {
+      // setItValue({
+      //   region1: ItData.It_region_one,
+      //   region2: ItData.It_region_two,
+      //   region3: ItData.It_region_three,
+      // });
+    }
+  }, [ItData]);
+
+  const getIt = async () => {
+    try {
+      const response = await axios.get(
+        `https://semantic.onesmarter.com/simulation/previous/`,
+        {
+          params: {
+            user_id: user.userid,
+            sim_id: selectedSim[0].simulation_id,
+            admin_id: selectedSim[0].admin_id,
+            current_decision: "It",
+            current_quarter: selectedSim[0].current_quarter,
+            firm_key: firm_data,
+          },
+        }
+      );
+      const data = response.data;
+      setItData(data);
+      localStorage.setItem("ItData", JSON.stringify(data));
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
 
   const submitIt = async () => {
     try {
       const response = await axios.post(`${api}/decision/it/`, {
-        firm_key: "123",
-        quarter: null,
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        user_id: user.userid,
+        firm_key: firm_data,
+        quarter: selectedSim[0].current_quarter,
         sync_a: suppliers.A,
         sync_b: suppliers.B,
         sync_c: suppliers.C,
@@ -36,6 +78,7 @@ const IT = () => {
         tr: reportValues.transportation,
       });
       console.log("POST request successful", response.data);
+      getIt();
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
     }
@@ -61,13 +104,23 @@ const IT = () => {
       </div>
       <div className="sm:grid grid-cols-2  gap-3 m-1">
         <div className="m-3 rounded-xl  h-screen bg-white p-2  flex flex-col justify-start">
-          <IT_suppliers setSuppliersFromDecision={setSuppliers} />
-          <IT_reports setReportValuesFromDecision={setReportValues} />
+          <IT_suppliers
+            ItData={ItData}
+            setSuppliersFromDecision={setSuppliers}
+          />
+          <IT_reports
+            ItData={ItData}
+            setReportValuesFromDecision={setReportValues}
+          />
         </div>
         <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
           <InfoImg />
           <div className="py-10">
-            <ITDataChart submitIt={submitIt} reportValues={reportValues} suppliers={suppliers} />
+            <ITDataChart
+              submitIt={submitIt}
+              reportValues={reportValues}
+              suppliers={suppliers}
+            />
           </div>
         </div>
       </div>

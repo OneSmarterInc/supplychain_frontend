@@ -4,190 +4,143 @@ import { Button } from "@material-tailwind/react";
 import { SalesPDFDocument } from "./SalesPDFDocument";
 
 const ReportTable1 = () => {
+  const reportData = JSON.parse(localStorage.getItem("reportData"));
+  console.log("REPORT_", reportData);
+  // const reportData = [
+  //   {
+  //     "Sales Volume": {
+  //       "All Products": 123,
+  //       "Product 7-1": 31631,
+  //       "Product 7-2": 18604,
+  //     },
+  //     "Unfilled Orders": {
+  //       "All Products": 0,
+  //       "Product 7-1": 0,
+  //       "Product 7-2": 0,
+  //     },
+  //     Price: {
+  //       "All Products": 368,
+  //       "Product 7-1": 374,
+  //       "Product 7-2": 357,
+  //     },
+  //   },
+  //   {
+  //     details: {
+  //       "Product Costs": {
+  //         "All Products": 8050921,
+  //         "Product 7-1": 4689926,
+  //         "Product 7-2": 3360995,
+  //       },
+  //       "Order Processing": {
+  //         "All Products": 659780,
+  //       },
+  //       "Replacement Parts": {
+  //         "All Products": 114946,
+  //       },
+  //       "RFID Costs": {
+  //         "All Products": 409395,
+  //       },
+  //       "Transportation Costs": {
+  //         "All Products": 1706785,
+  //       },
+  //       "Transportation Rebates": {
+  //         "All Products": 40000,
+  //       },
+  //       "Volume Discount": {
+  //         "All Products": 0,
+  //       },
+  //       "Duties and Traffic": {
+  //         "All Products": 838687,
+  //       },
+  //     },
+  //     "All Products": 18511800,
+  //     "Product 7-1": 11857200,
+  //     "Product 7-2": 6654600,
+  //   },
+  //   {
+  //     "All Products": 6771286,
+  //     "Product 7-1": 5896151,
+  //     "Product 7-2": 2541920,
+  //   },
+  //   {
+  //     details: {
+  //       "Administrative O/H": {
+  //         "All Products": 1200000,
+  //       },
+  //       "Consulting Fees": {
+  //         "All Products": 0,
+  //       },
+  //       "Corporate O/H": {
+  //         "All Products": 500000,
+  //       },
+  //       "Cross Docking": {
+  //         "All Products": 0,
+  //       },
+  //       "Distribution FC": {
+  //         "All Products": 75000,
+  //       },
+  //       "Emergency Procurement": {
+  //         "All Products": 143401,
+  //       },
+  //       "Emergency Production": {
+  //         "All Products": 25000,
+  //       },
+  //       "Forecast Inaccuracy": {
+  //         "All Products": 167447,
+  //       },
+  //       "Information Technology": {
+  //         "All Products": 14000,
+  //       },
+  //       "Inventory Charges": {
+  //         "All Products": 223785,
+  //       },
+  //       "Plant Capacity FC": {
+  //         "All Products": 200000,
+  //       },
+  //       "Procurement FC": {
+  //         "All Products": 5000,
+  //       },
+  //       "Production FC": {
+  //         "All Products": 47000,
+  //       },
+  //       "Research Studies": {
+  //         "All Products": 0,
+  //       },
+  //       "Service Outsourcing": {
+  //         "All Products": 692000,
+  //       },
+  //       "Unfilled Handling": {
+  //         "All Products": 0,
+  //       },
+  //       "Total Fixed & Other": {
+  //         "All Products": 4732633,
+  //       },
+  //     },
+  //   },
+  //   {
+  //     "All Products": 2038653,
+  //     "Product 7-1": 4081281,
+  //     "Product 7-2": 857343,
+  //   },
+  //   {
+  //     "All Products": -7185,
+  //   },
+  //   {
+  //     "All Products": -1015419,
+  //   },
+  //   {
+  //     "All Products": 1015419,
+  //   },
+  // ];
 
-  const salesData = {
-    "Sales Volume": {
-      "All Products": 50235,
-      "Product 7-1": 31631,
-      "Product 7-2": 18604,
-    },
-    "Unfilled Orders": {
-      "All Products": 0,
-      "Product 7-1": 0,
-      "Product 7-2": 0,
-    },
-    Price: {
-      "All Products": 18604,
-      "Product 7-1": 374,
-      "Product 7-2": 357,
-    },
-  };
-
-  const Revenues = {
-    "All Products": 18511800,
-    "Product 7-1": 11857200,
-    "Product 7-2": 6654600,
-    details: {
-      "Product Costs": {
-        "All Products": 8050921,
-        "Product 7-1": 4689926,
-        "Product 7-2": 3360995,
-      },
-      "Order Processing": {
-        "All Products": 0,
-        "Product 7-1": 0,
-        "Product 7-2": 0,
-      },
-      "Replacement Parts": {
-        "All Products": 659780,
-        "Product 7-1": 442244,
-        "Product 7-2": 217536,
-      },
-      "RFID Costs": {
-        "All Products": 114946,
-        "Product 7-1": 409395,
-        "Product 7-2": 46558,
-      },
-      "Transportation Costs": {
-        "All Products": 237675,
-        "Product 7-1": 68388,
-        "Product 7-2": 171720,
-      },
-      "Transportation Rebates": {
-        "All Products": 237675,
-        "Product 7-1": 68388,
-        "Product 7-2": 171720,
-      },
-      "Volume Discount": {
-        "All Products": 237675,
-        "Product 7-1": 68388,
-        "Product 7-2": 171720,
-      },
-      "Duties and Traffic": {
-        "All Products": 237675,
-        "Product 7-1": 68388,
-        "Product 7-2": 171720,
-      },
-    },
-  };
-  const GrossMargin = {
-    "All Products": 0.431,
-    "Product 7-1": 0.564,
-    "Product 7-2": 0.188,
-  };
-
-  const Fixed_Other_Costs = {
-    details: {
-      "Administrative O/H": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Consulting Fees": {
-        "All Products": 0,
-        "Product 7-1": 0,
-        "Product 7-2": 0,
-      },
-      "Corporate O/H": {
-        "All Products": 18604,
-        "Product 7-1": 374,
-        "Product 7-2": 357,
-      },
-      "Cross Docking": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Distribution FC": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Emergency Procurement": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Emergency Production": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Forecast Inaccuracy": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Information Technology": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Inventory Charges": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Plant Capacity FC": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Procurement FC": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Production FC": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Research Studies": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Service Outsourcing": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Unfilled Handling": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-      "Total Fixed & Other": {
-        "All Products": 50235,
-        "Product 7-1": 31631,
-        "Product 7-2": 18604,
-      },
-    },
-  };
-  const OperatingIncome = {
-    "All Products": 431,
-    "Product 7-1": 564,
-    "Product 7-2": 188,
-  };
-
-  const NonOperatingIncome = {
-    "All Products": 0.431,
-    "Product 7-1": "-",
-    "Product 7-2": "-",
-  };
-  const Taxes = {
-    "All Products": 0.431,
-    "Product 7-1": "-",
-    "Product 7-2": "-",
-  };
-
-  const NetIncome = {
-    "All Products": 0.431,
-    "Product 7-1": "-",
-    "Product 7-2": "-",
-  };
-
+  const salesData = reportData[0];
+  const Revenues = reportData[1];
+  const GrossMargin = reportData[2];
+  const Fixed_Other_Costs = reportData[3];
+  const OperatingIncome = reportData[4];
+  const NonOperatingIncome = reportData[5];
+  const Taxes = reportData[6];
+  const NetIncome = reportData[7];
   return (
     <div>
       <div className="heading flex justify-between font-bold">

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Demand_hype_ch1 from "../Components/Demand_hype_ch1";
 import Demand_hype_ch2 from "../Components/Demand_hype_ch2";
 import Demand_meta_ch1 from "../Components/Demand_meta_ch1";
@@ -20,14 +20,45 @@ const Demand_generation = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  const [demandData, setDemandData] = useState();
+  useEffect(() => {
+    getDemand();
+  }, []);
+
+  const getDemand = async () => {
+    try {
+      const response = await axios.get(
+        `https://semantic.onesmarter.com/simulation/previous/`,
+        {
+          params: {
+            user_id: user.userid,
+            sim_id: selectedSim[0].simulation_id,
+            admin_id: selectedSim[0].admin_id,
+            current_decision: "Demand",
+            current_quarter: selectedSim[0].current_quarter,
+            firm_key: firm_data,
+          },
+        }
+      );
+      const data = response.data;
+      setDemandData(data);
+      localStorage.setItem("demandData", JSON.stringify(data));
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+
+  console.log("DemandData:===", demandData);
+
   const submitDemand = async () => {
     try {
       const response = await axios.post(`${api}/decision/demand/`, {
-        simulation_id: null,
-        admin_id: null,
-        user_id: null,
-        firm_key: "123",
-        quarter: null,
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        user_id: user.userid,
+        firm_key: firm_data,
+        quarter: selectedSim[0].current_quarter,
         hyperware_channel_one_active: hypeCh1Value.Active,
         hyperware_channel_one_price: hypeCh1Value.Price,
         hyperware_channel_one_market: hypeCh1Value.MarketSpending,
@@ -42,6 +73,7 @@ const Demand_generation = () => {
         metaware_channel_two_market: metaCh2Value.MarketSpending,
       });
       console.log("POST request successful", response.data);
+      getDemand();
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
     }
@@ -72,10 +104,22 @@ const Demand_generation = () => {
       <div className="grid grid-cols-2 grid-flow-col gap-2   ">
         <div className="row-span-2 m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-center overflow-scroll  scroll-pt-96">
           <div className="mt-[620px]"></div>
-          <Demand_hype_ch1 setHypeCh1ValuetoParent={setHypeCh1Value} />
-          <Demand_hype_ch2 setHypeCh2ValuetoParent={setHypeCh2Value} />
-          <Demand_meta_ch1 setMetaCh1ValuetoParent={setMetaCh1Value} />
-          <Demand_meta_ch2 setMetaCh2ValuetoParent={setMetaCh2Value} />
+          <Demand_hype_ch1
+            demandData={demandData}
+            setHypeCh1ValuetoParent={setHypeCh1Value}
+          />
+          <Demand_hype_ch2
+            demandData={demandData}
+            setHypeCh2ValuetoParent={setHypeCh2Value}
+          />
+          <Demand_meta_ch1
+            demandData={demandData}
+            setMetaCh1ValuetoParent={setMetaCh1Value}
+          />
+          <Demand_meta_ch2
+            demandData={demandData}
+            setMetaCh2ValuetoParent={setMetaCh2Value}
+          />
         </div>
         <div className=" rounded-2xl m-3     bg-white h-screen p-2">
           <div className=" bg-cover overflow-hidden bg-no-repeat">

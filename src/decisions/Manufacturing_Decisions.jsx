@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, Input, Text } from "@chakra-ui/react";
 import InfoImg from "../Components/InfoImg";
 import NavBar from "../Components/NavBar";
@@ -9,25 +9,86 @@ import ManufacturingDataChart from "../DataChartsOfDecisions/Manufacturing/Manuf
 
 const Manufacturing_Decisions = () => {
   const { api } = useContext(MyContext);
-
+  const [ManufacturingData, setManufacturingData] = useState();
   const [values, setValues] = useState({
-    Production: { productZero: 74000, hyperware: 74000, metaware: null },
-    EmergencyLimit: { productZero: 74000, hyperware: null, metaware: 74000 },
-    VolumeFlexibility: {
-      productZero: 74000,
-      hyperware: 74000,
-      metaware: 74000,
+    Production: {
+      productZero: 0,
+      hyperware: 0,
+      metaware: 0,
     },
-    // Add more channels and regions as needed
+    EmergencyLimit: {
+      productZero: 0,
+      hyperware: 0,
+      metaware: 0,
+    },
+    VolumeFlexibility: {
+      productZero: 0,
+      hyperware: 0,
+      metaware: 0,
+    },
   });
 
-  // console.log("data", values);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+
+  useEffect(() => {
+    getManufacturing();
+  }, []);
+
+  useEffect(() => {
+    if (ManufacturingData) {
+      setValues({
+        Production: {
+          productZero: ManufacturingData.production_zero,
+          hyperware: ManufacturingData.production_hyperware,
+          metaware: ManufacturingData.production_metaware,
+        },
+        EmergencyLimit: {
+          productZero: ManufacturingData.emergency_limit_zero,
+          hyperware: ManufacturingData.emergency_limit_hyperware,
+          metaware: ManufacturingData.emergency_limit_metaware,
+        },
+        VolumeFlexibility: {
+          productZero: ManufacturingData.volume_flexibility_zero,
+          hyperware: ManufacturingData.volume_flexibility_hyperware,
+          metaware: ManufacturingData.volume_flexibility_metaware,
+        },
+      });
+    }
+  }, [ManufacturingData]);
+
+  const getManufacturing = async () => {
+    try {
+      const response = await axios.get(
+        `https://semantic.onesmarter.com/simulation/previous/`,
+        {
+          params: {
+            user_id: user.userid,
+            sim_id: selectedSim[0].simulation_id,
+            admin_id: selectedSim[0].admin_id,
+            current_decision: "Manufacture",
+            current_quarter: selectedSim[0].current_quarter,
+            firm_key: firm_data,
+          },
+        }
+      );
+      const data = response.data;
+      setManufacturingData(data);
+      localStorage.setItem("ManufacturingData", JSON.stringify(data));
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
 
   const submitManufacturing = async () => {
     try {
       const response = await axios.post(`${api}/decision/manufacture/`, {
-        firm_key: "123",
-        quarter: null,
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        user_id: user.userid,
+        firm_key: firm_data,
+        quarter: selectedSim[0].current_quarter,
         production_zero: Number(values.Production.productZero),
         production_hyperware: Number(values.Production.hyperware),
         production_metaware: Number(values.Production.metaware),
@@ -41,6 +102,7 @@ const Manufacturing_Decisions = () => {
         volume_flexibility_metaware: Number(values.VolumeFlexibility.metaware),
       });
       console.log("POST request successful", response.data);
+      getManufacturing();
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
     }
@@ -56,9 +118,6 @@ const Manufacturing_Decisions = () => {
     }));
   };
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
-
   return (
     <div>
       <NavBar />
@@ -72,12 +131,11 @@ const Manufacturing_Decisions = () => {
           </h1>
 
           <div className="flex">
-            {" "}
             <h1 className="text-xl text-start px-3 py-2 text-blue-500">
               {selectedSim[0].name}
-            </h1>{" "}
-            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
-            <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
+            </h1>
+            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>
+            <h1 className="text-xl text-start px-3 py-2 text-gray-600">
               {user.username}
             </h1>
           </div>
@@ -156,19 +214,7 @@ const Manufacturing_Decisions = () => {
                 </Tbody>
               </Table>
             </div>
-            <div className="rounded-lg -2xl h-96  flex flex-col justify-start">
-              <Text className="p-5 pb-2 pt-6 text-xl">
-                <strong>Sales Volume Forecast:</strong>
-              </Text>
-              <Text className="p-5 py-1  pl-8 text-2xl ">
-                <strong className="text-green-600">Hyperware: </strong>
-                <span>179000</span>
-              </Text>
-              <Text className="p-5 py-1 pl-8 text-2xl ">
-                <strong className="text-green-600">Metaware: </strong>
-                <span>171000</span>
-              </Text>
-            </div>
+            <div className="rounded-lg -2xl h-96  flex flex-col justify-start"></div>
           </div>
           <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
             <InfoImg />

@@ -1,7 +1,7 @@
 import { Box, Select, Text } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 
-const IT_suppliers = ({ setSuppliersFromDecision }) => {
+const IT_suppliers = ({ setSuppliersFromDecision, ItData }) => {
   const options = ["A", "B", "C", "D", "E", "F", "G"];
   const initialSuppliers = {
     A: false,
@@ -12,6 +12,19 @@ const IT_suppliers = ({ setSuppliersFromDecision }) => {
     F: false,
     G: false,
   };
+  useEffect(() => {
+    if (ItData) {
+      setSuppliers({
+        A: ItData.sync_a,
+        B: ItData.sync_b,
+        C: ItData.sync_c,
+        D: ItData.sync_d,
+        E: ItData.sync_e,
+        F: ItData.sync_f,
+        G: ItData.sync_g,
+      });
+    }
+  }, [ItData]);
 
   const [suppliers, setSuppliers] = useState(initialSuppliers);
 

@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import ForecastPreview from "../../Components/Previews/ForecastPreview";
 import MyContext from "../../Components/ContextApi/MyContext";
 import ReportModal from "../../report/ReportModal";
+import axios from "axios";
 
 const ForecastDataChart = ({
   submitForecast,
@@ -14,7 +15,9 @@ const ForecastDataChart = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [firstDropdownValue, setFirstDropdownValue] = useState("1");
   const [secondDropdownValue, setSecondDropdownValue] = useState("cpl");
+  const [reportData, setReportData] = useState();
   const { api } = useContext(MyContext);
+
 
   const location = useLocation();
   const path = location.pathname;
@@ -61,7 +64,19 @@ const ForecastDataChart = ({
     }
   };
   console.log(secondDropdownValue);
-  const handleButtonClick = async () => {
+
+  const handleQuarterSelectChange = (e) => {
+    setFirstDropdownValue(e.target.value);
+  };
+
+  // const handleReportSelectChange = (e) => {
+  //   setSecondDropdownValue(e.target.value);
+  //   if (secondDropdownValue === e.target.value) {
+  //     handleButtonClick();
+  //   }
+  // };
+
+  const handleButtonClick = async (e) => {
     // Construct the query parameters
     const queryParams = new URLSearchParams({
       simulation_id: simData[0].simulation_id,
@@ -70,19 +85,19 @@ const ForecastDataChart = ({
     }).toString();
 
     // Append the query parameters to the URL
-    const url = `${api}/reports/${secondDropdownValue}/?${queryParams}`;
+    const url = `${api}/reports/${e.target.value}/?${queryParams}`;
 
     // Make a GET request with the constructed URL
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await response.json();
-    console.log(data); // Process your data here
+    try {
+      const response = await axios.get(url);
+      console.log("POST request successful", response.data);
+      localStorage.setItem("reportData", JSON.stringify(reportData))
+    } catch (error) {
+      console.error("Error making POST request:", error);
+    }
   };
+
+  console.log("REPORT_DATA:", reportData)
 
   return (
     <div className="app">
@@ -134,22 +149,22 @@ const ForecastDataChart = ({
           <Select
             width="165px"
             border="1px solid black"
-            onChange={(e) => setFirstDropdownValue(e.target.value)}
+            onChange={(e) => handleQuarterSelectChange(e)}
           >
             {option}
           </Select>
           <Select
             width="165px"
             border="1px solid black"
-            onChange={(e) => setSecondDropdownValue(e.target.value)}
+            onChange={(e) => handleButtonClick(e)}
           >
             <option value="cpl">Corporate P&L Statement </option>
             <option value="hpl">Historical Corporate P&L Statement</option>
-            <option value="hpls">Hyperware P&L Statement</option>
+            <option value="pcpl">Hyperware P&L Statement</option>
             <option value="mpls">Metaware P&L Statement</option>
             <option value="bl">Balance Sheet</option>
             <option value="cfar">Cash FLow Analysis Report</option>
-            <option value="fgir">FINISHED GOODS INVENTORY REPORT</option>
+            <option value="inventory">FINISHED GOODS INVENTORY REPORT</option>
             <option value="pir">PROCUREMENT INVENTORY REPORT</option>
             <option value="odvr">OTHER DECISION VARIABLES REPORT</option>
             <option value="far">FORECASTING ACCURACY REPORT</option>

@@ -58,8 +58,6 @@ export default function Steps({ setNoOfQuarters }) {
 
     navigate("/usersidelive");
   };
-  localStorage.setItem("simulationData", simulationData)
-
   return (
     <>
       <div className="w-full sm:px-24 px-6 text-wrap py-4">

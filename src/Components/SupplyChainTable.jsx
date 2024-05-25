@@ -1,13 +1,14 @@
 import { Toast } from "@chakra-ui/react";
+import axios from "axios";
 import React, { useRef, useState, useEffect } from "react";
 
-const SupplyChainTable = (props) => {
-  const tableRef = useRef(null); // Ref for the table element
+const SupplyChainTable = ({ setUpdatedDCData }) => {
+  const tableRef = useRef(null);
   // <SupplyChainTable getDcdata={getDcData}  setUpdatedDCData={setUpdatedDCData} /> from parent
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeDC, setActiveDC] = useState("DC1"); // Track active DC
+  const procurementData = JSON.parse(localStorage.getItem("procurementData"));
 
-  // Supplier and medium options
   const supplierOptions = [
     "Select",
     "supplierA",
@@ -18,67 +19,12 @@ const SupplyChainTable = (props) => {
   const mediumOptions = ["Select", "Air", "Surface"];
 
   // State variables to hold data for each DC
-  const [dcData, setDcData] = useState({
-    DC1: [
-      {
-        name: "gamma",
-        supplier: "supplierD",
-        medium: "Air",
-        demand: "74000",
-        units: "3000",
-      },
-      {
-        name: "delta",
-        supplier: "supplierA",
-        medium: "Air",
-        demand: "7400",
-        units: "10000",
-      },
-      {
-        name: "epsilon",
-        supplier: "supplierD",
-        medium: "Air",
-        demand: "10000",
-        units: "20000",
-      },
-    ],
-    DC2: [
-      {
-        name: "gamma",
-        supplier: "supplierD",
-        medium: "Air",
-        demand: "15000",
-        units: "25000",
-      },
-      {
-        name: "delta",
-        supplier: "supplierD",
-        medium: "Air",
-        demand: "500",
-        units: "1000",
-      },
-      {
-        name: "epsilon",
-        supplier: "supplierD",
-        medium: "Air",
-        demand: "10000",
-        units: "25000",
-      },
-    ],
-    DC3: "closed",
-  });
-
-  console.log("DC DATA", dcData);
-  // Load data from props initially and whenever props change
-  useEffect(() => {
-    if (props.getDcData) {
-      setDcData(props.getDcData);
-    }
-  }, [props.getDcData]);
+  const [dcData, setDcData] = useState(procurementData?.sac_units);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+  console.log("DC DATA", dcData);
 
   const handleDCButtonClick = (dc) => {
     setActiveDC(dc);
@@ -95,7 +41,7 @@ const SupplyChainTable = (props) => {
       name: "",
       supplier: "",
       medium: "",
-      demand: "",
+
       units: "",
     };
     setDcData((prevData) => ({
@@ -116,7 +62,7 @@ const SupplyChainTable = (props) => {
   // }, [dcData]);
 
   // Function to pass updated data to the parent component
-  props.setUpdatedDCData(dcData);
+  setUpdatedDCData(dcData);
 
   return (
     <div
@@ -139,22 +85,18 @@ const SupplyChainTable = (props) => {
                   <th className="text-center py-3 text-lg ">Name</th>
                   <th className="text-center py-3 text-lg ">Supplier</th>
                   <th className="text-center py-3 text-lg ">Medium</th>
-                  <th className="text-center py-3 text-lg ">Demands</th>
+
                   <th className="text-center py-3 text-lg w-28">Units</th>
                 </tr>
               </thead>
 
               <tbody ref={tableRef} className="h-40 overflow-scroll-auto">
-                {dcData[activeDC].map((entry, index) => (
+                {dcData[activeDC]?.map((entry, index) => (
                   <tr className="bg-slate-300 " key={index}>
                     <td className="text-center w-28 text-xl">
                       <input
                         type="text"
-                        className={`p-2 pl-3 pr-2 w-28 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.demand.trim() === ""
-                            ? "border-red-500 outline-red-500"
-                            : "border-green-500 outline-green-500"
-                        } placeholder:text-red-400`}
+                        className={`p-2 pl-3 pr-2 w-28 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm  placeholder:text-red-400`}
                         value={entry.name}
                         placeholder="Enter Name"
                         onChange={(e) =>
@@ -187,7 +129,7 @@ const SupplyChainTable = (props) => {
                             )
                           }
                         >
-                          {supplierOptions.map((option, i) => (
+                          {supplierOptions?.map((option, i) => (
                             <option key={i} value={option}>
                               {option}
                             </option>
@@ -214,7 +156,7 @@ const SupplyChainTable = (props) => {
                             )
                           }
                         >
-                          {mediumOptions.map((option, i) => (
+                          {mediumOptions?.map((option, i) => (
                             <option key={i} value={option}>
                               {option}
                             </option>
@@ -222,25 +164,7 @@ const SupplyChainTable = (props) => {
                         </select>
                       </p>
                     </td>
-                    <td className="text-center py-2 text-xl">
-                      <input
-                        type="text"
-                        className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.demand.trim() === ""
-                            ? "border-red-500 outline-red-500"
-                            : "border-green-500 outline-green-500"
-                        } placeholder:text-red-400`}
-                        value={entry.demand}
-                        onChange={(e) =>
-                          handleInputChange(
-                            activeDC,
-                            index,
-                            "demand",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
+
                     <td className="text-center py-2 text-xl">
                       <input
                         type="text"
@@ -272,22 +196,18 @@ const SupplyChainTable = (props) => {
                   <th className="text-center py-3 text-lg ">Name</th>
                   <th className="text-center py-3 text-lg ">Supplier</th>
                   <th className="text-center py-3 text-lg ">Medium</th>
-                  <th className="text-center py-3 text-lg ">Demands</th>
+
                   <th className="text-center py-3 text-lg w-28">Units</th>
                 </tr>
               </thead>
 
               <tbody className="h-40 overflow-scroll">
-                {dcData[activeDC].map((entry, index) => (
+                {dcData[activeDC]?.map((entry, index) => (
                   <tr className="bg-slate-300 " key={index}>
                     <td className="text-center w-28 text-xl">
                       <input
                         type="text"
-                        className={`p-2 pl-3 pr-2 w-28 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.demand.trim() === ""
-                            ? "border-red-500 outline-red-500"
-                            : "border-green-500 outline-green-500"
-                        } placeholder:text-red-400`}
+                        className={`p-2 pl-3 pr-2 w-28 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm  placeholder:text-red-400`}
                         value={entry.name}
                         placeholder="Enter Name"
                         onChange={(e) =>
@@ -319,7 +239,7 @@ const SupplyChainTable = (props) => {
                             )
                           }
                         >
-                          {supplierOptions.map((option, i) => (
+                          {supplierOptions?.map((option, i) => (
                             <option key={i} value={option}>
                               {option}
                             </option>
@@ -346,7 +266,7 @@ const SupplyChainTable = (props) => {
                             )
                           }
                         >
-                          {mediumOptions.map((option, i) => (
+                          {mediumOptions?.map((option, i) => (
                             <option key={i} value={option}>
                               {option}
                             </option>
@@ -354,25 +274,7 @@ const SupplyChainTable = (props) => {
                         </select>
                       </p>
                     </td>
-                    <td className="text-center py-2 text-xl">
-                      <input
-                        type="text"
-                        className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.demand.trim() === ""
-                            ? "border-red-500 outline-red-500"
-                            : "border-green-500 outline-green-500"
-                        } placeholder:text-red-400`}
-                        value={entry.demand}
-                        onChange={(e) =>
-                          handleInputChange(
-                            activeDC,
-                            index,
-                            "demand",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
+
                     <td className="text-center py-2 text-xl">
                       <input
                         type="text"
@@ -410,7 +312,7 @@ const SupplyChainTable = (props) => {
               </thead>
 
               <tbody className="h-40 overflow-scroll">
-                {dcData[activeDC].map((entry, index) => (
+                {dcData[activeDC]?.map((entry, index) => (
                   <tr className="bg-slate-300 " key={index}>
                     <td className="text-center w-28 text-xl">
                       <input
@@ -451,7 +353,7 @@ const SupplyChainTable = (props) => {
                             )
                           }
                         >
-                          {supplierOptions.map((option, i) => (
+                          {supplierOptions?.map((option, i) => (
                             <option key={i} value={option}>
                               {option}
                             </option>
@@ -478,7 +380,7 @@ const SupplyChainTable = (props) => {
                             )
                           }
                         >
-                          {mediumOptions.map((option, i) => (
+                          {mediumOptions?.map((option, i) => (
                             <option key={i} value={option}>
                               {option}
                             </option>
@@ -486,25 +388,7 @@ const SupplyChainTable = (props) => {
                         </select>
                       </p>
                     </td>
-                    <td className="text-center py-2 text-xl">
-                      <input
-                        type="text"
-                        className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.demand.trim() === ""
-                            ? "border-red-500 outline-red-500"
-                            : "border-green-500 outline-green-500"
-                        } placeholder:text-red-400`}
-                        value={entry.demand}
-                        onChange={(e) =>
-                          handleInputChange(
-                            activeDC,
-                            index,
-                            "demand",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
+
                     <td className="text-center py-2 text-xl">
                       <input
                         type="text"

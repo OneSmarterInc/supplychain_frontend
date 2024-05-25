@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Table, Tbody, Tr, Td, Select, Text } from "@chakra-ui/react";
 
-const IT_reports = ({ setReportValuesFromDecision }) => {
+const IT_reports = ({ setReportValuesFromDecision, ItData }) => {
   const [reportValues, setReportValues] = useState({
     procurement: false,
     productCost: false,
@@ -10,6 +10,19 @@ const IT_reports = ({ setReportValuesFromDecision }) => {
     transportationCost: false,
     transportation: false,
   });
+
+  useEffect(() => {
+    if (ItData) {
+      setReportValues({
+        procurement: ItData.ptc,
+        productCost: ItData.pcr,
+        replacementParts: ItData.rpdr,
+        retailPipeline: ItData.rpr,
+        transportationCost: ItData.tcr,
+        transportation: ItData.tr,
+      });
+    }
+  }, [ItData]);
 
   const handleChange = (e, reportType) => {
     setReportValues({
@@ -40,7 +53,7 @@ const IT_reports = ({ setReportValuesFromDecision }) => {
                   width="100px"
                   border="1px solid black"
                   value={reportValues.procurement ? "true" : "false"}
-                  onChange={(e) => handleChange(e, 'procurement')}
+                  onChange={(e) => handleChange(e, "procurement")}
                 >
                   <option value="true">Yes</option>
                   <option value="false">No</option>
@@ -56,7 +69,7 @@ const IT_reports = ({ setReportValuesFromDecision }) => {
                   width="100px"
                   border="1px solid black"
                   value={reportValues.productCost ? "true" : "false"}
-                  onChange={(e) => handleChange(e, 'productCost')}
+                  onChange={(e) => handleChange(e, "productCost")}
                 >
                   <option value="true">Yes</option>
                   <option value="false">No</option>
@@ -74,7 +87,7 @@ const IT_reports = ({ setReportValuesFromDecision }) => {
                   width="100px"
                   border="1px solid black"
                   value={reportValues.replacementParts ? "true" : "false"}
-                  onChange={(e) => handleChange(e, 'replacementParts')}
+                  onChange={(e) => handleChange(e, "replacementParts")}
                 >
                   <option value="true">Yes</option>
                   <option value="false">No</option>
@@ -90,7 +103,7 @@ const IT_reports = ({ setReportValuesFromDecision }) => {
                   width="100px"
                   border="1px solid black"
                   value={reportValues.retailPipeline ? "true" : "false"}
-                  onChange={(e) => handleChange(e, 'retailPipeline')}
+                  onChange={(e) => handleChange(e, "retailPipeline")}
                 >
                   <option value="true">Yes</option>
                   <option value="false">No</option>
@@ -108,7 +121,7 @@ const IT_reports = ({ setReportValuesFromDecision }) => {
                   width="100px"
                   border="1px solid black"
                   value={reportValues.transportationCost ? "true" : "false"}
-                  onChange={(e) => handleChange(e, 'transportationCost')}
+                  onChange={(e) => handleChange(e, "transportationCost")}
                 >
                   <option value="true">Yes</option>
                   <option value="false">No</option>
@@ -124,7 +137,7 @@ const IT_reports = ({ setReportValuesFromDecision }) => {
                   width="100px"
                   border="1px solid black"
                   value={reportValues.transportation ? "true" : "false"}
-                  onChange={(e) => handleChange(e, 'transportation')}
+                  onChange={(e) => handleChange(e, "transportation")}
                 >
                   <option value="true">Yes</option>
                   <option value="false">No</option>

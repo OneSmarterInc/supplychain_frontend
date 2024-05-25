@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 
 const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
+  const procurementData = JSON.parse(localStorage.getItem("procurementData"));
+  console.log("ProcurementDataRaw-", procurementData);
   const [newData, setNewData] = useState({
-    alpha_quantity: "",
-    beta_quantity: "",
+    alpha_quantity: procurementData?.alpha_quantity,
+    beta_quantity: procurementData?.beta_quantity,
   });
 
   const handleChange = (e) => {
@@ -42,7 +44,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
               <input
                 id="alpha-input"
                 className={`bg-gray-50 border  text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none mx-auto  p-2 ${
-                  !newData.alpha_quantity.trim()
+                  !newData.alpha_quantity
                     ? "border-red-500 outline-red-500"
                     : " border-green-500 outline-green-500"
                 }`}
@@ -65,7 +67,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
               <input
                 id="beta-input"
                 className={`bg-gray-50 border text-center text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500  mx-auto  p-2 ${
-                  !newData.beta_quantity.trim()
+                  !newData.beta_quantity
                     ? "border-red-500 outline-red-500"
                     : " border-green-500 outline-green-500"
                 }`}
