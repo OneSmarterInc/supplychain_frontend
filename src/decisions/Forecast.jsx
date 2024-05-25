@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Forecasting_sales from "../Components/Forecasting_sales";
 import Forecasting_sales2 from "../Components/Forecasting_sales2";
 import NavBar from "../Components/NavBar";
@@ -15,23 +15,57 @@ const Forecast = () => {
   console.log("ForecastHyperware", ForecastHyperware);
   console.log("ForecastMetaware", ForecastMetaware);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+
+  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  const [ForecastData, setForecastData] = useState();
+  useEffect(() => {
+    getForecast();
+  }, []);
+
+  const getForecast = async () => {
+    try {
+      const response = await axios.get(
+        `https://semantic.onesmarter.com/simulation/previous/`,
+        {
+          params: {
+            user_id: user.userid,
+            sim_id: selectedSim[0].simulation_id,
+            admin_id: selectedSim[0].admin_id,
+            current_decision: "Forecast",
+            current_quarter: selectedSim[0].current_quarter,
+            firm_key: firm_data,
+          },
+        }
+      );
+      const data = response.data;
+      setForecastData(data);
+      localStorage.setItem("ForecastData", JSON.stringify(data));
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+
   const submitForecast = async () => {
     try {
       const response = await axios.post(`${api}/decision/forecast/`, {
-        firm_key: "123",
-        quarter: null,
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        user_id: user.userid,
+        firm_key: firm_data,
+        quarter: selectedSim[0].current_quarter,
         hyperware_channel_one: ForecastHyperware.channel1,
         hyperware_channel_two: ForecastHyperware.channel2,
         metaware_channel_one: ForecastMetaware.channel1,
         metaware_channel_two: ForecastMetaware.channel2,
       });
       console.log("POST request successful", response.data);
+      getForecast();
     } catch (error) {
       console.error("Error making POST request: Forecast", error);
     }
   };
-  const user = JSON.parse(localStorage.getItem("user"));
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
 
   return (
     <div style={{ fontFamily: "ABeeZee" }} className=" ">

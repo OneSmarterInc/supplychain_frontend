@@ -17,9 +17,16 @@ import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import DistributionDataChart from "../DataChartsOfDecisions/Distribution/DistributionDataChart";
+import { useEffect } from "react";
 
 const Distribution_Decision = () => {
   const { api } = useContext(MyContext);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  const [DistributionData, setDistributionData] = useState();
+
   const [values, setValues] = useState({
     distribution_center: {},
     rfid: {},
@@ -29,6 +36,45 @@ const Distribution_Decision = () => {
     sac_surface_shipping: {},
   });
   console.log("Distribution Values:---", values);
+  useEffect(() => {
+    getDistribution();
+  }, []);
+
+  useEffect(() => {
+    if (DistributionData) {
+      setValues({
+        distribution_center: DistributionData.distribution_center,
+        rfid: DistributionData.rfid,
+        emergency_carrier: DistributionData.emergency_carrier,
+        cross_docking: DistributionData.cross_docking,
+        fgi_surface_shipping: DistributionData.fgi_surface_shipping,
+        sac_surface_shipping: DistributionData.sac_surface_shipping,
+      });
+    }
+  }, [DistributionData]);
+
+  const getDistribution = async () => {
+    try {
+      const response = await axios.get(
+        `https://semantic.onesmarter.com/simulation/previous/`,
+        {
+          params: {
+            user_id: user.userid,
+            sim_id: selectedSim[0].simulation_id,
+            admin_id: selectedSim[0].admin_id,
+            current_decision: "Distribution",
+            current_quarter: selectedSim[0].current_quarter,
+            firm_key: firm_data,
+          },
+        }
+      );
+      const data = response.data;
+      setDistributionData(data);
+      localStorage.setItem("DistributionData", JSON.stringify(data));
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
 
   const [availableCarriers, setAvailableCarriers] = useState([
     "I",
@@ -78,18 +124,22 @@ const Distribution_Decision = () => {
 
   const regions = ["region1", "region2", "region3"];
   const options = {
-    distribution_centerOpt: [0, 1, 2],
+    distribution_centerOpt: [0, 1],
     rfidOpt: [0, 1],
     emergency_carrierOpt: ["I", "J", "K", "L", "M", "N"],
     cross_dockingOpt: ["I", "J", "K", "L", "M", "N"],
-    fgi_surface_shippingOpt: [1, 2, 3],
-    sac_surface_shippingOpt: [1, 2, 3],
+    fgi_surface_shippingOpt: [0, 1],
+    sac_surface_shippingOpt: [0, 1],
   };
 
   const submitDistribution = async () => {
     try {
       const response = await axios.post(`${api}/decision/distribution/`, {
-        firm_key: "123",
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        user_id: user.userid,
+        firm_key: firm_data,
+        quarter: selectedSim[0].current_quarter,
         distribution_center: values.distribution_center,
         rfid: values.rfid,
         emergency_carrier: values.emergency_carrier,
@@ -98,13 +148,11 @@ const Distribution_Decision = () => {
         sac_surface_shipping: values.sac_surface_shipping,
       });
       console.log("POST request successful", response.data);
+      getDistribution();
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
     }
   };
-
-  const user = JSON.parse(localStorage.getItem("user"));
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
 
   return (
     <div>

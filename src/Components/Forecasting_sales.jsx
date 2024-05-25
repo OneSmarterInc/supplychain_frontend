@@ -1,12 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, Input, Text } from "@chakra-ui/react";
 
 const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
-  const [ForecastHyperware, setForecastHyperware] = useState({
-    channel1: { region1: 74000, region2: 74000, region3: 74000 },
-    channel2: { region1: 74000, region2: 74000, region3: 74000 },
+  const forecastData = JSON.parse(localStorage.getItem("ForecastData"));
+  console.log("ForecastData:==", forecastData);
+
+  const initialForecast = {
+    channel1: forecastData?.hyperware_channel_one || {
+      region1: "",
+      region2: "",
+      region3: "",
+    },
+    channel2: forecastData?.hyperware_channel_two || {
+      region1: "",
+      region2: "",
+      region3: "",
+    },
     // Add more channels and regions as needed
-  });
+  };
+
+  const [ForecastHyperware, setForecastHyperware] = useState(initialForecast);
 
   const handleChange = (channel, region, newValue) => {
     setForecastHyperware((prevForecastHyperware) => ({
@@ -18,9 +31,9 @@ const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
     }));
   };
 
-  setForecastHyperwaretopass(ForecastHyperware);
-
-  // console.log("forecast value", ForecastHyperware);
+  useEffect(() => {
+    setForecastHyperwaretopass(ForecastHyperware);
+  }, [ForecastHyperware, setForecastHyperwaretopass]);
 
   return (
     <>
@@ -51,7 +64,7 @@ const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
               <Td>
                 <Input
                   type="number"
-                  value={ForecastHyperware[channel].region1}
+                  value={ForecastHyperware[channel]?.region1 || ""}
                   onChange={(e) =>
                     handleChange(channel, "region1", e.target.value)
                   }
@@ -61,7 +74,7 @@ const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
               <Td>
                 <Input
                   type="number"
-                  value={ForecastHyperware[channel].region2}
+                  value={ForecastHyperware[channel]?.region2 || ""}
                   onChange={(e) =>
                     handleChange(channel, "region2", e.target.value)
                   }
@@ -71,7 +84,7 @@ const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
               <Td>
                 <Input
                   type="number"
-                  value={ForecastHyperware[channel].region3}
+                  value={ForecastHyperware[channel]?.region3 || ""}
                   onChange={(e) =>
                     handleChange(channel, "region3", e.target.value)
                   }
