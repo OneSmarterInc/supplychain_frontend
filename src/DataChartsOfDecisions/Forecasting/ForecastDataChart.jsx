@@ -6,6 +6,7 @@ import ForecastPreview from "../../Components/Previews/ForecastPreview";
 import MyContext from "../../Components/ContextApi/MyContext";
 import ReportModal from "../../report/ReportModal";
 import axios from "axios";
+import EvaluationReportModal from "../../report/EvaluationReport/EvaluationReportModal";
 
 const ForecastDataChart = ({
   submitForecast,
@@ -17,7 +18,6 @@ const ForecastDataChart = ({
   const [secondDropdownValue, setSecondDropdownValue] = useState("cpl");
   const [reportData, setReportData] = useState();
   const { api } = useContext(MyContext);
-
 
   const location = useLocation();
   const path = location.pathname;
@@ -81,7 +81,7 @@ const ForecastDataChart = ({
     const queryParams = new URLSearchParams({
       simulation_id: simData[0].simulation_id,
       quarter: firstDropdownValue,
-      firm: simData[0].firm_data[user],
+      firm: Object.keys(simData[0]?.firm_data)[0],
     }).toString();
 
     // Append the query parameters to the URL
@@ -91,13 +91,13 @@ const ForecastDataChart = ({
     try {
       const response = await axios.get(url);
       console.log("POST request successful", response.data);
-      localStorage.setItem("reportData", JSON.stringify(reportData))
+      localStorage.setItem("reportData", JSON.stringify(reportData));
     } catch (error) {
       console.error("Error making POST request:", error);
     }
   };
 
-  console.log("REPORT_DATA:", reportData)
+  console.log("REPORT_DATA:", reportData);
 
   return (
     <div className="app">
@@ -169,10 +169,9 @@ const ForecastDataChart = ({
             <option value="odvr">OTHER DECISION VARIABLES REPORT</option>
             <option value="far">FORECASTING ACCURACY REPORT</option>
           </Select>
-          {/* <button className="h-10  bg-gray-700 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5 w-24 " onClick={handleButtonClick}>
-            View
-          </button> */}
-          <ReportModal />
+       
+          {/* <ReportModal /> */}
+          <EvaluationReportModal/>
         </HStack>
       </div>
     </div>

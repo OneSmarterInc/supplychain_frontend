@@ -25,19 +25,16 @@ const Procurement_Decisions = () => {
   }, []);
   const getProcurement = async () => {
     try {
-      const response = await axios.get(
-        `https://semantic.onesmarter.com/simulation/previous/`,
-        {
-          params: {
-            user_id: user.userid,
-            sim_id: selectedSim[0].simulation_id,
-            admin_id: selectedSim[0].admin_id,
-            current_decision: "Procurement",
-            current_quarter: selectedSim[0].current_quarter,
-            firm_key: firm_data,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSim[0].simulation_id,
+          admin_id: selectedSim[0].admin_id,
+          current_decision: "Procurement",
+          current_quarter: selectedSim[0].current_quarter,
+          firm_key: firm_data,
+        },
+      });
       const data = response.data;
       localStorage.setItem("procurementData", JSON.stringify(data));
     } catch (error) {

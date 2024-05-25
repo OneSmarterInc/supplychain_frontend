@@ -4,134 +4,134 @@ import { Button } from "@material-tailwind/react";
 import { SalesPDFDocument } from "./SalesPDFDocument";
 
 const ReportTable1 = () => {
-  const reportData = JSON.parse(localStorage.getItem("reportData"));
+  // const reportData = JSON.parse(localStorage.getItem("reportData"));
   console.log("REPORT_", reportData);
-  // const reportData = [
-  //   {
-  //     "Sales Volume": {
-  //       "All Products": 123,
-  //       "Product 7-1": 31631,
-  //       "Product 7-2": 18604,
-  //     },
-  //     "Unfilled Orders": {
-  //       "All Products": 0,
-  //       "Product 7-1": 0,
-  //       "Product 7-2": 0,
-  //     },
-  //     Price: {
-  //       "All Products": 368,
-  //       "Product 7-1": 374,
-  //       "Product 7-2": 357,
-  //     },
-  //   },
-  //   {
-  //     details: {
-  //       "Product Costs": {
-  //         "All Products": 8050921,
-  //         "Product 7-1": 4689926,
-  //         "Product 7-2": 3360995,
-  //       },
-  //       "Order Processing": {
-  //         "All Products": 659780,
-  //       },
-  //       "Replacement Parts": {
-  //         "All Products": 114946,
-  //       },
-  //       "RFID Costs": {
-  //         "All Products": 409395,
-  //       },
-  //       "Transportation Costs": {
-  //         "All Products": 1706785,
-  //       },
-  //       "Transportation Rebates": {
-  //         "All Products": 40000,
-  //       },
-  //       "Volume Discount": {
-  //         "All Products": 0,
-  //       },
-  //       "Duties and Traffic": {
-  //         "All Products": 838687,
-  //       },
-  //     },
-  //     "All Products": 18511800,
-  //     "Product 7-1": 11857200,
-  //     "Product 7-2": 6654600,
-  //   },
-  //   {
-  //     "All Products": 6771286,
-  //     "Product 7-1": 5896151,
-  //     "Product 7-2": 2541920,
-  //   },
-  //   {
-  //     details: {
-  //       "Administrative O/H": {
-  //         "All Products": 1200000,
-  //       },
-  //       "Consulting Fees": {
-  //         "All Products": 0,
-  //       },
-  //       "Corporate O/H": {
-  //         "All Products": 500000,
-  //       },
-  //       "Cross Docking": {
-  //         "All Products": 0,
-  //       },
-  //       "Distribution FC": {
-  //         "All Products": 75000,
-  //       },
-  //       "Emergency Procurement": {
-  //         "All Products": 143401,
-  //       },
-  //       "Emergency Production": {
-  //         "All Products": 25000,
-  //       },
-  //       "Forecast Inaccuracy": {
-  //         "All Products": 167447,
-  //       },
-  //       "Information Technology": {
-  //         "All Products": 14000,
-  //       },
-  //       "Inventory Charges": {
-  //         "All Products": 223785,
-  //       },
-  //       "Plant Capacity FC": {
-  //         "All Products": 200000,
-  //       },
-  //       "Procurement FC": {
-  //         "All Products": 5000,
-  //       },
-  //       "Production FC": {
-  //         "All Products": 47000,
-  //       },
-  //       "Research Studies": {
-  //         "All Products": 0,
-  //       },
-  //       "Service Outsourcing": {
-  //         "All Products": 692000,
-  //       },
-  //       "Unfilled Handling": {
-  //         "All Products": 0,
-  //       },
-  //       "Total Fixed & Other": {
-  //         "All Products": 4732633,
-  //       },
-  //     },
-  //   },
-  //   {
-  //     "All Products": 2038653,
-  //     "Product 7-1": 4081281,
-  //     "Product 7-2": 857343,
-  //   },
-  //   {
-  //     "All Products": -7185,
-  //   },
-  //   {
-  //     "All Products": -1015419,
-  //   },
-  //   {
-  //     "All Products": 1015419,
-  //   },
-  // ];
+  const reportData = [
+    {
+      "Sales Volume": {
+        "All Products": 123,
+        "Product 7-1": 31631,
+        "Product 7-2": 18604,
+      },
+      "Unfilled Orders": {
+        "All Products": 0,
+        "Product 7-1": 0,
+        "Product 7-2": 0,
+      },
+      Price: {
+        "All Products": 368,
+        "Product 7-1": 374,
+        "Product 7-2": 357,
+      },
+    },
+    {
+      details: {
+        "Product Costs": {
+          "All Products": 8050921,
+          "Product 7-1": 4689926,
+          "Product 7-2": 3360995,
+        },
+        "Order Processing": {
+          "All Products": 659780,
+        },
+        "Replacement Parts": {
+          "All Products": 114946,
+        },
+        "RFID Costs": {
+          "All Products": 409395,
+        },
+        "Transportation Costs": {
+          "All Products": 1706785,
+        },
+        "Transportation Rebates": {
+          "All Products": 40000,
+        },
+        "Volume Discount": {
+          "All Products": 0,
+        },
+        "Duties and Traffic": {
+          "All Products": 838687,
+        },
+      },
+      "All Products": 18511800,
+      "Product 7-1": 11857200,
+      "Product 7-2": 6654600,
+    },
+    {
+      "All Products": 6771286,
+      "Product 7-1": 5896151,
+      "Product 7-2": 2541920,
+    },
+    {
+      details: {
+        "Administrative O/H": {
+          "All Products": 1200000,
+        },
+        "Consulting Fees": {
+          "All Products": 0,
+        },
+        "Corporate O/H": {
+          "All Products": 500000,
+        },
+        "Cross Docking": {
+          "All Products": 0,
+        },
+        "Distribution FC": {
+          "All Products": 75000,
+        },
+        "Emergency Procurement": {
+          "All Products": 143401,
+        },
+        "Emergency Production": {
+          "All Products": 25000,
+        },
+        "Forecast Inaccuracy": {
+          "All Products": 167447,
+        },
+        "Information Technology": {
+          "All Products": 14000,
+        },
+        "Inventory Charges": {
+          "All Products": 223785,
+        },
+        "Plant Capacity FC": {
+          "All Products": 200000,
+        },
+        "Procurement FC": {
+          "All Products": 5000,
+        },
+        "Production FC": {
+          "All Products": 47000,
+        },
+        "Research Studies": {
+          "All Products": 0,
+        },
+        "Service Outsourcing": {
+          "All Products": 692000,
+        },
+        "Unfilled Handling": {
+          "All Products": 0,
+        },
+        "Total Fixed & Other": {
+          "All Products": 4732633,
+        },
+      },
+    },
+    {
+      "All Products": 2038653,
+      "Product 7-1": 4081281,
+      "Product 7-2": 857343,
+    },
+    {
+      "All Products": -7185,
+    },
+    {
+      "All Products": -1015419,
+    },
+    {
+      "All Products": 1015419,
+    },
+  ];
 
   const salesData = reportData[0];
   const Revenues = reportData[1];

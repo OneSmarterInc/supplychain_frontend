@@ -27,7 +27,7 @@ const Forecast = () => {
   const getForecast = async () => {
     try {
       const response = await axios.get(
-        `https://semantic.onesmarter.com/simulation/previous/`,
+        `${api}/previous/`,
         {
           params: {
             user_id: user.userid,
@@ -54,7 +54,7 @@ const Forecast = () => {
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
         firm_key: firm_data,
-        quarter: selectedSim[0].current_quarter,
+        quarter: 10,
         hyperware_channel_one: ForecastHyperware.channel1,
         hyperware_channel_two: ForecastHyperware.channel2,
         metaware_channel_one: ForecastMetaware.channel1,

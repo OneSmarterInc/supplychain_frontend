@@ -41,7 +41,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
       name: "",
       supplier: "",
       medium: "",
-
       units: "",
     };
     setDcData((prevData) => ({
@@ -169,7 +168,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                       <input
                         type="text"
                         className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.units.trim() === ""
+                          entry.units === ""
                             ? "border-red-500 outline-red-500"
                             : "border-green-500 outline-green-500"
                         } placeholder:text-red-400`}
@@ -279,7 +278,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                       <input
                         type="text"
                         className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.units.trim() === ""
+                          entry.units === ""
                             ? "border-red-500 outline-red-500"
                             : "border-green-500 outline-green-500"
                         } placeholder:text-red-400`}
@@ -393,7 +392,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                       <input
                         type="text"
                         className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.units.trim() === ""
+                          entry.units === ""
                             ? "border-red-500 outline-red-500"
                             : "border-green-500 outline-green-500"
                         } placeholder:text-red-400`}
