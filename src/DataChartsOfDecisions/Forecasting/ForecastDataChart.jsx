@@ -1,12 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { HStack, Select } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import ForecastPreview from "../../Components/Previews/ForecastPreview";
 import MyContext from "../../Components/ContextApi/MyContext";
-import ReportModal from "../../report/ReportModal";
 import axios from "axios";
 import EvaluationReportModal from "../../report/EvaluationReport/EvaluationReportModal";
+import ProductReportModal from "../../report/ProductReport/ProductReportModel";
+import ReportModal from "../../report/CplReport/ReportModal";
+import FGInventoryModal from "../../report/FinishedGoodsInventoryReport/FGInventoryModal";
 
 const ForecastDataChart = ({
   submitForecast,
@@ -15,14 +17,12 @@ const ForecastDataChart = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [firstDropdownValue, setFirstDropdownValue] = useState("1");
-  const [secondDropdownValue, setSecondDropdownValue] = useState("cpl");
-  const [reportData, setReportData] = useState();
+  const [secondDropdownValue, setSecondDropdownValue] = useState("");
+
   const { api } = useContext(MyContext);
 
   const location = useLocation();
   const path = location.pathname;
-
-  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   let simData = localStorage.getItem("selectedSim");
   simData = JSON.parse(simData);
@@ -63,20 +63,24 @@ const ForecastDataChart = ({
       submitForecast();
     }
   };
-  console.log(secondDropdownValue);
 
   const handleQuarterSelectChange = (e) => {
     setFirstDropdownValue(e.target.value);
   };
 
-  // const handleReportSelectChange = (e) => {
-  //   setSecondDropdownValue(e.target.value);
-  //   if (secondDropdownValue === e.target.value) {
-  //     handleButtonClick();
-  //   }
-  // };
+  useEffect(() => {
+    const e = {
+      target: {
+        value: "cpl",
+      },
+    };
+    handleButtonClick(e);
+  }, []);
 
   const handleButtonClick = async (e) => {
+    const newDropdownValue = e.target.value;
+    setSecondDropdownValue(newDropdownValue);
+
     // Construct the query parameters
     const queryParams = new URLSearchParams({
       simulation_id: simData[0].simulation_id,
@@ -85,19 +89,19 @@ const ForecastDataChart = ({
     }).toString();
 
     // Append the query parameters to the URL
-    const url = `${api}/reports/${e.target.value}/?${queryParams}`;
+    const url = `${api}/reports/${
+      newDropdownValue ? newDropdownValue : "cpl"
+    }/?${queryParams}`;
 
     // Make a GET request with the constructed URL
     try {
       const response = await axios.get(url);
-      console.log("POST request successful", response.data);
-      localStorage.setItem("reportData", JSON.stringify(reportData));
+      console.log("GET request successful", response.data);
+      localStorage.setItem("reportData", JSON.stringify(response.data));
     } catch (error) {
-      console.error("Error making POST request:", error);
+      console.error("Error making GET request:", error);
     }
   };
-
-  console.log("REPORT_DATA:", reportData);
 
   return (
     <div className="app">
@@ -169,9 +173,18 @@ const ForecastDataChart = ({
             <option value="odvr">OTHER DECISION VARIABLES REPORT</option>
             <option value="far">FORECASTING ACCURACY REPORT</option>
           </Select>
-       
-          {/* <ReportModal /> */}
-          <EvaluationReportModal/>
+
+          {secondDropdownValue === "cpl" ? <ReportModal /> : null}
+          {secondDropdownValue === "hpl" ? <ReportModal /> : null}
+          {secondDropdownValue === "pcpl" ? <ProductReportModal /> : null}
+          {secondDropdownValue === "mpls" ? <ReportModal /> : null}
+          {secondDropdownValue === "bl" ? <ReportModal /> : null}
+          {secondDropdownValue === "cfar" ? <ReportModal /> : null}
+          {secondDropdownValue === "inventory" ? <FGInventoryModal/> : null}
+          {secondDropdownValue === "pir" ? <ReportModal /> : null}
+          {secondDropdownValue === "odvr" ? <ReportModal /> : null}
+          {secondDropdownValue === "far" ? <ReportModal /> : null}
+          <EvaluationReportModal />
         </HStack>
       </div>
     </div>

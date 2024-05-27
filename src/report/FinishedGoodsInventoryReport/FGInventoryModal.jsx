@@ -6,8 +6,8 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import ReportTable1 from "./ReportTable1";
-export default function ReportModal() {
+import FGInventoryTable from "./FGInventoryTable";
+export default function FGInventoryModal() {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => setOpen(!open);
@@ -15,7 +15,7 @@ export default function ReportModal() {
   return (
     <>
       <Button onClick={handleOpen} variant="gradient">
-        Open Report
+        Open Goods Inventory Report
       </Button>
       <Dialog size="lg" open={open} handler={handleOpen}>
         <DialogHeader>Report</DialogHeader>
@@ -23,7 +23,7 @@ export default function ReportModal() {
           style={{ height: "600px", overflowY: "auto" }}
           className="text-lg overflow-scroll "
         >
-          <ReportTable1 />
+          <FGInventoryTable />
         </DialogBody>
         <DialogFooter>
           <Button

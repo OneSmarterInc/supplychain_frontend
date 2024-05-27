@@ -6,9 +6,8 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import EvaluationReportTable from "./EvaluationReportTable";
-
-export default function EvaluationReportModal() {
+import ProductReportTable from "./ProductReportTable";
+export default function ProductReportModal() {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => setOpen(!open);
@@ -16,15 +15,15 @@ export default function EvaluationReportModal() {
   return (
     <>
       <Button onClick={handleOpen} variant="gradient">
-        Open Evaluation Report
+        Open Product Report
       </Button>
       <Dialog size="lg" open={open} handler={handleOpen}>
-        <DialogHeader>Evaluation Report</DialogHeader>
+        <DialogHeader>Report</DialogHeader>
         <DialogBody
           style={{ height: "600px", overflowY: "auto" }}
           className="text-lg overflow-scroll "
         >
-          <EvaluationReportTable />
+          <ProductReportTable />
         </DialogBody>
         <DialogFooter>
           <Button
