@@ -5,7 +5,7 @@ import { SalesPDFDocument } from "./SalesPDFDocument";
 
 const ReportTable1 = () => {
   const reportData = JSON.parse(localStorage.getItem("reportData"));
-  console.log("REPORT_", reportData);
+
   // const reportData = [
   //   {
   //     "Sales Volume": {

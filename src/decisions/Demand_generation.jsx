@@ -29,7 +29,7 @@ const Demand_generation = () => {
   const getDemand = async () => {
     try {
       const response = await axios.get(
-        `https://semantic.onesmarter.com/simulation/previous/`,
+        `${api}/previous/`,
         {
           params: {
             user_id: user.userid,

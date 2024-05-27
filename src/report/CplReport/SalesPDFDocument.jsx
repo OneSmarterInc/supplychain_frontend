@@ -14,7 +14,16 @@ export const SalesPDFDocument = ({
     <Document>
       <Page size="A4">
         <View>
-          <Text style={styles.header}>Sales Data</Text>
+          <View style={styles.heading}>
+            <View>
+              <Text>FIRM 7: Los Descodificadores </Text>
+              <Text> CORPORATE P&L STATEMENT, MONTH 25 </Text>
+            </View>
+            <View>
+              <Text>INDUSTRY BBB</Text>
+              <Text>PAGE 5</Text>
+            </View>
+          </View>
           <View style={styles.table}>
             <View style={styles.tableRow}>
               <Text style={styles.cellhead}>Metric</Text>
@@ -118,6 +127,13 @@ const styles = StyleSheet.create({
   page: {
     padding: "20px",
     margin: "4px",
+  },
+  heading: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
   header: {
     fontSize: 20,
