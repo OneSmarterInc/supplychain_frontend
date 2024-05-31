@@ -5,18 +5,21 @@ import FGInventorySalesPDF from "./FGInventorySalesPDF";
 
 const FGInventoryTable = () => {
   const Data = JSON.parse(localStorage.getItem("reportData"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const reportData = Data[0];
 
   return (
     <div>
       <div className="heading flex justify-between font-bold">
         <div>
-          <p>FIRM 1: SRTM Pty.</p>
-          <p>FINISHED GOODS INVENTORY REPORT, MONTH 56</p>
+          <p>Firm : {Object.keys(selectedSim[0]?.firm_data)[0]}</p>
+          <p>
+            PERFORMANCE Product REPORT, MONTH {selectedSim[0].current_quarter}
+          </p>
         </div>
         <div>
-          <p>INDUSTRY HHH</p>
-          <p>PAGE 11</p>
+          <p>INDUSTRY AAA</p>
+          <p>PAGE 1</p>
         </div>
       </div>
       <table className="w-full text-start whitespace-nowrap">

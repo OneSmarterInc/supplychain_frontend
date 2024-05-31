@@ -53,19 +53,16 @@ const Service_Decision = () => {
 
   const getService = async () => {
     try {
-      const response = await axios.get(
-        `${api}/previous/`,
-        {
-          params: {
-            user_id: user.userid,
-            sim_id: selectedSim[0].simulation_id,
-            admin_id: selectedSim[0].admin_id,
-            current_decision: "Service",
-            current_quarter: selectedSim[0].current_quarter,
-            firm_key: firm_data,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSim[0].simulation_id,
+          admin_id: selectedSim[0].admin_id,
+          current_decision: "Service",
+          current_quarter: selectedSim[0].current_quarter,
+          firm_key: firm_data,
+        },
+      });
       const data = response.data;
       setServiceData(data);
       localStorage.setItem("ServiceData", JSON.stringify(data));
