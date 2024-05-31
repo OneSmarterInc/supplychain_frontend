@@ -5,14 +5,17 @@ import ProductReportSalesPDF from "./ProductReportSalesPDF";
 
 const ProductReportTable = () => {
   const Data = JSON.parse(localStorage.getItem("reportData"));
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+
   const reportData = Data[0];
 
   return (
     <div>
       <div className="heading flex justify-between font-bold">
         <div>
-          <p>FIRM 3: InterSet BV</p>
-          <p>PERFORMANCE Product REPORT, MONTH 23</p>
+          <p>Firm : {selectedSim[0].firm_key}</p>
+          <p>PERFORMANCE Product REPORT, MONTH {selectedSim[0].current_quarter}</p>
         </div>
         <div>
           <p>INDUSTRY AAA</p>
