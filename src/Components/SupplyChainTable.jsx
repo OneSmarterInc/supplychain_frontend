@@ -4,7 +4,6 @@ import React, { useRef, useState, useEffect } from "react";
 
 const SupplyChainTable = ({ setUpdatedDCData }) => {
   const tableRef = useRef(null);
-  // <SupplyChainTable getDcdata={getDcData}  setUpdatedDCData={setUpdatedDCData} /> from parent
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeDC, setActiveDC] = useState("DC1"); // Track active DC
   const procurementData = JSON.parse(localStorage.getItem("procurementData"));
@@ -19,7 +18,13 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
   const mediumOptions = ["Select", "Air", "Surface"];
 
   // State variables to hold data for each DC
-  const [dcData, setDcData] = useState(procurementData?.sac_units);
+  const [dcData, setDcData] = useState({});
+
+  useEffect(() => {
+    if (procurementData?.sac_units) {
+      setDcData(procurementData?.sac_units);
+    }
+  }, [procurementData?.sac_units]);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -77,7 +82,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
           className="h-100 ml-2 overflow-scroll border-2 border-opacity-50 border-blue-gray-200"
         >
           {/* Conditionally render tables based on activeDC */}
-          {activeDC === "DC1" && dcData.DC1 !== "closed" && (
+          {activeDC === "DC1" && dcData?.DC1 !== "closed" && (
             <table className="table-auto w-full border-separate border-spacing-2 ">
               <thead>
                 <tr className="bg-slate-300  ">
@@ -188,7 +193,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
               </tbody>
             </table>
           )}
-          {activeDC === "DC2" && dcData.DC2 !== "closed" && (
+          {activeDC === "DC2" && dcData?.DC2 !== "closed" && (
             <table className="table-auto w-full border-separate border-spacing-2 ">
               <thead>
                 <tr className="bg-slate-300  ">
@@ -298,7 +303,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
               </tbody>
             </table>
           )}
-          {activeDC === "DC3" && dcData.DC3 !== "closed" && (
+          {activeDC === "DC3" && dcData?.DC3 !== "closed" && (
             <table className="table-auto w-full border-separate border-spacing-2 ">
               <thead>
                 <tr className="bg-slate-300  ">
@@ -422,7 +427,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
             className={`h-10 mx-1 bg-blue-gray-400 text-white hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg p-1.5 ${
               activeDC === "DC1" && "bg-green-800 "
             }  disabled:bg-gray-400  disabled:cursor-default`}
-            disabled={dcData.DC1 === "closed"}
+            disabled={dcData?.DC1 === "closed"}
           >
             DC 1
           </button>
@@ -432,7 +437,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
             className={`h-10 mx-1 bg-blue-gray-400 text-white hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg p-1.5 ${
               activeDC === "DC2" && "bg-green-800 "
             }  disabled:bg-gray-400 disabled:cursor-default `}
-            disabled={dcData.DC2 === "closed"}
+            disabled={dcData?.DC2 === "closed"}
           >
             DC 2
           </button>
