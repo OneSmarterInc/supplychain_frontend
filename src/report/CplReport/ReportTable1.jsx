@@ -132,6 +132,10 @@ const ReportTable1 = () => {
   //     "All Products": 1015419,
   //   },
   // ];
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  let user = localStorage.getItem("user");
+  user = JSON.parse(user);
+  const userEmail = user.email;
 
   const salesData = reportData[0];
   const Revenues = reportData[1];
@@ -141,16 +145,24 @@ const ReportTable1 = () => {
   const NonOperatingIncome = reportData[5];
   const Taxes = reportData[6];
   const NetIncome = reportData[7];
+
+  // selectedSim[0].firm_data.map((firmData, index) => {
+  //   const firmName = firmData[userEmail];
+  //   console.log(`Firm key ${index}:`, firmName);
+  // });
+
   return (
     <div>
       <div className="heading flex justify-between font-bold">
         <div>
-          <p>Firm 7: Los Descodificadores</p>
-          <p>CORPORATE P&L STATEMENT, MONTH 25</p>
+          <p>Firm : {Object.keys(selectedSim[0]?.firm_data)[0]}</p>
+          <p>
+            PERFORMANCE Product REPORT, MONTH {selectedSim[0].current_quarter}
+          </p>
         </div>
         <div>
-          <p>INDUSTRY BBB</p>
-          <p>PAGE 5</p>
+          <p>INDUSTRY AAA</p>
+          <p>PAGE 1</p>
         </div>
       </div>
       <table className="w-full text-start whitespace-nowrap">

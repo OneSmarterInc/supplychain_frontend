@@ -68,12 +68,19 @@ const EvaluationReportTable = () => {
     customer_satisfaction_best: 26.6,
   };
 
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  let user = localStorage.getItem("user");
+  user = JSON.parse(user);
+  const userEmail = user.email;
+
   return (
     <div>
       <div className="heading flex justify-between font-bold">
         <div>
-          <p>FIRM 3: InterSet BV</p>
-          <p>PERFORMANCE EVALUATION REPORT, MONTH 23</p>
+          <p>Firm : {Object.keys(selectedSim[0]?.firm_data)[0]}</p>
+          <p>
+            PERFORMANCE Product REPORT, MONTH {selectedSim[0].current_quarter}
+          </p>
         </div>
         <div>
           <p>INDUSTRY AAA</p>

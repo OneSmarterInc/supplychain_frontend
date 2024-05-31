@@ -10,12 +10,15 @@ const ProductReportTable = () => {
 
   const reportData = Data[0];
 
+  console.log("FirmDataProduct:--", selectedSim[0]);
   return (
     <div>
       <div className="heading flex justify-between font-bold">
         <div>
-          <p>Firm : {selectedSim[0].firm_key}</p>
-          <p>PERFORMANCE Product REPORT, MONTH {selectedSim[0].current_quarter}</p>
+          <p>Firm : {Object.keys(selectedSim[0]?.firm_data)[0]}</p>
+          <p>
+            PERFORMANCE Product REPORT, MONTH {selectedSim[0].current_quarter}
+          </p>
         </div>
         <div>
           <p>INDUSTRY AAA</p>
