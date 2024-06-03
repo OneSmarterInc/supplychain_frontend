@@ -18,6 +18,7 @@ const Demand_generation = () => {
 
   // console.log("hypeCh1Value", hypeCh1Value);
 
+  const { api } = useContext(MyContext);
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
@@ -28,19 +29,16 @@ const Demand_generation = () => {
 
   const getDemand = async () => {
     try {
-      const response = await axios.get(
-        `${api}/previous/`,
-        {
-          params: {
-            user_id: user.userid,
-            sim_id: selectedSim[0].simulation_id,
-            admin_id: selectedSim[0].admin_id,
-            current_decision: "Demand",
-            current_quarter: selectedSim[0].current_quarter,
-            firm_key: firm_data,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSim[0].simulation_id,
+          admin_id: selectedSim[0].admin_id,
+          current_decision: "Demand",
+          current_quarter: selectedSim[0].current_quarter,
+          firm_key: firm_data,
+        },
+      });
       const data = response.data;
       setDemandData(data);
       localStorage.setItem("demandData", JSON.stringify(data));
@@ -73,12 +71,28 @@ const Demand_generation = () => {
         metaware_channel_two_market: metaCh2Value.MarketSpending,
       });
       console.log("POST request successful", response.data);
+      addUserLogger();
       getDemand();
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
     }
   };
-  const { api } = useContext(MyContext);
+  const addUserLogger = async () => {
+    try {
+      const response = await axios.post(
+        `${api}/adduserlogs/`,
+
+        {
+          firm_key: firm_data,
+          users: user.email,
+        }
+      );
+      const data = response.data;
+      console.log("addUserLoggerData", data)
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
       <NavBar />

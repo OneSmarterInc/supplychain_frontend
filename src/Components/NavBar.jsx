@@ -9,13 +9,19 @@ const NavBar = () => {
   const filteredSimulation = simData.filter(
     (item) => item.simulation_id === parseInt(id)
   );
-  
-  let current_quarter = `quarter${filteredSimulation[0]["current_quarter"]}`;
+
+  console.log("filteredSimulation", filteredSimulation);
+
+  let current_quarter = `quarter${
+    filteredSimulation[0]["current_quarter"] - 1
+  }`; //note: -1 for temporary to sort error
+
+  console.log("current_quarter", current_quarter);
   const decisions =
     filteredSimulation[0]["quarter_specific_decisions"][current_quarter];
   console.log(decisions);
   // const decisions = filteredSimulation[0]['quarter_specific_decisions']["quarter2"];
-  console.log(decisions.is_procurement);
+  console.log("decisions from navbar", decisions?.is_procurement);
 
   return (
     <div>
@@ -34,9 +40,9 @@ const NavBar = () => {
               </Link>
             </div>
           </div>
-          <div className="hidden  bg-white sm:block">
-            <div className="flex justify-evenly space-x-4 py-1">
-              {decisions.is_forecasting === "True" && (
+          <div className=" hidden sm:block bg-white">
+            <div className=" flex justify-evenly space-x-4 py-1">
+              {decisions?.is_forecasting === "True" && (
                 <Link
                   to="/forecast"
                   className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
@@ -44,7 +50,7 @@ const NavBar = () => {
                   Forecast
                 </Link>
               )}
-              {decisions.is_procurement === "True" && (
+              {decisions?.is_procurement === "True" && (
                 <Link
                   to="/procurement"
                   className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
@@ -52,7 +58,7 @@ const NavBar = () => {
                   Procurements
                 </Link>
               )}
-              {decisions.is_manufacturing === "True" && (
+              {decisions?.is_manufacturing === "True" && (
                 <Link
                   to="/manufacturing"
                   className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
@@ -60,7 +66,7 @@ const NavBar = () => {
                   Manufacturing
                 </Link>
               )}
-              {decisions.is_distribution === "True" && (
+              {decisions?.is_distribution === "True" && (
                 <Link
                   to="/distribution"
                   className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
@@ -69,7 +75,7 @@ const NavBar = () => {
                 </Link>
               )}
 
-              {decisions.is_transportation === "True" && (
+              {decisions?.is_transportation === "True" && (
                 <Link
                   to="/transportation"
                   className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
@@ -78,7 +84,7 @@ const NavBar = () => {
                 </Link>
               )}
 
-              {decisions.is_service === "True" && (
+              {decisions?.is_service === "True" && (
                 <Link
                   to="/service"
                   className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
@@ -86,7 +92,7 @@ const NavBar = () => {
                   Service
                 </Link>
               )}
-              {decisions.is_demand_gen === "True" && (
+              {decisions?.is_demand_gen === "True" && (
                 <Link
                   to="/demand"
                   className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
@@ -95,7 +101,7 @@ const NavBar = () => {
                 </Link>
               )}
 
-              {decisions.is_it === "True" && (
+              {decisions?.is_it === "True" && (
                 <Link
                   to="/it"
                   className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"

@@ -76,6 +76,24 @@ const Procurement_Decisions = () => {
     }
   };
 
+  const addUserLogger = async () => {
+    try {
+      const response = await axios.post(
+        `${api}/adduserlogs/`,
+
+        {
+          firm_key: firm_data,
+          users: user.email,
+        }
+      );
+      const data = response.data;
+      addUserLogger()
+      console.log("addUserLoggerData", data)
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+
   document.body.style.backgroundColor = "#e0e2e4";
 
   return (

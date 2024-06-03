@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   HStack,
   Select,
@@ -31,6 +31,10 @@ const Transportation_Decision = () => {
     row6: { product: "", carrier: "", medium: "", units: "" },
   });
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+
   const handleChange = (rowId, field, value) => {
     setDc1Data((prevDc1Data) => ({
       ...prevDc1Data,
@@ -40,22 +44,79 @@ const Transportation_Decision = () => {
       },
     }));
   };
-  // console.log("row5", Dc1Data.row5);
+
+  const [TransportationData, setTransportationData] = useState();
+  console.log("TransportationData:--", TransportationData);
+  useEffect(() => {
+    getTransportation();
+  }, []);
+
+  useEffect(() => {
+    if (TransportationData) {
+      setDc1Data({
+        row1: { product: "", carrier: "", medium: "", units: "" },
+        row2: { product: "", carrier: "", medium: "", units: "" },
+        row3: { product: "", carrier: "", medium: "", units: "" },
+        row4: { product: "", carrier: "", medium: "", units: "" },
+        row5: { product: "", carrier: "", medium: "", units: "" },
+        row6: { product: "", carrier: "", medium: "", units: "" },
+      });
+    }
+  }, [TransportationData]);
+
+  const getTransportation = async () => {
+    try {
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSim[0].simulation_id,
+          admin_id: selectedSim[0].admin_id,
+          current_decision: "Transportation",
+          current_quarter: selectedSim[0].current_quarter,
+          firm_key: firm_data,
+        },
+      });
+      const data = response.data;
+      setTransportationData(data);
+      localStorage.setItem("TransportationData", JSON.stringify(data));
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
 
   const submitTransportation = async () => {
     try {
       const response = await axios.post(`${api}/decision/transportation/`, {
-        firm_key: "123",
-        quarter: null,
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        user_id: user.userid,
+        firm_key: firm_data,
+        quarter: selectedSim[0].current_quarter,
+        Dc1Data,
       });
+      addUserLogger();
       console.log("POST request successful", response.data);
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
     }
   };
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  const addUserLogger = async () => {
+    try {
+      const response = await axios.post(
+        `${api}/adduserlogs/`,
+
+        {
+          firm_key: firm_data,
+          users: user.email,
+        }
+      );
+      const data = response.data;
+      console.log("addUserLoggerData", data);
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
 
   return (
     <div>
@@ -115,7 +176,6 @@ const Transportation_Decision = () => {
                         >
                           <option value="Product 0">Product 0</option>
                           <option value="Product 1">Product 1</option>
-                          <option value="Product 2">Product 2</option>
                         </Select>
                       </Td>
 

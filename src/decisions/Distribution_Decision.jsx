@@ -55,19 +55,16 @@ const Distribution_Decision = () => {
 
   const getDistribution = async () => {
     try {
-      const response = await axios.get(
-        `${api}/previous/`,
-        {
-          params: {
-            user_id: user.userid,
-            sim_id: selectedSim[0].simulation_id,
-            admin_id: selectedSim[0].admin_id,
-            current_decision: "Distribution",
-            current_quarter: selectedSim[0].current_quarter,
-            firm_key: firm_data,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSim[0].simulation_id,
+          admin_id: selectedSim[0].admin_id,
+          current_decision: "Distribution",
+          current_quarter: selectedSim[0].current_quarter,
+          firm_key: firm_data,
+        },
+      });
       const data = response.data;
       setDistributionData(data);
       localStorage.setItem("DistributionData", JSON.stringify(data));
@@ -148,9 +145,27 @@ const Distribution_Decision = () => {
         sac_surface_shipping: values.sac_surface_shipping,
       });
       console.log("POST request successful", response.data);
+      addUserLogger();
       getDistribution();
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
+    }
+  };
+
+  const addUserLogger = async () => {
+    try {
+      const response = await axios.post(
+        `${api}/adduserlogs/`,
+
+        {
+          firm_key: firm_data,
+          users: user.email,
+        }
+      );
+      const data = response.data;
+      console.log("addUserLoggerData", data);
+    } catch (error) {
+      console.error("Error making GET request:", error);
     }
   };
 
