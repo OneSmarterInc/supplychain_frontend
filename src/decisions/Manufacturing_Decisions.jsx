@@ -108,6 +108,24 @@ const Manufacturing_Decisions = () => {
     }
   };
 
+  const addUserLogger = async () => {
+    try {
+      const response = await axios.post(
+        `${api}/adduserlogs/`,
+
+        {
+          firm_key: firm_data,
+          users: user.email,
+        }
+      );
+      const data = response.data;
+      addUserLogger()
+      console.log("addUserLoggerData", data)
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+
   const handleChange = (channel, region, newValue) => {
     setValues((prevValues) => ({
       ...prevValues,

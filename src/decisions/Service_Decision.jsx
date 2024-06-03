@@ -83,10 +83,28 @@ const Service_Decision = () => {
         service_region_two: serviceValue.region2,
         service_region_three: serviceValue.region3,
       });
+      addUserLogger()
       getService();
       console.log("POST request successful", response.data);
     } catch (error) {
       console.error("Error making POST request: Service", error);
+    }
+  };
+
+  const addUserLogger = async () => {
+    try {
+      const response = await axios.post(
+        `${api}/adduserlogs/`,
+
+        {
+          firm_key: firm_data,
+          users: user.email,
+        }
+      );
+      const data = response.data;
+      console.log("addUserLoggerData", data)
+    } catch (error) {
+      console.error("Error making GET request:", error);
     }
   };
 
