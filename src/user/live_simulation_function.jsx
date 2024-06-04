@@ -11,14 +11,14 @@ import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportMo
 
 const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
   let navigate = useNavigate();
-  let simid = localStorage.getItem("selectedSimulation");
+  // let simid = localStorage.getItem("selectedSimulation");
   let simData = localStorage.getItem("simData");
 
   const { api } = useContext(MyContext);
   simData = JSON.parse(simData);
 
   const filteredSimulation = simData.filter(
-    (item) => item.simulation_id === parseInt(simid)
+    (item) => item.simulation_id === parseInt(id)
   );
   localStorage.setItem("selectedSim", JSON.stringify(filteredSimulation));
 

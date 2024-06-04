@@ -17,31 +17,20 @@ const AdminSideLiveFunction = ({
   currentQuarter,
 }) => {
   let navigate = useNavigate();
-  let simid = localStorage.getItem("selectedSimulation");
   let simData = localStorage.getItem("simData");
 
   const { api } = useContext(MyContext);
   simData = JSON.parse(simData);
 
   const filteredSimulation = simData.filter(
-    (item) => item.simulation_id === parseInt(simid)
+    (item) => item.simulation_id === parseInt(id)
   );
   localStorage.setItem("selectedSim", JSON.stringify(filteredSimulation));
-
-  function handleSubmit() {
-    // Perform some action
-    const saveData = (id) => {
-      localStorage.setItem("selectedSimulation", JSON.stringify(id));
-    };
-    saveData(id);
-    navigate("/forecast"); // navigate to a success page
-  }
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [firstDropdownValue, setFirstDropdownValue] = useState("1");
   const [secondDropdownValue, setSecondDropdownValue] = useState("");
-  let selectedSim = localStorage.getItem("selectedSim");
-  selectedSim = JSON.parse(selectedSim);
+
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
   const [isAddAdminInputModalOpen, setIsAddAdminInputModalOpen] =
@@ -52,10 +41,10 @@ const AdminSideLiveFunction = ({
   const [newUserEmail, setNewUserEmail] = useState("");
   const [selectedFirm, setSelectedFirm] = useState(null);
 
-  const firm_key = Object.keys(selectedSim[0]?.firm_data)[0];
+  const firm_key = Object.keys(filteredSimulation[0]?.firm_data)[0];
 
   const option = [];
-  for (let i = 1; i <= selectedSim[0]?.current_quarter; i++) {
+  for (let i = 1; i <= filteredSimulation[0]?.current_quarter; i++) {
     option.push(
       <option key={i} value={i}>
         Select Quarter {i}
@@ -87,7 +76,7 @@ const AdminSideLiveFunction = ({
 
     // Construct the query parameters
     const queryParams = new URLSearchParams({
-      simulation_id: simData[0].simulation_id,
+      simulation_id: filteredSimulation[0]?.simulation_id,
       quarter: firstDropdownValue,
       firm: Object.keys(simData[0]?.firm_data)[0],
     }).toString();
@@ -122,7 +111,7 @@ const AdminSideLiveFunction = ({
         {
           params: {
             admin_id: user.userid,
-            simulation_id: 73,
+            simulation_id: filteredSimulation[0]?.simulation_id,
             email: newAdminEmail,
           },
         }
@@ -159,8 +148,8 @@ const AdminSideLiveFunction = ({
         "https://semantic.onesmarter.com/simulation/firmsbyadmin/",
         {
           params: {
-            admin_id: 1,
-            simulation_id: 73,
+            admin_id: user.userid,
+            simulation_id: filteredSimulation[0]?.simulation_id,
             firm_key: firm_key,
             email: user.email,
           },
