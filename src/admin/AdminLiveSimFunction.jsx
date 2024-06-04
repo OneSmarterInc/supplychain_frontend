@@ -44,6 +44,14 @@ const AdminSideLiveFunction = ({
   selectedSim = JSON.parse(selectedSim);
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
+  const [isAddAdminInputModalOpen, setIsAddAdminInputModalOpen] =
+    useState(false);
+  const [isAddUserInputModalOpen, setIsAddUserInputModalOpen] = useState(false);
+  const [isFirmModalOpen, setIsFirmModalOpen] = useState(false);
+  const [newAdminEmail, setNewAdminEmail] = useState("");
+  const [newUserEmail, setNewUserEmail] = useState("");
+  const [selectedFirm, setSelectedFirm] = useState(null);
+
   const firm_key = Object.keys(selectedSim[0]?.firm_data)[0];
 
   const option = [];
@@ -64,14 +72,14 @@ const AdminSideLiveFunction = ({
   };
 
   useEffect(() => {
-    // const e = {
-    //   target: {
-    //     value: "cpl",
-    //   },
-    // };
-    // handleButtonClick(e);
+    const e = {
+      target: {
+        value: "cpl",
+      },
+    };
+    handleButtonClick(e);
     firmsFetch();
-  }, []);
+  }, [selectedFirm?.users]);
 
   const handleButtonClick = async (e) => {
     const newDropdownValue = e.target.value;
@@ -98,14 +106,6 @@ const AdminSideLiveFunction = ({
       console.error("Error making GET request:", error);
     }
   };
-
-  const [isAddAdminInputModalOpen, setIsAddAdminInputModalOpen] =
-    useState(false);
-  const [isAddUserInputModalOpen, setIsAddUserInputModalOpen] = useState(false);
-  const [isFirmModalOpen, setIsFirmModalOpen] = useState(false);
-  const [newAdminEmail, setNewAdminEmail] = useState("");
-  const [newUserEmail, setNewUserEmail] = useState("");
-  const [selectedFirm, setSelectedFirm] = useState(null);
 
   const addAdminInputModal = () => {
     setIsAddAdminInputModalOpen(!isAddAdminInputModalOpen);
@@ -138,12 +138,10 @@ const AdminSideLiveFunction = ({
   const handleAddUser = async () => {
     try {
       const response = await axios.post(
-        "https://semantic.onesmarter.com/simulation/firmsbyadmin/",
+        `https://semantic.onesmarter.com/simulation/firmsbyadmin/?admin_id=${user.userid}&email=${newUserEmail}&firm_key=${selectedFirm.firm_key}&simulation_id=73`,
         {
           firm_key: firm_key,
           users: newUserEmail,
-          simulation_id: 73,
-          email: user.email,
         }
       );
       console.log("User added:", response.data);
@@ -192,7 +190,7 @@ const AdminSideLiveFunction = ({
           </div>
           <button
             onClick={addAdminInputModal}
-            className="ml-4 text-lg bg-blue-500 text-white p-1 px-2 rounded-lg hover:bg-blue-700"
+            className="ml-4 text-lg h-10 bg-blue-500 text-white p-1 px-2 rounded-lg hover:bg-blue-700"
           >
             Add Admin
           </button>
