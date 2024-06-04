@@ -5,6 +5,7 @@ import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useToast } from "@chakra-ui/react";
 import PlayComponent from "./live_simulation_function";
+import UserLoggerApi from "../LoggerApis/UserLoggerApi";
 
 const UserSideLive = () => {
   const { api } = useContext(MyContext);
@@ -90,7 +91,9 @@ const UserSideLive = () => {
           />
         ))}
 
-      <div className="h-60 bg-teal-300"></div>
+      <div className="">
+        <UserLoggerApi/>
+      </div>
     </div>
   );
 };
