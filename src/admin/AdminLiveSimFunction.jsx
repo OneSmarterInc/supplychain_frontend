@@ -127,7 +127,7 @@ const AdminSideLiveFunction = ({
   const handleAddUser = async () => {
     try {
       const response = await axios.post(
-        `https://semantic.onesmarter.com/simulation/firmsbyadmin/?admin_id=${user.userid}&email=${newUserEmail}&firm_key=${selectedFirm.firm_key}&simulation_id=73`,
+        `https://semantic.onesmarter.com/simulation/firmsbyadmin/?admin_id=${user.userid}&email=${newUserEmail}&firm_key=${selectedFirm.firm_key}&simulation_id=${filteredSimulation[0]?.simulation_id}`,
         {
           firm_key: firm_key,
           users: newUserEmail,
