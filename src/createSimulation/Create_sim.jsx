@@ -87,12 +87,11 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     // temporary navigate without conditions
     setNoOfQuarters(simulationData.total_quarters);
     localStorage.setItem("noOfQuarters", [simulationData.total_quarters]);
+    localStorage.setItem("createSimData", JSON.stringify(simulationData));
     if (simulationData.total_quarters) {
       navigate("/createsim?step=2");
     }
   };
-  
-
 
   return (
     <>

@@ -1,14 +1,8 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ProfileDropdown from "./Profile";
 
 const UserNavBar = () => {
-  const navigate = useNavigate();
-
-  const handleLogOut = () => {
-    localStorage.removeItem("user");
-    navigate("/signin");
-  };
-
   return (
     <div>
       <nav className="bg-gray-800">
@@ -42,13 +36,8 @@ const UserNavBar = () => {
                   </Link>
                 </div>
               </div>
-              <div
-                className="p-2 bg-red-700 text-white cursor-pointer rounded-md"
-                onClick={handleLogOut}
-              >
-                {" "}
-                LogOut
-              </div>
+              {/* Profile Section */}
+              <ProfileDropdown />
             </div>
           </div>
         </div>

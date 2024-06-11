@@ -4,19 +4,14 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../Components/ContextApi/MyContext";
 
-const QuarterDetails = ({simulationData}) => {
+const QuarterDetails = () => {
   const noOfQuarters = localStorage.getItem("noOfQuarters");
+  const createSimData = JSON.parse(localStorage.getItem("createSimData"));
   const navigate = useNavigate();
   const toast = useToast();
 
   const { api } = useContext(MyContext);
-  toast({
-    title: "Email Sent successful",
-    status: "success",
-    duration: 2000,
-    isClosable: true,
-    position: "top",
-  });
+
   const initialQuarterState = {
     is_procurement: true,
     is_manufacturing: true,
@@ -35,8 +30,7 @@ const QuarterDetails = ({simulationData}) => {
     Array.from({ length: noOfQuarters }, () => ({ ...initialQuarterState }))
   );
   console.log("quarters data", quarters);
-  const combineSimData = { ...simulationData, quartersData: quarters };
-  console.log("Combine Sim Data:--", combineSimData);
+  const combineSimData = { ...createSimData, quartersData: quarters };
 
   const handleCheckboxChange = (index, field) => {
     setQuarters((prevQuarters) => {
@@ -57,20 +51,21 @@ const QuarterDetails = ({simulationData}) => {
     });
   };
 
+  localStorage.setItem("combineSimData", JSON.stringify(combineSimData));
   const handleSubmit = async () => {
-    if (combineSimData.total_quarters) {
-      try {
-        const response = await axios.post(
-          `${api}/simulations/simulation/`,
-          combineSimData
-        );
-        console.log("Success:", response.data);
-      } catch (error) {
-        console.error("Error submitting form:", error);
-      }
-    } else {
-      alert("Please Enter Quarters");
-    }
+    // if (combineSimData.total_quarters) {
+    //   try {
+    //     const response = await axios.post(
+    //       `${api}/simulations/simulation/`,
+    //       combineSimData
+    //     );
+    //     console.log("Success:", response.data);
+    //   } catch (error) {
+    //     console.error("Error submitting form:", error);
+    //   }
+    // } else {
+    //   alert("Please Enter Quarters");
+    // }
     try {
       //here we have to sumbit post request using axios
       navigate("/createsim?step=3");
@@ -213,8 +208,7 @@ const QuarterDetails = ({simulationData}) => {
         <button
           onClick={handleSubmit}
           className="w-28 h-10 rounded-xl text-center text-xl bg-green-500 text-white "
-        >
-          Submit
+        >Next
         </button>
       </div>
     </div>

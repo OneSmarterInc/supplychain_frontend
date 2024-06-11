@@ -12,9 +12,7 @@ const NavBar = () => {
 
   console.log("filteredSimulation", filteredSimulation);
 
-  let current_quarter = `quarter${
-    filteredSimulation[0]["current_quarter"] - 1
-  }`; //note: -1 for temporary to sort error
+  let current_quarter = `quarter${filteredSimulation[0]["current_quarter"]}`; //note: -1 for temporary to sort error
 
   console.log("current_quarter", current_quarter);
   const decisions =

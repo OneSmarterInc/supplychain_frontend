@@ -25,6 +25,7 @@ const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
   function handleSubmit() {
     // Perform some action
     const saveData = (id) => {
+      localStorage.setItem("selectedSim", JSON.stringify(filteredSimulation));
       localStorage.setItem("selectedSimulation", JSON.stringify(id));
     };
     saveData(id);

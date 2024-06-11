@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import UserNavBar from "../Components/UserNavBar";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useToast } from "@chakra-ui/react";
 import AdminSideLiveFunction from "./AdminLiveSimFunction";
+import AdminNavBar from "../Components/AdminNavBar";
 
 const AdminSideLive = () => {
   const { api } = useContext(MyContext);
@@ -73,7 +73,7 @@ const AdminSideLive = () => {
 
   return (
     <div>
-      <UserNavBar />
+      <AdminNavBar />
       <h2 className="text-3xl p-2 pl-10 ">Live Simulation</h2>
       {simData
         .filter((item) => item.is_active === true)

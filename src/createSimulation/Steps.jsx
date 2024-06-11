@@ -4,9 +4,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Create_sim from "./Create_sim";
 import QuarterDetails from "./QuarterDetails";
 import { Box, Text, Flex, useToast } from "@chakra-ui/react";
+import GDP from "../Components/GDP";
 
 export default function Steps({ setNoOfQuarters }) {
-  const noOfQuarters = localStorage.getItem("noOfQuarters")
+  const noOfQuarters = localStorage.getItem("noOfQuarters");
   const toast = useToast();
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,17 +48,6 @@ export default function Steps({ setNoOfQuarters }) {
     window.location.href = `http://localhost:5173/?address=${address}`;
   };
 
-  const HandleCreateSimulation = () => {
-    toast({
-      title: "Simulation Created successful",
-      status: "success",
-      duration: 2000,
-      isClosable: true,
-      position: "top",
-    });
-
-    navigate("/usersidelive");
-  };
   return (
     <>
       <div className="w-full sm:px-24 px-6 text-wrap py-4">
@@ -141,24 +131,9 @@ export default function Steps({ setNoOfQuarters }) {
 
         {steps === 3 && (
           <>
-            <Flex h="50vh" justify="center" align="center">
-              <Box alignContent={"center"} flex={"column"}>
-                <Text>Edit Rules and Default values of First Quarter </Text>
-                <Button
-                  alignContent={"center"}
-                  flex={"column"}
-                  onClick={HandleAdmin}
-                >
-                  Edit
-                </Button>
-              </Box>
-            </Flex>
-
-            <Flex h="10vh" justify="center" align="center">
-              <Box alignContent={"center"} flex={"column"}>
-                <Button color="green" onClick={HandleCreateSimulation}>
-                  Create Simulation{" "}
-                </Button>
+            <Flex h="screen" justify="center" align="center">
+              <Box>
+                <GDP />
               </Box>
             </Flex>
           </>
