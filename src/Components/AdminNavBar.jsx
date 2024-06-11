@@ -1,15 +1,8 @@
-import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Table, Thead, Tbody, Tr, Th, Td, Input, Text } from "@chakra-ui/react";
+import React from "react";
+import { Link } from "react-router-dom";
+import ProfileDropdown from "./Profile";
 
 const AdminNavBar = () => {
-  const navigate = useNavigate();
-
-  const handleLogOut = () => {
-    localStorage.removeItem("user");
-    navigate("/signin");
-  };
-
   return (
     <div>
       <nav className="bg-gray-800">
@@ -49,13 +42,8 @@ const AdminNavBar = () => {
                   </Link>
                 </div>
               </div>
-              <div
-                className="p-2 bg-red-700 text-white cursor-pointer rounded-md "
-                onClick={handleLogOut}
-              >
-                {" "}
-                LogOut
-              </div>
+              {/* Profile Section */}
+              <ProfileDropdown />
             </div>
           </div>
         </div>

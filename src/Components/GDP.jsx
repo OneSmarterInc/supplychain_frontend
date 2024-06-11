@@ -114,6 +114,12 @@ const GDP = () => {
     ...combineSimData,
     current_demand_data: currentData,
     growth_demand_data: growthData,
+    demand_grow_rule: {
+      gdp: gdp,
+      drift: drift,
+      ad_positive: higherDemandRange,
+      ad_negative: lowerDemandRange,
+    },
   };
 
   const handleSubmit = async () => {
