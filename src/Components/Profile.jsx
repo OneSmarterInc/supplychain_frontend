@@ -12,8 +12,7 @@ const ProfileDropdown = () => {
   const [profile, setProfile] = useState({
     name: user?.username,
     email: "nachiket@gmail.com",
-    company: "OneSmarter Inc.",
-    companyEmail: user?.email,
+    Email: user?.email,
     userType: user?.isadmin ? "Admin" : "User",
   });
 
@@ -36,7 +35,7 @@ const ProfileDropdown = () => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    // Save profile changes (e.g., make an API call)
+    // (make an API call)
     setIsEditOpen(false);
   };
 
@@ -49,7 +48,7 @@ const ProfileDropdown = () => {
     <div className="relative">
       <div
         onClick={toggleDropdown}
-        className="cursor-pointer flex items-center p-2 rounded-full hover:bg-gray-100"
+        className="cursor-pointer flex items-center p-1 rounded-full hover:bg-blue-gray-100"
       >
         {profile?.name && (
           <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-xl text-white font-bold">
@@ -86,17 +85,8 @@ const ProfileDropdown = () => {
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               <div className="flex items-center">
-                <span className="material-icons font-bold">Comapany:</span>
-                <span className="ml-3">{profile?.company}</span>
-              </div>
-            </a>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            >
-              <div className="flex items-center">
                 <span className="material-icons font-bold ">Email:</span>
-                <span className="ml-3">{profile?.companyEmail}</span>
+                <span className="ml-3">{profile?.Email}</span>
               </div>
             </a>
             <a
@@ -160,26 +150,15 @@ const ProfileDropdown = () => {
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
               </div>
+        
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                  Company
-                </label>
-                <input
-                  type="text"
-                  name="company"
-                  value={profile?.company}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Company Email
+                 Email
                 </label>
                 <input
                   type="email"
-                  name="companyEmail"
-                  value={profile?.companyEmail}
+                  name="Email"
+                  value={profile?.Email}
                   onChange={handleInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />

@@ -26,19 +26,16 @@ const Forecast = () => {
 
   const getForecast = async () => {
     try {
-      const response = await axios.get(
-        `${api}/previous/`,
-        {
-          params: {
-            user_id: user.userid,
-            sim_id: selectedSim[0].simulation_id,
-            admin_id: selectedSim[0].admin_id,
-            current_decision: "Forecast",
-            current_quarter: selectedSim[0].current_quarter,
-            firm_key: firm_data,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSim[0].simulation_id,
+          admin_id: selectedSim[0].admin_id,
+          current_decision: "Forecast",
+          current_quarter: selectedSim[0].current_quarter,
+          firm_key: firm_data,
+        },
+      });
       const data = response.data;
       setForecastData(data);
       localStorage.setItem("ForecastData", JSON.stringify(data));
@@ -54,7 +51,7 @@ const Forecast = () => {
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
         firm_key: firm_data,
-        quarter: 10,
+        quarter: 18,
         hyperware_channel_one: ForecastHyperware.channel1,
         hyperware_channel_two: ForecastHyperware.channel2,
         metaware_channel_one: ForecastMetaware.channel1,
@@ -62,6 +59,7 @@ const Forecast = () => {
       });
       console.log("POST request successful", response.data);
       getForecast();
+      addUserLogger();
     } catch (error) {
       console.error("Error making POST request: Forecast", error);
     }
@@ -69,17 +67,18 @@ const Forecast = () => {
 
   const addUserLogger = async () => {
     try {
-      const response = await axios.post(
-        `${api}/adduserlogs/`,
-
-        {
-          firm_key: firm_data,
-          users: user.email,
-        }
-      );
+      const response = await axios.post(`${api}/adduserlogs/`, {
+        email: user.email,
+        user_id: user.userid,
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        decision: "Forecast",
+        action: "created",
+        ip_address: "123.345.1",
+        username: user.username
+      });
       const data = response.data;
-      addUserLogger()
-      console.log("addUserLoggerData", data)
+      console.log("addUserLoggerData", data);
     } catch (error) {
       console.error("Error making GET request:", error);
     }

@@ -8,11 +8,6 @@ import AdminNavBar from "../Components/AdminNavBar";
 
 const Home = () => {
   const userData = JSON.parse(localStorage.getItem("user"));
-  const navigate = useNavigate();
-  const handleLogOut = () => {
-    localStorage.removeItem("user");
-    navigate("/");
-  };
   return (
     <>
       {userData?.isadmin ? <AdminNavBar /> : <UserNavBar />}
@@ -42,18 +37,6 @@ const Home = () => {
             <Heading className="m-4">Welcome to Supplychain Simulation</Heading>
             <Box display="flex" gap={10} justifyContent="center" mt={20}>
               {/* Profile Section */}
-              {/* <ProfileDropdown/> */}
-
-              {/* temporary  */}
-              {userData ? (
-                <Button color={"red"} onClick={handleLogOut}>
-                  LogOut {userData?.isadmin ? "Admin" : "User"}
-                </Button>
-              ) : (
-                <Link to="/signin">
-                  <Button>Login</Button>
-                </Link>
-              )}
             </Box>
           </div>
         </div>

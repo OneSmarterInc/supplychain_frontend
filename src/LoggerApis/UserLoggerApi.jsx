@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Select, Text, HStack, Box, VStack } from "@chakra-ui/react";
 import axios from "axios";
 
-const UserLoggerApi = () => {
+const UserLoggerApi = ({ simulation_id }) => {
+  let user = JSON.parse(localStorage.getItem("user"));
   const [userLoggerData, setUserLoggerData] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [filteredLogger, setFilteredLogger] = useState([]);
@@ -14,7 +15,7 @@ const UserLoggerApi = () => {
   const fetchUserLogger = async () => {
     try {
       const response = await axios.get(
-        "https://semantic.onesmarter.com/simulation/adduserlogs/"
+        `https://semantic.onesmarter.com/simulation/adduserlogs/?admin_id=${user.userid}&simulation_id=${simulation_id}`
       );
       const data = response.data;
       setUserLoggerData(data);
@@ -39,9 +40,9 @@ const UserLoggerApi = () => {
   };
 
   return (
-    <Box bg="gray.100" p={8} borderRadius="md" boxShadow="md">
-      <VStack spacing={4} align="stretch">
-        <HStack spacing={3}>
+    <Box bg="gray.100" p={4} borderRadius="md" boxShadow="md">
+      <VStack spacing={2} align="stretch">
+        <HStack spacing={2}>
           <Select
             width="165px"
             border="1px solid black"

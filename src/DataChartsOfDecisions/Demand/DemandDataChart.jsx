@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { HStack, Select } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
-// import DistributionPreview from "./Previews/DistributionPreview";
-// import ForecastPreview from "./Previews/ForecastPreview";
-// import ProcurementPreview from "../../Components/Previews/ForecastPreview";
-// import ManufacturingPreview from "../../Components/Previews/ForecastPreview";
-// import ServicePreview from "../../Components/Previews/ServicePreview";
 import TransportationPreview from "../../Components/Previews/TransportationPreview";
 import DemandPreview from "../../Components/Previews/DemandPreview";
+import axios from "axios";
+import MyContext from "../../Components/ContextApi/MyContext";
+
 
 const DemandDataChart = ({
   metaCh1Value,
   metaCh2Value,
   hypeCh1Value,
   hypeCh2Value,
-  submitDemand
+  submitDemand,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
@@ -25,6 +23,30 @@ const DemandDataChart = ({
     setIsModalOpen(!isModalOpen);
     // console.log("newsac_units", newsac_units[0].name);
   };
+
+  useEffect(() => {
+    getChartData();
+  }, []);
+  const { api } = useContext(MyContext);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+
+  const [graphData, setGraphData] = useState({})
+
+  const getChartData = async () => {
+    try {
+      const response = await axios.get(
+        `${api}/procurement_graph/?simulation_id=${selectedSim[0].simulation_id}&current_quarter=${selectedSim[0]?.current_quarter}&firm_key=${firm_data}`
+      );
+      console.log(response.status);
+      if (response.status === 200) {
+        console.log("ProcurementGraph:--", response.data);
+        const serializedValue = JSON.stringify(response.data);
+      }
+    } catch (error) {}
+  };
+
   // eslint-disable-next-line
   const [options, setOptions] = useState({
     chart: {
@@ -55,7 +77,7 @@ const DemandDataChart = ({
             {" "}
             {/* temporary div, then remove */}
           </div>
-          {/* <Chart options={options} series={series} type="area" width="510" /> */}
+          <Chart options={options} series={series} type="area" width="510" />
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}

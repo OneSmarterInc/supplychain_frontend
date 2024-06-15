@@ -152,9 +152,9 @@ const GDP = () => {
             <h3 className="text-xl font-semibold mb-2 text-indigo-500">
               Hyperware
             </h3>
-            <table className="w-full h-40 text-center border-collapse border border-gray-200">
+            <table className="w-full bg-blue-gray-100 h-40 text-center border-collapse border border-gray-200">
               <thead>
-                <tr className="bg-gray-100">
+                <tr className="">
                   <th className="px-4 py-2 border border-gray-200">Channel</th>
                   <th className="px-4 py-2 border border-gray-200">Region 1</th>
                   <th className="px-4 py-2 border border-gray-200">Region 2</th>
@@ -162,7 +162,7 @@ const GDP = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="even:bg-gray-50">
+                <tr className="">
                   <td className="px-4 py-2 border border-gray-200">
                     Channel 1
                   </td>
@@ -197,7 +197,7 @@ const GDP = () => {
                     />
                   </td>
                 </tr>
-                <tr className="even:bg-gray-50">
+                <tr className="">
                   <td className="px-4 py-2 border border-gray-200">
                     Channel 2
                   </td>
@@ -239,9 +239,9 @@ const GDP = () => {
             <h3 className="text-xl font-semibold mb-2 text-indigo-500">
               Metaware
             </h3>
-            <table className="w-full h-40 text-center border-collapse border border-gray-300">
+            <table className="w-full h-40 bg-blue-gray-100 text-center border-collapse border border-gray-300">
               <thead>
-                <tr className="bg-gray-100">
+                <tr className="">
                   <th className="px-4 py-2 border border-gray-200">Channel</th>
                   <th className="px-4 py-2 border border-gray-200">Region 1</th>
                   <th className="px-4 py-2 border border-gray-200">Region 2</th>
@@ -249,7 +249,7 @@ const GDP = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="even:bg-gray-50">
+                <tr className="">
                   <td className="px-4 py-2 border border-gray-200">
                     Channel 1
                   </td>
@@ -284,7 +284,7 @@ const GDP = () => {
                     />
                   </td>
                 </tr>
-                <tr className="even:bg-gray-50">
+                <tr className="">
                   <td className="px-4 py-2 border border-gray-200">
                     Channel 2
                   </td>

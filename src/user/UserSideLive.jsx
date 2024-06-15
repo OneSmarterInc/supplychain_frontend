@@ -92,7 +92,7 @@ const UserSideLive = () => {
         ))}
 
       <div className="">
-        <UserLoggerApi/>
+        {/* <UserLoggerApi/> */}
       </div>
     </div>
   );
