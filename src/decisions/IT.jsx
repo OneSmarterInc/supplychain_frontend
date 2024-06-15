@@ -79,6 +79,7 @@ const IT = () => {
       });
       console.log("POST request successful", response.data);
       getIt();
+      addUserLogger()
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
     }
@@ -86,17 +87,18 @@ const IT = () => {
 
   const addUserLogger = async () => {
     try {
-      const response = await axios.post(
-        `${api}/adduserlogs/`,
-
-        {
-          firm_key: firm_data,
-          users: user.email,
-        }
-      );
+      const response = await axios.post(`${api}/adduserlogs/`, {
+        email: user.email,
+        user_id: user.userid,
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        decision: "Forecast",
+        action: "created",
+        ip_address: "123.345.1",
+        username: user.username
+      });
       const data = response.data;
-      addUserLogger()
-      console.log("addUserLoggerData", data)
+      console.log("addUserLoggerData", data);
     } catch (error) {
       console.error("Error making GET request:", error);
     }

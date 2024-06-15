@@ -4,7 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Create_sim from "./Create_sim";
 import QuarterDetails from "./QuarterDetails";
 import { Box, Text, Flex, useToast } from "@chakra-ui/react";
-import GDP from "../Components/GDP";
+import GDP from "./GDP";
+
 
 export default function Steps({ setNoOfQuarters }) {
   const noOfQuarters = localStorage.getItem("noOfQuarters");

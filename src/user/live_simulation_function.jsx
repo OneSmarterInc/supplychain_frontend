@@ -8,6 +8,7 @@ import ReportModal from "../report/CplReport/ReportModal";
 import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
+import UserLoggerApi from "../LoggerApis/UserLoggerApi";
 
 const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
   let navigate = useNavigate();
@@ -37,8 +38,8 @@ const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
   const [secondDropdownValue, setSecondDropdownValue] = useState("");
   let selectedSim = localStorage.getItem("selectedSim");
   selectedSim = JSON.parse(selectedSim);
-  let user = localStorage.getItem("user");
-  user = JSON.parse(user);
+
+  let user = JSON.parse(localStorage.getItem("user"));
   user = user.email;
 
   const option = [];
@@ -118,6 +119,9 @@ const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
           >
             Reports
           </button>
+        </div>
+        <div className="logger">
+          <UserLoggerApi simulation_id={id} />
         </div>
       </div>
       <div className="graph">

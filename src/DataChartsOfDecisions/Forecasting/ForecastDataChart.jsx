@@ -111,7 +111,7 @@ const ForecastDataChart = ({
             {" "}
             {/* temporary div, then remove */}
           </div>
-          {/* <Chart options={options} series={series} type="area" width="510" /> */}
+          <Chart options={options} series={series} type="area" width="510" />
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}
