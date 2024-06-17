@@ -150,10 +150,10 @@ const ProfileDropdown = () => {
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
               </div>
-        
+
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                 Email
+                  Company Email
                 </label>
                 <input
                   type="email"
@@ -163,18 +163,7 @@ const ProfileDropdown = () => {
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  User Type
-                </label>
-                <input
-                  type="text"
-                  name="userType"
-                  value={profile?.userType}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                />
-              </div>
+            
               <div className="flex justify-end">
                 <button
                   type="button"
