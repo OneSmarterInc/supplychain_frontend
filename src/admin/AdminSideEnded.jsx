@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import axios from "axios";
+import MyContext from "../Components/ContextApi/MyContext";
+import { useToast } from "@chakra-ui/react";
+import AdminSideLiveFunction from "./AdminLiveSimFunction";
 import AdminNavBar from "../Components/AdminNavBar";
+import AdminSideEndedFunction from "./AdminEndedSimFunction";
 
-const AdminSideEnded = () => {
+const AdminSideLive = () => {
+  const { api } = useContext(MyContext);
   document.body.style.backgroundColor = "#e0e2e4";
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   // eslint-disable-next-line
   const [options, setOptions] = useState({
     chart: {
@@ -32,47 +36,64 @@ const AdminSideEnded = () => {
   const [series, setSeries] = useState([
     {
       name: "Units Sold",
-      data: [50, 60, 70, 80, 70, 60, 55, 65, 80, 85, 90, 100],
+      data: [
+        1276, 2386, 3649, 7066, 11132, 30000, 55000, 65526, 56523, 85000, 90236,
+        100000,
+      ],
     },
   ]);
+
+  useEffect(() => {
+    getAllData();
+  }, []);
+  const [simData, setSimData] = useState([]);
+  console.log("SimData-", simData);
+  const toast = useToast();
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  // const userId = user.userid;
+  // const LogedInUserEmail = user.useremail;
+
+  const userId = user.userid;
+  const LogedInUserEmail = "nachikettekade01@gmail.com";
+
+  const getAllData = async () => {
+    try {
+      const response = await axios.get(
+        `${api}/all_simulation/?user_id=${userId}`
+      );
+      console.log(response.status);
+      if (response.status === 200) {
+        console.log("AllData", response.data);
+        const serializedValue = JSON.stringify(response.data);
+        setSimData(response.data);
+        localStorage.setItem("simData", serializedValue);
+      }
+    } catch (error) {}
+  };
+
   return (
     <div>
       <AdminNavBar />
-      <h2 className="text-3xl p-2 pl-10 ">Ended Simulation</h2>
-      <div className="flex h-80 bg-slate-200 justify-around items-center mx-10 rounded-lg  border-2 border-neutral-600">
-        <div className="info">
-          <h2 className="text-3xl p-2 underline underline-offset-1">
-            MBA-Batch 2022 |<span className="text-3xl p-2">Ended</span>
-          </h2>
+      <h2 className="text-3xl p-2 pl-10 ">Live Simulation</h2>
+      {simData
+        .filter((item) => item.is_active === false)
+        .reverse()
+        .map((item, index) => (
+          <AdminSideEndedFunction
+            key={index}
+            id={item.simulation_id}
+            batch={item.name}
+            startDate={item.start_date}
+            endDate={item.end_date}
+            time={item.time}
+            currentQuarter={item.current_quarter}
+          />
+        ))}
 
-          <div className="buttons my-2">
-            <div className="flex flex-row my-2">
-              <button className="w-28 h-10 rounded-lg  bg-green-600 text-white text-center p-2 mx-1 hover:bg-green-700">
-                Firm 1
-              </button>
-              <button className="w-28 h-10 rounded-lg  bg-green-600 text-white text-center p-2  hover:bg-green-700">
-                Firm 2
-              </button>
-            </div>
-            <button className="w-56 mx-1.5 h-10 rounded-lg bg-sky-900 text-white text-center p-2 hover:bg-sky-950">
-              Results
-            </button>
-          </div>
-        </div>
-        <div className="graph ">
-          <div className="mixed-chart pt-4">
-            <Chart
-              options={options}
-              series={series}
-              type="area"
-              width="450"
-              mar
-            />
-          </div>
-        </div>
-      </div>
+      <div className="h-60 bg-teal-300"></div>
     </div>
   );
 };
 
-export default AdminSideEnded;
+export default AdminSideLive;

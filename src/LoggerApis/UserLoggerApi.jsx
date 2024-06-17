@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Select, Text, HStack, Box, VStack } from "@chakra-ui/react";
 import axios from "axios";
+import MyContext from "../Components/ContextApi/MyContext";
 
 const UserLoggerApi = ({ simulation_id }) => {
   let user = JSON.parse(localStorage.getItem("user"));
   const [userLoggerData, setUserLoggerData] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [filteredLogger, setFilteredLogger] = useState([]);
-
+  const { api } = useContext(MyContext);
   useEffect(() => {
     fetchUserLogger();
   }, []);
@@ -15,7 +16,7 @@ const UserLoggerApi = ({ simulation_id }) => {
   const fetchUserLogger = async () => {
     try {
       const response = await axios.get(
-        `https://semantic.onesmarter.com/simulation/adduserlogs/?admin_id=${user.userid}&simulation_id=${simulation_id}`
+        `${api}/adduserlogs/?admin_id=${user.userid}&simulation_id=${simulation_id}`
       );
       const data = response.data;
       setUserLoggerData(data);

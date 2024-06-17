@@ -40,10 +40,19 @@ const QuarterDetails = () => {
       getInitialQuarterState(index)
     )
   );
-  console.log("quarters data", quarters);
+  console.log(
+    "quarters data",
+    quarters.reduce((prev, quarter, index) => {
+      prev[`quarter${index + 1}`] = quarter;
+      return prev;
+    }, {})
+  );
   const combineSimData = {
     ...createSimData,
-    quarter_specific_decisions: quarters,
+    quarter_specific_decisions: quarters.reduce((prev, quarter, index) => {
+      prev[`quarter${index + 1}`] = quarter;
+      return prev;
+    }, {}),
   };
 
   const handleCheckboxChange = (index, field) => {

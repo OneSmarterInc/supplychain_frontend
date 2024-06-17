@@ -9,7 +9,7 @@ import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
 
-const AdminSideLiveFunction = ({
+const AdminSideEndedFunction = ({
   id,
   batch,
   startDate,
@@ -33,12 +33,7 @@ const AdminSideLiveFunction = ({
 
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
-  const [isAddAdminInputModalOpen, setIsAddAdminInputModalOpen] =
-    useState(false);
-  const [isAddUserInputModalOpen, setIsAddUserInputModalOpen] = useState(false);
   const [isFirmModalOpen, setIsFirmModalOpen] = useState(false);
-  const [newAdminEmail, setNewAdminEmail] = useState("");
-  const [newUserEmail, setNewUserEmail] = useState("");
   const [selectedFirm, setSelectedFirm] = useState(null);
 
   const firm_key = Object.keys(filteredSimulation[0]?.firm_data)[0];
@@ -96,48 +91,6 @@ const AdminSideLiveFunction = ({
     }
   };
 
-  const addAdminInputModal = () => {
-    setIsAddAdminInputModalOpen(!isAddAdminInputModalOpen);
-  };
-
-  const addUserInputModal = () => {
-    setIsAddUserInputModalOpen(!isAddUserInputModalOpen);
-  };
-
-  const handleAddAdmin = async () => {
-    try {
-      const response = await axios.post(`${api}/addadmin/`, {
-        params: {
-          admin_id: user.userid,
-          simulation_id: filteredSimulation[0]?.simulation_id,
-          email: newAdminEmail,
-        },
-      });
-      console.log("Admin added:", response.data);
-      setIsAddAdminInputModalOpen(false);
-      setNewAdminEmail("");
-    } catch (error) {
-      console.error("Error adding admin:", error);
-    }
-  };
-
-  const handleAddUser = async () => {
-    try {
-      const response = await axios.post(
-        `${api}/firmsbyadmin/?admin_id=${user.userid}&email=${newUserEmail}&firm_key=${selectedFirm.firm_key}&simulation_id=${filteredSimulation[0]?.simulation_id}`,
-        {
-          firm_key: firm_key,
-          users: newUserEmail,
-        }
-      );
-      console.log("User added:", response.data);
-      setIsAddUserInputModalOpen(false);
-      setNewUserEmail("");
-    } catch (error) {
-      console.error("Error adding admin:", error);
-    }
-  };
-
   const [firms, setFirms] = useState([]);
   const firmsFetch = async () => {
     try {
@@ -171,34 +124,10 @@ const AdminSideLiveFunction = ({
               Current Quarter : {currentQuarter}
             </span>
           </div>
-          <button
-            onClick={addAdminInputModal}
-            className="ml-4 text-lg h-10 bg-blue-500 text-white p-1 px-2 rounded-lg hover:bg-blue-700"
-          >
-            Add Admin
-          </button>
         </div>
         <p className="text-base p-2">
           start Date {startDate} | End Date {endDate}
         </p>
-
-        {isAddAdminInputModalOpen && (
-          <div className="modal bg-white p-4 rounded-lg w-fit m-3 shadow-lg mt-4">
-            <input
-              type="email"
-              value={newAdminEmail}
-              onChange={(e) => setNewAdminEmail(e.target.value)}
-              placeholder="Enter admin email"
-              className="p-2 border-2 border-gray-300 w-96 rounded-lg"
-            />
-            <button
-              onClick={handleAddAdmin}
-              className="ml-4 w-24 bg-green-500 text-white p-2 rounded-lg hover:bg-green-700"
-            >
-              Add
-            </button>
-          </div>
-        )}
 
         <div className="relative">
           {firms?.map((firmsdata) => {
@@ -264,36 +193,6 @@ const AdminSideLiveFunction = ({
                     </div>
                   </div>
                 ))}
-              </div>
-              <div className="">
-                {" "}
-                <div className="flex items-center">
-                  <div className="h-28 flex items-center">
-                    <button
-                      onClick={addUserInputModal}
-                      className="ml-4 text-lg bg-blue-500 text-white p-1 h-10 px-2 rounded-lg hover:bg-blue-700"
-                    >
-                      Add User
-                    </button>
-                  </div>
-                  {isAddUserInputModalOpen && (
-                    <div className="modal bg-white p-4 rounded-lg w-fit m-3 shadow-lg mt-4">
-                      <input
-                        type="email"
-                        value={newUserEmail}
-                        onChange={(e) => setNewUserEmail(e.target.value)}
-                        placeholder="Enter User email"
-                        className="p-2 border-2 border-gray-300 w-96 rounded-lg"
-                      />
-                      <button
-                        onClick={handleAddUser}
-                        className="ml-4 w-24 bg-green-500 text-white p-2 rounded-lg hover:bg-green-700"
-                      >
-                        Add
-                      </button>
-                    </div>
-                  )}
-                </div>
               </div>
             </div>
           )}
@@ -382,4 +281,4 @@ const AdminSideLiveFunction = ({
   );
 };
 
-export default AdminSideLiveFunction;
+export default AdminSideEndedFunction;

@@ -22,20 +22,15 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
   const [selectedFirmIndex, setSelectedFirmIndex] = useState(null);
+
+  let user = JSON.parse(localStorage.getItem("user"));
+
   const [simulationData, setSimulationData] = useState({
     name: "Test Simulation",
     total_quarters: 0,
     firms: 1,
-    admin_id: 3,
-    firm_data: [
-      {
-        "1smarterinc@gmail.com": "Onesmarter inc",
-        "nachiketrtekade@gmail.com": "Onesmarter inc",
-        "kunal.kalpande@onesmarter.com": "Onesmarter inc",
-        "nachiket.tekade@onesmarter.com": "test",
-        "avinash.kalmegh@onesmarter.com": "test",
-      },
-    ], // Changed to firm_data here ,
+    admin_id: user.userid,
+    firm_data: [], // Changed to firm_data here ,
     start_date: "2024-04-05",
     end_date: "2024-04-05",
     decision_open: "01:59:00",
