@@ -45,6 +45,70 @@ const GDP = () => {
   const [lowerDemandRange, setLowerDemandRange] = useState(500);
   const [higherDemandRange, setHigherDemandRange] = useState(500);
 
+  // Renames Mapp
+  const [suppliarMapp, setSuppliarMapp] = useState({
+    A: "",
+    B: "",
+    C: "",
+    D: "",
+    E: "",
+    F: "",
+    G: "",
+  });
+  const [distributerMapp, setDistributerMapp] = useState({
+    I: "",
+    J: "",
+    K: "",
+    L: "",
+    M: "",
+    N: "",
+  });
+
+  const [componentMapp, setComponentMapp] = useState({
+    alpha: "",
+    beta: "",
+    gamma: "",
+    epsilon: "",
+    delta: "",
+  });
+
+  const [HyperwareRegionMapp, setHyperwareRegionMapp] = useState({
+    region1: "",
+    region2: "",
+    region3: "",
+  });
+  const [HyperwareChannelMapp, setHyperwareChannelMapp] = useState({
+    channel1: "",
+    channel2: "",
+  });
+
+  const [MetawareRegionMapp, setMetawareRegionMapp] = useState({
+    region1: "",
+    region2: "",
+    region3: "",
+  });
+  const [MetawareChannelMapp, setMetawareChannelMapp] = useState({
+    channel1: "",
+    channel2: "",
+  });
+
+  const [renameDataVariable, setRenameDataVariable] = useState({
+    hyperware: "",
+    metaware: "",
+  });
+
+  const renamedMappedData = {
+    dataVariabllesMapp: renameDataVariable,
+    HyperwareRegionMapp: HyperwareRegionMapp,
+    HyperwareChannelMapp: HyperwareChannelMapp,
+    MetawareRegionMapp: MetawareRegionMapp,
+    MetawareChannelMapp: MetawareChannelMapp,
+    componentMapp: componentMapp,
+    distributerMapp: distributerMapp,
+    suppliarMapp: suppliarMapp,
+  };
+  console.log("RenamedMappedData: ", renamedMappedData);
+
   useEffect(() => {
     // Calculate and set initial growth data
     const initialGrowthData = calculateGrowthForAll(currentData);
@@ -120,6 +184,7 @@ const GDP = () => {
       ad_positive: higherDemandRange,
       ad_negative: lowerDemandRange,
     },
+    renamedMappedData: renamedMappedData,
   };
 
   const handleSubmit = async () => {
@@ -138,11 +203,47 @@ const GDP = () => {
       alert("Please Enter Quarters");
     }
   };
+
+  const handleSupplierInput = (e) => {
+    setSuppliarMapp((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleDistributerInput = (e) => {
+    setDistributerMapp((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleComponentsInput = (e) => {
+    setComponentMapp((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleRegionInput = (e) => {
+    setHyperwareRegionMapp((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleMetawareRegionInput = (e) => {
+    setMetawareRegionMapp((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   return (
     <div className="container mx-auto p-6 pt-0 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center text-indigo-600">
+      {/* <h1 className="text-3xl font-bold mb-6 text-center text-indigo-600">
         Data Analysis
-      </h1>
+      </h1> */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4 text-gray-700">
@@ -155,16 +256,56 @@ const GDP = () => {
             <table className="w-full bg-blue-gray-100 h-40 text-center border-collapse border border-gray-200">
               <thead>
                 <tr className="">
-                  <th className="px-4 py-2 border border-gray-200">Channel</th>
-                  <th className="px-4 py-2 border border-gray-200">Region 1</th>
-                  <th className="px-4 py-2 border border-gray-200">Region 2</th>
-                  <th className="px-4 py-2 border border-gray-200">Region 3</th>
+                  <th className=" py-2 border border-gray-200">
+                    <input
+                      className="w-32 p-2 border rounded-md"
+                      placeholder={"hyperware"}
+                      value={renameDataVariable["hyperware"]}
+                      name={"hyperware"}
+                      onChange={(e) => {
+                        setRenameDataVariable({
+                          ...renameDataVariable,
+                          hyperware: e.target.value,
+                        });
+                      }}
+                      type="text"
+                    />
+                  </th>
+                  {Object.keys(HyperwareRegionMapp).map((item, index) => {
+                    return (
+                      <th className="px-2 py-2 border border-gray-200">
+                        <input
+                          key={index}
+                          type="text"
+                          name={item}
+                          onChange={(e) => {
+                            handleRegionInput(e);
+                          }}
+                          placeholder={item}
+                          value={HyperwareRegionMapp[item]}
+                          className="w-full p-2 border rounded-md"
+                        />
+                      </th>
+                    );
+                  })}
                 </tr>
               </thead>
               <tbody>
                 <tr className="">
                   <td className="px-4 py-2 border border-gray-200">
-                    Channel 1
+                    <input
+                      className="w-full p-2 border rounded-md"
+                      placeholder={"channel1"}
+                      value={HyperwareChannelMapp["channel1"]}
+                      name={"channel1"}
+                      onChange={(e) => {
+                        setHyperwareChannelMapp({
+                          ...HyperwareChannelMapp,
+                          channel1: e.target.value,
+                        });
+                      }}
+                      type="text"
+                    />
                   </td>
                   <td className="px-4 py-2 border border-gray-200">
                     <input
@@ -199,7 +340,19 @@ const GDP = () => {
                 </tr>
                 <tr className="">
                   <td className="px-4 py-2 border border-gray-200">
-                    Channel 2
+                    <input
+                      className="w-full p-2 border rounded-md"
+                      placeholder={"channel2"}
+                      value={HyperwareChannelMapp["channel2"]}
+                      name={"channel2"}
+                      onChange={(e) => {
+                        setHyperwareChannelMapp({
+                          ...HyperwareChannelMapp,
+                          channel2: e.target.value,
+                        });
+                      }}
+                      type="text"
+                    />
                   </td>
                   <td className="px-4 py-2 border border-gray-200">
                     <input
@@ -241,17 +394,58 @@ const GDP = () => {
             </h3>
             <table className="w-full h-40 bg-blue-gray-100 text-center border-collapse border border-gray-300">
               <thead>
+                {/* regionmapp */}
                 <tr className="">
-                  <th className="px-4 py-2 border border-gray-200">Channel</th>
-                  <th className="px-4 py-2 border border-gray-200">Region 1</th>
-                  <th className="px-4 py-2 border border-gray-200">Region 2</th>
-                  <th className="px-4 py-2 border border-gray-200">Region 3</th>
+                  <th className=" py-2 border border-gray-200">
+                    <input
+                      className="w-32 p-2 border rounded-md"
+                      placeholder={"metaware"}
+                      value={renameDataVariable["metaware"]}
+                      name={"metaware"}
+                      onChange={(e) => {
+                        setRenameDataVariable({
+                          ...renameDataVariable,
+                          metaware: e.target.value,
+                        });
+                      }}
+                      type="text"
+                    />
+                  </th>
+                  {Object.keys(MetawareRegionMapp).map((item, index) => {
+                    return (
+                      <th className="px-2 py-2 border border-gray-200">
+                        <input
+                          key={index}
+                          type="text"
+                          name={item}
+                          onChange={(e) => {
+                            handleMetawareRegionInput(e);
+                          }}
+                          placeholder={item}
+                          value={MetawareRegionMapp[item]}
+                          className="w-full p-2 border rounded-md"
+                        />
+                      </th>
+                    );
+                  })}
                 </tr>
               </thead>
               <tbody>
                 <tr className="">
                   <td className="px-4 py-2 border border-gray-200">
-                    Channel 1
+                    <input
+                      className="w-full p-2 border rounded-md"
+                      placeholder={"channel1"}
+                      value={MetawareChannelMapp["channel1"]}
+                      name={"channel1"}
+                      onChange={(e) => {
+                        setMetawareChannelMapp({
+                          ...MetawareChannelMapp,
+                          channel1: e.target.value,
+                        });
+                      }}
+                      type="text"
+                    />
                   </td>
                   <td className="px-4 py-2 border border-gray-200">
                     <input
@@ -286,7 +480,19 @@ const GDP = () => {
                 </tr>
                 <tr className="">
                   <td className="px-4 py-2 border border-gray-200">
-                    Channel 2
+                    <input
+                      className="w-full p-2 border rounded-md"
+                      placeholder={"channel2"}
+                      value={MetawareChannelMapp["channel2"]}
+                      name={"channel2"}
+                      onChange={(e) => {
+                        setMetawareChannelMapp({
+                          ...MetawareChannelMapp,
+                          channel2: e.target.value,
+                        });
+                      }}
+                      type="text"
+                    />
                   </td>
                   <td className="px-4 py-2 border border-gray-200">
                     <input
@@ -484,6 +690,85 @@ const GDP = () => {
           </div>
         </div>
       </div>
+      {/* Sub Assembly Components */}
+
+      <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-gray-700">Components</h2>
+        <div>
+          <label
+            htmlFor="actualDemand"
+            className="block text-gray-600 font-semibold mb-2"
+          >
+            Components Rename
+          </label>
+          <div className="flex gap-2">
+            {Object.keys(componentMapp).map((item, index) => {
+              return (
+                <input
+                  key={index}
+                  name={item}
+                  onChange={(e) => handleComponentsInput(e)}
+                  type="text"
+                  placeholder={item}
+                  value={componentMapp[item]}
+                  className="w-1/2 p-2 border rounded-md"
+                />
+              );
+            })}
+          </div>
+        </div>
+        {/* suppliar and distributer */}
+        <div>
+          <label
+            htmlFor="actualDemand"
+            className="block text-gray-600 font-semibold mb-2"
+          >
+            Suppliar Rename
+          </label>
+
+          <div className="flex gap-2">
+            {Object.keys(suppliarMapp).map((item, index) => {
+              return (
+                <input
+                  key={index}
+                  name={item}
+                  onChange={(e) => handleSupplierInput(e)}
+                  type="text"
+                  placeholder={item}
+                  value={suppliarMapp[item]}
+                  className="w-1/2 p-2 border rounded-md"
+                />
+              );
+            })}
+          </div>
+        </div>{" "}
+        <div>
+          <label
+            htmlFor="actualDemand"
+            className="block text-gray-600 font-semibold mb-2"
+          >
+            Distributer Rename
+          </label>
+          <div className="flex gap-2">
+            {Object.keys(distributerMapp).map((item, index) => {
+              return (
+                <input
+                  key={index}
+                  type="text"
+                  name={item}
+                  onChange={(e) => {
+                    handleDistributerInput(e);
+                  }}
+                  placeholder={item}
+                  value={distributerMapp[item]}
+                  className="w-1/2 p-2 border rounded-md"
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
       <div className="mt-6 flex justify-center">
         <button
           onClick={handleSubmit}

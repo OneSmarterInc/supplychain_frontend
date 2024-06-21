@@ -19,6 +19,7 @@ import { useState } from "react";
 import Steps from "../createSimulation/Steps";
 import AdminNavBar from "../Components/AdminNavBar";
 import { PrivateRoute } from "./PrivateRoutes";
+import Inventory from "../Components/Inventory";
 
 const MainRoutes = () => {
   const [noOfQuarters, setNoOfQuarters] = useState();
@@ -206,6 +207,17 @@ const MainRoutes = () => {
           <div className="signup  h-screen">
             <PrivateRoute>
               <UserSideEnded />
+            </PrivateRoute>
+          </div>
+        }
+      />
+       <Route
+        exact
+        path="/inventory"
+        element={
+          <div className="signup  h-screen">
+            <PrivateRoute>
+              <Inventory />
             </PrivateRoute>
           </div>
         }
