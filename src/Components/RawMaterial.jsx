@@ -7,7 +7,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
     alpha_quantity: procurementData?.alpha_quantity,
     beta_quantity: procurementData?.beta_quantity,
   });
-
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (value >= 0 && !value.includes("-")) {
@@ -37,7 +37,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
         <tbody>
           <tr className="bg-slate-300 ">
             <td className="text-center py-0 text-lg bg-blue-gray-100 rounded-md ">
-              Alpha
+              {selectedSim[0]?.renamedMappedData?.componentMapp?.alpha}
             </td>
             {/* <td className="text-center py-3 text-lg ">15000 </td> */}
             <td className="text-center py-3 text-lg ">
@@ -60,7 +60,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
 
           <tr className="bg-slate-300 ">
             <td className="text-center py-3 text-lg bg-blue-gray-100 rounded-md ">
-              Beta
+              {selectedSim[0]?.renamedMappedData?.componentMapp?.beta}
             </td>
             {/* <td className="text-center py-3 text-lg ">10000</td> */}
             <td className="text-center py-3 text-lg ">

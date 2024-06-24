@@ -176,8 +176,8 @@ const GDP = () => {
 
   const updatedCombineSimData = {
     ...combineSimData,
-    hyperware_config: [currentData?.hyperware],
-    metaware_config: [currentData?.metaware],
+    hyperware_default: [currentData?.hyperware],
+    metaware_default: [currentData?.metaware],
     demand_grow_rule: {
       gdp: gdp,
       drift: drift,

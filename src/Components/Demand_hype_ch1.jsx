@@ -36,19 +36,20 @@ const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {
     setHypeCh1ValuetoParent(hypeCh1Value);
   }, [hypeCh1Value, setHypeCh1ValuetoParent]);
 
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   return (
     <Box>
       <Text className="p-5 py-3 pb-0 text-xl">
-        <strong>Hypeware Channel 1</strong>
+        <strong>{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}- {selectedSim[0]?.renamedMappedData?.HyperwareChannelMapp?.channel1}  </strong>
       </Text>
       <br />
       <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>
         <Thead>
           <Tr>
-            <Th> </Th>
-            {regions.map((region) => (
-              <Th key={region}>{region}</Th>
-            ))}
+          <Th fontWeight="bold">{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region1}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region2}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region3}</Th>
           </Tr>
         </Thead>
         <Tbody>

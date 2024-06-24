@@ -11,6 +11,7 @@ import {
   Td,
   Text,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
 import InfoImg from "../Components/InfoImg";
@@ -18,6 +19,7 @@ import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import DistributionDataChart from "../DataChartsOfDecisions/Distribution/DistributionDataChart";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Distribution_Decision = () => {
   const { api } = useContext(MyContext);
@@ -25,6 +27,17 @@ const Distribution_Decision = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  let firm_key_new = "";
+  if (selectedSim[0]?.firm_data.length) {
+    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
+
+      return item.emails.includes(user.email);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
+  console.log("Firm Key demand Live Sim: -------", firm_key_new);
   const [DistributionData, setDistributionData] = useState();
 
   const [values, setValues] = useState({
@@ -62,7 +75,7 @@ const Distribution_Decision = () => {
           admin_id: selectedSim[0].admin_id,
           current_decision: "Distribution",
           current_quarter: selectedSim[0].current_quarter,
-          firm_key: firm_data,
+          firm_key: firm_key_new,
         },
       });
       const data = response.data;
@@ -129,13 +142,16 @@ const Distribution_Decision = () => {
     sac_surface_shippingOpt: [0, 1],
   };
 
+  const toast = useToast();
+  const navigate = useNavigate()
+
   const submitDistribution = async () => {
     try {
       const response = await axios.post(`${api}/decision/distribution/`, {
         simulation_id: selectedSim[0].simulation_id,
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
-        firm_key: firm_data,
+        firm_key: firm_key_new,
         quarter: selectedSim[0].current_quarter,
         distribution_center: values.distribution_center,
         rfid: values.rfid,
@@ -147,6 +163,14 @@ const Distribution_Decision = () => {
       console.log("POST request successful", response.data);
       addUserLogger();
       getDistribution();
+      toast({
+        title: "Distribution successful",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      navigate("/service")
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
     }

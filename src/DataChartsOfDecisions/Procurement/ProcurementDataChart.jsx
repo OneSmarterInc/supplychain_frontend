@@ -60,13 +60,24 @@ const ProcurementDataChart = ({ updatedDCData, submitProcurement }) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  let firm_key_new = "";
+  if (selectedSim[0]?.firm_data.length) {
+    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
+
+      return item.emails.includes(user.email);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
+  console.log("Firm Key Procurement Data Live Sim: -------", firm_key_new);
 
   const getChartData = async () => {
     try {
       const response = await axios.get(
         `${api}/procurement_graph/?simulation_id=${
           selectedSim[0].simulation_id
-        }&current_quarter=${7}&firm_key=${firm_data}`
+        }&current_quarter=${7}&firm_key=${firm_key_new}`
       );
       console.log(response.status);
       if (response.status === 200) {

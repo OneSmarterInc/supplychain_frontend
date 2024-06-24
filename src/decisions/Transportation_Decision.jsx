@@ -11,6 +11,7 @@ import {
   Td,
   Input,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
 // import DataChart from "../Components/DataChart";
@@ -18,6 +19,7 @@ import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import TransportationDataChart from "../DataChartsOfDecisions/Transportation/TransportationDataChart";
+import { useNavigate } from "react-router-dom";
 
 const Transportation_Decision = () => {
   const { api } = useContext(MyContext);
@@ -34,6 +36,17 @@ const Transportation_Decision = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  let firm_key_new = "";
+  if (selectedSim[0]?.firm_data.length) {
+    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
+
+      return item.emails.includes(user.email);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
+  console.log("Firm Key demand Live Sim: -------", firm_key_new);
 
   const handleChange = (rowId, field, value) => {
     setDc1Data((prevDc1Data) => ({
@@ -73,7 +86,7 @@ const Transportation_Decision = () => {
           admin_id: selectedSim[0].admin_id,
           current_decision: "Transportation",
           current_quarter: selectedSim[0].current_quarter,
-          firm_key: firm_data,
+          firm_key: firm_key_new,
         },
       });
       const data = response.data;
@@ -83,19 +96,28 @@ const Transportation_Decision = () => {
       console.error("Error making GET request:", error);
     }
   };
-
+  const toast = useToast();
+  const navigate = useNavigate();
   const submitTransportation = async () => {
     try {
       const response = await axios.post(`${api}/decision/transportation/`, {
         simulation_id: selectedSim[0].simulation_id,
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
-        firm_key: firm_data,
+        firm_key: firm_key_new,
         quarter: selectedSim[0].current_quarter,
         Dc1Data,
       });
-      getTransportation()
+      getTransportation();
       addUserLogger();
+      toast({
+        title: "Login successful",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      navigate("/usersidelive");
       console.log("POST request successful", response.data);
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
@@ -112,7 +134,7 @@ const Transportation_Decision = () => {
         decision: "Forecast",
         action: "created",
         ip_address: "123.345.1",
-        username: user.username
+        username: user.username,
       });
       const data = response.data;
       console.log("addUserLoggerData", data);

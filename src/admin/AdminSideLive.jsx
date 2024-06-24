@@ -54,7 +54,7 @@ const AdminSideLive = () => {
   // const LogedInUserEmail = user.useremail;
 
   const userId = user.userid;
-  const LogedInUserEmail = "nachikettekade01@gmail.com";
+  // const LogedInUserEmail = "nachikettekade01@gmail.com";
 
   const getAllData = async () => {
     try {

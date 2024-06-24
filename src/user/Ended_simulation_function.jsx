@@ -9,7 +9,7 @@ import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
 
-const AdminSideEndedFunction = ({
+const UserSideEndedFunction = ({
   id,
   batch,
   startDate,
@@ -28,6 +28,7 @@ const AdminSideEndedFunction = ({
   localStorage.setItem("selectedSim", JSON.stringify(filteredSimulation));
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [firstDropdownValue, setFirstDropdownValue] = useState("1");
   const [secondDropdownValue, setSecondDropdownValue] = useState("");
 
@@ -58,6 +59,10 @@ const AdminSideEndedFunction = ({
 
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
+  };
+
+  const toggleResultModal = () => {
+    setIsResultModalOpen(!isReportModalOpen);
   };
 
   const handleQuarterSelectChange = (e) => {
@@ -124,7 +129,7 @@ const AdminSideEndedFunction = ({
   };
 
   return (
-    <div className="flex h-80  bg-slate-200 justify-around items-center mx-10 rounded-lg border-2 border-neutral-600">
+    <div className="flex h-80  bg-slate-200 justify-start items-center mx-10 sm:ml-80 rounded-lg border-2 border-neutral-600">
       <div className="info">
         <div className="text-3xl p-2 flex">
           <div className="flex items-center ">
@@ -139,83 +144,17 @@ const AdminSideEndedFunction = ({
         </p>
 
         <div className="relative">
-          {firms?.map((firmsdata) => {
-            return (
-              <button
-                key={firmsdata.firm_key}
-                className="w-40 h-10 rounded-lg bg-green-600 text-white text-center p-2 mx-2 hover:bg-sky-950"
-                onClick={() => {
-                  handleFirmsUsers(firmsdata);
-                }}
-              >
-                {firmsdata ? firmsdata.firm_key : "Unknown Firm"}
-              </button>
-            );
-          })}
-
-          {isFirmModalOpen && selectedFirm && (
-            <div className="modal bg-white p-4 rounded-lg z-50   fixed top-24 w-[800px] shadow-lg mt-4 ">
-              <div className="buttons my-2 flex  items-center justify-between">
-                <h2 className="text-2xl font-bold mb-4">
-                  Users of{" "}
-                  <span className="text-green-600">
-                    {selectedFirm.firm_key}
-                  </span>
-                </h2>
-                <div className="flex  items-center space-x-3">
-                  <button
-                    onClick={toggleModal}
-                    className="w-28 h-10 rounded-lg bg-green-600 text-white text-center p-2 hover:bg-green-700"
-                  >
-                    Reports
-                  </button>
-                  <h2
-                    onClick={() => {
-                      setIsFirmModalOpen(false);
-                    }}
-                    className="flex justify-end text-red-300 cursor-pointer"
-                  >
-                    close
-                  </h2>
-                </div>
-              </div>
-              <div className="h-80  overflow-y-scroll">
-                {selectedFirm.users.map((user) => (
-                  <div className="p-4 bg-white shadow-md rounded-lg">
-                    <div
-                      key={user.user_id}
-                      className="mb-4 flex items-center space-x-4"
-                    >
-                      <h1 className="text-3xl text-blue-500">
-                        <i className="fa-solid fa-user"></i>
-                      </h1>
-                      <div className="">
-                        <p className="text-lg font-semibold text-gray-700">
-                          UserID:{" "}
-                          <span className="font-normal">{user.user_id}</span>
-                        </p>
-                        <p className="text-lg font-semibold text-gray-700">
-                          Email:{" "}
-                          <span className="font-normal">{user.email}</span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-        {/* <button
-            className="w-32 h-10 rounded-lg bg-blue-600 text-white text-center p-2 mx-2 hover:bg-sky-950"
-            onClick={handleSubmit}
-          >
-            Enter
-          </button> */}
-      </div>
-      <div className="graph">
-        <div className="mixed-chart pt-4">
-          {/* <Chart options={options} series={series} type="area" width="450" /> */}
+          <div className="flex  items-center space-x-3">
+            <button onClick={toggleResultModal} className="">
+              <EvaluationReportModal />
+            </button>
+            <button
+              onClick={toggleModal}
+              className="w-28 h-10 rounded-lg bg-green-600 text-white text-center p-2 hover:bg-green-700"
+            >
+              Reports
+            </button>
+          </div>
         </div>
       </div>
       {isReportModalOpen && (
@@ -277,10 +216,6 @@ const AdminSideEndedFunction = ({
                 {secondDropdownValue === "pir" && <ReportModal />}
                 {secondDropdownValue === "odvr" && <ReportModal />}
                 {secondDropdownValue === "far" && <ReportModal />}
-                <div className="px-5">
-                  {" "}
-                  <EvaluationReportModal />
-                </div>
               </div>
             </div>
           </div>
@@ -290,4 +225,4 @@ const AdminSideEndedFunction = ({
   );
 };
 
-export default AdminSideEndedFunction;
+export default UserSideEndedFunction;

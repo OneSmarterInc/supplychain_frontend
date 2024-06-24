@@ -17,6 +17,7 @@ const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
   console.log("DEMANDDATA-FROM-METACH2:--", demandData);
   const regions = ["region1", "region2", "region3"];
 
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   // Correctly initialize metaCh2Value with nested objects
   const [metaCh2Value, setMetaCh2Value] = useState({
     Active: { ...demandData?.metaware_channel_two_active },
@@ -43,16 +44,16 @@ const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
   return (
     <Box>
       <Text className="p-5 py-3 pb-0 text-xl">
-        <strong>Metaware Channel 2</strong>
+      <strong>{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}- {selectedSim[0]?.renamedMappedData?.MetawareChannelMapp?.channel2}  </strong>
       </Text>
       <br />
       <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>
         <Thead>
-          <Tr>
-            <Th> </Th>
-            {regions.map((region) => (
-              <Th key={region}>{region}</Th>
-            ))}
+        <Tr>
+          <Th fontWeight="bold">{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region1}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region2}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region3}</Th>
           </Tr>
         </Thead>
         <Tbody>

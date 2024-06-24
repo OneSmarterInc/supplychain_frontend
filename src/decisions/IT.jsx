@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import InfoImg from "../Components/InfoImg";
 import IT_suppliers from "../Components/IT_suppliers";
 import IT_reports from "../Components/IT_reports";
-import { HStack, Select } from "@chakra-ui/react";
+import { HStack, Select, useToast } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
 import DataChart from "../Components/DataChart";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import ITDataChart from "../DataChartsOfDecisions/ITDataChart";
+import { useNavigate } from "react-router-dom";
 const IT = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
@@ -16,6 +17,18 @@ const IT = () => {
   const { api } = useContext(MyContext);
 
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  let firm_key_new = "";
+  if (selectedSim[0]?.firm_data.length) {
+    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
+
+      return item.emails.includes(user.email);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
+  console.log("Firm Key demand Live Sim: -------", firm_key_new);
+
   const [ItData, setItData] = useState();
   console.log("ItData:--", ItData);
   useEffect(() => {
@@ -43,7 +56,7 @@ const IT = () => {
             admin_id: selectedSim[0].admin_id,
             current_decision: "It",
             current_quarter: selectedSim[0].current_quarter,
-            firm_key: firm_data,
+            firm_key: firm_key_new,
           },
         }
       );
@@ -54,14 +67,15 @@ const IT = () => {
       console.error("Error making GET request:", error);
     }
   };
-
+  const toast = useToast();
+  const navigate = useNavigate()
   const submitIt = async () => {
     try {
       const response = await axios.post(`${api}/decision/it/`, {
         simulation_id: selectedSim[0].simulation_id,
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
-        firm_key: firm_data,
+        firm_key: firm_key_new,
         quarter: selectedSim[0].current_quarter,
         sync_a: suppliers.A,
         sync_b: suppliers.B,
@@ -80,6 +94,14 @@ const IT = () => {
       console.log("POST request successful", response.data);
       getIt();
       addUserLogger()
+      toast({
+        title: "It successful",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      navigate("/transportation")
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
     }

@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import UserNavBar from "../Components/UserNavBar";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useToast } from "@chakra-ui/react";
+import AdminNavBar from "../Components/AdminNavBar";
+import UserSideEndedFunction from "./Ended_simulation_function";
 
 const UserSideEnded = () => {
   const { api } = useContext(MyContext);
@@ -48,9 +49,11 @@ const UserSideEnded = () => {
   console.log("SimData-", simData);
   const toast = useToast();
   const user = JSON.parse(localStorage.getItem("user"));
+
   // const userId = user.userid;
   // const LogedInUserEmail = user.useremail;
-  const userId = 3;
+
+  const userId = user.userid;
   const LogedInUserEmail = "nachikettekade01@gmail.com";
 
   const getAllData = async () => {
@@ -60,17 +63,9 @@ const UserSideEnded = () => {
       );
       console.log(response.status);
       if (response.status === 200) {
-     
         console.log("AllData", response.data);
         const serializedValue = JSON.stringify(response.data);
         setSimData(response.data);
-        toast({
-          title: "UserSide Ended Simulation Data",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-          position: "top",
-        });
         localStorage.setItem("simData", serializedValue);
       }
     } catch (error) {}
@@ -78,78 +73,24 @@ const UserSideEnded = () => {
 
   return (
     <div>
-      <UserNavBar />
-      <h2 className="text-3xl p-2 pl-10 ">Ended Simulation</h2>
-      <div className="flex h-80 bg-slate-200 justify-around items-center mx-10 rounded-lg  border-2 border-neutral-600">
-        <div className="info">
-          <h2 className="text-3xl p-2 underline underline-offset-1">
-            MBA-Batch 2023 |
-            <span className="text-3xl p-2">Current Quarter: 6</span>
-          </h2>
+      <AdminNavBar />
+      <h2 className="text-3xl p-2 pl-10 ">Live Simulation</h2>
+      {simData
+        .filter((item) => item.is_active === false)
+        .reverse()
+        .map((item, index) => (
+          <UserSideEndedFunction
+            key={index}
+            id={item.simulation_id}
+            batch={item.name}
+            startDate={item.start_date}
+            endDate={item.end_date}
+            time={item.time}
+            currentQuarter={item.current_quarter}
+          />
+        ))}
 
-          <div className="buttons my-2">
-            <button className="w-32 h-10 rounded-lg  bg-blue-600 text-white text-center p-2 mx-2 hover:bg-sky-950">
-              Results
-            </button>
-            <button className="w-28 h-10 rounded-lg  bg-green-600 text-white text-center p-2 hover:bg-green-700">
-              Reports
-            </button>
-          </div>
-        </div>
-        <div className="graph ">
-          <div className="mixed-chart pt-4">
-            <Chart
-              options={options}
-              series={series}
-              type="area"
-              width="450"
-         
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-red-200 p-2">
-        <table className="table-auto mx-auto">
-          <thead>
-            <tr>
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Start Date</th>
-              <th className="px-4 py-2">End Date</th>
-              <th className="px-4 py-2">Decision Opens</th>
-              <th className="px-4 py-2">Decision Closes</th>
-              <th className="px-2 py-2">Total Quarters</th>
-              <th className="px-4 py-2">Firms</th>
-              <th className="px-4 py-2">Firm Data User</th>
-              <th className="px-4 py-2">My Firm</th>
-            </tr>
-          </thead>
-          <tbody>
-            {simData &&
-              simData
-                .filter((item) =>(item.is_active===false))
-                .map((item, index) => (
-                  <tr key={index}>
-                    <td className="border px-4 py-2">{item.name}</td>
-                    <td className="border px-4 py-2">{item.start_date}</td>
-                    <td className="border px-4 py-2">{item.end_date}</td>
-                    <td className="border px-4 py-2">{item.decision_open}</td>
-                    <td className="border px-4 py-2">{item.decision_close}</td>
-                    <td className="border px-4 py-2 text-center">{item.total_quarters}</td>
-                    <td className="border px-4 py-2  text-center">{item.firms}</td>
-                    <td className="border px-4 py-2">
-                      {Object.keys(item.firm_data).filter(
-                        (item) => item === LogedInUserEmail
-                      )}
-                    </td>
-                    <td className="border px-4 py-2">
-                      {item.firm_data[LogedInUserEmail]}
-                    </td>
-                  </tr>
-                ))}
-          </tbody>
-        </table>
-      </div>
+      <div className="h-60 bg-teal-300"></div>
     </div>
   );
 };

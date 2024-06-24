@@ -28,6 +28,7 @@ const QuarterDetails = () => {
       is_demand_gen: true,
       is_forecasting: true,
       is_it: true,
+      is_transportation: true,
       quarter_start_date: startDate.toISOString().split("T")[0], // Format as YYYY-MM-DD
       quarter_end_date: endDate.toISOString().split("T")[0], // Format as YYYY-MM-DD
       quarter_start_time: "10:00",
@@ -116,7 +117,8 @@ const QuarterDetails = () => {
                         (key === "is_service" && "Service") ||
                         (key === "is_demand_gen" && "Demand Generation") ||
                         (key === "is_forecasting" && "Forecasting") ||
-                        (key === "is_it" && "It")}
+                        (key === "is_it" && "It") ||
+                        (key === "is_transportation" && "Transportation")}
                     </label>
                   </div>
                 ))}
