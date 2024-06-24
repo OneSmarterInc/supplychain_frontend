@@ -9,6 +9,7 @@ import MyContext from "../Components/ContextApi/MyContext";
 
 import { useToast } from "@chakra-ui/react";
 import ProcurementDataChart from "../DataChartsOfDecisions/Procurement/ProcurementDataChart";
+import { useNavigate } from "react-router-dom";
 
 const Procurement_Decisions = () => {
   const { api } = useContext(MyContext);
@@ -17,8 +18,18 @@ const Procurement_Decisions = () => {
   let [beta_quantity, setBeta_quantity] = useState({});
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
-  console.log("selectedSim:==", Object.keys(selectedSim[0].firm_data)[0]);
   const firm_data = Object.keys(selectedSim[0].firm_data)[0];
+  let firm_key_new = "";
+  if (selectedSim[0]?.firm_data.length) {
+    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
+
+      return item.emails.includes(user.email);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
+  console.log("Firm Key demand Live Sim: -------", firm_key_new);
   const toast = useToast();
   useEffect(() => {
     getProcurement();
@@ -32,7 +43,7 @@ const Procurement_Decisions = () => {
           admin_id: selectedSim[0].admin_id,
           current_decision: "Procurement",
           current_quarter: selectedSim[0].current_quarter,
-          firm_key: firm_data,
+          firm_key: firm_key_new,
         },
       });
       const data = response.data;
@@ -41,6 +52,8 @@ const Procurement_Decisions = () => {
       console.error("Error making GET request:", error);
     }
   };
+
+  const navigate = useNavigate()
 
   const submitProcurement = async () => {
     try {
@@ -57,7 +70,7 @@ const Procurement_Decisions = () => {
         simulation_id: selectedSim[0].simulation_id,
         admin_id: selectedSim[0].admin_id,
         user_id: user.user_id,
-        firm_key: firm_data,
+        firm_key: firm_key_new,
         quarter: selectedSim[0].current_quarter,
         alpha_quantity: Number(alpha_quantity),
         beta_quantity: Number(beta_quantity),
@@ -67,12 +80,13 @@ const Procurement_Decisions = () => {
       getProcurement()
       addUserLogger()
       toast({
-        title: "Entries Saved successful",
+        title: "Procurement Submit Successful",
         status: "success",
         duration: 9000,
         isClosable: true,
         position: "top",
       });
+      navigate("/manufacturing")
     } catch (error) {
       console.error("Error making POST request:", error);
     }

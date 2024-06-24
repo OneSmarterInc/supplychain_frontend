@@ -4,12 +4,26 @@ import { Button } from "@material-tailwind/react";
 import EvaluationReportSalesPDF from "./EvaluationReportSalesPDF";
 
 const EvaluationReportTable = () => {
+  //todo: dynamic params
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  let user = localStorage.getItem("user");
+  user = JSON.parse(user);
+
+  let firm_key_new = "";
+  if (selectedSim[0]?.firm_data.length) {
+    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
+      return item.emails.includes(user.email);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
+  console.log("Firm Key demand Live Sim: -------", firm_key_new);
   const reportData = {
-    id: 1,
-    simulation_id: 73,
-    admin_id: 1,
-    firm_key: "onesmarter inc.",
-    quarter: 1,
+    simulation_id: selectedSim[0].simulation_id,
+    admin_id: user.userid,
+    firm_key: firm_key_new,
+    quarter: selectedSim[0].current_quarter,
     net_income_to_revenues_firm_3: 4.5,
     net_income_to_revenues_worst: 4.5,
     net_income_to_revenues_average: 5.4,
@@ -67,11 +81,6 @@ const EvaluationReportTable = () => {
     customer_satisfaction_average: 25.3,
     customer_satisfaction_best: 26.6,
   };
-
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
-  let user = localStorage.getItem("user");
-  user = JSON.parse(user);
-  const userEmail = user.email;
 
   return (
     <div>

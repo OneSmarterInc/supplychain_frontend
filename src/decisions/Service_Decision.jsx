@@ -10,6 +10,7 @@ import {
   Th,
   Td,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
 // import DataChart from "../Components/DataChart";
@@ -17,13 +18,15 @@ import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import ServiceDataChart from "../DataChartsOfDecisions/Service/ServiceDataChart";
+import { useNavigate } from "react-router-dom";
 
 const Service_Decision = () => {
   const { api } = useContext(MyContext);
   const regions = ["region1", "region2", "region3"];
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
-
+  const toast = useToast();
+  const navigate = useNavigate()
   const [serviceValue, setServiceValue] = useState({
     region1: "",
     region2: "",
@@ -35,8 +38,19 @@ const Service_Decision = () => {
   };
 
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  let firm_key_new = "";
+  if (selectedSim[0]?.firm_data.length) {
+    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
+
+      return item.emails.includes(user.email);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
+  console.log("Firm Key demand Live Sim: -------", firm_key_new);
   const [ServiceData, setServiceData] = useState();
-  console.log("ServiceData:--", ServiceData);
+  console.log("ServiceData:--", firm_data);
   useEffect(() => {
     getService();
   }, []);
@@ -60,7 +74,7 @@ const Service_Decision = () => {
           admin_id: selectedSim[0].admin_id,
           current_decision: "Service",
           current_quarter: selectedSim[0].current_quarter,
-          firm_key: firm_data,
+          firm_key: firm_key_new,
         },
       });
       const data = response.data;
@@ -77,14 +91,22 @@ const Service_Decision = () => {
         simulation_id: selectedSim[0].simulation_id,
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
-        firm_key: firm_data,
+        firm_key: firm_key_new,
         quarter: selectedSim[0].current_quarter,
         service_region_one: serviceValue.region1,
         service_region_two: serviceValue.region2,
         service_region_three: serviceValue.region3,
       });
-      addUserLogger()
+      addUserLogger();
       getService();
+      toast({
+        title: "Login successful",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      navigate("/demand")
       console.log("POST request successful", response.data);
     } catch (error) {
       console.error("Error making POST request: Service", error);
@@ -101,7 +123,7 @@ const Service_Decision = () => {
         decision: "Forecast",
         action: "created",
         ip_address: "123.345.1",
-        username: user.username
+        username: user.username,
       });
       const data = response.data;
       console.log("addUserLoggerData", data);

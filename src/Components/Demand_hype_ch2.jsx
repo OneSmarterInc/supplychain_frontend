@@ -16,6 +16,7 @@ const Demand_hype_ch2 = ({ setHypeCh2ValuetoParent }) => {
   const demandData = JSON.parse(localStorage.getItem("demandData"));
   const regions = ["region1", "region2", "region3"];
 
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const [hypeCh2Value, setHypeCh2Value] = useState({
     Active: { ...demandData?.hyperware_channel_two_active },
     Price: { ...demandData?.hyperware_channel_two_price },
@@ -39,16 +40,16 @@ const Demand_hype_ch2 = ({ setHypeCh2ValuetoParent }) => {
   return (
     <Box>
       <Text className="p-5 py-3 pb-0 text-xl">
-        <strong>Hypeware Channel 2</strong>
+      <strong>{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}- {selectedSim[0]?.renamedMappedData?.HyperwareChannelMapp?.channel2}  </strong>
       </Text>
       <br />
       <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>
         <Thead>
-          <Tr>
-            <Th> </Th>
-            {regions.map((region) => (
-              <Th key={region}>{region}</Th>
-            ))}
+        <Tr>
+          <Th fontWeight="bold">{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region1}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region2}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region3}</Th>
           </Tr>
         </Thead>
         <Tbody>

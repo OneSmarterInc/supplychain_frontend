@@ -1,4 +1,4 @@
-import { Select, Text, HStack } from "@chakra-ui/react";
+import { Select, Text, HStack, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import Chart from "react-apexcharts"; // Ensure you've installed react-apexcharts
@@ -21,7 +21,7 @@ const AdminSideLiveFunction = ({
 
   const { api } = useContext(MyContext);
   simData = JSON.parse(simData);
-
+  const toast = useToast();
   const filteredSimulation = simData.filter(
     (item) => item.simulation_id === parseInt(id)
   );
@@ -42,6 +42,18 @@ const AdminSideLiveFunction = ({
   const [selectedFirm, setSelectedFirm] = useState(null);
 
   const firm_key = Object.keys(filteredSimulation[0]?.firm_data)[0];
+
+  let firm_key_new = "";
+  if (filteredSimulation[0]?.firm_data.length) {
+    let firm_obj = filteredSimulation[0]?.firm_data.filter((item, index) => {
+
+      return item.emails.includes(user.email);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
+  console.log("Firm Key admin Live Sim: -------", firm_key_new);
 
   const option = [];
   for (let i = 1; i <= filteredSimulation[0]?.current_quarter; i++) {
@@ -89,7 +101,7 @@ const AdminSideLiveFunction = ({
     // Make a GET request with the constructed URL
     try {
       const response = await axios.get(url);
-      console.log("GET request successful", response.data);
+      // console.log("GET request successful", response.data);
       localStorage.setItem("reportData", JSON.stringify(response.data));
     } catch (error) {
       console.error("Error making GET request:", error);
@@ -113,9 +125,16 @@ const AdminSideLiveFunction = ({
           email: newAdminEmail,
         },
       });
-      console.log("Admin added:", response.data);
+      // console.log("Admin added:", response.data);
       setIsAddAdminInputModalOpen(false);
       setNewAdminEmail("");
+      toast({
+        title: "Submit Successful",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       console.error("Error adding admin:", error);
     }
@@ -124,15 +143,18 @@ const AdminSideLiveFunction = ({
   const handleAddUser = async () => {
     try {
       const response = await axios.post(
-        `${api}/firmsbyadmin/?admin_id=${user.userid}&email=${newUserEmail}&firm_key=${selectedFirm.firm_key}&simulation_id=${filteredSimulation[0]?.simulation_id}`,
-        {
-          firm_key: firm_key,
-          users: newUserEmail,
-        }
+        `${api}/firmsbyadmin/?admin_id=${user.userid}&email=${newUserEmail}&firm_key=${selectedFirm.firm_key}&simulation_id=${filteredSimulation[0]?.simulation_id}`
       );
-      console.log("User added:", response.data);
+      // console.log("User added:", response.data);
       setIsAddUserInputModalOpen(false);
       setNewUserEmail("");
+      toast({
+        title: "Submit Successful",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       console.error("Error adding admin:", error);
     }
@@ -145,11 +167,11 @@ const AdminSideLiveFunction = ({
         params: {
           admin_id: user.userid,
           simulation_id: filteredSimulation[0]?.simulation_id,
-          firm_key: firm_key,
+          firm_key: firm_key_new,
           email: user.email,
         },
       });
-      console.log("Firms by admin:", response.data);
+      // console.log("Firms by admin:", response.data);
       setFirms(response.data);
     } catch (error) {
       console.error("Error adding admin:", error);

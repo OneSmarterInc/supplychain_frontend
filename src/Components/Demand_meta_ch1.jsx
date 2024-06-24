@@ -16,6 +16,7 @@ const Demand_meta_ch1 = ({ setMetaCh1ValuetoParent }) => {
   const demandData = JSON.parse(localStorage.getItem("demandData"));
   const regions = ["region1", "region2", "region3"];
 
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const [metaCh1Value, setMetaCh1Value] = useState({
     Active: { ...demandData?.metaware_channel_one_active },
     Price: { ...demandData?.metaware_channel_one_price },
@@ -39,16 +40,16 @@ const Demand_meta_ch1 = ({ setMetaCh1ValuetoParent }) => {
   return (
     <Box>
       <Text className="p-5 py-3 pb-0 text-xl">
-        <strong>Metaware Channel 1</strong>
+      <strong>{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}- {selectedSim[0]?.renamedMappedData?.MetawareChannelMapp?.channel1}  </strong>
       </Text>
       <br />
       <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>
         <Thead>
-          <Tr>
-            <Th> </Th>
-            {regions.map((region) => (
-              <Th key={region}>{region}</Th>
-            ))}
+        <Tr>
+        <Th fontWeight="bold">{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region1}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region2}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region3}</Th>
           </Tr>
         </Thead>
         <Tbody>

@@ -3,6 +3,7 @@ import { Table, Thead, Tbody, Tr, Th, Td, Input, Text } from "@chakra-ui/react";
 
 const Forecasting_sales2 = ({ setForecastMetawaretopass }) => {
   const forecastData = JSON.parse(localStorage.getItem("ForecastData"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   console.log("ForecastData:==", forecastData);
 
   const initialForecast = {
@@ -50,17 +51,31 @@ const Forecasting_sales2 = ({ setForecastMetawaretopass }) => {
       >
         <Thead>
           <Tr>
-            <Th>Metaware</Th>
-            <Th>Region 1</Th>
-            <Th>Region 2</Th>
-            <Th>Region 3</Th>
+            <Th fontWeight="bold">
+              {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
+            </Th>
+            <Th>
+              {selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region1}
+            </Th>
+            <Th>
+              {selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region2}
+            </Th>
+            <Th>
+              {selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region3}
+            </Th>
           </Tr>
         </Thead>
         <Tbody>
           {Object.keys(ForecastMetaware).map((channel) => (
             <Tr key={channel}>
               <Td>
-                <strong>{channel}</strong>
+                <strong>
+                  {selectedSim[0]?.renamedMappedData?.MetawareChannelMapp
+                    ?.channel
+                    ? selectedSim[0]?.renamedMappedData?.MetawareChannelMapp
+                        ?.channel
+                    : channel}
+                </strong>
               </Td>
               <Td>
                 <Input

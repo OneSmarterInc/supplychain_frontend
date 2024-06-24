@@ -1,11 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Table, Thead, Tbody, Tr, Th, Td, Input, Text } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Input,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import InfoImg from "../Components/InfoImg";
 import NavBar from "../Components/NavBar";
 // import DataChart from "../Components/DataChart";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import ManufacturingDataChart from "../DataChartsOfDecisions/Manufacturing/ManufacturingDataChart";
+import { useNavigate } from "react-router-dom";
 
 const Manufacturing_Decisions = () => {
   const { api } = useContext(MyContext);
@@ -31,6 +42,16 @@ const Manufacturing_Decisions = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  let firm_key_new = "";
+  if (selectedSim[0]?.firm_data.length) {
+    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
+      return item.emails.includes(user.email);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
+  console.log("Firm Key demand Live Sim: -------", firm_key_new);
 
   useEffect(() => {
     getManufacturing();
@@ -60,19 +81,16 @@ const Manufacturing_Decisions = () => {
 
   const getManufacturing = async () => {
     try {
-      const response = await axios.get(
-        `${api}/previous/`,
-        {
-          params: {
-            user_id: user.userid,
-            sim_id: selectedSim[0].simulation_id,
-            admin_id: selectedSim[0].admin_id,
-            current_decision: "Manufacture",
-            current_quarter: selectedSim[0].current_quarter,
-            firm_key: firm_data,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSim[0].simulation_id,
+          admin_id: selectedSim[0].admin_id,
+          current_decision: "Manufacture",
+          current_quarter: selectedSim[0].current_quarter,
+          firm_key: firm_key_new,
+        },
+      });
       const data = response.data;
       setManufacturingData(data);
       localStorage.setItem("ManufacturingData", JSON.stringify(data));
@@ -80,14 +98,15 @@ const Manufacturing_Decisions = () => {
       console.error("Error making GET request:", error);
     }
   };
-
+  const toast = useToast();
+  const navigate = useNavigate();
   const submitManufacturing = async () => {
     try {
       const response = await axios.post(`${api}/decision/manufacture/`, {
         simulation_id: selectedSim[0].simulation_id,
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
-        firm_key: firm_data,
+        firm_key: firm_key_new,
         quarter: selectedSim[0].current_quarter,
         production_zero: Number(values.Production.productZero),
         production_hyperware: Number(values.Production.hyperware),
@@ -103,7 +122,15 @@ const Manufacturing_Decisions = () => {
       });
       console.log("POST request successful", response.data);
       getManufacturing();
-      addUserLogger()
+      addUserLogger();
+      toast({
+        title: "Manufacturing successful",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      navigate("/distribution");
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
     }
@@ -118,7 +145,7 @@ const Manufacturing_Decisions = () => {
         decision: "Forecast",
         action: "created",
         ip_address: "123.345.1",
-        username: user.username
+        username: user.username,
       });
       const data = response.data;
       console.log("addUserLoggerData", data);
@@ -176,8 +203,19 @@ const Manufacturing_Decisions = () => {
                   <Tr>
                     <Th fontWeight="bold"></Th>
                     <Th>Product Zero</Th>
-                    <Th>Hyperware</Th>
-                    <Th>Metaware</Th>
+
+                    <Th>
+                      {
+                        selectedSim[0]?.renamedMappedData?.dataVariabllesMapp
+                          ?.hyperware
+                      }
+                    </Th>
+                    <Th>
+                      {
+                        selectedSim[0]?.renamedMappedData?.dataVariabllesMapp
+                          ?.metaware
+                      }
+                    </Th>
                   </Tr>
                 </Thead>
                 <Tbody>

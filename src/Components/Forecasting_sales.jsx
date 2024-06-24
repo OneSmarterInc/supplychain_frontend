@@ -3,6 +3,7 @@ import { Table, Thead, Tbody, Tr, Th, Td, Input, Text } from "@chakra-ui/react";
 
 const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
   const forecastData = JSON.parse(localStorage.getItem("ForecastData"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   console.log("ForecastData:==", forecastData);
 
   const initialForecast = {
@@ -34,7 +35,7 @@ const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
   useEffect(() => {
     setForecastHyperwaretopass(ForecastHyperware);
   }, [ForecastHyperware, setForecastHyperwaretopass]);
-
+console.log("Renamed:-", selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware)
   return (
     <>
       <Text className="p-5 py-3 text-lg">
@@ -49,17 +50,23 @@ const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
       >
         <Thead fontWeight="bold">
           <Tr>
-            <Th fontWeight="bold">Hyperware</Th>
-            <Th>Region 1</Th>
-            <Th>Region 2</Th>
-            <Th>Region 3</Th>
+            <Th fontWeight="bold">{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region1}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region2}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region3}</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {Object.keys(ForecastHyperware).map((channel) => (
+          {Object.keys(ForecastHyperware).map((channel, index) => (
             <Tr key={channel}>
               <Td>
-                <strong>{channel}</strong>
+              <strong>
+                  {selectedSim[0]?.renamedMappedData?.MetawareChannelMapp
+                    ?.channel
+                    ? selectedSim[0]?.renamedMappedData?.MetawareChannelMapp
+                        ?.channel
+                    : channel}
+                </strong>
               </Td>
               <Td>
                 <Input

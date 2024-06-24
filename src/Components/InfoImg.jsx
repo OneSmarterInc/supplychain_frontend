@@ -7,9 +7,10 @@ import service from "../assets/service.png";
 import transport from "../assets/transport.png";
 import manufacturing from "../assets/manufacturing.png";
 import procurement from "../assets/procurement.png";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const InfoImg = () => {
+  const navigate = useNavigate()
   const location = useLocation();
   const pathname = location.pathname;
   return (
@@ -32,7 +33,7 @@ const InfoImg = () => {
             width: "900px",
           }}
         />
-        <div className="absolute left-16 flex bottom-0 flex-row py-2 justify-center">
+        <div className="absolute  flex bottom-0 flex-row py-2 justify-center">
           <div
             style={{ backgroundColor: "whitesmoke" }}
             className="bg-slate-300 h-16 px-2 flex items-center  m-1 rounded-lg "
@@ -47,10 +48,13 @@ const InfoImg = () => {
           </div>
           <div
             style={{ backgroundColor: "whitesmoke" }}
-            className="bg-slate-300 px-2 h-16  m-1 rounded-lg  "
+            className="bg-slate-300 px-2 h-16  m-1 rounded-lg"
           >
             <h2 className="text-base p-1 pb-0">Deadline:</h2>
             <h2 className="text-base p-1 pt-0">15:00 EST 30-Aug-2023</h2>
+          </div>
+          <div className="m-auto">
+            <button onClick={()=>navigate("/inventory")} className="p-2 bg-yellow-500 rounded-md">Inventory</button>
           </div>
         </div>
       </div>

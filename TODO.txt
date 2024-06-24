@@ -1,0 +1,6 @@
+note: 
+1. quarters navbar transportation missins
+2. ended mapping live
+3. name change of decisions
+4. current date to start date
+5. which region to show in service
