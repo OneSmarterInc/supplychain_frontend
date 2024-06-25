@@ -29,6 +29,15 @@ const ForecastDataChart = ({
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
   user = user.email;
+  let firm_key_new = "";
+  if (simData[0]?.firm_data.length) {
+    let firm_obj = simData[0]?.firm_data.filter((item, index) => {
+      return item.emails.includes(user);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
 
   const option = [];
   for (let i = 1; i <= simData[0].current_quarter; i++) {
@@ -85,12 +94,12 @@ const ForecastDataChart = ({
     const queryParams = new URLSearchParams({
       simulation_id: simData[0].simulation_id,
       quarter: firstDropdownValue,
-      firm: Object.keys(simData[0]?.firm_data)[0],
+      firm: firm_key_new,
     }).toString();
 
     // Append the query parameters to the URL
     const url = `${api}/reports/${
-      newDropdownValue ? newDropdownValue : "cpl"
+      newDropdownValue ? newDropdownValue : ""
     }/?${queryParams}`;
 
     // Make a GET request with the constructed URL
@@ -162,6 +171,7 @@ const ForecastDataChart = ({
             border="1px solid black"
             onChange={(e) => handleButtonClick(e)}
           >
+            <option value="">Select </option>
             <option value="cpl">Corporate P&L Statement </option>
             <option value="hpl">Historical Corporate P&L Statement</option>
             <option value="pcpl">Hyperware P&L Statement</option>
@@ -180,7 +190,7 @@ const ForecastDataChart = ({
           {secondDropdownValue === "mpls" ? <ReportModal /> : null}
           {secondDropdownValue === "bl" ? <ReportModal /> : null}
           {secondDropdownValue === "cfar" ? <ReportModal /> : null}
-          {secondDropdownValue === "inventory" ? <FGInventoryModal/> : null}
+          {secondDropdownValue === "inventory" ? <FGInventoryModal /> : null}
           {secondDropdownValue === "pir" ? <ReportModal /> : null}
           {secondDropdownValue === "odvr" ? <ReportModal /> : null}
           {secondDropdownValue === "far" ? <ReportModal /> : null}

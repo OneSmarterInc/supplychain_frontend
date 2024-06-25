@@ -59,14 +59,14 @@ const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
     setFirstDropdownValue(e.target.value);
   };
 
-  useEffect(() => {
-    const e = {
-      target: {
-        value: "cpl",
-      },
-    };
-    handleButtonClick(e);
-  }, []);
+  // useEffect(() => {
+  //   const e = {
+  //     target: {
+  //       value: "",
+  //     },
+  //   };
+  //   handleButtonClick(e);
+  // }, []);
 
   const handleButtonClick = async (e) => {
     const newDropdownValue = e.target.value;
@@ -81,7 +81,7 @@ const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
 
     // Append the query parameters to the URL
     const url = `${api}/reports/${
-      newDropdownValue ? newDropdownValue : "cpl"
+      newDropdownValue ? newDropdownValue : ""
     }/?${queryParams}`;
 
     // Make a GET request with the constructed URL
@@ -95,7 +95,7 @@ const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
   };
 
   return (
-    <div className="flex h-80 bg-slate-200 justify-around items-center mx-10 rounded-lg border-2 border-neutral-600">
+    <div className="flex mt-4 bg-slate-200 justify-around items-center mx-10 rounded-lg border-2 border-neutral-600">
       <div className="info">
         <h2 className="text-3xl p-2 underline underline-offset-1">
           {batch} |
@@ -161,6 +161,7 @@ const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
                   onChange={(e) => handleButtonClick(e)}
                   value={secondDropdownValue}
                 >
+                  <option value="">Select</option>
                   <option value="cpl">Corporate P&L Statement</option>
                   <option value="hpl">
                     Historical Corporate P&L Statement

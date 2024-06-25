@@ -1,24 +1,22 @@
 import { useToast } from "@chakra-ui/react";
-import axios from "axios";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../Components/ContextApi/MyContext";
 
 const QuarterDetails = () => {
-  const noOfQuarters = localStorage.getItem("noOfQuarters");
+  const noOfQuarters = parseInt(localStorage.getItem("noOfQuarters"));
   const createSimData = JSON.parse(localStorage.getItem("createSimData"));
   const navigate = useNavigate();
   const toast = useToast();
 
   const { api } = useContext(MyContext);
 
-  const getInitialQuarterState = (index) => {
-    const currentDate = new Date();
-    const startDate = new Date(currentDate);
-    startDate.setDate(startDate.getDate() + index * 10);
+  const getInitialQuarterState = (startDate, index) => {
+    const start = new Date(startDate);
+    start.setDate(start.getDate() + index * 10);
 
-    const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 5);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 5);
 
     return {
       is_procurement: true,
@@ -29,32 +27,20 @@ const QuarterDetails = () => {
       is_forecasting: true,
       is_it: true,
       is_transportation: true,
-      quarter_start_date: startDate.toISOString().split("T")[0], // Format as YYYY-MM-DD
-      quarter_end_date: endDate.toISOString().split("T")[0], // Format as YYYY-MM-DD
+      quarter_start_date: start.toISOString().split("T")[0], // Format as YYYY-MM-DD
+      quarter_end_date: end.toISOString().split("T")[0], // Format as YYYY-MM-DD
       quarter_start_time: "10:00",
       quarter_end_time: "18:00",
     };
   };
 
+  const initialStartDate = new Date();
+  initialStartDate.setDate(initialStartDate.getDate() + 1); // Set to tomorrow's date
   const [quarters, setQuarters] = useState(
     Array.from({ length: noOfQuarters }, (_, index) =>
-      getInitialQuarterState(index)
+      getInitialQuarterState(initialStartDate, index)
     )
   );
-  console.log(
-    "quarters data",
-    quarters.reduce((prev, quarter, index) => {
-      prev[`quarter${index + 1}`] = quarter;
-      return prev;
-    }, {})
-  );
-  const combineSimData = {
-    ...createSimData,
-    quarter_specific_decisions: quarters.reduce((prev, quarter, index) => {
-      prev[`quarter${index + 1}`] = quarter;
-      return prev;
-    }, {}),
-  };
 
   const handleCheckboxChange = (index, field) => {
     setQuarters((prevQuarters) => {
@@ -71,11 +57,36 @@ const QuarterDetails = () => {
         ...updatedQuarters[index],
         [field]: value,
       };
+
+      // If the start date is changed, update subsequent quarters
+      if (field === "quarter_start_date") {
+        let startDate = new Date(value);
+        for (let i = index; i < updatedQuarters.length; i++) {
+          startDate.setDate(startDate.getDate() + (i === index ? 0 : 5)); // 5 days gap
+          const endDate = new Date(startDate);
+          endDate.setDate(endDate.getDate() + 5);
+
+          updatedQuarters[i] = {
+            ...updatedQuarters[i],
+            quarter_start_date: startDate.toISOString().split("T")[0],
+            quarter_end_date: endDate.toISOString().split("T")[0],
+          };
+        }
+      }
       return updatedQuarters;
     });
   };
 
+  const combineSimData = {
+    ...createSimData,
+    quarter_specific_decisions: quarters.reduce((prev, quarter, index) => {
+      prev[`quarter${index + 1}`] = quarter;
+      return prev;
+    }, {}),
+  };
+
   localStorage.setItem("combineSimData", JSON.stringify(combineSimData));
+
   const handleSubmit = async () => {
     try {
       navigate("/createsim?step=3");
@@ -117,7 +128,7 @@ const QuarterDetails = () => {
                         (key === "is_service" && "Service") ||
                         (key === "is_demand_gen" && "Demand Generation") ||
                         (key === "is_forecasting" && "Forecasting") ||
-                        (key === "is_it" && "It") ||
+                        (key === "is_it" && "IT") ||
                         (key === "is_transportation" && "Transportation")}
                     </label>
                   </div>

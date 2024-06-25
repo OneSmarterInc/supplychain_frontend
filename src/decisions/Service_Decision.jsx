@@ -26,7 +26,7 @@ const Service_Decision = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const toast = useToast();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [serviceValue, setServiceValue] = useState({
     region1: "",
     region2: "",
@@ -41,7 +41,6 @@ const Service_Decision = () => {
   let firm_key_new = "";
   if (selectedSim[0]?.firm_data.length) {
     let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
-
       return item.emails.includes(user.email);
     });
     if (firm_obj.length) {
@@ -106,7 +105,7 @@ const Service_Decision = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/demand")
+      navigate("/demand");
       console.log("POST request successful", response.data);
     } catch (error) {
       console.error("Error making POST request: Service", error);
@@ -167,9 +166,27 @@ const Service_Decision = () => {
                 <Thead>
                   <Tr>
                     <Th> </Th>
-                    {regions.map((region) => (
+                    {/* {regions.map((region) => (
                       <Th key={region}>{region}</Th>
-                    ))}
+                    ))} */}
+                    <Th>
+                      {
+                        selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp
+                          ?.region1
+                      }
+                    </Th>
+                    <Th>
+                      {
+                        selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp
+                          ?.region2
+                      }
+                    </Th>
+                    <Th>
+                      {
+                        selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp
+                          ?.region3
+                      }
+                    </Th>
                   </Tr>
                 </Thead>
                 <Tbody>

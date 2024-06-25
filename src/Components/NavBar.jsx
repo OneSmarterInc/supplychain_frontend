@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ProfileDropdown from "./Profile";
 
 const NavBar = () => {
   let id = localStorage.getItem("selectedSimulation");
@@ -24,14 +25,14 @@ const NavBar = () => {
     <div>
       <nav style={{ fontFamily: "ABeeZee" }} className="">
         <div className="flex flex-col items-center justify-center sm:items-stretch sm:justify-between">
-          <div className=" bg-gray-800 py-2 px-3 flex justify-between items-center  ">
+          <div className=" bg-gray-800 py-1 px-3 flex justify-between items-center  ">
             <div className="text-2xl text-white font-bold ">
               Supplychain Simulation
             </div>
-            <div className="text-2xl w-32 flex justify-between mx-3 text-white font-bold pl-14">
-              <Link to="/" className="">
-                <i className="fa-solid fa-user cursor-pointer"></i>
-              </Link>
+            <div className="text-2xl font-serif w-40 flex justify-between items-center mx-3 text-white font-bold pl-14">
+              <div className="mx-3">
+                <ProfileDropdown />
+              </div>
               <Link to="/" className="">
                 <i className="fa-solid fa-house cursor-pointer"></i>
               </Link>
@@ -71,16 +72,6 @@ const NavBar = () => {
                   Distribution
                 </Link>
               )}
-
-              {decisions?.is_transportation === true && (
-                <Link
-                  to="/transportation"
-                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
-                >
-                  Transport
-                </Link>
-              )}
-
               {decisions?.is_service === true && (
                 <Link
                   to="/service"
@@ -97,13 +88,20 @@ const NavBar = () => {
                   Demand
                 </Link>
               )}
-
               {decisions?.is_it === true && (
                 <Link
                   to="/it"
                   className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
                 >
                   IT
+                </Link>
+              )}{" "}
+              {decisions?.is_transportation === true && (
+                <Link
+                  to="/transportation"
+                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
+                >
+                  Transport
                 </Link>
               )}
             </div>

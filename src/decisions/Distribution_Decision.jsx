@@ -232,11 +232,9 @@ const Distribution_Decision = () => {
                 <Thead>
                   <Tr>
                     <Th> </Th>
-                    {regions.map((region) => (
-                      <Th key={region}>
-                        {region.charAt(0).toUpperCase() + region.slice(1)}
-                      </Th>
-                    ))}
+                    <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region1}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region2}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region3}</Th>
                   </Tr>
                 </Thead>
                 <Tbody>

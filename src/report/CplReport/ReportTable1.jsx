@@ -9,6 +9,15 @@ const ReportTable1 = () => {
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
+  let firm_key_new = "";
+  if (selectedSim[0]?.firm_data.length) {
+    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
+      return item.emails.includes(user.email);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
   const userEmail = user.email;
 
   const salesData = reportData[0];
@@ -24,7 +33,7 @@ const ReportTable1 = () => {
     <div>
       <div className="heading flex justify-between font-bold">
         <div>
-          <p>Firm : {Object.keys(selectedSim[0]?.firm_data)[0]}</p>
+          <p>Firm : {firm_key_new}</p>
           <p>
             PERFORMANCE Product REPORT, MONTH {selectedSim[0].current_quarter}
           </p>

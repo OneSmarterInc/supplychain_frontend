@@ -5,6 +5,7 @@ import MyContext from "../Components/ContextApi/MyContext";
 import { useToast } from "@chakra-ui/react";
 import AdminNavBar from "../Components/AdminNavBar";
 import UserSideEndedFunction from "./Ended_simulation_function";
+import UserNavBar from "../Components/UserNavBar";
 
 const UserSideEnded = () => {
   const { api } = useContext(MyContext);
@@ -73,7 +74,7 @@ const UserSideEnded = () => {
 
   return (
     <div>
-      <AdminNavBar />
+      <UserNavBar />
       <h2 className="text-3xl p-2 pl-10 ">Live Simulation</h2>
       {simData
         .filter((item) => item.is_active === false)
