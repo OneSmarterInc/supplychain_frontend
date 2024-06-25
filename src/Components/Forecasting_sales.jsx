@@ -35,11 +35,17 @@ const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
   useEffect(() => {
     setForecastHyperwaretopass(ForecastHyperware);
   }, [ForecastHyperware, setForecastHyperwaretopass]);
-console.log("Renamed:-", selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware)
+  console.log(
+    "Renamed:-",
+    selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware
+  );
   return (
     <>
       <Text className="p-5 py-3 text-lg">
-        <strong>Sales Volume Forecast Product : Hyperware</strong>
+        <strong>
+          Sales Volume Forecast Product :{" "}
+          {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
+        </strong>
       </Text>
       <Table
         variant="striped"
@@ -50,21 +56,21 @@ console.log("Renamed:-", selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.
       >
         <Thead fontWeight="bold">
           <Tr>
-            <Th fontWeight="bold">{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}</Th>
-            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region1}</Th>
-            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region2}</Th>
-            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region3}</Th>
+            <Th fontWeight="bold">
+              {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
+            </Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region3}</Th>
           </Tr>
         </Thead>
         <Tbody>
           {Object.keys(ForecastHyperware).map((channel, index) => (
             <Tr key={channel}>
               <Td>
-              <strong>
-                  {selectedSim[0]?.renamedMappedData?.MetawareChannelMapp
-                    ?.channel
-                    ? selectedSim[0]?.renamedMappedData?.MetawareChannelMapp
-                        ?.channel
+                <strong>
+                  {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel
+                    ? selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel
                     : channel}
                 </strong>
               </Td>

@@ -30,7 +30,6 @@ const Distribution_Decision = () => {
   let firm_key_new = "";
   if (selectedSim[0]?.firm_data.length) {
     let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
-
       return item.emails.includes(user.email);
     });
     if (firm_obj.length) {
@@ -143,7 +142,7 @@ const Distribution_Decision = () => {
   };
 
   const toast = useToast();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const submitDistribution = async () => {
     try {
@@ -170,7 +169,7 @@ const Distribution_Decision = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/service")
+      navigate("/service");
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
     }
@@ -186,7 +185,7 @@ const Distribution_Decision = () => {
         decision: "Forecast",
         action: "created",
         ip_address: "123.345.1",
-        username: user.username
+        username: user.username,
       });
       const data = response.data;
       console.log("addUserLoggerData", data);
@@ -232,9 +231,24 @@ const Distribution_Decision = () => {
                 <Thead>
                   <Tr>
                     <Th> </Th>
-                    <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region1}</Th>
-            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region2}</Th>
-            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region3}</Th>
+                    <Th>
+                      {
+                        selectedSim[0]?.renamedMappedData?.RegionMapp
+                          ?.region1
+                      }
+                    </Th>
+                    <Th>
+                      {
+                        selectedSim[0]?.renamedMappedData?.RegionMapp
+                          ?.region2
+                      }
+                    </Th>
+                    <Th>
+                      {
+                        selectedSim[0]?.renamedMappedData?.RegionMapp
+                          ?.region3
+                      }
+                    </Th>
                   </Tr>
                 </Thead>
                 <Tbody>

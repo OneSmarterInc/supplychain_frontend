@@ -50,10 +50,12 @@ const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
       <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>
         <Thead>
         <Tr>
-          <Th fontWeight="bold">{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}</Th>
-            <Th>{selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region1}</Th>
-            <Th>{selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region2}</Th>
-            <Th>{selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region3}</Th>
+        <Th fontWeight="bold">
+              {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}
+            </Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region3}</Th>
           </Tr>
         </Thead>
         <Tbody>

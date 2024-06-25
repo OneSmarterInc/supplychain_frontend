@@ -72,7 +72,7 @@ const InfoImg = () => {
             className="bg-slate-300 px-2 h-16  m-1 rounded-lg"
           >
             <h2 className="text-base p-1 pb-0">Deadline:</h2>
-            <h2 className="text-base p-1 pt-0">{selectedSim[0]?.decision_close} EST {formatDate(selectedSim[0]?.end_date)}</h2>
+            <h2 className="text-base p-1 pt-0">{selectedSim[0]?.decision_close.slice(0,5)} EST {formatDate(selectedSim[0]?.end_date)}</h2>
           </div>
           <div className="m-auto">
             <button onClick={()=>navigate("/inventory")} className="p-2 bg-yellow-500 rounded-md">Inventory</button>

@@ -30,7 +30,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
         <thead>
           <tr className="bg-slate-300  ">
             <th className="text-center py-3 text-lg font-medium ">Entries</th>
-            {/* <th className="text-center py-3 text-lg ">Demands</th> */}
+        
             <th className="text-center py-3 text-lg font-medium">Units</th>
           </tr>
         </thead>
@@ -39,7 +39,6 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
             <td className="text-center py-0 text-lg bg-blue-gray-100 rounded-md ">
               {selectedSim[0]?.renamedMappedData?.componentMapp?.alpha}
             </td>
-            {/* <td className="text-center py-3 text-lg ">15000 </td> */}
             <td className="text-center py-3 text-lg ">
               <input
                 id="alpha-input"
