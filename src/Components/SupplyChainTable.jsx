@@ -8,16 +8,25 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
   const [activeDC, setActiveDC] = useState("DC1"); // Track active DC
   const procurementData = JSON.parse(localStorage.getItem("procurementData"));
 
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const supplierOptions = [
     "Select",
-    "supplierA",
-    "supplierB",
-    "supplierC",
-    "supplierD",
+    selectedSim[0]?.renamedMappedData?.suppliarMapp["A"],
+    
+    selectedSim[0]?.renamedMappedData?.suppliarMapp["B"],
+    
+    selectedSim[0]?.renamedMappedData?.suppliarMapp["C"],
+    
+    selectedSim[0]?.renamedMappedData?.suppliarMapp["D"],
+    
+    selectedSim[0]?.renamedMappedData?.suppliarMapp["E"],
+    
+    selectedSim[0]?.renamedMappedData?.suppliarMapp["F"],
+    
+    selectedSim[0]?.renamedMappedData?.suppliarMapp["G"],
   ];
   const mediumOptions = ["Select", "Air", "Surface"];
 
-  // State variables to hold data for each DC
   const [dcData, setDcData] = useState({});
 
   useEffect(() => {
@@ -52,20 +61,11 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
       ...prevData,
       [dc]: [...prevData[dc], newEntry],
     }));
-
-    // Scroll to the bottom of the table when a new entry is added
     if (tableRef.current) {
       tableRef.current.scrollTop = tableRef.current.scrollHeight;
     }
   };
-  // // Scroll to the bottom of the table when a new entry is added
-  // useEffect(() => {
-  //   if (tableRef.current) {
-  //     tableRef.current.scrollBottom = tableRef.current.scrollHeight;
-  //   }
-  // }, [dcData]);
 
-  // Function to pass updated data to the parent component
   setUpdatedDCData(dcData);
 
   return (

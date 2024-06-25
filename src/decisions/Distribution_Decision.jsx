@@ -135,8 +135,22 @@ const Distribution_Decision = () => {
   const options = {
     distribution_centerOpt: [0, 1],
     rfidOpt: [0, 1],
-    emergency_carrierOpt: ["I", "J", "K", "L", "M", "N"],
-    cross_dockingOpt: ["I", "J", "K", "L", "M", "N"],
+    emergency_carrierOpt: [
+      selectedSim[0]?.renamedMappedData?.distributerMapp["I"],
+      selectedSim[0]?.renamedMappedData?.distributerMapp["J"],
+      selectedSim[0]?.renamedMappedData?.distributerMapp["K"],
+      selectedSim[0]?.renamedMappedData?.distributerMapp["L"],
+      selectedSim[0]?.renamedMappedData?.distributerMapp["M"],
+      selectedSim[0]?.renamedMappedData?.distributerMapp["N"],
+    ],
+    cross_dockingOpt: [
+      selectedSim[0]?.renamedMappedData?.distributerMapp["I"],
+      selectedSim[0]?.renamedMappedData?.distributerMapp["J"],
+      selectedSim[0]?.renamedMappedData?.distributerMapp["K"],
+      selectedSim[0]?.renamedMappedData?.distributerMapp["L"],
+      selectedSim[0]?.renamedMappedData?.distributerMapp["M"],
+      selectedSim[0]?.renamedMappedData?.distributerMapp["N"],
+    ],
     fgi_surface_shippingOpt: [0, 1],
     sac_surface_shippingOpt: [0, 1],
   };
@@ -232,22 +246,13 @@ const Distribution_Decision = () => {
                   <Tr>
                     <Th> </Th>
                     <Th>
-                      {
-                        selectedSim[0]?.renamedMappedData?.RegionMapp
-                          ?.region1
-                      }
+                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}
                     </Th>
                     <Th>
-                      {
-                        selectedSim[0]?.renamedMappedData?.RegionMapp
-                          ?.region2
-                      }
+                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}
                     </Th>
                     <Th>
-                      {
-                        selectedSim[0]?.renamedMappedData?.RegionMapp
-                          ?.region3
-                      }
+                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region3}
                     </Th>
                   </Tr>
                 </Thead>
