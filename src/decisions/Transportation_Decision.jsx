@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
-  HStack,
-  Select,
   Box,
   Table,
   Thead,
@@ -14,7 +12,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
-// import DataChart from "../Components/DataChart";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
@@ -23,15 +20,133 @@ import { useNavigate } from "react-router-dom";
 
 const Transportation_Decision = () => {
   const { api } = useContext(MyContext);
-  const regions = ["carrier", "medium"];
-  const [Dc1Data, setDc1Data] = useState({
-    row1: { product: "", carrier: "", medium: "", units: "" },
-    row2: { product: "", carrier: "", medium: "", units: "" },
-    row3: { product: "", carrier: "", medium: "", units: "" },
-    row4: { product: "", carrier: "", medium: "", units: "" },
-    row5: { product: "", carrier: "", medium: "", units: "" },
-    row6: { product: "", carrier: "", medium: "", units: "" },
+  const [TransportationData, setTransportationData] = useState(null);
+  useEffect(() => {
+    getTransportation();
+  }, []);
+
+
+  const [Dc2Data, setDc2Data] = useState({
+    product0: {
+      surface: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+      air: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+    },
+    product1: {
+      surface: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+      air: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+    },
+    product2: {
+      surface: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+      air: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+    },
   });
+
+  const [Dc3Data, setDc3Data] = useState({
+    product0: {
+      surface: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+      air: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+    },
+    product1: {
+      surface: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+      air: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+    },
+    product2: {
+      surface: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+      air: {
+        carrierI: "",
+        carrierJ: "",
+        carrierK: "",
+        carrierL: "",
+        carrierM: "",
+        carrierN: "",
+      },
+    },
+  });
+
+  useEffect(() => {
+    if (TransportationData) {
+      setDc2Data(TransportationData?.dc_two);
+      setDc3Data(TransportationData?.dc_three);
+    }
+  }, [TransportationData]);
+  console.log("DC3:", Dc3Data);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
@@ -45,35 +160,19 @@ const Transportation_Decision = () => {
       firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
     }
   }
-  const handleChange = (rowId, field, value, e) => {
-    e.preventDefault();
-    setDc1Data((prevDc1Data) => ({
-      ...prevDc1Data,
-      [rowId]: {
-        ...prevDc1Data[rowId],
-        [field]: value,
+
+  const handleChange = (setDataFunc, product, shipmentType, carrier, value) => {
+    setDataFunc((prevData) => ({
+      ...prevData,
+      [product]: {
+        ...prevData[product],
+        [shipmentType]: {
+          ...prevData[product][shipmentType],
+          [carrier]: value,
+        },
       },
     }));
   };
-
-  const [TransportationData, setTransportationData] = useState();
-  console.log("TransportationData:--", TransportationData);
-  useEffect(() => {
-    getTransportation();
-  }, []);
-
-  useEffect(() => {
-    if (TransportationData) {
-      setDc1Data({
-        row1: { product: "", carrier: "", medium: "", units: "" },
-        row2: { product: "", carrier: "", medium: "", units: "" },
-        row3: { product: "", carrier: "", medium: "", units: "" },
-        row4: { product: "", carrier: "", medium: "", units: "" },
-        row5: { product: "", carrier: "", medium: "", units: "" },
-        row6: { product: "", carrier: "", medium: "", units: "" },
-      });
-    }
-  }, [TransportationData]);
 
   const getTransportation = async () => {
     try {
@@ -94,8 +193,10 @@ const Transportation_Decision = () => {
       console.error("Error making GET request:", error);
     }
   };
+
   const toast = useToast();
   const navigate = useNavigate();
+
   const submitTransportation = async () => {
     try {
       const response = await axios.post(`${api}/decision/transportation/`, {
@@ -104,172 +205,118 @@ const Transportation_Decision = () => {
         user_id: user.userid,
         firm_key: firm_key_new,
         quarter: selectedSim[0].current_quarter,
-        flag_dc2: false,
-        flag_dc3: false,
-        dc_two: Dc1Data,
-        dc_three: null,
+        dc_two: Dc2Data,
+        dc_three: Dc3Data,
       });
       getTransportation();
-      addUserLogger();
       toast({
-        title: "Login successful",
+        title: "Transportation data submitted successfully",
         status: "success",
         duration: 9000,
         isClosable: true,
         position: "top",
       });
       navigate("/usersidelive");
-      console.log("POST request successful", response.data);
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
     }
   };
 
-  const addUserLogger = async () => {
-    try {
-      const response = await axios.post(`${api}/adduserlogs/`, {
-        email: user.email,
-        user_id: user.userid,
-        simulation_id: selectedSim[0].simulation_id,
-        admin_id: selectedSim[0].admin_id,
-        decision: "Forecast",
-        action: "created",
-        ip_address: "123.345.1",
-        username: user.username,
-      });
-      const data = response.data;
-      console.log("addUserLoggerData", data);
-    } catch (error) {
-      console.error("Error making GET request:", error);
-    }
-  };
+  const renderTable = (data, setDataFunc, title) => (
+    <Box>
+      <Text className="p-5 px-8 py-1 font-semibold  text-xl bg-blue-gray-600 text-white">
+        {title}
+      </Text>
+      <Table
+        size="sm"
+        variant="striped"
+        colorScheme="teal"
+        className="bg-slate-300 "
+      >
+        <Thead>
+          <Tr>
+            <Th>Products</Th>
+            <Th>Carrier I</Th>
+            <Th>Carrier J</Th>
+            <Th>Carrier K</Th>
+            <Th>Carrier L</Th>
+            <Th>Carrier M</Th>
+            <Th>Carrier N</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {Object.entries(data).map(([product, shipmentTypes]) =>
+            Object.entries(shipmentTypes).map(
+              ([shipmentType, carriers], index) => (
+                <Tr key={`${product}-${shipmentType}`}>
+                  <Td>{`Product ${product.replace("product", "")}, ${
+                    shipmentType.charAt(0).toUpperCase() + shipmentType.slice(1)
+                  }`}</Td>
+                  {Object.keys(carriers).map((carrier) => (
+                    <Td key={carrier}>
+                      <Input
+                        width={"70px"}
+                        margin={0}
+                        padding={0}
+                        type="number"
+                        size={"sm"}
+                        rounded={"lg"}
+                        value={carriers[carrier]}
+                        onChange={(e) =>
+                          handleChange(
+                            setDataFunc,
+                            product,
+                            shipmentType,
+                            carrier,
+                            e.target.value
+                          )
+                        }
+                        border="1px solid black"
+                      />
+                    </Td>
+                  ))}
+                </Tr>
+              )
+            )
+          )}
+        </Tbody>
+      </Table>
+    </Box>
+  );
 
   return (
     <div>
       <NavBar />
-      <div style={{ fontFamily: "ABeeZee" }} className=" ">
+      <div style={{ fontFamily: "ABeeZee" }}>
         <div className="flex justify-between">
           <h1 className="text-2xl text-start pl-6 py-2 ">
             Transportation Decision
           </h1>
-
           <div className="flex">
-            {" "}
             <h1 className="text-xl text-start px-3 py-2 text-blue-500">
               {selectedSim[0].name}
-            </h1>{" "}
-            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
+            </h1>
+            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>
             <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
               {user.username}
             </h1>
           </div>
         </div>
-        <div className="grid grid-cols-2 grid-flow-col gap-2  m-1">
-          <div className="m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-start">
-            <Box>
-              <Text className="p-5 px-8 py-3 font-semibold pb-0 text-xl">
-                DC 2
-              </Text>
-              <br />
-              <Table
-                variant="simple"
-                className="bg-slate-300 mx-3"
-                width={"650px"}
-              >
-                <Thead>
-                  <Tr>
-                    <Th>Products</Th>
-                    <Th>Carrier</Th>
-                    <Th>Mediums</Th>
-                    <Th>Units</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {Object.entries(Dc1Data).map(([rowId, rowData]) => (
-                    <Tr key={rowId}>
-                      <Td>
-                        <Select
-                          placeholder="Select"
-                          fontSize={15}
-                          width="100%"
-                          border="1px solid black"
-                          size={"sm"}
-                          rounded={"lg"}
-                          value={rowData.product}
-                          onChange={(e) =>
-                            handleChange(rowId, "product", e.target.value, e)
-                          }
-                        >
-                          <option value="Product 0">Product 0</option>
-                          <option value="Product 1">Product 1</option>
-                        </Select>
-                      </Td>
+        <div className="flex  gap-1 m-1">
+          <div className="m-2 rounded-2xl  bg-white p-2 flex flex-col space-y-4 justify-start">
+            <div className=""></div>
 
-                      <Td>
-                        <Select
-                          placeholder="Select"
-                          fontSize={15}
-                          width="100%"
-                          border="1px solid black"
-                          size={"sm"}
-                          rounded={"lg"}
-                          onChange={(e) =>
-                            handleChange(rowId, "carrier", e.target.value, e)
-                          }
-                          value={rowData.carrier}
-                        >
-                          <option value="">Select</option>
-                          <option value="I">I</option>
-                          <option value="J">J</option>
-                          <option value="K">K</option>
-                          <option value="L">L</option>
-                          <option value="M">M</option>
-                          <option value="N">N</option>
-                        </Select>
-                      </Td>
-                      <Td>
-                        <Select
-                          placeholder="Select"
-                          fontSize={15}
-                          width="100%"
-                          size={"sm"}
-                          rounded={"lg"}
-                          border="1px solid black"
-                          onChange={(e) =>
-                            handleChange(rowId, "medium", e.target.value, e)
-                          }
-                          value={rowData.medium}
-                        >
-                          <option value="">Select</option>
-                          <option value="Surface">Surface</option>
-                          <option value="Air">Air</option>
-                        </Select>
-                      </Td>
-                      <Td>
-                        <Input
-                          width={"100px"}
-                          type="number"
-                          size={"sm"}
-                          rounded={"lg"}
-                          value={rowData.units}
-                          onChange={(e) =>
-                            handleChange(rowId, "units", e.target.value, e)
-                          }
-                          border="1px solid black"
-                        />
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </Box>
+            {!TransportationData?.flag_dc2 &&
+              renderTable(Dc2Data, setDc2Data, "DC 2")}
+            {!TransportationData?.flag_dc3 &&
+              renderTable(Dc3Data, setDc3Data, "DC 3")}
           </div>
-          <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
+          <div className="rounded-2xl m-2 overflow-hidden bg-white  p-2">
             <InfoImg />
             <div className="py-10">
               <TransportationDataChart
                 submitTransportation={submitTransportation}
-                Dc1Data={Dc1Data}
+                Dc2Data={Dc2Data}
               />
             </div>
           </div>

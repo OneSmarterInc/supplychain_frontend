@@ -4,3 +4,11 @@ note:
 3. name change of decisions
 4. current date to start date
 5. which region to show in service
+
+6. current date to start date, then calculation quarters*gap of 4
+7. decisions transportation 
+8. change service dropdown to 1,2,3,4
+9. region mapp- same region
+10. default names of renamed data
+11. dynamic popups
+12. remove navigation routes from inventory
