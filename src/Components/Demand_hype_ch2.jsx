@@ -46,10 +46,12 @@ const Demand_hype_ch2 = ({ setHypeCh2ValuetoParent }) => {
       <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>
         <Thead>
         <Tr>
-          <Th fontWeight="bold">{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}</Th>
-            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region1}</Th>
-            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region2}</Th>
-            <Th>{selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp?.region3}</Th>
+        <Th fontWeight="bold">
+              {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
+            </Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region3}</Th>
           </Tr>
         </Thead>
         <Tbody>

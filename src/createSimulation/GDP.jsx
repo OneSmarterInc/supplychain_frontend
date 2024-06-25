@@ -47,62 +47,50 @@ const GDP = () => {
 
   // Renames Mapp
   const [suppliarMapp, setSuppliarMapp] = useState({
-    A: "",
-    B: "",
-    C: "",
-    D: "",
-    E: "",
-    F: "",
-    G: "",
+    A: "A",
+    B: "B",
+    C: "C",
+    D: "D",
+    E: "E",
+    F: "F",
+    G: "G",
   });
   const [distributerMapp, setDistributerMapp] = useState({
-    I: "",
-    J: "",
-    K: "",
-    L: "",
-    M: "",
-    N: "",
+    I: "I",
+    J: "J",
+    K: "K",
+    L: "L",
+    M: "M",
+    N: "N",
   });
 
   const [componentMapp, setComponentMapp] = useState({
-    alpha: "",
-    beta: "",
-    gamma: "",
-    epsilon: "",
-    delta: "",
+    alpha: "alpha",
+    beta: "beta",
+    gamma: "gamma",
+    epsilon: "epsilon",
+    delta: "delta",
   });
 
-  const [HyperwareRegionMapp, setHyperwareRegionMapp] = useState({
-    region1: "",
-    region2: "",
-    region3: "",
+  const [RegionMapp, setRegionMapp] = useState({
+    region1: "region1",
+    region2: "region2",
+    region3: "region3",
   });
-  const [HyperwareChannelMapp, setHyperwareChannelMapp] = useState({
-    channel1: "",
-    channel2: "",
-  });
-
-  const [MetawareRegionMapp, setMetawareRegionMapp] = useState({
-    region1: "",
-    region2: "",
-    region3: "",
-  });
-  const [MetawareChannelMapp, setMetawareChannelMapp] = useState({
-    channel1: "",
-    channel2: "",
+  const [ChannelMapp, setChannelMapp] = useState({
+    channel1: "channel1",
+    channel2: "channel2",
   });
 
   const [renameDataVariable, setRenameDataVariable] = useState({
-    hyperware: "",
-    metaware: "",
+    hyperware: "hyperware",
+    metaware: "metaware",
   });
 
   const renamedMappedData = {
     dataVariabllesMapp: renameDataVariable,
-    HyperwareRegionMapp: HyperwareRegionMapp,
-    HyperwareChannelMapp: HyperwareChannelMapp,
-    MetawareRegionMapp: MetawareRegionMapp,
-    MetawareChannelMapp: MetawareChannelMapp,
+    RegionMapp: RegionMapp,
+    ChannelMapp: ChannelMapp,
     componentMapp: componentMapp,
     distributerMapp: distributerMapp,
     suppliarMapp: suppliarMapp,
@@ -226,14 +214,7 @@ const GDP = () => {
   };
 
   const handleRegionInput = (e) => {
-    setHyperwareRegionMapp((prevData) => ({
-      ...prevData,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleMetawareRegionInput = (e) => {
-    setMetawareRegionMapp((prevData) => ({
+    setRegionMapp((prevData) => ({
       ...prevData,
       [e.target.name]: e.target.value,
     }));
@@ -271,7 +252,7 @@ const GDP = () => {
                       type="text"
                     />
                   </th>
-                  {Object.keys(HyperwareRegionMapp).map((item, index) => {
+                  {Object.keys(RegionMapp).map((item, index) => {
                     return (
                       <th className="px-2 py-2 border border-gray-200">
                         <input
@@ -282,7 +263,7 @@ const GDP = () => {
                             handleRegionInput(e);
                           }}
                           placeholder={item}
-                          value={HyperwareRegionMapp[item]}
+                          value={RegionMapp[item]}
                           className="w-full p-2 border rounded-md"
                         />
                       </th>
@@ -296,11 +277,11 @@ const GDP = () => {
                     <input
                       className="w-full p-2 border rounded-md"
                       placeholder={"channel1"}
-                      value={HyperwareChannelMapp["channel1"]}
+                      value={ChannelMapp["channel1"]}
                       name={"channel1"}
                       onChange={(e) => {
-                        setHyperwareChannelMapp({
-                          ...HyperwareChannelMapp,
+                        setChannelMapp({
+                          ...ChannelMapp,
                           channel1: e.target.value,
                         });
                       }}
@@ -343,11 +324,11 @@ const GDP = () => {
                     <input
                       className="w-full p-2 border rounded-md"
                       placeholder={"channel2"}
-                      value={HyperwareChannelMapp["channel2"]}
+                      value={ChannelMapp["channel2"]}
                       name={"channel2"}
                       onChange={(e) => {
-                        setHyperwareChannelMapp({
-                          ...HyperwareChannelMapp,
+                        setChannelMapp({
+                          ...ChannelMapp,
                           channel2: e.target.value,
                         });
                       }}
@@ -411,7 +392,7 @@ const GDP = () => {
                       type="text"
                     />
                   </th>
-                  {Object.keys(MetawareRegionMapp).map((item, index) => {
+                  {Object.keys(RegionMapp).map((item, index) => {
                     return (
                       <th className="px-2 py-2 border border-gray-200">
                         <input
@@ -419,10 +400,10 @@ const GDP = () => {
                           type="text"
                           name={item}
                           onChange={(e) => {
-                            handleMetawareRegionInput(e);
+                            handleRegionInput(e);
                           }}
                           placeholder={item}
-                          value={MetawareRegionMapp[item]}
+                          value={RegionMapp[item]}
                           className="w-full p-2 border rounded-md"
                         />
                       </th>
@@ -436,11 +417,11 @@ const GDP = () => {
                     <input
                       className="w-full p-2 border rounded-md"
                       placeholder={"channel1"}
-                      value={MetawareChannelMapp["channel1"]}
+                      value={ChannelMapp["channel1"]}
                       name={"channel1"}
                       onChange={(e) => {
-                        setMetawareChannelMapp({
-                          ...MetawareChannelMapp,
+                        setChannelMapp({
+                          ...ChannelMapp,
                           channel1: e.target.value,
                         });
                       }}
@@ -483,11 +464,11 @@ const GDP = () => {
                     <input
                       className="w-full p-2 border rounded-md"
                       placeholder={"channel2"}
-                      value={MetawareChannelMapp["channel2"]}
+                      value={ChannelMapp["channel2"]}
                       name={"channel2"}
                       onChange={(e) => {
-                        setMetawareChannelMapp({
-                          ...MetawareChannelMapp,
+                        setChannelMapp({
+                          ...ChannelMapp,
                           channel2: e.target.value,
                         });
                       }}

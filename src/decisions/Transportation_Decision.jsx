@@ -25,7 +25,6 @@ const Transportation_Decision = () => {
     getTransportation();
   }, []);
 
-
   const [Dc2Data, setDc2Data] = useState({
     product0: {
       surface: {
@@ -227,21 +226,28 @@ const Transportation_Decision = () => {
       <Text className="p-5 px-8 py-1 font-semibold  text-xl bg-blue-gray-600 text-white">
         {title}
       </Text>
-      <Table
-        size="sm"
-        variant="striped"
-        colorScheme="teal"
-        className="bg-slate-300 "
-      >
+      <Table size="sm" variant="striped" className="bg-slate-300 ">
         <Thead>
           <Tr>
             <Th>Products</Th>
-            <Th>Carrier I</Th>
-            <Th>Carrier J</Th>
-            <Th>Carrier K</Th>
-            <Th>Carrier L</Th>
-            <Th>Carrier M</Th>
-            <Th>Carrier N</Th>
+            <Th>
+              Carrier {selectedSim[0]?.renamedMappedData?.distributerMapp?.I}
+            </Th>
+            <Th>
+              Carrier {selectedSim[0]?.renamedMappedData?.distributerMapp?.J}
+            </Th>
+            <Th>
+              Carrier {selectedSim[0]?.renamedMappedData?.distributerMapp?.K}
+            </Th>
+            <Th>
+              Carrier {selectedSim[0]?.renamedMappedData?.distributerMapp?.L}
+            </Th>
+            <Th>
+              Carrier {selectedSim[0]?.renamedMappedData?.distributerMapp?.M}
+            </Th>
+            <Th>
+              Carrier {selectedSim[0]?.renamedMappedData?.distributerMapp?.N}
+            </Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -303,13 +309,18 @@ const Transportation_Decision = () => {
           </div>
         </div>
         <div className="flex  gap-1 m-1">
-          <div className="m-2 rounded-2xl  bg-white p-2 flex flex-col space-y-4 justify-start">
-            <div className=""></div>
-
-            {!TransportationData?.flag_dc2 &&
+          <div className="m-2 min-w-[700px]  rounded-2xl  bg-white p-2 flex flex-col space-y-4 justify-start">
+            {TransportationData?.flag_dc2 &&
               renderTable(Dc2Data, setDc2Data, "DC 2")}
-            {!TransportationData?.flag_dc3 &&
+            {TransportationData?.flag_dc3 &&
               renderTable(Dc3Data, setDc3Data, "DC 3")}
+            {!(
+              TransportationData?.flag_dc3 && TransportationData?.flag_dc2
+            ) && (
+              <div>
+                <h1 className="text-red-500 text-3xl"> No data to show here</h1>
+              </div>
+            )}
           </div>
           <div className="rounded-2xl m-2 overflow-hidden bg-white  p-2">
             <InfoImg />

@@ -169,23 +169,15 @@ const Service_Decision = () => {
                     {/* {regions.map((region) => (
                       <Th key={region}>{region}</Th>
                     ))} */}
+                    
                     <Th>
-                      {
-                        selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp
-                          ?.region1
-                      }
+                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}
                     </Th>
                     <Th>
-                      {
-                        selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp
-                          ?.region2
-                      }
+                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}
                     </Th>
                     <Th>
-                      {
-                        selectedSim[0]?.renamedMappedData?.HyperwareRegionMapp
-                          ?.region3
-                      }
+                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region3}
                     </Th>
                   </Tr>
                 </Thead>
@@ -202,8 +194,11 @@ const Service_Decision = () => {
                           onChange={(e) => handleChange(region, e.target.value)}
                           value={serviceValue[region]}
                         >
-                          <option value="0">0</option>
+                       
                           <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
                         </Select>
                       </Td>
                     ))}

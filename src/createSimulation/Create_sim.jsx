@@ -29,7 +29,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     name: "Test Simulation",
     total_quarters: 0,
     firms: 1,
-    admin_id: user.userid,
+    admin_id: user?.userid,
     firm_data: [], // Changed to firm_data here ,
     start_date: "2024-04-05",
     end_date: "2024-04-05",

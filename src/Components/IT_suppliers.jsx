@@ -2,7 +2,17 @@ import { Box, Select, Text } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 
 const IT_suppliers = ({ setSuppliersFromDecision, ItData }) => {
-  const options = ["A", "B", "C", "D", "E", "F", "G"];
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  const options = [
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.A,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.B,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.C,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.D,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.E,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.F,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.G,
+  ];
+
   const initialSuppliers = {
     A: false,
     B: false,

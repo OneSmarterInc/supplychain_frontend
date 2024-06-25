@@ -39,7 +39,7 @@ const Forecasting_sales2 = ({ setForecastMetawaretopass }) => {
   return (
     <div>
       <Text className="p-5 py-3 text-lg">
-        <strong>Sales Volume Forecast Product : Metaware</strong>
+        <strong>Sales Volume Forecast Product :{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}</strong>
       </Text>
 
       <Table
@@ -52,17 +52,11 @@ const Forecasting_sales2 = ({ setForecastMetawaretopass }) => {
         <Thead>
           <Tr>
             <Th fontWeight="bold">
-              {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
+              {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}
             </Th>
-            <Th>
-              {selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region1}
-            </Th>
-            <Th>
-              {selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region2}
-            </Th>
-            <Th>
-              {selectedSim[0]?.renamedMappedData?.MetawareRegionMapp?.region3}
-            </Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}</Th>
+            <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region3}</Th>
           </Tr>
         </Thead>
         <Tbody>
