@@ -95,7 +95,7 @@ const IT = () => {
       getIt();
       addUserLogger()
       toast({
-        title: "It successful",
+        title: "It Submitted successful",
         status: "success",
         duration: 9000,
         isClosable: true,

@@ -40,7 +40,7 @@ const Demand_meta_ch1 = ({ setMetaCh1ValuetoParent }) => {
   return (
     <Box>
       <Text className="p-5 py-3 pb-0 text-xl">
-      <strong>{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}- {selectedSim[0]?.renamedMappedData?.MetawareChannelMapp?.channel1}  </strong>
+      <strong>{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}- {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel1}  </strong>
       </Text>
       <br />
       <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>

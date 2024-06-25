@@ -80,7 +80,7 @@ const Procurement_Decisions = () => {
       getProcurement()
       addUserLogger()
       toast({
-        title: "Procurement Submit Successful",
+        title: "Procurement Submited Successful",
         status: "success",
         duration: 9000,
         isClosable: true,

@@ -129,7 +129,7 @@ const AdminSideLiveFunction = ({
       setIsAddAdminInputModalOpen(false);
       setNewAdminEmail("");
       toast({
-        title: "Submit Successful",
+        title: "Admin Added Successful",
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -149,7 +149,7 @@ const AdminSideLiveFunction = ({
       setIsAddUserInputModalOpen(false);
       setNewUserEmail("");
       toast({
-        title: "Submit Successful",
+        title: "User Added Successful",
         status: "success",
         duration: 9000,
         isClosable: true,

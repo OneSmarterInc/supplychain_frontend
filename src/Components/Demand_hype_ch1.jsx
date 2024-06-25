@@ -40,7 +40,7 @@ const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {
   return (
     <Box>
       <Text className="p-5 py-3 pb-0 text-xl">
-        <strong>{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}- {selectedSim[0]?.renamedMappedData?.HyperwareChannelMapp?.channel1}  </strong>
+        <strong>{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}- {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel1}  </strong>
       </Text>
       <br />
       <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>

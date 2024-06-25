@@ -99,7 +99,7 @@ const Service_Decision = () => {
       addUserLogger();
       getService();
       toast({
-        title: "Login successful",
+        title: "Service Submitted successful",
         status: "success",
         duration: 9000,
         isClosable: true,

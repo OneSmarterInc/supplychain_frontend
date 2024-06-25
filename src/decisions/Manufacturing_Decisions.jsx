@@ -124,7 +124,7 @@ const Manufacturing_Decisions = () => {
       getManufacturing();
       addUserLogger();
       toast({
-        title: "Manufacturing successful",
+        title: "Manufacturing Submitted Successful",
         status: "success",
         duration: 9000,
         isClosable: true,
