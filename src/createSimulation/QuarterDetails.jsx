@@ -1,5 +1,5 @@
 import { useToast } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../Components/ContextApi/MyContext";
 
@@ -13,10 +13,10 @@ const QuarterDetails = () => {
 
   const getInitialQuarterState = (startDate, index) => {
     const start = new Date(startDate);
-    start.setDate(start.getDate() + index * 10);
+    start.setDate(start.getDate() + index * 4); // Each quarter starts after the previous ends
 
     const end = new Date(start);
-    end.setDate(end.getDate() + 5);
+    end.setDate(end.getDate() + 4); // 4 days gap
 
     return {
       is_procurement: true,
@@ -34,8 +34,10 @@ const QuarterDetails = () => {
     };
   };
 
-  const initialStartDate = new Date();
-  initialStartDate.setDate(initialStartDate.getDate() + 1); // Set to tomorrow's date
+  const startDate = new Date(createSimData?.start_date);
+  const initialStartDate = new Date(startDate); // Use the start date from createSimData
+  initialStartDate.setDate(initialStartDate.getDate()); // Ensure initial start date is set correctly
+
   const [quarters, setQuarters] = useState(
     Array.from({ length: noOfQuarters }, (_, index) =>
       getInitialQuarterState(initialStartDate, index)
@@ -62,9 +64,11 @@ const QuarterDetails = () => {
       if (field === "quarter_start_date") {
         let startDate = new Date(value);
         for (let i = index; i < updatedQuarters.length; i++) {
-          startDate.setDate(startDate.getDate() + (i === index ? 0 : 5)); // 5 days gap
+          if (i > index) {
+            startDate.setDate(startDate.getDate() + 4); // Next quarter starts the day after the current ends
+          }
           const endDate = new Date(startDate);
-          endDate.setDate(endDate.getDate() + 5);
+          endDate.setDate(endDate.getDate() + 4); // 4 days gap
 
           updatedQuarters[i] = {
             ...updatedQuarters[i],

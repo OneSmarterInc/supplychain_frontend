@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
-  Avatar,
   Box,
   Button,
   Input,
@@ -13,9 +12,7 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
-import AdminNavBar from "../Components/AdminNavBar";
 import { useNavigate } from "react-router";
 
 const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
@@ -28,17 +25,37 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
   const [simulationData, setSimulationData] = useState({
     name: "Test Simulation",
     total_quarters: 0,
-    firms: 1,
+    firms: 0,
     admin_id: user?.userid,
-    firm_data: [], // Changed to firm_data here ,
-    start_date: "2024-04-05",
-    end_date: "2024-04-05",
+    firm_data: [],
+    start_date: getCurrentDate(),
+    end_date: "", // Initialize as empty string
     decision_open: "01:59:00",
     decision_close: "01:59:00",
   });
 
+  // Function to get current date in YYYY-MM-DD format
+  function getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    let month = (today.getMonth() + 1).toString().padStart(2, "0");
+    let day = today.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "start_date") {
+      // Prevent setting start date before current date
+      const currentDate = getCurrentDate();
+      if (value < currentDate) {
+        // Reset start date to current date if invalid
+        setSimulationData((prev) => ({ ...prev, start_date: currentDate }));
+        return;
+      }
+    }
+
     setSimulationData((prev) => ({
       ...prev,
       [name]: name === "firms" ? Math.max(0, parseInt(value, 10) || 0) : value,
@@ -49,9 +66,19 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
       const newfirm_data = new Array(numberOfFirms).fill().map(() => ({
         firmName: "",
         email: "",
-        emails: [], // Initialize emails array
+        emails: [],
       }));
       setSimulationData((prev) => ({ ...prev, firm_data: newfirm_data }));
+    }
+
+    if (name === "total_quarters") {
+      // Calculate and set end date based on quarters and start date
+      const quarters = Math.max(0, parseInt(value, 10) || 0);
+      const startDate = simulationData.start_date;
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + quarters * 4); // 4 days per quarter
+      const formattedEndDate = endDate.toISOString().split("T")[0];
+      setSimulationData((prev) => ({ ...prev, end_date: formattedEndDate }));
     }
   };
 
@@ -62,7 +89,6 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
   };
 
   const handleAddEmail = (index) => {
-    // Push the email to the firm details and clear the email input
     const updatedfirm_data = [...simulationData.firm_data];
     updatedfirm_data[index].emails.push(updatedfirm_data[index].email);
     updatedfirm_data[index].email = ""; // Clear the email input
@@ -72,12 +98,15 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
   const handleRemoveEmail = (firmIndex, emailIndex) => {
     setSimulationData((prev) => {
       const newFirmData = [...prev.firm_data];
-      // Remove the email at emailIndex
       newFirmData[firmIndex].emails.splice(emailIndex, 1);
       return { ...prev, firm_data: newFirmData };
     });
   };
+
+  // Setting simulation data from steps
   setSimulationDataFromSteps(simulationData);
+
+  // Handle next button click
   const handleNext = async () => {
     // temporary navigate without conditions
     setNoOfQuarters(simulationData.total_quarters);
@@ -255,7 +284,10 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
               bgColor="white"
               mt={5}
               placeholder="Start Date - Time"
+              value={simulationData.start_date}
               onChange={handleInputChange}
+              min={getCurrentDate()} // Ensure start date cannot be before current date
+              required
             />
             <Input
               name="end_date"
@@ -263,6 +295,8 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
               bgColor="white"
               mt={5}
               placeholder="End Date - Time"
+              value={simulationData.end_date}
+              min={simulationData.start_date} // Ensure end date cannot be before start date
               onChange={handleInputChange}
             />
           </Box>
