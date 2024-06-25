@@ -25,7 +25,7 @@ const Transportation_Decision = () => {
     getTransportation();
   }, []);
 
-  const [Dc2Data, setDc2Data] = useState({
+  const defaultDc2Data = {
     product0: {
       surface: {
         carrierI: "",
@@ -80,9 +80,11 @@ const Transportation_Decision = () => {
         carrierN: "",
       },
     },
-  });
+  };
 
-  const [Dc3Data, setDc3Data] = useState({
+  const [Dc2Data, setDc2Data] = useState(defaultDc2Data);
+
+  const defaultDc3Data = {
     product0: {
       surface: {
         carrierI: "",
@@ -137,15 +139,28 @@ const Transportation_Decision = () => {
         carrierN: "",
       },
     },
-  });
+  };
+
+  const [Dc3Data, setDc3Data] = useState(defaultDc3Data);
 
   useEffect(() => {
     if (TransportationData) {
-      setDc2Data(TransportationData?.dc_two);
-      setDc3Data(TransportationData?.dc_three);
+      if (TransportationData.flag_dc2) {
+        if (Object.keys(TransportationData.dc_two).length === 0) {
+          setDc2Data(defaultDc2Data);
+        } else {
+          setDc2Data(TransportationData.dc_two);
+        }
+      }
+      if (TransportationData.flag_dc3) {
+        if (Object.keys(TransportationData.dc_three).length === 0) {
+          setDc3Data(defaultDc3Data);
+        } else {
+          setDc3Data(TransportationData.dc_three);
+        }
+      }
     }
   }, [TransportationData]);
-  console.log("DC3:", Dc3Data);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
@@ -315,7 +330,7 @@ const Transportation_Decision = () => {
             {TransportationData?.flag_dc3 &&
               renderTable(Dc3Data, setDc3Data, "DC 3")}
             {!(
-              TransportationData?.flag_dc3 && TransportationData?.flag_dc2
+              TransportationData?.flag_dc3 || TransportationData?.flag_dc2
             ) && (
               <div>
                 <h1 className="text-red-500 text-3xl"> No data to show here</h1>
