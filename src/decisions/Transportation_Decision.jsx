@@ -39,16 +39,14 @@ const Transportation_Decision = () => {
   let firm_key_new = "";
   if (selectedSim[0]?.firm_data.length) {
     let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
-
       return item.emails.includes(user.email);
     });
     if (firm_obj.length) {
       firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
     }
   }
-  console.log("Firm Key demand Live Sim: -------", firm_key_new);
-
-  const handleChange = (rowId, field, value) => {
+  const handleChange = (rowId, field, value, e) => {
+    e.preventDefault();
     setDc1Data((prevDc1Data) => ({
       ...prevDc1Data,
       [rowId]: {
@@ -106,7 +104,10 @@ const Transportation_Decision = () => {
         user_id: user.userid,
         firm_key: firm_key_new,
         quarter: selectedSim[0].current_quarter,
-        Dc1Data,
+        flag_dc2: false,
+        flag_dc3: false,
+        dc_two: Dc1Data,
+        dc_three: null,
       });
       getTransportation();
       addUserLogger();
@@ -196,7 +197,7 @@ const Transportation_Decision = () => {
                           rounded={"lg"}
                           value={rowData.product}
                           onChange={(e) =>
-                            handleChange(rowId, "product", e.target.value)
+                            handleChange(rowId, "product", e.target.value, e)
                           }
                         >
                           <option value="Product 0">Product 0</option>
@@ -213,7 +214,7 @@ const Transportation_Decision = () => {
                           size={"sm"}
                           rounded={"lg"}
                           onChange={(e) =>
-                            handleChange(rowId, "carrier", e.target.value)
+                            handleChange(rowId, "carrier", e.target.value, e)
                           }
                           value={rowData.carrier}
                         >
@@ -222,7 +223,8 @@ const Transportation_Decision = () => {
                           <option value="J">J</option>
                           <option value="K">K</option>
                           <option value="L">L</option>
-                          <option value="K">N</option>
+                          <option value="M">M</option>
+                          <option value="N">N</option>
                         </Select>
                       </Td>
                       <Td>
@@ -234,7 +236,7 @@ const Transportation_Decision = () => {
                           rounded={"lg"}
                           border="1px solid black"
                           onChange={(e) =>
-                            handleChange(rowId, "medium", e.target.value)
+                            handleChange(rowId, "medium", e.target.value, e)
                           }
                           value={rowData.medium}
                         >
@@ -251,7 +253,7 @@ const Transportation_Decision = () => {
                           rounded={"lg"}
                           value={rowData.units}
                           onChange={(e) =>
-                            handleChange(rowId, "units", e.target.value)
+                            handleChange(rowId, "units", e.target.value, e)
                           }
                           border="1px solid black"
                         />

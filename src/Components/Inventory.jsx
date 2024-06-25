@@ -1,4 +1,5 @@
 import React from "react";
+import AdminNavBar from "../Components/AdminNavBar";
 
 const Inventory = () => {
   const manufacture = [
@@ -29,14 +30,12 @@ const Inventory = () => {
     { name: "Metaware", value: 15450 },
   ];
 
-  return (
+  return (<> <AdminNavBar/>
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-gray-800 mb-4">
-        Supply Chain Simulation
-      </h1>
+     
       <div className="flex justify-between">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Simulations &gt; MBA 2024 &gt; onesmarter inc &gt; Inventory
+          Simulations &gt; MBA 2024 &gt; procurement &gt; Inventory
         </h2>
         <h3 className="text-xl font-bold text-gray-800">5th Quarter</h3>
       </div>
@@ -185,7 +184,7 @@ const Inventory = () => {
         </div>
         <div className="grid">(Not Owned / Sourced)</div>
       </div>
-    </div>
+    </div></>
   );
 };
 
