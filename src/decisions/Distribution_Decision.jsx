@@ -86,12 +86,12 @@ const Distribution_Decision = () => {
   };
 
   const [availableCarriers, setAvailableCarriers] = useState([
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
+    selectedSim[0]?.renamedMappedData?.distributerMapp["I"],
+    selectedSim[0]?.renamedMappedData?.distributerMapp["J"],
+    selectedSim[0]?.renamedMappedData?.distributerMapp["K"],
+    selectedSim[0]?.renamedMappedData?.distributerMapp["L"],
+    selectedSim[0]?.renamedMappedData?.distributerMapp["M"],
+    selectedSim[0]?.renamedMappedData?.distributerMapp["N"],
   ]);
 
   const handleChange = (channel, region, newValue) => {
@@ -177,7 +177,7 @@ const Distribution_Decision = () => {
       addUserLogger();
       getDistribution();
       toast({
-        title: "Distribution successful",
+        title: "Distribution Submitted Successful",
         status: "success",
         duration: 9000,
         isClosable: true,

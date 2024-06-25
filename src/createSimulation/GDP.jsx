@@ -2,12 +2,13 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../Components/ContextApi/MyContext";
+import { useToast } from "@chakra-ui/react";
 
 const GDP = () => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
   const combineSimData = JSON.parse(localStorage.getItem("combineSimData"));
-
+  const toast = useToast();
   const [currentData, setCurrentData] = useState({
     hyperware: {
       region1: {
@@ -183,6 +184,13 @@ const GDP = () => {
           updatedCombineSimData
         );
         console.log("Success:", response.data);
+        toast({
+          title: "Simulation Created Successfully",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+          position: "top",
+        });
         navigate("/adminsidelive");
       } catch (error) {
         console.error("Error submitting form:", error);

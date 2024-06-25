@@ -65,7 +65,7 @@ const Forecast = () => {
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
         firm_key: firm_key_new,
-        quarter: 18,
+        quarter: selectedSim[0].current_quarter,
         hyperware_channel_one: ForecastHyperware.channel1,
         hyperware_channel_two: ForecastHyperware.channel2,
         metaware_channel_one: ForecastMetaware.channel1,
@@ -75,7 +75,7 @@ const Forecast = () => {
       getForecast();
       addUserLogger();
       toast({
-        title: "Forecast successful",
+        title: "Forecast Submitted Successful",
         status: "success",
         duration: 9000,
         isClosable: true,

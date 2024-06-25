@@ -89,7 +89,7 @@ const Demand_generation = () => {
       addUserLogger();
       getDemand();
       toast({
-        title: "Submit Successful",
+        title: "Demand Generation Submit Successful",
         status: "success",
         duration: 9000,
         isClosable: true,
