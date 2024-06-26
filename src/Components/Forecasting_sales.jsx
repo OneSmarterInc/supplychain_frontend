@@ -69,9 +69,7 @@ const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
             <Tr key={channel}>
               <Td>
                 <strong>
-                  {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel
-                    ? selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel
-                    : channel}
+                {selectedSim[0]?.renamedMappedData?.ChannelMapp?.[channel] || channel}
                 </strong>
               </Td>
               <Td>

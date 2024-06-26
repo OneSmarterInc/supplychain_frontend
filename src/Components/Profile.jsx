@@ -11,7 +11,7 @@ const ProfileDropdown = () => {
 
   const [profile, setProfile] = useState({
     name: user?.username,
-    email: "nachiket@gmail.com",
+    email:user?.email,
     Email: user?.email,
     userType: user?.isadmin ? "Admin" : "User",
   });
@@ -48,11 +48,15 @@ const ProfileDropdown = () => {
     <div className="relative">
       <div
         onClick={toggleDropdown}
-        className="cursor-pointer flex items-center p-1 rounded-full hover:bg-blue-gray-100"
+        className="cursor-pointer flex items-center rounded-full bg-blue-gray-100 w-10 h-10 hover:bg-blue-gray-100"
       >
-        {profile?.name && (
+        {profile?.name ? (
           <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-xl text-white font-bold">
             {profile?.name[0].toUpperCase()}
+          </div>
+        ):(
+          <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-xl text-white font-bold">
+            {profile?.Email[0].toUpperCase()}
           </div>
         )}
       </div>

@@ -64,11 +64,7 @@ const Forecasting_sales2 = ({ setForecastMetawaretopass }) => {
             <Tr key={channel}>
               <Td>
                 <strong>
-                  {selectedSim[0]?.renamedMappedData?.MetawareChannelMapp
-                    ?.channel
-                    ? selectedSim[0]?.renamedMappedData?.MetawareChannelMapp
-                        ?.channel
-                    : channel}
+                {selectedSim[0]?.renamedMappedData?.ChannelMapp[channel] || channel}
                 </strong>
               </Td>
               <Td>

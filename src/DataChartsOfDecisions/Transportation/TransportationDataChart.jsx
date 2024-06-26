@@ -4,6 +4,7 @@ import { HStack, Select } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 
 import TransportationPreview from "../../Components/Previews/TransportationPreview";
+import ReportComponent from "../../report/ReportComponent";
 
 const TransportationDataChart = ({ Dc1Data, submitTransportation }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,21 +82,8 @@ const TransportationDataChart = ({ Dc1Data, submitTransportation }) => {
             {/* Modal ends */}
           </div>
         </div>
-        <HStack spacing={3} ml={9}>
-          <Select width="165px" border="1px solid black">
-            <option value="">Select Quarter 1</option>
-            <option value="">Select Quarter 2</option>
-            <option value="">Select Quarter 3</option>
-          </Select>
-          <Select width="165px" border="1px solid black">
-            <option value="">Select Report 1</option>
-            <option value="">Select Report 2</option>
-            <option value="">Select Report 3</option>
-          </Select>
-          <button className="h-10  bg-gray-700 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5 w-24 ">
-            View
-          </button>
-        </HStack>
+       
+        <ReportComponent/>
       </div>
     </div>
   );

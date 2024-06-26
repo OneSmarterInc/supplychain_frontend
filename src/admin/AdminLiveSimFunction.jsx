@@ -46,7 +46,6 @@ const AdminSideLiveFunction = ({
   let firm_key_new = "";
   if (filteredSimulation[0]?.firm_data.length) {
     let firm_obj = filteredSimulation[0]?.firm_data.filter((item, index) => {
-
       return item.emails.includes(user.email);
     });
     if (firm_obj.length) {
@@ -71,16 +70,6 @@ const AdminSideLiveFunction = ({
   const handleQuarterSelectChange = (e) => {
     setFirstDropdownValue(e.target.value);
   };
-
-  useEffect(() => {
-    const e = {
-      target: {
-        value: "cpl",
-      },
-    };
-    handleButtonClick(e);
-    firmsFetch();
-  }, [selectedFirm?.users]);
 
   const handleButtonClick = async (e) => {
     const newDropdownValue = e.target.value;
@@ -364,33 +353,19 @@ const AdminSideLiveFunction = ({
                   onChange={(e) => handleButtonClick(e)}
                   value={secondDropdownValue}
                 >
+                  {" "}
+                  <option value="">Select</option>
                   <option value="cpl">Corporate P&L Statement</option>
-                  <option value="hpl">
-                    Historical Corporate P&L Statement
-                  </option>
                   <option value="pcpl">Hyperware P&L Statement</option>
-                  <option value="mpls">Metaware P&L Statement</option>
-                  <option value="bl">Balance Sheet</option>
-                  <option value="cfar">Cash Flow Analysis Report</option>
                   <option value="inventory">
                     Finished Goods Inventory Report
                   </option>
-                  <option value="pir">Procurement Inventory Report</option>
-                  <option value="odvr">Other Decision Variables Report</option>
-                  <option value="far">Forecasting Accuracy Report</option>
                 </Select>
               </HStack>
               <div className="mt-4 flex">
                 {secondDropdownValue === "cpl" && <ReportModal />}
-                {secondDropdownValue === "hpl" && <ReportModal />}
                 {secondDropdownValue === "pcpl" && <ProductReportModal />}
-                {secondDropdownValue === "mpls" && <ReportModal />}
-                {secondDropdownValue === "bl" && <ReportModal />}
-                {secondDropdownValue === "cfar" && <ReportModal />}
-                {secondDropdownValue === "inventory" && <FGInventoryModal />}
-                {secondDropdownValue === "pir" && <ReportModal />}
-                {secondDropdownValue === "odvr" && <ReportModal />}
-                {secondDropdownValue === "far" && <ReportModal />}
+                {secondDropdownValue === "inventory" && <FGInventoryModal />}\
                 <div className="px-5">
                   {" "}
                   <EvaluationReportModal />

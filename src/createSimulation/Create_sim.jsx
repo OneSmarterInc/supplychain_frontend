@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -29,10 +29,19 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     admin_id: user?.userid,
     firm_data: [],
     start_date: getCurrentDate(),
-    end_date: "", // Initialize as empty string
+    end_date: "", // Do not initialize as current date
     decision_open: "01:59:00",
     decision_close: "01:59:00",
   });
+
+  useEffect(() => {
+    if (simulationData.start_date && simulationData.total_quarters) {
+      setSimulationData((prev) => ({
+        ...prev,
+        end_date: calculateEndDate(prev.start_date, prev.total_quarters),
+      }));
+    }
+  }, [simulationData.start_date, simulationData.total_quarters]);
 
   // Function to get current date in YYYY-MM-DD format
   function getCurrentDate() {
@@ -43,14 +52,25 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     return `${year}-${month}-${day}`;
   }
 
+  function calculateEndDate(startDate, quarters) {
+    const startDateObj = new Date(startDate);
+
+    console.log(
+      "startDateObj * quarters+4",
+      startDateObj.getDate() + quarters * 4
+    );
+
+    startDateObj.setDate(startDateObj.getDate() + quarters * 4);
+
+    return startDateObj.toISOString().split("T")[0];
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "start_date") {
-      // Prevent setting start date before current date
       const currentDate = getCurrentDate();
       if (value < currentDate) {
-        // Reset start date to current date if invalid
         setSimulationData((prev) => ({ ...prev, start_date: currentDate }));
         return;
       }
@@ -62,23 +82,13 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     }));
 
     if (name === "firms") {
-      const numberOfFirms = Math.max(0, parseInt(value, 10) || 0); // Ensure non-negative
+      const numberOfFirms = Math.max(0, parseInt(value, 10) || 0);
       const newfirm_data = new Array(numberOfFirms).fill().map(() => ({
         firmName: "",
         email: "",
         emails: [],
       }));
       setSimulationData((prev) => ({ ...prev, firm_data: newfirm_data }));
-    }
-
-    if (name === "total_quarters") {
-      // Calculate and set end date based on quarters and start date
-      const quarters = Math.max(0, parseInt(value, 10) || 0);
-      const startDate = simulationData.start_date;
-      const endDate = new Date(startDate);
-      endDate.setDate(endDate.getDate() + quarters * 4); // 4 days per quarter
-      const formattedEndDate = endDate.toISOString().split("T")[0];
-      setSimulationData((prev) => ({ ...prev, end_date: formattedEndDate }));
     }
   };
 
@@ -117,9 +127,15 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     }
   };
 
+  console.log(
+    "simulationData.start_date",
+    simulationData.start_date,
+    "simulationData.end_date",
+    simulationData.end_date
+  );
+
   return (
     <>
-      {/* <AdminNavBar /> */}
       <Text width="50%" m="auto" fontSize={20} fontWeight="bold" mt={5}>
         Create New Simulation
       </Text>
