@@ -5,11 +5,14 @@ note:
 4. current date to start date
 5. which region to show in service
 
-6. current date to start date, then calculation quarters*gap of 4
+6.  current date to start date, then calculation quarters*gap of 4
 11. dynamic popups
 
-7. decisions transportation 
-8. change service dropdown to 1,2,3,4
-9. region mapp- same region
+7.  decisions transportation 
+8.  change service dropdown to 1,2,3,4
+9.  region mapp- same region
 10. default names of renamed data
 12. remove navigation routes from inventory
+13. distribution decision change, show rfid and sac_surface
+14. remove hardcode value from reports
+15. transportation if no data: you do not own any Distribution challel in other region

@@ -13,13 +13,6 @@ const FGInventoryTable = () => {
       <div className="heading flex justify-between font-bold">
         <div>
           <p>Firm : {Object.keys(selectedSim[0]?.firm_data)[0]}</p>
-          <p>
-            PERFORMANCE Product REPORT, MONTH {selectedSim[0].current_quarter}
-          </p>
-        </div>
-        <div>
-          <p>INDUSTRY AAA</p>
-          <p>PAGE 1</p>
         </div>
       </div>
       <table className="w-full text-start whitespace-nowrap">

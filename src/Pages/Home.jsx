@@ -7,8 +7,7 @@ import UserNavBar from "../Components/UserNavBar";
 import AdminNavBar from "../Components/AdminNavBar";
 
 const Home = () => {
-  
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("user"));
   return (
     <>
@@ -38,9 +37,14 @@ const Home = () => {
           <div>
             <Heading className="m-4">Welcome to Supplychain Simulation</Heading>
             <Box display="flex" gap={10} justifyContent="center" mt={20}>
-              <button onClick={()=>navigate("/createsim")} className="p-2 bg-blue-gray-100 rounded-md text-center text-lg">
-                Create New
-              </button>
+              {userData?.isadmin && (
+                <button
+                  onClick={() => navigate("/createsim")}
+                  className="p-2 bg-blue-gray-100 rounded-md text-center text-lg"
+                >
+                  Create New
+                </button>
+              )}
             </Box>
           </div>
         </div>

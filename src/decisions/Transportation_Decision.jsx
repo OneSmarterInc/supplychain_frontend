@@ -223,6 +223,7 @@ const Transportation_Decision = () => {
         dc_three: Dc3Data,
       });
       getTransportation();
+      addUserLogger();
       toast({
         title: "Transportation data submitted successfully",
         status: "success",
@@ -233,6 +234,25 @@ const Transportation_Decision = () => {
       navigate("/usersidelive");
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
+    }
+  };
+
+  const addUserLogger = async () => {
+    try {
+      const response = await axios.post(`${api}/adduserlogs/`, {
+        email: user.email,
+        user_id: user.userid,
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        decision: "Service",
+        action: "created",
+        ip_address: "123.345.1",
+        username: user.username,
+      });
+      const data = response.data;
+      console.log("addUserLoggerData", data);
+    } catch (error) {
+      console.error("Error making GET request:", error);
     }
   };
 
@@ -333,7 +353,10 @@ const Transportation_Decision = () => {
               TransportationData?.flag_dc3 || TransportationData?.flag_dc2
             ) && (
               <div>
-                <h1 className="text-red-500 text-3xl"> No data to show here</h1>
+                <h1 className="text-red-500 text-3xl">
+                  {" "}
+                  You do not own any Distribution channel in other region
+                </h1>
               </div>
             )}
           </div>

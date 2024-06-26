@@ -99,7 +99,7 @@ const Procurement_Decisions = () => {
         user_id: user.userid,
         simulation_id: selectedSim[0].simulation_id,
         admin_id: selectedSim[0].admin_id,
-        decision: "Forecast",
+        decision: "Procurement",
         action: "created",
         ip_address: "123.345.1",
         username: user.username

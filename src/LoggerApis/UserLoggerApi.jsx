@@ -16,7 +16,7 @@ const UserLoggerApi = ({ simulation_id }) => {
   const fetchUserLogger = async () => {
     try {
       const response = await axios.get(
-        `${api}/adduserlogs/?admin_id=${user.userid}&simulation_id=${simulation_id}`
+        `${api}/adduserlogs/?simulation_id=${simulation_id}`
       );
       const data = response.data;
       setUserLoggerData(data);
@@ -62,7 +62,7 @@ const UserLoggerApi = ({ simulation_id }) => {
             })}
           </Select>
         </HStack>
-        <Box bg="white" p={4} borderRadius="md" boxShadow="sm">
+        <Box bg="white" overflowY={"scroll"} height={60} p={4} borderRadius="md" boxShadow="sm">
           {filteredLogger.map((logs) => {
             return (
               <Box key={logs.email} mb={2}>

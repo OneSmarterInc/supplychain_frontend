@@ -34,13 +34,6 @@ const ReportTable1 = () => {
       <div className="heading flex justify-between font-bold">
         <div>
           <p>Firm : {firm_key_new}</p>
-          <p>
-            PERFORMANCE Product REPORT, MONTH {selectedSim[0].current_quarter}
-          </p>
-        </div>
-        <div>
-          <p>INDUSTRY AAA</p>
-          <p>PAGE 1</p>
         </div>
       </div>
       <table className="w-full text-start whitespace-nowrap">
