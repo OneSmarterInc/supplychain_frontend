@@ -19,6 +19,10 @@ const AdminSideEndedFunction = ({
   let navigate = useNavigate();
   let simData = localStorage.getItem("simData");
 
+  useEffect(() => {
+    firmsFetch();
+  }, []);
+
   const { api } = useContext(MyContext);
   simData = JSON.parse(simData);
 
@@ -144,7 +148,7 @@ const AdminSideEndedFunction = ({
           })}
 
           {isFirmModalOpen && selectedFirm && (
-            <div className="modal bg-white p-4 rounded-lg z-50   fixed top-24 w-[800px] shadow-lg mt-4 ">
+            <div className="modal  z-40 bg-white p-4 rounded-lg    fixed top-24 w-[800px] shadow-lg mt-4 ">
               <div className="buttons my-2 flex  items-center justify-between">
                 <h2 className="text-2xl font-bold mb-4">
                   Users of{" "}
@@ -239,7 +243,9 @@ const AdminSideEndedFunction = ({
                   border="1px solid black"
                   onChange={(e) => handleButtonClick(e)}
                   value={secondDropdownValue}
-                >      <option value="">Select</option>
+                >
+                  {" "}
+                  <option value="">Select</option>
                   <option value="cpl">Corporate P&L Statement</option>
                   <option value="pcpl">Hyperware P&L Statement</option>
                   <option value="inventory">
