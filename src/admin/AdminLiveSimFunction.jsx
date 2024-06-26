@@ -105,6 +105,10 @@ const AdminSideLiveFunction = ({
     setIsAddUserInputModalOpen(!isAddUserInputModalOpen);
   };
 
+  useEffect(()=>{
+    firmsFetch()
+  },[])
+
   const handleAddAdmin = async () => {
     try {
       const response = await axios.post(`${api}/addadmin/`, {
@@ -227,7 +231,7 @@ const AdminSideLiveFunction = ({
           })}
 
           {isFirmModalOpen && selectedFirm && (
-            <div className="modal bg-white p-4 rounded-lg   fixed top-24 w-[800px] shadow-lg mt-4 ">
+            <div className="modal z-50 bg-white p-4 rounded-lg   fixed top-24 w-[800px] shadow-lg mt-4 ">
               <div className="buttons my-2 flex  items-center justify-between">
                 <h2 className="text-2xl font-bold mb-4">
                   Users of{" "}
