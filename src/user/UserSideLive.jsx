@@ -88,6 +88,7 @@ const UserSideLive = () => {
             endDate={item.end_date}
             time={item.time}
             currentQuarter={item.current_quarter}
+            firm_data = {item?.firm_data}
           />
         ))}
 

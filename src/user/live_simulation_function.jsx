@@ -10,9 +10,30 @@ import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventory
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
 import UserLoggerApi from "../LoggerApis/UserLoggerApi";
 
-const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
+const PlayComponent = ({
+  id,
+  batch,
+  startDate,
+  endDate,
+  currentQuarter,
+  firm_data,
+}) => {
   let navigate = useNavigate();
   // let simid = localStorage.getItem("selectedSimulation");
+  let user = JSON.parse(localStorage.getItem("user"));
+  user = user.email;
+
+  let firm_key_map = "";
+  if (firm_data?.length) {
+    let firm_obj = firm_data.filter((item, index) => {
+      return item.emails.includes(user);
+    });
+    if (firm_obj.length) {
+      firm_key_map = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+    }
+  }
+  console.log("Firm Key Map Live sim: ", firm_key_map);
+
   let simData = localStorage.getItem("simData");
 
   const { api } = useContext(MyContext);
@@ -39,8 +60,6 @@ const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
   let selectedSim = localStorage.getItem("selectedSim");
   selectedSim = JSON.parse(selectedSim);
 
-  let user = JSON.parse(localStorage.getItem("user"));
-  user = user.email;
 
   const option = [];
   for (let i = 1; i <= selectedSim[0]?.current_quarter; i++) {
@@ -121,7 +140,7 @@ const PlayComponent = ({ id, batch, startDate, endDate, currentQuarter }) => {
           </button>
         </div>
         <div className="logger">
-          <UserLoggerApi simulation_id={id} />
+          <UserLoggerApi simulation_id={id} firm_key={firm_key_map} />
         </div>
       </div>
       <div className="graph">

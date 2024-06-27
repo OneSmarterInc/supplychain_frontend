@@ -243,9 +243,9 @@ const GDP = () => {
             Current Data
           </h2>
           <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-2 text-indigo-500">
+            {/* <h3 className="text-xl font-semibold mb-2 text-indigo-500">
               Hyperware
-            </h3>
+            </h3> */}
             <table className="w-full bg-blue-gray-100 h-40 text-center border-collapse border border-gray-200">
               <thead>
                 <tr className="">
@@ -382,9 +382,9 @@ const GDP = () => {
             </table>
           </div>
           <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-2 text-indigo-500">
+            {/* <h3 className="text-xl font-semibold mb-2 text-indigo-500">
               Metaware
-            </h3>
+            </h3> */}
             <table className="w-full h-40 bg-blue-gray-100 text-center border-collapse border border-gray-300">
               <thead>
                 {/* regionmapp */}
@@ -525,9 +525,9 @@ const GDP = () => {
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4 text-gray-700">Growth Data</h2>
           <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-2 text-indigo-500">
+            {/* <h3 className="text-xl font-semibold mb-2 text-indigo-500">
               Hyperware
-            </h3>
+            </h3> */}
             <table className="w-full h-40 text-center border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
@@ -570,9 +570,9 @@ const GDP = () => {
             </table>
           </div>
           <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-2 text-indigo-500">
+            {/* <h3 className="text-xl font-semibold mb-2 text-indigo-500">
               Metaware
-            </h3>
+            </h3> */}
             <table className="w-full h-40 text-center border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-100">

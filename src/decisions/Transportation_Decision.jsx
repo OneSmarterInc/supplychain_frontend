@@ -248,6 +248,8 @@ const Transportation_Decision = () => {
         action: "created",
         ip_address: "123.345.1",
         username: user.username,
+        firm_key: firm_key_new
+
       });
       const data = response.data;
       console.log("addUserLoggerData", data);
