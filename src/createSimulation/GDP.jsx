@@ -8,6 +8,10 @@ const GDP = () => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
   const combineSimData = JSON.parse(localStorage.getItem("combineSimData"));
+  
+  console.log(parseInt(combineSimData.total_quarters) + 3);
+  combineSimData.total_quarters = parseInt(combineSimData.total_quarters) + 3;
+
   const toast = useToast();
   const [currentData, setCurrentData] = useState({
     hyperware: {

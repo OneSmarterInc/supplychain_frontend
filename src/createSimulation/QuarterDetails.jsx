@@ -84,7 +84,7 @@ const QuarterDetails = () => {
   const combineSimData = {
     ...createSimData,
     quarter_specific_decisions: quarters.reduce((prev, quarter, index) => {
-      prev[`quarter${index + 1}`] = quarter;
+      prev[`quarter${index + 4}`] = quarter; // Start from quarter 4
       return prev;
     }, {}),
   };
@@ -103,7 +103,7 @@ const QuarterDetails = () => {
     <div className="p-6 mx-auto bg-slate-200 rounded-xl shadow-md flex flex-col items-center">
       {quarters.map((quarter, index) => (
         <div key={index} className="mb-6 bg-slate-300 p-4 rounded-xl">
-          <h3 className="text-xl font-bold m-2 mx-2">Quarter {index + 1} :</h3>
+          <h3 className="text-xl font-bold m-2 mx-2">Quarter {index + 4} :</h3> {/* Start from quarter 4 */}
           <div className="grid grid-cols-1 gap-x-4 gap-y-2 ml-14">
             {/* Checkboxes for decisions */}
             <div className="flex flex-col sm:flex-row space-y-2 sm:items-center">

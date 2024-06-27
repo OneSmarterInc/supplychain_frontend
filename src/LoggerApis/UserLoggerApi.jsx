@@ -3,7 +3,7 @@ import { Select, Text, HStack, Box, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 
-const UserLoggerApi = ({ simulation_id }) => {
+const UserLoggerApi = ({ simulation_id, firm_key }) => {
   let user = JSON.parse(localStorage.getItem("user"));
   const [userLoggerData, setUserLoggerData] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
@@ -16,7 +16,7 @@ const UserLoggerApi = ({ simulation_id }) => {
   const fetchUserLogger = async () => {
     try {
       const response = await axios.get(
-        `${api}/adduserlogs/?simulation_id=${simulation_id}`
+        `${api}/adduserlogs/?simulation_id=${simulation_id}&firm_key=${firm_key}`
       );
       const data = response.data;
       setUserLoggerData(data);
