@@ -123,7 +123,8 @@ const Service_Decision = () => {
         action: "created",
         ip_address: "123.345.1",
         username: user.username,
-        firm_key: firm_key_new
+        firm_key: firm_key_new,
+        current_quarter:selectedSim[0].current_quarter,
 
       });
       const data = response.data;

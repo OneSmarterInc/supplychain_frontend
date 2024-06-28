@@ -1,7 +1,6 @@
-import { Select, Text, HStack } from "@chakra-ui/react";
+import { Select, HStack } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import Chart from "react-apexcharts"; // Ensure you've installed react-apexcharts
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../Components/ContextApi/MyContext";
 import ReportModal from "../report/CplReport/ReportModal";
@@ -9,7 +8,7 @@ import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
 import UserLoggerApi from "../LoggerApis/UserLoggerApi";
-
+import backgroundImage from "../assets/bg.png";
 const PlayComponent = ({
   id,
   batch,
@@ -19,7 +18,6 @@ const PlayComponent = ({
   firm_data,
 }) => {
   let navigate = useNavigate();
-  // let simid = localStorage.getItem("selectedSimulation");
   let user = JSON.parse(localStorage.getItem("user"));
   user = user.email;
 
@@ -29,7 +27,7 @@ const PlayComponent = ({
       return item.emails.includes(user);
     });
     if (firm_obj.length) {
-      firm_key_map = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+      firm_key_map = firm_obj[0].firmName;
     }
   }
   console.log("Firm Key Map Live sim: ", firm_key_map);
@@ -45,13 +43,12 @@ const PlayComponent = ({
   localStorage.setItem("selectedSim", JSON.stringify(filteredSimulation));
 
   function handleSubmit() {
-    // Perform some action
     const saveData = (id) => {
       localStorage.setItem("selectedSim", JSON.stringify(filteredSimulation));
       localStorage.setItem("selectedSimulation", JSON.stringify(id));
     };
     saveData(id);
-    navigate("/forecast"); // navigate to a success page
+    navigate("/forecast");
   }
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -60,9 +57,8 @@ const PlayComponent = ({
   let selectedSim = localStorage.getItem("selectedSim");
   selectedSim = JSON.parse(selectedSim);
 
-
   const option = [];
-  for (let i = 1; i <= selectedSim[0]?.current_quarter; i++) {
+  for (let i = 1; i <= selectedSim[0]?.current_quarter-1; i++) {
     option.push(
       <option key={i} value={i}>
         Select Quarter {i}
@@ -78,32 +74,20 @@ const PlayComponent = ({
     setFirstDropdownValue(e.target.value);
   };
 
-  // useEffect(() => {
-  //   const e = {
-  //     target: {
-  //       value: "",
-  //     },
-  //   };
-  //   handleButtonClick(e);
-  // }, []);
-
   const handleButtonClick = async (e) => {
     const newDropdownValue = e.target.value;
     setSecondDropdownValue(newDropdownValue);
 
-    // Construct the query parameters
     const queryParams = new URLSearchParams({
       simulation_id: simData[0].simulation_id,
       quarter: firstDropdownValue,
-      firm: Object.keys(simData[0]?.firm_data)[0],
+      firm: firm_key_map,
     }).toString();
 
-    // Append the query parameters to the URL
     const url = `${api}/reports/${
       newDropdownValue ? newDropdownValue : ""
     }/?${queryParams}`;
 
-    // Make a GET request with the constructed URL
     try {
       const response = await axios.get(url);
       console.log("GET request successful", response.data);
@@ -114,38 +98,40 @@ const PlayComponent = ({
   };
 
   return (
-    <div className="flex mt-4 bg-slate-200 justify-around items-center mx-10 rounded-lg border-2 border-neutral-600">
-      <div className="info">
-        <h2 className="text-3xl p-2 underline underline-offset-1">
-          {batch} |
-          <span className="text-3xl p-2">
-            Current Quarter : {currentQuarter}
-          </span>
-        </h2>
-        <p className="text-base p-2">
-          start Date {startDate} | End Date {endDate}
-        </p>
-        <div className="buttons my-2">
-          <button
-            className="w-32 h-10 rounded-lg bg-blue-600 text-white text-center p-2 mx-2 hover:bg-sky-950"
-            onClick={handleSubmit}
-          >
-            Enter
-          </button>
-          <button
-            onClick={toggleModal}
-            className="w-28 h-10 rounded-lg bg-green-600 text-white text-center p-2 hover:bg-green-700"
-          >
-            Reports
-          </button>
+    <div className="flex mt-4 bg-white justify-around items-center mx-10 rounded-lg border-2 border-neutral-600 shadow-xl">
+      <div className="flex w-full">
+        <div className="flex-1 flex flex-col items-center justify-center" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="info text-center" >
+
+            <h2 className="text-3xl p-2">
+              {batch} |
+              <span className="text-3xl p-2">
+                Quarter  {currentQuarter}
+              </span>
+            </h2>
+            <p className="text-base p-2">
+              Start Date {startDate} | End Date {endDate}
+            </p>
+            <div className="buttons my-2">
+              <button
+                className="w-32 h-10 rounded-lg bg-blue-600 text-white text-center p-2 mx-2 hover:bg-sky-950"
+                onClick={handleSubmit}
+              >
+                Enter
+              </button>
+              <button
+                onClick={toggleModal}
+                className="w-28 h-10 rounded-lg bg-green-600 text-white text-center p-2 hover:bg-green-700"
+              >
+                Reports
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="logger">
-          <UserLoggerApi simulation_id={id} firm_key={firm_key_map} />
-        </div>
-      </div>
-      <div className="graph">
-        <div className="mixed-chart pt-4">
-          {/* <Chart options={options} series={series} type="area" width="450" /> */}
+        <div className="flex-1">
+          <div className="logger">
+            <UserLoggerApi simulation_id={id} firm_key={firm_key_map} current_quarter={selectedSim[0].current_quarter}/>
+          </div>
         </div>
       </div>
       {isReportModalOpen && (
@@ -210,7 +196,7 @@ const PlayComponent = ({
                 {secondDropdownValue === "far" && <ReportModal />}
                 <div className="px-5">
                   {" "}
-                  <EvaluationReportModal />
+                  <EvaluationReportModal simulation_id={id} firm_key={firm_key_map} selected_quarter={firstDropdownValue} />
                 </div>
               </div>
             </div>

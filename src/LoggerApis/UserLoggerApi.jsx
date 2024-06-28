@@ -3,7 +3,7 @@ import { Select, Text, HStack, Box, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 
-const UserLoggerApi = ({ simulation_id, firm_key }) => {
+const UserLoggerApi = ({ simulation_id, firm_key, current_quarter }) => {
   let user = JSON.parse(localStorage.getItem("user"));
   const [userLoggerData, setUserLoggerData] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
@@ -16,7 +16,7 @@ const UserLoggerApi = ({ simulation_id, firm_key }) => {
   const fetchUserLogger = async () => {
     try {
       const response = await axios.get(
-        `${api}/adduserlogs/?simulation_id=${simulation_id}&firm_key=${firm_key}`
+        `${api}/adduserlogs/?simulation_id=${simulation_id}&firm_key=${firm_key}&current_quarter=${current_quarter}`
       );
       const data = response.data;
       setUserLoggerData(data);
@@ -65,7 +65,7 @@ const UserLoggerApi = ({ simulation_id, firm_key }) => {
         <Box bg="white" overflowY={"scroll"} height={60} p={4} borderRadius="md" boxShadow="sm">
           {filteredLogger.map((logs) => {
             return (
-              <Box key={logs.email} mb={2}>
+              <Box key={logs.email} mb={2} >
                 {logs.username && (
                   <h2 className="text-xl">
                     <span className="text-green-300">{logs.username}</span>{" "}

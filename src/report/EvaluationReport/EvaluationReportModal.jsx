@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -7,9 +7,34 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import EvaluationReportTable from "./EvaluationReportTable";
+import axios from "axios";
+import MyContext from "../../Components/ContextApi/MyContext";
 
-export default function EvaluationReportModal() {
+export default function EvaluationReportModal({ simulation_id, firm_key, selected_quarter }) {
   const [open, setOpen] = React.useState(false);
+  const [reportData, setReportData] = React.useState('');
+  const { api } = useContext(MyContext);
+
+  useEffect(() => {
+    getForecast();
+  }, [simulation_id, firm_key, selected_quarter]);
+  
+  const getForecast = async () => {
+    try {
+      const response = await axios.get(`${api}/reports/evaluation/`, {
+        params: {
+          simulation_id: simulation_id,
+          firm_key: firm_key,
+          selected_quarter: selected_quarter,
+        },
+      });
+      const data = response.data;
+      
+      setReportData(data[0]);
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
 
   const handleOpen = () => setOpen(!open);
 
@@ -22,9 +47,9 @@ export default function EvaluationReportModal() {
         <DialogHeader>Evaluation Report</DialogHeader>
         <DialogBody
           style={{ height: "600px", overflowY: "auto" }}
-          className="text-lg overflow-scroll "
+          className="text-lg overflow-scroll"
         >
-          <EvaluationReportTable />
+          <EvaluationReportTable reportData={reportData}/>
         </DialogBody>
         <DialogFooter>
           <Button
@@ -35,9 +60,6 @@ export default function EvaluationReportModal() {
           >
             <span>Cancel</span>
           </Button>
-          {/* <Button variant="gradient" color="green" onClick={handleOpen}>
-            <span>Confirm</span>
-          </Button> */}
         </DialogFooter>
       </Dialog>
     </>

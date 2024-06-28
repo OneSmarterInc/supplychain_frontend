@@ -72,6 +72,14 @@ const NavBar = () => {
                   Distribution
                 </Link>
               )}
+               {decisions?.is_transportation === true && (
+                <Link
+                  to="/transportation"
+                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
+                >
+                  Transport
+                </Link>
+              )}
               {decisions?.is_service === true && (
                 <Link
                   to="/service"
@@ -96,14 +104,7 @@ const NavBar = () => {
                   IT
                 </Link>
               )}{" "}
-              {decisions?.is_transportation === true && (
-                <Link
-                  to="/transportation"
-                  className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
-                >
-                  Transport
-                </Link>
-              )}
+             
             </div>
           </div>
         </div>

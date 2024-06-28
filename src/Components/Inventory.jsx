@@ -1,56 +1,79 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AdminNavBar from "../Components/AdminNavBar";
+import axios from "axios";
+import storage from "../assets/storage.png";
+import facotry from "../assets/factory.png";
+import { Image } from "@chakra-ui/react";
+import MyContext from "./ContextApi/MyContext";
 
 const Inventory = () => {
-  const manufacture = [
-    { name: "Alpha", value: 750000 },
-    { name: "Beta", value: 750000 },
-    { name: "Gamma", value: 154000 },
-    { name: "Delta", value: 75800 },
-    { name: "Epsilon", value: 228000 },
-    { name: "Hyperware", value: 15450 },
-    { name: "Metaware", value: 15450 },
-  ];
+  const { api } = useContext(MyContext);
+  const current_quarter = (localStorage.getItem("inventory_current_quarter")) || [];
+  const firm_key = (localStorage.getItem("inventory_firm_key")) || [];
+  const name = (localStorage.getItem("simulation_name")) || [];
 
-  const distributionCenter1 = [
-    { name: "Gamma", value: 750000 },
-    { name: "Delta", value: 750000 },
-    { name: "Epsilon", value: 750000 },
-    { name: "Product Zero", value: 10000 },
-    { name: "Hyperware", value: 15450 },
-    { name: "Metaware", value: 15450 },
-  ];
 
-  const distributionCenter2 = [
-    { name: "Gamma", value: 750000 },
-    { name: "Delta", value: 750000 },
-    { name: "Epsilon", value: 750000 },
-    { name: "Product Zero", value: 10000 },
-    { name: "Hyperware", value: 15450 },
-    { name: "Metaware", value: 15450 },
-  ];
+
+  const [data, setData] = useState({
+    manufacture: {},
+    distributionCenter1: {},
+    distributionCenter2: {},
+    capital: 0,
+  });
+
+  useEffect(() => {
+
+    const simulation_id = (localStorage.getItem("inventory_simulation_id")) || [];
+    const firm_key = (localStorage.getItem("inventory_firm_key")) || [];
+    const current_quarter = (localStorage.getItem("inventory_current_quarter")) || [];
+
+    axios.get(`${api}/inventory/`, {
+      params: {
+        simulation_id: simulation_id,
+        firm_key: firm_key,
+        current_quarter: current_quarter
+      }
+    })
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the data!", error);
+      });
+
+  }, []);
+
+  const convertToArray = (obj) => {
+    return Object.keys(obj).map(key => ({
+      name: key.replace('inventory_', '').replace('_region2', '').replace('_region3', ''),
+      value: obj[key]
+    }));
+  };
+
+  const manufactureArray = convertToArray(data.manufacture);
+  const distributionCenter1Array = convertToArray(data.distributionCenter1);
+  const distributionCenter2Array = convertToArray(data.distributionCenter2);
 
   return (
     <>
-      {" "}
       <AdminNavBar />
       <div className="container mx-auto p-4">
         <div className="flex justify-between">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            {/* Simulations &gt; MBA 2024 &gt; procurement &gt; Inventory */}
+
           </h2>
-          <h3 className="text-xl font-bold text-gray-800">5th Quarter</h3>
+          <h3 className="text-xl font-bold text-gray-800">{name} | {firm_key} | {current_quarter}th Quarter</h3>
         </div>
         <div className="mb-4 bg-gray-400 p-4 rounded-md shadow">
           <div className="flex justify-between mb-4">
-            <h3 className="text-xl font-bold text-gray-800">Manufacture</h3>
+            <h3 className="text-xl font-bold text-gray-800">Manufacture | Region 1 | capital - {data.capital} $ </h3>
           </div>
           <div className="flex justify-between">
             <div className="grid grid-cols-5 gap-4">
-              {manufacture
+              {manufactureArray
                 .filter(
                   (item) =>
-                    item.name !== "Hyperware" && item.name !== "Metaware"
+                    item.name !== "hyperware" && item.name !== "metaware"
                 )
                 .map((item) => (
                   <div
@@ -65,10 +88,10 @@ const Inventory = () => {
                 ))}
             </div>
             <div className="bg-gray-300 p-4 grid grid-cols-2 rounded-lg">
-              {manufacture
+              {manufactureArray
                 .filter(
                   (item) =>
-                    item.name === "Hyperware" || item.name === "Metaware"
+                    item.name === "hyperware" || item.name === "metaware"
                 )
                 .map((item) => (
                   <div
@@ -80,25 +103,25 @@ const Inventory = () => {
                   </div>
                 ))}
             </div>
-            <div className="w-24 flex justify-center">{/* img */}</div>
+            <div className="w-34 flex justify-center">   <Image src={facotry} /> </div>
           </div>
         </div>
         <div className="mb-4 bg-gray-400 p-4 rounded-md shadow">
           <div className="flex justify-between">
             {" "}
             <h3 className="text-xl font-bold text-gray-800 mb-2">
-              Distribution Center - Region 1 (Owned)
+              Distribution Center | Region 2
             </h3>
-            <h4 className="text-gray-200">warehouse-4 3</h4>
+
           </div>
           <div className="flex justify-between">
             <div className="grid grid-cols-5 gap-4">
-              {distributionCenter1
+              {distributionCenter1Array
                 .filter(
                   (item) =>
-                    item.name !== "Hyperware" &&
-                    item.name !== "Metaware" &&
-                    item.name !== "Product Zero"
+                    item.name !== "hyperware" &&
+                    item.name !== "metaware" &&
+                    item.name !== "zero"
                 )
                 .map((item) => (
                   <div key={item.name} className=" p-4 rounded-lg text-center">
@@ -110,12 +133,12 @@ const Inventory = () => {
                 ))}
             </div>
             <div className="bg-gray-300 grid grid-cols-3 p-4 rounded-lg">
-              {distributionCenter1
+              {distributionCenter1Array
                 .filter(
                   (item) =>
-                    item.name === "Hyperware" ||
-                    item.name === "Metaware" ||
-                    item.name === "Product Zero"
+                    item.name === "hyperware" ||
+                    item.name === "metaware" ||
+                    item.name === "zero"
                 )
                 .map((item) => (
                   <div
@@ -127,26 +150,26 @@ const Inventory = () => {
                   </div>
                 ))}
             </div>
-            <div className="w-24 flex justify-center">{/* img */}</div>
+            <div className="w-34 flex justify-center">   <Image src={storage} /> </div>
           </div>
         </div>
         <div className="mb-4 bg-gray-400 p-4 rounded-md shadow">
           <div className="flex justify-between">
             {" "}
             <h3 className="text-xl font-bold text-gray-800 mb-2">
-              Distribution Center - Region 2 (Owned)
+              Distribution Center | Region 3
             </h3>
-            <h4 className="text-gray-200">warehouse-4 3</h4>
+
           </div>
 
           <div className="flex justify-between">
             <div className="grid grid-cols-5 gap-4">
-              {distributionCenter2
+              {distributionCenter2Array
                 .filter(
                   (item) =>
-                    item.name !== "Hyperware" &&
-                    item.name !== "Metaware" &&
-                    item.name !== "Product Zero"
+                    item.name !== "hyperware" &&
+                    item.name !== "metaware" &&
+                    item.name !== "zero"
                 )
                 .map((item) => (
                   <div key={item.name} className=" p-4 rounded-lg text-center">
@@ -158,12 +181,12 @@ const Inventory = () => {
                 ))}
             </div>
             <div className="bg-gray-300 grid grid-cols-3 p-4 rounded-lg">
-              {distributionCenter2
+              {distributionCenter2Array
                 .filter(
                   (item) =>
-                    item.name === "Hyperware" ||
-                    item.name === "Metaware" ||
-                    item.name === "Product Zero"
+                    item.name === "hyperware" ||
+                    item.name === "metaware" ||
+                    item.name === "zero"
                 )
                 .map((item) => (
                   <div
@@ -175,19 +198,10 @@ const Inventory = () => {
                   </div>
                 ))}
             </div>
-            <div className="w-24 flex justify-center">{/* img */}</div>
+            <div className="w-34 flex justify-center">   <Image src={storage} /> </div>
           </div>
         </div>
-        <div className="bg-gray-400 p-4 rounded-md shadow">
-          <div className="flex justify-between">
-            {" "}
-            <h3 className="text-xl font-bold text-gray-800 mb-2">
-              Distribution Center - Region 3
-            </h3>
-            <h4 className="text-gray-200">warehouse-4 3</h4>
-          </div>
-          <div className="grid">(Not Owned / Sourced)</div>
-        </div>
+
       </div>
     </>
   );
