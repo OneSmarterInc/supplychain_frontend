@@ -14,7 +14,7 @@ export default function EvaluationReportModal({ simulation_id, firm_key, selecte
   const [open, setOpen] = React.useState(false);
   const [reportData, setReportData] = React.useState('');
   const { api } = useContext(MyContext);
-
+  console.log(simulation_id,firm_key,selected_quarter);
   useEffect(() => {
     getForecast();
   }, [simulation_id, firm_key, selected_quarter]);
@@ -31,6 +31,7 @@ export default function EvaluationReportModal({ simulation_id, firm_key, selecte
       const data = response.data;
       
       setReportData(data[0]);
+      console.log(reportData);
     } catch (error) {
       console.error("Error making GET request:", error);
     }
@@ -49,7 +50,7 @@ export default function EvaluationReportModal({ simulation_id, firm_key, selecte
           style={{ height: "600px", overflowY: "auto" }}
           className="text-lg overflow-scroll"
         >
-          <EvaluationReportTable reportData={reportData}/>
+          <EvaluationReportTable reportData={reportData} firm={firm_key}/>
         </DialogBody>
         <DialogFooter>
           <Button

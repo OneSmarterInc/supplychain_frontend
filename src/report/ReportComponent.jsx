@@ -7,6 +7,7 @@ import ProductReportModal from "./ProductReport/ProductReportModel";
 import FGInventoryModal from "./FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "./EvaluationReport/EvaluationReportModal";
 import MyContext from "../Components/ContextApi/MyContext";
+import BalanceSheetModel from "./BlanceSheetReport/BalanceSheetModel";
 
 const ReportComponent = () => {
     const { api } = useContext(MyContext);
@@ -34,7 +35,7 @@ const ReportComponent = () => {
       firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
     }
   }
-  for (let i = 1; i <= simData[0].current_quarter; i++) {
+  for (let i = 1; i <= simData[0].current_quarter-1; i++) {
     option.push(
       <option key={i} value={i}>
         Select Quarter {i}
@@ -95,21 +96,24 @@ const ReportComponent = () => {
         >
           <option value="">Select </option>
           <option value="cpl">Corporate P&L Statement </option>
-          {/* <option value="hpl">Historical Corporate P&L Statement</option> */}
+          <option value="hpl">Historical Corporate P&L Statement</option>
           <option value="pcpl">Hyperware P&L Statement</option>
-          {/* <option value="mpls">Metaware P&L Statement</option> */}
-          {/* <option value="bl">Balance Sheet</option> */}
+          <option value="mpls">Metaware P&L Statement</option>
+          <option value="bl">Balance Sheet</option>
           {/* <option value="cfar">Cash FLow Analysis Report</option> */}
-          <option value="inventory">FINISHED GOODS INVENTORY REPORT</option>
+          <option value="inventory">Finished Goods Inventory Report </option>
           {/* <option value="pir">PROCUREMENT INVENTORY REPORT</option> */}
           {/* <option value="odvr">OTHER DECISION VARIABLES REPORT</option> */}
           {/* <option value="far">FORECASTING ACCURACY REPORT</option> */}
         </Select>
 
         {secondDropdownValue === "cpl" ? <ReportModal /> : null}
+        {secondDropdownValue === "hpl" ? <ReportModal /> : null}
         {secondDropdownValue === "pcpl" ? <ProductReportModal /> : null}
+        {secondDropdownValue === "mpls" ? <ProductReportModal /> : null}
         {secondDropdownValue === "inventory" ? <FGInventoryModal /> : null}
-        <EvaluationReportModal />
+        {secondDropdownValue === "bl" ? <BalanceSheetModel /> : null}
+        <EvaluationReportModal simulation_id={simData[0].simulation_id} firm_key={firm_key_new} selected_quarter={simData[0].current_quarter-1} />
       </HStack>
     </div>
   );

@@ -5,25 +5,29 @@ import React, { useRef, useState, useEffect } from "react";
 const SupplyChainTable = ({ setUpdatedDCData }) => {
   const tableRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeDC, setActiveDC] = useState("DC1"); // Track active DC
-  const procurementData = JSON.parse(localStorage.getItem("procurementData"));
+  const [activeDC, setActiveDC] = useState("DC1");
+  const [procurementData, setProcurementData] = useState({});
+  const [selectedSim, setSelectedSim] = useState([]);
 
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("procurementData"));
+    setProcurementData(data || {});
+  }, []);
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("selectedSim"));
+    setSelectedSim(data || []);
+  }, []);
+
   const supplierOptions = [
     "Select",
-    selectedSim[0]?.renamedMappedData?.suppliarMapp["A"],
-    
-    selectedSim[0]?.renamedMappedData?.suppliarMapp["B"],
-    
-    selectedSim[0]?.renamedMappedData?.suppliarMapp["C"],
-    
-    selectedSim[0]?.renamedMappedData?.suppliarMapp["D"],
-    
-    selectedSim[0]?.renamedMappedData?.suppliarMapp["E"],
-    
-    selectedSim[0]?.renamedMappedData?.suppliarMapp["F"],
-    
-    selectedSim[0]?.renamedMappedData?.suppliarMapp["G"],
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.A || "Supplier A",
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.B || "Supplier B",
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.C || "Supplier C",
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.D || "Supplier D",
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.E || "Supplier E",
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.F || "Supplier F",
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.G || "Supplier G",
   ];
   const mediumOptions = ["Select", "Air", "Surface"];
 
@@ -38,7 +42,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-  console.log("DC DATA", dcData);
 
   const handleDCButtonClick = (dc) => {
     setActiveDC(dc);
@@ -81,7 +84,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
           ref={tableRef}
           className="h-100 ml-2 overflow-scroll border-2 border-opacity-50 border-blue-gray-200"
         >
-          {/* Conditionally render tables based on activeDC */}
           {activeDC === "DC1" && dcData?.DC1 !== "closed" && (
             <table className="table-auto w-full border-separate border-spacing-2 ">
               <thead>
@@ -89,11 +91,9 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                   <th className="text-center py-3 text-lg ">Name</th>
                   <th className="text-center py-3 text-lg ">Supplier</th>
                   <th className="text-center py-3 text-lg ">Medium</th>
-
                   <th className="text-center py-3 text-lg w-28">Units</th>
                 </tr>
               </thead>
-
               <tbody ref={tableRef} className="h-40 overflow-scroll-auto">
                 {dcData[activeDC]?.map((entry, index) => (
                   <tr className="bg-slate-300 " key={index}>
@@ -113,7 +113,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                         }
                       />
                     </td>
-
                     <td className="text-center py-2 text-xl ">
                       <p className="flex justify-center">
                         <select
@@ -168,7 +167,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                         </select>
                       </p>
                     </td>
-
                     <td className="text-center py-2 text-xl">
                       <input
                         type="text"
@@ -200,11 +198,9 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                   <th className="text-center py-3 text-lg ">Name</th>
                   <th className="text-center py-3 text-lg ">Supplier</th>
                   <th className="text-center py-3 text-lg ">Medium</th>
-
                   <th className="text-center py-3 text-lg w-28">Units</th>
                 </tr>
               </thead>
-
               <tbody className="h-40 overflow-scroll">
                 {dcData[activeDC]?.map((entry, index) => (
                   <tr className="bg-slate-300 " key={index}>
@@ -278,7 +274,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                         </select>
                       </p>
                     </td>
-
                     <td className="text-center py-2 text-xl">
                       <input
                         type="text"
@@ -310,11 +305,9 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                   <th className="text-center py-3 text-lg ">Name</th>
                   <th className="text-center py-3 text-lg ">Supplier</th>
                   <th className="text-center py-3 text-lg ">Medium</th>
-                  <th className="text-center py-3 text-lg ">Demands</th>
                   <th className="text-center py-3 text-lg w-28">Units</th>
                 </tr>
               </thead>
-
               <tbody className="h-40 overflow-scroll">
                 {dcData[activeDC]?.map((entry, index) => (
                   <tr className="bg-slate-300 " key={index}>
@@ -392,7 +385,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                         </select>
                       </p>
                     </td>
-
                     <td className="text-center py-2 text-xl">
                       <input
                         type="text"
@@ -431,7 +423,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
           >
             DC 1
           </button>
-          {/* Similarly, handle buttons for DC2 and DC3 */}
           <button
             onClick={() => handleDCButtonClick("DC2")}
             className={`h-10 mx-1 bg-blue-gray-400 text-white hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg p-1.5 ${
@@ -451,7 +442,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
             DC 3
           </button>
         </div>
-
         <div className="flex flex-row w-30 justify-center">
           <button
             onClick={() => onAddEntry(activeDC)}

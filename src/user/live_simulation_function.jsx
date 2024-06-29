@@ -168,19 +168,15 @@ const PlayComponent = ({
                 >
                   <option value="">Select</option>
                   <option value="cpl">Corporate P&L Statement</option>
-                  <option value="hpl">
-                    Historical Corporate P&L Statement
-                  </option>
+                  <option value="hpl">Historical Corporate P&L Statement</option>
                   <option value="pcpl">Hyperware P&L Statement</option>
                   <option value="mpls">Metaware P&L Statement</option>
                   <option value="bl">Balance Sheet</option>
-                  <option value="cfar">Cash Flow Analysis Report</option>
-                  <option value="inventory">
-                    Finished Goods Inventory Report
-                  </option>
-                  <option value="pir">Procurement Inventory Report</option>
-                  <option value="odvr">Other Decision Variables Report</option>
-                  <option value="far">Forecasting Accuracy Report</option>
+                  {/* <option value="cfar">Cash Flow Analysis Report</option> */}
+                  <option value="inventory">Finished Goods Inventory Report</option>
+                  {/* <option value="pir">Procurement Inventory Report</option> */}
+                  {/* <option value="odvr">Other Decision Variables Report</option> */}
+                  {/* <option value="far">Forecasting Accuracy Report</option> */}
                 </Select>
               </HStack>
               <div className="mt-4 flex">
@@ -196,7 +192,7 @@ const PlayComponent = ({
                 {secondDropdownValue === "far" && <ReportModal />}
                 <div className="px-5">
                   {" "}
-                  <EvaluationReportModal simulation_id={id} firm_key={firm_key_map} selected_quarter={firstDropdownValue} />
+                  <EvaluationReportModal simulation_id={simData[0].simulation_id} firm_key={firm_key_map} selected_quarter={firstDropdownValue} />
                 </div>
               </div>
             </div>

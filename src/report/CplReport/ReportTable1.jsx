@@ -38,11 +38,11 @@ const ReportTable1 = () => {
       </div>
       <table className="w-full text-start whitespace-nowrap">
         <thead>
-          <tr className="bg-gray-400 text-red-500">
+          <tr className="bg-gray-400 text-white-500">
             <th className="px-4 py-2">Metric</th>
             <th className="px-4 py-2">All Products</th>
-            <th className="px-4 py-2">Product 7-1</th>
-            <th className="px-4 py-2">Product 7-2</th>
+            <th className="px-4 py-2">Hyperware</th>
+            <th className="px-4 py-2">Metaware</th>
           </tr>
         </thead>
         <tbody>

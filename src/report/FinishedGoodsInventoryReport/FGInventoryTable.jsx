@@ -8,20 +8,21 @@ const FGInventoryTable = () => {
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const reportData = Data[0];
 
+
   return (
     <div>
       <div className="heading flex justify-between font-bold">
         <div>
-          <p>Firm : {Object.keys(selectedSim[0]?.firm_data)[0]}</p>
+          <p>Firm : l </p>
         </div>
       </div>
       <table className="w-full text-start whitespace-nowrap">
         <thead>
           <tr>
             <th className="px-4 py-2">Metric</th>
-            <th className="px-4 py-2">Product 1-0</th>
-            <th className="px-4 py-2">Product 1-1</th>
-            <th className="px-4 py-2">Product 1-2</th>
+            <th className="px-4 py-2">Product Zero</th>
+            <th className="px-4 py-2">Hyperware</th>
+            <th className="px-4 py-2">Metaware</th>
           </tr>
         </thead>
         <tbody>
