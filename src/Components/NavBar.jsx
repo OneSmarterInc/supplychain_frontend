@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ProfileDropdown from "./Profile";
+import favicon from "../assets/favicon.png";
 
 const NavBar = () => {
   let id = localStorage.getItem("selectedSimulation");
@@ -26,8 +27,9 @@ const NavBar = () => {
       <nav style={{ fontFamily: "ABeeZee" }} className="">
         <div className="flex flex-col items-center justify-center sm:items-stretch sm:justify-between">
           <div className=" bg-gray-800 py-1 px-3 flex justify-between items-center  ">
-            <div className="text-2xl text-white font-bold ">
-              Supplychain Simulation
+            <div className="text-2xl flex items-center text-white font-bold ">
+              <img src={favicon} className="h-12 w-12 " alt="" />
+              <span>Supplychain Simulation</span>
             </div>
             <div className="text-2xl font-serif w-40 flex justify-between items-center mx-3 text-white font-bold pl-14">
               <div className="mx-3">
@@ -72,7 +74,7 @@ const NavBar = () => {
                   Distribution
                 </Link>
               )}
-               {decisions?.is_transportation === true && (
+              {decisions?.is_transportation === true && (
                 <Link
                   to="/transportation"
                   className="text-orange-400  hover:text-red-500 rounded-md px-3 py-1 text-lg  focus:bg-green-300 focus:text-white font-medium"
@@ -104,7 +106,6 @@ const NavBar = () => {
                   IT
                 </Link>
               )}{" "}
-             
             </div>
           </div>
         </div>
