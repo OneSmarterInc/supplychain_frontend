@@ -75,7 +75,7 @@ const AdminSideLive = () => {
   return (
     <div>
       <AdminNavBar />
-      <h2 className="text-3xl p-2 pl-10 ">Live Simulation</h2>
+      <h2 className="text-3xl p-2 pl-10 bg-blue-gray-900 text-white ">Ended Simulation</h2>
       {simData
         .filter((item) => item.is_active === false)
         .reverse()
@@ -90,8 +90,6 @@ const AdminSideLive = () => {
             currentQuarter={item.current_quarter}
           />
         ))}
-
-      <div className="h-60 bg-teal-300"></div>
     </div>
   );
 };

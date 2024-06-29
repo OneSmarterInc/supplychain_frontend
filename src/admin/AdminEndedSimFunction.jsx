@@ -118,10 +118,10 @@ const AdminSideEndedFunction = ({
   };
 
   return (
-    <div className="flex h-80  bg-slate-200 justify-around items-center mx-10 rounded-lg border-2 border-neutral-600">
-      <div className="info">
+    <div className="flex h-80 pl-96 bg-slate-200 justify-start items-center bg-blue-gray-900">
+      <div className="info min-w-[700px] p-4 bg-blue-gray-800">
         <div className="text-3xl p-2 flex">
-          <div className="flex items-center ">
+          <div className="flex text-white items-center ">
             <h1 className="text-3xl"> {batch} |</h1>
             <span className="text-3xl p-2">
               Current Quarter : {currentQuarter}

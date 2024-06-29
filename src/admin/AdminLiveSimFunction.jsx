@@ -105,9 +105,9 @@ const AdminSideLiveFunction = ({
     setIsAddUserInputModalOpen(!isAddUserInputModalOpen);
   };
 
-  useEffect(()=>{
-    firmsFetch()
-  },[])
+  useEffect(() => {
+    firmsFetch();
+  }, []);
 
   const handleAddAdmin = async () => {
     try {
@@ -177,14 +177,12 @@ const AdminSideLiveFunction = ({
   };
 
   return (
-    <div className="flex h-80 bg-slate-200 justify-around items-center mx-10 rounded-lg border-2 border-neutral-600">
-      <div className="info">
-        <div className="text-3xl p-2 flex">
-          <div className="flex items-center ">
+    <div className="flex h-80 pl-96 bg-slate-200 justify-start items-center bg-blue-gray-900">
+      <div className="info min-w-[700px] p-4 bg-blue-gray-800">
+        <div className="text-3xl w-full  flex items-center justify-between">
+          <div className="flex text-white items-center ">
             <h1 className="text-3xl"> {batch} |</h1>
-            <span className="text-3xl p-2">
-              Current Quarter : {currentQuarter}
-            </span>
+            <span className="text-3xl p-2">Quarter : {currentQuarter}</span>
           </div>
           <button
             onClick={addAdminInputModal}
@@ -193,7 +191,7 @@ const AdminSideLiveFunction = ({
             Add Admin
           </button>
         </div>
-        <p className="text-base p-2">
+        <p className="text-base p-3 text-blue-gray-500">
           start Date {startDate} | End Date {endDate}
         </p>
 
@@ -215,12 +213,12 @@ const AdminSideLiveFunction = ({
           </div>
         )}
 
-        <div className="relative">
+        <div className="relative flex items-center bg-blue-gray-700 p-3">
           {firms?.map((firmsdata) => {
             return (
               <button
                 key={firmsdata.firm_key}
-                className="w-40 h-10 rounded-lg bg-green-600 text-white text-center p-2 mx-2 hover:bg-sky-950"
+                className="w-40 h-10 rounded-lg bg-green-600 text-white text-center p-2 m-2 hover:bg-sky-950"
                 onClick={() => {
                   handleFirmsUsers(firmsdata);
                 }}

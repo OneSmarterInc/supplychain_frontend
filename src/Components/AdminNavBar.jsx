@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ProfileDropdown from "./Profile";
+import favicon from "../assets/favicon.png";
 
 const AdminNavBar = () => {
   return (
@@ -10,6 +11,7 @@ const AdminNavBar = () => {
           <div className="relative flex h-16 items-center justify-end">
             <div className="flex w-screen items-center  justify-between">
               <div className="flex flex-shrink-0 items-center">
+              <img src={favicon} className="h-12 w-12 " alt="" />
                 <p className="text-2xl text-white font-bold">
                   Supplychain Simulation
                 </p>

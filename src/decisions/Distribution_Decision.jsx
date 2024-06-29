@@ -134,7 +134,7 @@ const Distribution_Decision = () => {
   const regions = ["region1", "region2", "region3"];
   const options = {
     distribution_centerOpt: [0, 1],
-    rfidOpt: [0, 1],
+    rfidOpt: [0, 1, 2],
     emergency_carrierOpt: [
       selectedSim[0]?.renamedMappedData?.distributerMapp["I"],
       selectedSim[0]?.renamedMappedData?.distributerMapp["J"],
@@ -152,7 +152,7 @@ const Distribution_Decision = () => {
       selectedSim[0]?.renamedMappedData?.distributerMapp["N"],
     ],
     fgi_surface_shippingOpt: [0, 1],
-    sac_surface_shippingOpt: [0, 1],
+    sac_surface_shippingOpt: [0, 1, 2],
   };
 
   const toast = useToast();
@@ -201,8 +201,7 @@ const Distribution_Decision = () => {
         ip_address: "123.345.1",
         username: user.username,
         firm_key: firm_key_new,
-        current_quarter:selectedSim[0].current_quarter,
-
+        current_quarter: selectedSim[0].current_quarter,
       });
       const data = response.data;
       console.log("addUserLoggerData", data);
@@ -234,7 +233,7 @@ const Distribution_Decision = () => {
           </div>
         </div>
         <div className="grid grid-cols-2 grid-flow-col gap-3  m-1">
-          <div className="row-span-2 m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-start">
+          <div className="row-span-2 m-3 rounded-2xl bg-white p-2  flex flex-col justify-start">
             <Box>
               <Text className="p-5 py-3 pb-0 text-xl">
                 <strong>Distribution</strong>
@@ -269,6 +268,10 @@ const Distribution_Decision = () => {
                         {regions.map((region) => (
                           <Td key={region}>
                             <Select
+                              disabled={
+                                (region === "region2" || region==="region3") ? false:
+                                (region === "region1" && (channel === "rfid" || channel === "sac_surface_shipping")) ? false  :true 
+                              }
                               placeholder="Select"
                               value={values[channel][region.toLowerCase()]}
                               onChange={(e) =>
@@ -310,6 +313,10 @@ const Distribution_Decision = () => {
                               <Td key={region}>
                                 <Select
                                   placeholder="Select"
+                                  disabled={
+                                    (region === "region2" || region==="region3") ? false:
+                                   true 
+                                  }
                                   value={row[region]}
                                   onChange={(e) =>
                                     handleCrossDockingChange(
@@ -361,7 +368,7 @@ const Distribution_Decision = () => {
               </Table>
             </Box>
           </div>
-          <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
+          <div className="rounded-2xl m-3  overflow-hidden    bg-white h-full p-2">
             <InfoImg />
             <div className="py-10">
               {" "}
