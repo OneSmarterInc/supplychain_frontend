@@ -75,7 +75,7 @@ const UserSideEnded = () => {
   return (
     <div>
       <UserNavBar />
-      <h2 className="text-3xl p-2 pl-10 ">Live Simulation</h2>
+      <h2 className="text-3xl p-2 pl-10 ">Ended Simulation</h2>
       {simData
         .filter((item) => item.is_active === false)
         .reverse()

@@ -2,6 +2,7 @@ import React from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Button } from "@material-tailwind/react";
 import { SalesPDFDocument } from "./SalesPDFDocument";
+import Chart from "react-apexcharts";
 
 const ReportTable1 = () => {
   const reportData = JSON.parse(localStorage.getItem("reportData"));
@@ -29,16 +30,123 @@ const ReportTable1 = () => {
   const Taxes = reportData[6];
   const NetIncome = reportData[7];
 
+  const chartData = {
+    series: [
+      {
+        name: "All Products",
+        data: [
+          Math.trunc(Revenues["All Products"]),
+          Math.trunc(GrossMargin["All Products"]),
+          Math.trunc(OperatingIncome["All Products"]),
+          Math.trunc(NonOperatingIncome["All Products"]),
+          Math.trunc(Taxes["All Products"]),
+          Math.trunc(NetIncome["All Products"])
+        ]
+      },
+      {
+        name: "Hyperware",
+        data: [
+          Math.trunc(Revenues["Product 7-1"]),
+          Math.trunc(GrossMargin["Product 7-1"]),
+          Math.trunc(OperatingIncome["Product 7-1"]),
+          Math.trunc(NonOperatingIncome["Product 7-1"]),
+          Math.trunc(Taxes["Product 7-1"]),
+          Math.trunc(NetIncome["Product 7-1"])
+        ]
+      },
+      {
+        name: "Metaware",
+        data: [
+          Math.trunc(Revenues["Product 7-2"]),
+          Math.trunc(GrossMargin["Product 7-2"]),
+          Math.trunc(OperatingIncome["Product 7-2"]),
+          Math.trunc(NonOperatingIncome["Product 7-2"]),
+          Math.trunc(Taxes["Product 7-2"]),
+          Math.trunc(NetIncome["Product 7-2"])
+        ]
+      }
+    ],
+    options: {
+      chart: {
+        type: "bar",
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "55%"
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ["transparent"]
+      },
+      xaxis: {
+        categories: [
+          "Revenue",
+          "Gross Margin",
+          "Operating Income",
+          "Non Operating Income",
+          "Taxes",
+          "Net Income"
+        ]
+      },
+      yaxis: {
+        title: {
+          text: "Amount"
+        },
+        labels: {
+          formatter: function (val) {
+            return Math.trunc(val);
+          }
+        }
+      },
+      fill: {
+        opacity: 1
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return `$ ${Math.trunc(val)}`;
+          }
+        }
+      }
+    }
+  };
+
+  const formatNumber = (num) => {
+    if (typeof num === "number") {
+      return new Intl.NumberFormat("en-US", {
+        maximumFractionDigits: 0
+      }).format(num);
+    }
+    return num;
+  };
+
   return (
     <div>
-      <div className="heading flex justify-between font-bold">
+      <div className="heading flex justify-between font-bold mb-4">
         <div>
-          <p>Firm : {firm_key_new}</p>
+          <p>Firm: {firm_key_new}</p>
         </div>
       </div>
-      <table className="w-full text-start whitespace-nowrap">
+
+      <div id="chart" className="mb-6">
+        <Chart
+          options={chartData.options}
+          series={chartData.series}
+          type="bar"
+          height={350}
+        />
+      </div>
+
+      <table className="w-full text-start whitespace-nowrap mb-4">
         <thead>
-          <tr className="bg-gray-400 text-white-500">
+          <tr className="bg-gray-400 text-white">
             <th className="px-4 py-2">Metric</th>
             <th className="px-4 py-2">All Products</th>
             <th className="px-4 py-2">Hyperware</th>
@@ -47,65 +155,67 @@ const ReportTable1 = () => {
         </thead>
         <tbody>
           {Object.keys(salesData).map((key, index) => (
-            <tr key={index}>
-              <td className=" border font-bold px-4 py-2">{key}</td>
-              <td className="border px-4 py-2 text-center">
-                {typeof salesData[key] === "object"
-                  ? Object.values(salesData[key])[0]
-                  : salesData[key]}
-              </td>
-              <td className="border px-4 py-2 text-center">
-                {typeof salesData[key] === "object"
-                  ? Object.values(salesData[key])[1]
-                  : salesData[key]}
-              </td>
-              <td className="border px-4 py-2 text-center">
-                {typeof salesData[key] === "object"
-                  ? Object.values(salesData[key])[2]
-                  : salesData[key]}
-              </td>
-            </tr>
+            key !== "Sales Volume" && key !== "Unfilled Orders" ? (
+              <tr key={index}>
+                <td className="border font-bold px-4 py-2">{key}</td>
+                <td className="border px-4 py-2 text-center">
+                  {typeof salesData[key] === "object"
+                    ? formatNumber(Math.trunc(Object.values(salesData[key])[0]))
+                    : formatNumber(Math.trunc(salesData[key]))}
+                </td>
+                <td className="border px-4 py-2 text-center">
+                  {typeof salesData[key] === "object"
+                    ? formatNumber(Math.trunc(Object.values(salesData[key])[1]))
+                    : formatNumber(Math.trunc(salesData[key]))}
+                </td>
+                <td className="border px-4 py-2 text-center">
+                  {typeof salesData[key] === "object"
+                    ? formatNumber(Math.trunc(Object.values(salesData[key])[2]))
+                    : formatNumber(Math.trunc(salesData[key]))}
+                </td>
+              </tr>
+            ) : null
           ))}
           <tr>
             <td className="font-bold border px-4 py-2">Revenue</td>
             <td className="border px-4 py-2 text-center">
-              {Revenues["All Products"]}
+              {formatNumber(Math.trunc(Revenues["All Products"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {Revenues["Product 7-1"]}
+              {formatNumber(Math.trunc(Revenues["Product 7-1"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {Revenues["Product 7-2"]}
+              {formatNumber(Math.trunc(Revenues["Product 7-2"]))}
             </td>
           </tr>
           {Object.keys(Revenues.details).map((detailKey, index) => (
             <tr key={index}>
               <td className="border px-4 py-2 pl-8">- {detailKey}</td>
               <td className="border px-4 py-2 text-center">
-                {Revenues.details[detailKey]["All Products"]}
+                {formatNumber(Math.trunc(Revenues.details[detailKey]["All Products"]))}
               </td>
               <td className="border px-4 py-2 text-center">
-                {Revenues.details[detailKey]["Product 7-1"]}
+                {formatNumber(Math.trunc(Revenues.details[detailKey]["Product 7-1"]))}
               </td>
               <td className="border px-4 py-2 text-center">
-                {Revenues.details[detailKey]["Product 7-2"]}
+                {formatNumber(Math.trunc(Revenues.details[detailKey]["Product 7-2"]))}
               </td>
             </tr>
           ))}
           <tr>
             <td className="font-bold border px-4 py-2">Gross Margin</td>
             <td className="border px-4 py-2 text-center">
-              {GrossMargin["All Products"]}
+              {formatNumber(Math.trunc(GrossMargin["All Products"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {GrossMargin["Product 7-1"]}
+              {formatNumber(Math.trunc(GrossMargin["Product 7-1"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {GrossMargin["Product 7-2"]}
+              {formatNumber(Math.trunc(GrossMargin["Product 7-2"]))}
             </td>
           </tr>
           <tr>
-            <td className="font-bold border px-4 py-2">Fixed_Other_Costs</td>
+            <td className="font-bold border px-4 py-2">Fixed Other Costs</td>
             <td className="border px-4 py-2 text-center"></td>
             <td className="border px-4 py-2 text-center"></td>
             <td className="border px-4 py-2 text-center"></td>
@@ -114,69 +224,68 @@ const ReportTable1 = () => {
             <tr key={index}>
               <td className="border px-4 py-2 pl-8">- {detailKey}</td>
               <td className="border px-4 py-2 text-center">
-                {Fixed_Other_Costs.details[detailKey]["All Products"]}
+                {formatNumber(Math.trunc(Fixed_Other_Costs.details[detailKey]["All Products"]))}
               </td>
               <td className="border px-4 py-2 text-center">
-                {Fixed_Other_Costs.details[detailKey]["Product 7-1"]}
+                {formatNumber(Math.trunc(Fixed_Other_Costs.details[detailKey]["Product 7-1"]))}
               </td>
               <td className="border px-4 py-2 text-center">
-                {Fixed_Other_Costs.details[detailKey]["Product 7-2"]}
+                {formatNumber(Math.trunc(Fixed_Other_Costs.details[detailKey]["Product 7-2"]))}
               </td>
             </tr>
           ))}
           <tr>
-            <td className="font-bold border px-4 py-2">OperatingIncome</td>
+            <td className="font-bold border px-4 py-2">Operating Income</td>
             <td className="border px-4 py-2 text-center">
-              {OperatingIncome["All Products"]}
+              {formatNumber(Math.trunc(OperatingIncome["All Products"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {OperatingIncome["Product 7-1"]}
+              {formatNumber(Math.trunc(OperatingIncome["Product 7-1"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {OperatingIncome["Product 7-2"]}
+              {formatNumber(Math.trunc(OperatingIncome["Product 7-2"]))}
             </td>
           </tr>
           <tr>
-            <td className="font-bold border px-4 py-2">NonOperatingIncome</td>
+            <td className="font-bold border px-4 py-2">Non Operating Income</td>
             <td className="border px-4 py-2 text-center">
-              {NonOperatingIncome["All Products"]}
+              {formatNumber(Math.trunc(NonOperatingIncome["All Products"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {NonOperatingIncome["Product 7-1"]}
+              {formatNumber(Math.trunc(NonOperatingIncome["Product 7-1"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {NonOperatingIncome["Product 7-2"]}
+              {formatNumber(Math.trunc(NonOperatingIncome["Product 7-2"]))}
             </td>
           </tr>
           <tr>
             <td className="font-bold border px-4 py-2">Taxes</td>
             <td className="border px-4 py-2 text-center">
-              {Taxes["All Products"]}
+              {formatNumber(Math.trunc(Taxes["All Products"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {Taxes["Product 7-1"]}
+              {formatNumber(Math.trunc(Taxes["Product 7-1"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {Taxes["Product 7-2"]}
+              {formatNumber(Math.trunc(Taxes["Product 7-2"]))}
             </td>
           </tr>
           <tr>
-            <td className="font-bold border px-4 py-2">NetIncome</td>
+            <td className="font-bold border px-4 py-2">Net Income</td>
             <td className="border px-4 py-2 text-center">
-              {NetIncome["All Products"]}
+              {formatNumber(Math.trunc(NetIncome["All Products"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {NetIncome["Product 7-1"]}
+              {formatNumber(Math.trunc(NetIncome["Product 7-1"]))}
             </td>
             <td className="border px-4 py-2 text-center">
-              {NetIncome["Product 7-2"]}
+              {formatNumber(Math.trunc(NetIncome["Product 7-2"]))}
             </td>
           </tr>
         </tbody>
       </table>
 
       <div className="flex justify-end py-4">
-        {" "}
         <PDFDownloadLink
           document={
             <SalesPDFDocument

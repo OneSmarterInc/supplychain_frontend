@@ -19,7 +19,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import MyContext from "./ContextApi/MyContext";
 
@@ -32,7 +32,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { api } = useContext(MyContext);
-
+  const navigate = useNavigate()
   const toast = useToast();
 
   const handleShowClick = () => setShowPassword(!showPassword);
@@ -41,7 +41,7 @@ const Signup = () => {
     e.preventDefault();
 
     let data = {
-      userName: name,
+      username: name,
       email,
       password,
     };
@@ -63,6 +63,15 @@ const Signup = () => {
         const response = await axios.post(`${api}/users/createuser/`, data);
 
         if (response.status === 201) {
+          toast({
+            title: "Account Created Successfully ",
+            description: "Please sign in to continue",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+            position: "top",
+          });
+          navigate('/signin');
           console.log("Signup successful");
           console.log(response.data);
         } else {
