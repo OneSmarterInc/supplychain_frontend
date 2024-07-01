@@ -175,7 +175,7 @@ const AdminSideLiveFunction = ({
     setSelectedFirm(firmdata);
     setIsFirmModalOpen(!isFirmModalOpen);
   };
-
+  
   return (
     <div className="flex h-80 pl-96 bg-slate-200 justify-start items-center bg-blue-gray-900">
       <div className="info min-w-[700px] p-4 bg-blue-gray-800">
@@ -190,7 +190,15 @@ const AdminSideLiveFunction = ({
           >
             Add Admin
           </button>
+          <button
+            // onClick={addAdminInputModal}
+            className="text-lg h-10 bg-green-500 text-white p-1 px-2 rounded-lg hover:bg-green-700"
+            onClick={()=>{navigate('/usersidelive')}}
+          >
+            User Side
+          </button>
         </div>
+
         <p className="text-base p-3 text-blue-gray-500">
           start Date {startDate} | End Date {endDate}
         </p>
