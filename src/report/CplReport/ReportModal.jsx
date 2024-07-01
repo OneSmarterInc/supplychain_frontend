@@ -18,9 +18,9 @@ export default function ReportModal() {
         Open CPL Report
       </Button>
       <Dialog size="lg" open={open} handler={handleOpen}>
-        <DialogHeader>Report</DialogHeader>
+        <DialogHeader>Report : Corporate P&L </DialogHeader>
         <DialogBody
-          style={{ height: "600px", overflowY: "auto" }}
+          style={{ height: "80vh", overflowY: "auto" }}
           className="text-lg overflow-scroll "
         >
           <ReportTable1 />

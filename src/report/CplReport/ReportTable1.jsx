@@ -126,6 +126,17 @@ const ReportTable1 = () => {
     }
     return num;
   };
+  const currencyFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
+
+  const formatCurrency = (value) => {
+    if (typeof value === 'number') {
+      return currencyFormatter.format(value);
+    }
+    return value;
+  };
 
   return (
     <div>
@@ -154,68 +165,66 @@ const ReportTable1 = () => {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(salesData).map((key, index) => (
-            key !== "Sales Volume" && key !== "Unfilled Orders" ? (
-              <tr key={index}>
-                <td className="border font-bold px-4 py-2">{key}</td>
-                <td className="border px-4 py-2 text-center">
-                  {typeof salesData[key] === "object"
-                    ? formatNumber(Math.trunc(Object.values(salesData[key])[0]))
-                    : formatNumber(Math.trunc(salesData[key]))}
-                </td>
-                <td className="border px-4 py-2 text-center">
-                  {typeof salesData[key] === "object"
-                    ? formatNumber(Math.trunc(Object.values(salesData[key])[1]))
-                    : formatNumber(Math.trunc(salesData[key]))}
-                </td>
-                <td className="border px-4 py-2 text-center">
-                  {typeof salesData[key] === "object"
-                    ? formatNumber(Math.trunc(Object.values(salesData[key])[2]))
-                    : formatNumber(Math.trunc(salesData[key]))}
-                </td>
-              </tr>
-            ) : null
+           {Object.keys(salesData).map((key, index) => (
+            <tr key={index}>
+              <td className=" border font-bold px-4 py-2">{key}</td>
+              <td className="border px-4 py-2 text-center">
+                {typeof salesData[key] === "object"
+                  ? formatCurrency(Object.values(salesData[key])[0])
+                  : formatCurrency(salesData[key])}
+              </td>
+              <td className="border px-4 py-2 text-center">
+                {typeof salesData[key] === "object"
+                  ? formatCurrency(Object.values(salesData[key])[1])
+                  : formatCurrency(salesData[key])}
+              </td>
+              <td className="border px-4 py-2 text-center">
+                {typeof salesData[key] === "object"
+                  ? formatCurrency(Object.values(salesData[key])[2])
+                  : formatCurrency(salesData[key])}
+              </td>
+            </tr>
           ))}
           <tr>
             <td className="font-bold border px-4 py-2">Revenue</td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(Revenues["All Products"]))}
+              {formatCurrency(Revenues["All Products"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(Revenues["Product 7-1"]))}
+              {formatCurrency(Revenues["Product 7-1"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(Revenues["Product 7-2"]))}
+              {formatCurrency(Revenues["Product 7-2"])}
             </td>
           </tr>
           {Object.keys(Revenues.details).map((detailKey, index) => (
             <tr key={index}>
               <td className="border px-4 py-2 pl-8">- {detailKey}</td>
               <td className="border px-4 py-2 text-center">
-                {formatNumber(Math.trunc(Revenues.details[detailKey]["All Products"]))}
+                {formatCurrency(Revenues.details[detailKey]["All Products"])}
               </td>
               <td className="border px-4 py-2 text-center">
-                {formatNumber(Math.trunc(Revenues.details[detailKey]["Product 7-1"]))}
+                {formatCurrency(Revenues.details[detailKey]["Product 7-1"])}
               </td>
               <td className="border px-4 py-2 text-center">
-                {formatNumber(Math.trunc(Revenues.details[detailKey]["Product 7-2"]))}
+                {formatCurrency(Revenues.details[detailKey]["Product 7-2"])}
               </td>
             </tr>
           ))}
           <tr>
             <td className="font-bold border px-4 py-2">Gross Margin</td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(GrossMargin["All Products"]))}
+              {formatCurrency(GrossMargin["All Products"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(GrossMargin["Product 7-1"]))}
+              {formatCurrency(GrossMargin["Product 7-1"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(GrossMargin["Product 7-2"]))}
+              {formatCurrency(GrossMargin["Product 7-2"])}
             </td>
           </tr>
           <tr>
-            <td className="font-bold border px-4 py-2">Fixed Other Costs</td>
+            <td className="font-bold border px-4 py-2">Fixed_Other_Costs</td>
             <td className="border px-4 py-2 text-center"></td>
             <td className="border px-4 py-2 text-center"></td>
             <td className="border px-4 py-2 text-center"></td>
@@ -224,62 +233,62 @@ const ReportTable1 = () => {
             <tr key={index}>
               <td className="border px-4 py-2 pl-8">- {detailKey}</td>
               <td className="border px-4 py-2 text-center">
-                {formatNumber(Math.trunc(Fixed_Other_Costs.details[detailKey]["All Products"]))}
+                {formatCurrency(Fixed_Other_Costs.details[detailKey]["All Products"])}
               </td>
               <td className="border px-4 py-2 text-center">
-                {formatNumber(Math.trunc(Fixed_Other_Costs.details[detailKey]["Product 7-1"]))}
+                {formatCurrency(Fixed_Other_Costs.details[detailKey]["Product 7-1"])}
               </td>
               <td className="border px-4 py-2 text-center">
-                {formatNumber(Math.trunc(Fixed_Other_Costs.details[detailKey]["Product 7-2"]))}
+                {formatCurrency(Fixed_Other_Costs.details[detailKey]["Product 7-2"])}
               </td>
             </tr>
           ))}
           <tr>
-            <td className="font-bold border px-4 py-2">Operating Income</td>
+            <td className="font-bold border px-4 py-2">OperatingIncome</td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(OperatingIncome["All Products"]))}
+              {formatCurrency(OperatingIncome["All Products"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(OperatingIncome["Product 7-1"]))}
+              {formatCurrency(OperatingIncome["Product 7-1"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(OperatingIncome["Product 7-2"]))}
+              {formatCurrency(OperatingIncome["Product 7-2"])}
             </td>
           </tr>
           <tr>
-            <td className="font-bold border px-4 py-2">Non Operating Income</td>
+            <td className="font-bold border px-4 py-2">NonOperatingIncome</td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(NonOperatingIncome["All Products"]))}
+              {formatCurrency(NonOperatingIncome["All Products"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(NonOperatingIncome["Product 7-1"]))}
+              {formatCurrency(NonOperatingIncome["Product 7-1"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(NonOperatingIncome["Product 7-2"]))}
+              {formatCurrency(NonOperatingIncome["Product 7-2"])}
             </td>
           </tr>
           <tr>
             <td className="font-bold border px-4 py-2">Taxes</td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(Taxes["All Products"]))}
+              {formatCurrency(Taxes["All Products"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(Taxes["Product 7-1"]))}
+              {formatCurrency(Taxes["Product 7-1"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(Taxes["Product 7-2"]))}
+              {formatCurrency(Taxes["Product 7-2"])}
             </td>
           </tr>
           <tr>
-            <td className="font-bold border px-4 py-2">Net Income</td>
+            <td className="font-bold border px-4 py-2">NetIncome</td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(NetIncome["All Products"]))}
+              {formatCurrency(NetIncome["All Products"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(NetIncome["Product 7-1"]))}
+              {formatCurrency(NetIncome["Product 7-1"])}
             </td>
             <td className="border px-4 py-2 text-center">
-              {formatNumber(Math.trunc(NetIncome["Product 7-2"]))}
+              {formatCurrency(NetIncome["Product 7-2"])}
             </td>
           </tr>
         </tbody>
