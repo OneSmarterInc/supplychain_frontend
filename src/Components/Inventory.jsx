@@ -20,6 +20,17 @@ const Inventory = () => {
     distributionCenter2: {},
     capital: 0,
   });
+  const currencyFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
+
+  const formatCurrency = (value) => {
+    if (typeof value === 'number') {
+      return currencyFormatter.format(value);
+    }
+    return value;
+  };
 
   useEffect(() => {
 
@@ -31,7 +42,7 @@ const Inventory = () => {
       params: {
         simulation_id: simulation_id,
         firm_key: firm_key,
-        current_quarter: current_quarter
+        current_quarter: 1
       }
     })
       .then((response) => {
@@ -66,7 +77,7 @@ const Inventory = () => {
         </div>
         <div className="mb-4 bg-gray-400 p-4 rounded-md shadow">
           <div className="flex justify-between mb-4">
-            <h3 className="text-xl font-bold text-gray-800">Manufacture | Region 1 | capital - {data.capital} $ </h3>
+            <h3 className="text-xl font-bold text-gray-800">Manufacture | Region 1 | capital - {formatCurrency(data.capital)} </h3>
           </div>
           <div className="flex justify-between">
             <div className="grid grid-cols-5 gap-4">

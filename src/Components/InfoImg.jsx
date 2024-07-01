@@ -14,7 +14,7 @@ const InfoImg = () => {
   const location = useLocation();
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim")) || [];
   const user = JSON.parse(localStorage.getItem("user")) || {};
-
+  console.log(selectedSim[0].quarter_specific_decisions[`quarter${selectedSim[0].current_quarter}`]['quarter_end_time']);
   const firm_obj = selectedSim[0]?.firm_data.filter(item => item.emails.includes(user.email)) || [];
   const firm_key_new = firm_obj.length ? firm_obj[0].firmName : "";
 
@@ -81,17 +81,17 @@ const InfoImg = () => {
             style={{ backgroundColor: "whitesmoke" }}
             className="bg-slate-300 h-16 flex items-center m-1 rounded-lg"
           >
-            <h2 className="text-base px-2">{formatDate(selectedSim[0]?.start_date)} ({selectedSim[0]?.current_quarter} Quarter)</h2>
+            {/* <h2 className="text-base px-2">{formatDate(selectedSim[0].quarter_specific_decisions[`quarter${selectedSim[0].current_quarter}`]['quarter_start_date'])} ({selectedSim[0]?.current_quarter} Quarter)</h2> */}
           </div>
           <div
             style={{ backgroundColor: "whitesmoke" }}
             className="bg-slate-300 px-2 h-16 m-1 rounded-lg"
           >
             <h2 className="text-base p-1 pb-0">Deadline:</h2>
-            <h2 className="text-base p-1 pt-0">{selectedSim[0]?.decision_close.slice(0, 5)} EST {formatDate(selectedSim[0]?.end_date)}</h2>
+            <h2 className="text-base p-1 pt-0">{selectedSim[0].quarter_specific_decisions[`quarter${selectedSim[0].current_quarter}`]['quarter_end_time']} EST {formatDate(selectedSim[0].quarter_specific_decisions[`quarter${selectedSim[0].current_quarter}`]['quarter_end_date'])}</h2>
           </div>
           <div className="m-auto">
-            <button onClick={() => handleInventory(firm_key_new, selectedSim)} className="p-2 bg-yellow-500 rounded-md">Inventory</button>
+            <button title="Click to open Inventory" onClick={() => handleInventory(firm_key_new, selectedSim)} className="p-4 bg-blue-500 rounded-md text-white ml-4 hover:bg-blue-700 shadow-md hover:shadow-lg hover:shadow-blue-500/50">Inventory</button>
           </div>
         </div>
       </div>

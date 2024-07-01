@@ -1,26 +1,27 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Chart from "react-apexcharts";
-import { HStack, Select } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
-
-import ProcurementPreview from "../../Components/Previews/ProcurementPreview";
 import axios from "axios";
 import MyContext from "../../Components/ContextApi/MyContext";
 import ReportComponent from "../../report/ReportComponent";
 
-const ProcurementDataChart = ({ updatedDCData, submitProcurement }) => {
+const ProcurementDataChart = ({ submitProcurement }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
   const path = location.pathname;
-
-  const [graphData, setGraphData] = useState({
-    indicators: [],
-    values: [],
-  });
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
+  const { api } = useContext(MyContext);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  let firm_key_new = "";
+  if (selectedSim[0]?.firm_data.length) {
+    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
+      return item.emails.includes(user.email);
+    });
+    if (firm_obj.length) {
+      firm_key_new = firm_obj[0].firmName; // note: only one user in one firm so using firm_obj[0]
+    }
+  }
 
   const [options, setOptions] = useState({
     chart: {
@@ -33,62 +34,54 @@ const ProcurementDataChart = ({ updatedDCData, submitProcurement }) => {
 
   const [series, setSeries] = useState([
     {
-      name: "Units Sold",
+      name: "Net Income",
       data: [],
     },
   ]);
 
-  useEffect(() => {
-    getChartData();
-  }, []);
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
-  useEffect(() => {
-    setOptions((prevOptions) => ({
-      ...prevOptions,
-      xaxis: {
-        categories: graphData?.indicators,
-      },
-    }));
-    setSeries([
-      {
-        name: "Units Sold",
-        data: graphData?.values,
-      },
-    ]);
-  }, [graphData]);
-
-  const { api } = useContext(MyContext);
-  const user = JSON.parse(localStorage.getItem("user"));
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
-  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
-  let firm_key_new = "";
-  if (selectedSim[0]?.firm_data.length) {
-    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
-
-      return item.emails.includes(user.email);
-    });
-    if (firm_obj.length) {
-      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
-    }
-  }
-  console.log("Firm Key Procurement Data Live Sim: -------", firm_key_new);
-
-  const getChartData = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `${api}/procurement_graph/?simulation_id=${
-          selectedSim[0].simulation_id
-        }&current_quarter=${7}&firm_key=${firm_key_new}`
-      );
-      console.log(response.status);
-      if (response.status === 200) {
-        console.log("ProcurementGraph:--", response.data.indicators);
-        setGraphData(response.data);
-      }
+      const response = await axios.get(`${api}/graph/`, {
+        params: {
+          simulation_id: selectedSim[0].simulation_id, // replace with actual simulation_id
+          firm_key: firm_key_new // replace with actual firm_key
+        }
+      });
+      const data = response.data;
+
+      // Format the categories to prepend "Q"
+      const formattedCategories = data.quarter.map((quarter) => `Q${quarter}`);
+
+      // Flatten the net_income arrays, remove placeholders, and round up the values
+      const netIncome = data.net_income.map(incomeArray => 
+        incomeArray.filter(value => value !== "-").map(value => Math.ceil(Number(value)))
+      ).flat();
+
+      setOptions((prevOptions) => ({
+        ...prevOptions,
+        xaxis: {
+          categories: formattedCategories,
+        },
+      }));
+
+      setSeries([
+        {
+          name: "Net Income",
+          data: netIncome,
+        },
+      ]);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching data", error);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const onSubmit = () => {
     if (path === "/procurement") {
@@ -113,27 +106,15 @@ const ProcurementDataChart = ({ updatedDCData, submitProcurement }) => {
                 onClick={toggleModal}
                 data-modal-target="small-modal"
                 data-modal-toggle="small-modal"
-                className="h-10 w-28 bg-gray-700 text-white rounded-lg p-1 hover:bg-slate-800 m-2 text-xl cursor-pointer"
+                className="h-10 w-28 bg-gray-700 text-white rounded-lg  p-1 hover:bg-slate-800 m-2 text-xl cursor-pointer"
                 type="button"
               >
                 Preview
               </button>
 
-              {isModalOpen && (
-                <>
-                  {" "}
-                  {path === "/procurement" && (
-                    <ProcurementPreview
-                      toggleModal={toggleModal}
-                      updatedDCData={updatedDCData}
-                    />
-                  )}
-                </>
-              )}
-
               <button
                 onClick={onSubmit}
-                className="h-10 w-28 bg-green-700 text-white text-center rounded-lg p-1.5 hover:bg-green-800 m-2 text-xl cursor-pointer"
+                className="h-10 w-28 bg-green-700 text-white text-center rounded-lg  p-1.5 hover:bg-green-800 m-2 text-xl cursor-pointer"
               >
                 Submit
               </button>
@@ -141,7 +122,7 @@ const ProcurementDataChart = ({ updatedDCData, submitProcurement }) => {
             {/* Modal ends */}
           </div>
         </div>
-        
+
         <ReportComponent />
       </div>
     </div>

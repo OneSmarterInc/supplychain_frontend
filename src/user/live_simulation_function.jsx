@@ -68,6 +68,11 @@ const PlayComponent = ({
 
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
+    const saveData = (id) => {
+      localStorage.setItem("selectedSim", JSON.stringify(filteredSimulation));
+      localStorage.setItem("selectedSimulation", JSON.stringify(id));
+    };
+    saveData(id);
   };
 
   const handleQuarterSelectChange = (e) => {
@@ -168,12 +173,12 @@ const PlayComponent = ({
                 >
                   <option value="">Select</option>
                   <option value="cpl">Corporate P&L Statement</option>
-                  <option value="hpl">Historical Corporate P&L Statement</option>
+                  {/* <option value="hpl">Historical Corporate P&L Statement</option>
                   <option value="pcpl">Hyperware P&L Statement</option>
                   <option value="mpls">Metaware P&L Statement</option>
-                  <option value="bl">Balance Sheet</option>
+                  <option value="bl">Balance Sheet</option> */}
                   {/* <option value="cfar">Cash Flow Analysis Report</option> */}
-                  <option value="inventory">Finished Goods Inventory Report</option>
+                  {/* <option value="inventory">Finished Goods Inventory Report</option> */}
                   {/* <option value="pir">Procurement Inventory Report</option> */}
                   {/* <option value="odvr">Other Decision Variables Report</option> */}
                   {/* <option value="far">Forecasting Accuracy Report</option> */}

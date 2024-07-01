@@ -55,7 +55,7 @@ const AdminSideLiveFunction = ({
   console.log("Firm Key admin Live Sim: -------", firm_key_new);
 
   const option = [];
-  for (let i = 1; i <= filteredSimulation[0]?.current_quarter; i++) {
+  for (let i = 1; i <= filteredSimulation[0]?.current_quarter-1; i++) {
     option.push(
       <option key={i} value={i}>
         Select Quarter {i}
@@ -366,10 +366,10 @@ const AdminSideLiveFunction = ({
                   {" "}
                   <option value="">Select</option>
                   <option value="cpl">Corporate P&L Statement</option>
-                  <option value="pcpl">Hyperware P&L Statement</option>
+                  {/* <option value="pcpl">Hyperware P&L Statement</option>
                   <option value="inventory">
                     Finished Goods Inventory Report
-                  </option>
+                  </option> */}
                 </Select>
               </HStack>
               <div className="mt-4 flex">
