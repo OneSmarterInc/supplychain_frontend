@@ -75,13 +75,13 @@ const InfoImg = () => {
             style={{ backgroundColor: "whitesmoke" }}
             className="bg-slate-300 h-16 px-2 flex items-center m-1 rounded-lg"
           >
-            <h2 className="p-1 text-base pt-0">{firm_key_new}</h2>
+            <h2 className="p-1 text-base pt-0">{firm_key_new} | Q-{selectedSim[0]?.current_quarter}</h2>
           </div>
           <div
             style={{ backgroundColor: "whitesmoke" }}
             className="bg-slate-300 h-16 flex items-center m-1 rounded-lg"
           >
-            {/* <h2 className="text-base px-2">{formatDate(selectedSim[0].quarter_specific_decisions[`quarter${selectedSim[0].current_quarter}`]['quarter_start_date'])} ({selectedSim[0]?.current_quarter} Quarter)</h2> */}
+            {/* <h2 className="text-base px-2">({selectedSim[0]?.current_quarter} Quarter)</h2> */}
           </div>
           <div
             style={{ backgroundColor: "whitesmoke" }}
