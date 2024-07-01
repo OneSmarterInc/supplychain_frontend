@@ -16,12 +16,12 @@ export const SalesPDFDocument = ({
         <View>
           <View style={styles.heading}>
             <View>
-              <Text>FIRM 7: Los Descodificadores </Text>
-              <Text> CORPORATE P&L STATEMENT, MONTH 25 </Text>
+              <Text> </Text>
+              <Text> CORPORATE P&L STATEMENT </Text>
             </View>
             <View>
-              <Text>INDUSTRY BBB</Text>
-              <Text>PAGE 5</Text>
+              <Text></Text>
+              <Text></Text>
             </View>
           </View>
           <View style={styles.table}>
