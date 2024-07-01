@@ -144,6 +144,28 @@ const ReportTable1 = () => {
         <div>
           <p>Firm: {firm_key_new}</p>
         </div>
+        <div >
+          <PDFDownloadLink
+            document={
+              <SalesPDFDocument
+                salesData={salesData}
+                Revenues={Revenues}
+                GrossMargin={GrossMargin}
+                Fixed_Other_Costs={Fixed_Other_Costs}
+                OperatingIncome={OperatingIncome}
+                NonOperatingIncome={NonOperatingIncome}
+                Taxes={Taxes}
+                NetIncome={NetIncome}
+              />
+            }
+            fileName="sales_report.pdf"
+          >
+            {({ loading }) =>
+              loading ? "Loading document..." : <Button>Download Report</Button>
+            }
+          </PDFDownloadLink>
+        </div>
+
       </div>
 
       <div id="chart" className="mb-6">
@@ -165,26 +187,40 @@ const ReportTable1 = () => {
           </tr>
         </thead>
         <tbody>
-           {Object.keys(salesData).map((key, index) => (
+          {Object.keys(salesData).map((key, index) => (
             <tr key={index}>
-              <td className=" border font-bold px-4 py-2">{key}</td>
+              <td className="border font-bold px-4 py-2">{key}</td>
               <td className="border px-4 py-2 text-center">
                 {typeof salesData[key] === "object"
-                  ? formatCurrency(Object.values(salesData[key])[0])
-                  : formatCurrency(salesData[key])}
+                  ? (key === "Sales Volume" || key === "Unfilled Orders")
+                    ? Object.values(salesData[key])[0]
+                    : formatCurrency(Object.values(salesData[key])[0])
+                  : (key === "Sales Volume" || key === "Unfilled Orders")
+                    ? salesData[key]
+                    : formatCurrency(salesData[key])}
               </td>
               <td className="border px-4 py-2 text-center">
                 {typeof salesData[key] === "object"
-                  ? formatCurrency(Object.values(salesData[key])[1])
-                  : formatCurrency(salesData[key])}
+                  ? (key === "Sales Volume" || key === "Unfilled Orders")
+                    ? Object.values(salesData[key])[1]
+                    : formatCurrency(Object.values(salesData[key])[1])
+                  : (key === "Sales Volume" || key === "Unfilled Orders")
+                    ? salesData[key]
+                    : formatCurrency(salesData[key])}
               </td>
               <td className="border px-4 py-2 text-center">
                 {typeof salesData[key] === "object"
-                  ? formatCurrency(Object.values(salesData[key])[2])
-                  : formatCurrency(salesData[key])}
+                  ? (key === "Sales Volume" || key === "Unfilled Orders")
+                    ? Object.values(salesData[key])[2]
+                    : formatCurrency(Object.values(salesData[key])[2])
+                  : (key === "Sales Volume" || key === "Unfilled Orders")
+                    ? salesData[key]
+                    : formatCurrency(salesData[key])}
               </td>
             </tr>
           ))}
+
+
           <tr>
             <td className="font-bold border px-4 py-2">Revenue</td>
             <td className="border px-4 py-2 text-center">
@@ -294,27 +330,6 @@ const ReportTable1 = () => {
         </tbody>
       </table>
 
-      <div className="flex justify-end py-4">
-        <PDFDownloadLink
-          document={
-            <SalesPDFDocument
-              salesData={salesData}
-              Revenues={Revenues}
-              GrossMargin={GrossMargin}
-              Fixed_Other_Costs={Fixed_Other_Costs}
-              OperatingIncome={OperatingIncome}
-              NonOperatingIncome={NonOperatingIncome}
-              Taxes={Taxes}
-              NetIncome={NetIncome}
-            />
-          }
-          fileName="sales_report.pdf"
-        >
-          {({ loading }) =>
-            loading ? "Loading document..." : <Button>Download Report</Button>
-          }
-        </PDFDownloadLink>
-      </div>
     </div>
   );
 };
