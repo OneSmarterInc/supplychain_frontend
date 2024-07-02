@@ -4,6 +4,7 @@ import { HStack, Select } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import DistributionPreview from "../../Components/Previews/DistributionPreview";
 import ReportComponent from "../../report/ReportComponent";
+import CommonGraph from "../CommonGraph";
 const DistributionDataChart = ({
   submitDistribution,
   DistributionDataPreview,
@@ -17,21 +18,6 @@ const DistributionDataChart = ({
     // console.log("newsac_units", newsac_units[0].name);
   };
   // eslint-disable-next-line
-  const [options, setOptions] = useState({
-    chart: {
-      id: "area-chart",
-    },
-    xaxis: {
-      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-    },
-  });
-  // eslint-disable-next-line
-  const [series, setSeries] = useState([
-    {
-      name: "Units Sold",
-      data: [1500, 1560, 1700, 1880, 1970, 2160, 1955],
-    },
-  ]);
 
   const onSubmit = () => {
     if (path === "/distribution") {
@@ -46,7 +32,7 @@ const DistributionDataChart = ({
             {" "}
             {/* temporary div, then remove */}
           </div>
-          <Chart options={options} series={series} type="area" width="510" />
+          <CommonGraph />
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}
@@ -82,7 +68,7 @@ const DistributionDataChart = ({
             {/* Modal ends */}
           </div>
         </div>
-        
+
         <ReportComponent />
       </div>
     </div>

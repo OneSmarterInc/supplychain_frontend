@@ -26,6 +26,8 @@ export const PrivateRoute = ({ children }) => {
     // Redirect invalid users to the signin page
     if (location.pathname !== "/signin") {
       return <Navigate to="/signin" replace />;
+    } else if (location.pathname === "/") {
+      return <Navigate to="/signin" replace />;
     } else {
       return children;
     }

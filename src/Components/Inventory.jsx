@@ -5,6 +5,7 @@ import storage from "../assets/storage.png";
 import facotry from "../assets/factory.png";
 import { Image } from "@chakra-ui/react";
 import MyContext from "./ContextApi/MyContext";
+import UserNavBar from "./UserNavBar";
 
 const Inventory = () => {
   const { api } = useContext(MyContext);
@@ -67,7 +68,7 @@ const Inventory = () => {
 
   return (
     <>
-      <AdminNavBar />
+      <UserNavBar />
       <div className="container mx-auto p-4">
         <div className="flex justify-between">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">

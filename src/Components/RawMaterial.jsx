@@ -1,13 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
-  const procurementData = JSON.parse(localStorage.getItem("procurementData"));
+const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) => {
+  const procurementData = JSON.parse(procurementData1);
   console.log("ProcurementDataRaw-", procurementData);
+
   const [newData, setNewData] = useState({
-    alpha_quantity: procurementData?.alpha_quantity,
-    beta_quantity: procurementData?.beta_quantity,
+    alpha_quantity: "",
+    beta_quantity: "",
   });
+
+  useEffect(() => {
+    if (procurementData) {
+      setNewData({
+        alpha_quantity: procurementData?.alpha_quantity || "",
+        beta_quantity: procurementData?.beta_quantity || "",
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    setAlpha_quantity(newData.alpha_quantity);
+    setBeta_quantity(newData.beta_quantity);
+  }, [newData, setAlpha_quantity, setBeta_quantity]);
+
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (value >= 0 && !value.includes("-")) {
@@ -17,8 +34,6 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
       }));
     }
   };
-  setAlpha_quantity(newData.alpha_quantity);
-  setBeta_quantity(newData.beta_quantity);
 
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
@@ -30,7 +45,6 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
         <thead>
           <tr className="bg-slate-300  ">
             <th className="text-center py-3 text-lg font-medium ">Entries</th>
-        
             <th className="text-center py-3 text-lg font-medium">Units</th>
           </tr>
         </thead>
@@ -42,10 +56,10 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
             <td className="text-center py-3 text-lg ">
               <input
                 id="alpha-input"
-                className={`bg-gray-50 border  text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none mx-auto  p-2 ${
+                className={`bg-gray-50 border text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none mx-auto p-2 ${
                   !newData.alpha_quantity
                     ? "border-red-500 outline-red-500"
-                    : " border-green-500 outline-green-500"
+                    : "border-green-500 outline-green-500"
                 }`}
                 type="number"
                 name="alpha_quantity"
@@ -61,14 +75,13 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity }) => {
             <td className="text-center py-3 text-lg bg-blue-gray-100 rounded-md ">
               {selectedSim[0]?.renamedMappedData?.componentMapp?.beta}
             </td>
-            {/* <td className="text-center py-3 text-lg ">10000</td> */}
             <td className="text-center py-3 text-lg ">
               <input
                 id="beta-input"
-                className={`bg-gray-50 border text-center text-gray-900 text-sm rounded-lg -lg focus:ring-blue-500 focus:border-blue-500  mx-auto  p-2 ${
+                className={`bg-gray-50 border text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none mx-auto p-2 ${
                   !newData.beta_quantity
                     ? "border-red-500 outline-red-500"
-                    : " border-green-500 outline-green-500"
+                    : "border-green-500 outline-green-500"
                 }`}
                 type="number"
                 name="beta_quantity"

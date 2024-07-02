@@ -68,7 +68,7 @@ const Signin = () => {
           console.log("serializedValue,", serializedValue);
           localStorage.setItem("user", serializedValue);
           if (response.data.isadmin) {
-            navigate("/createsim");
+            navigate("/");
             setTimeout(function () {
               toast({
                 title: "Welcome Admin",
@@ -79,7 +79,7 @@ const Signin = () => {
               });
             }, 2000);
           } else {
-            navigate("/usersidelive");
+            navigate("/");
             setTimeout(function () {
               toast({
                 title: "Welcome User",

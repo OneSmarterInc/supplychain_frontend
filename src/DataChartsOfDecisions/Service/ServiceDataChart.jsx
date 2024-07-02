@@ -6,6 +6,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ReportComponent from "../../report/ReportComponent";
 import MyContext from "../../Components/ContextApi/MyContext";
 import axios from "axios";
+import CommonGraph from "../CommonGraph";
 
 const ServiceDataChart = ({ serviceDataPreview, submitService }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,8 +52,8 @@ const ServiceDataChart = ({ serviceDataPreview, submitService }) => {
       const response = await axios.get(`${api}/graph/`, {
         params: {
           simulation_id: selectedSim[0].simulation_id, // replace with actual simulation_id
-          firm_key: firm_key_new // replace with actual firm_key
-        }
+          firm_key: firm_key_new, // replace with actual firm_key
+        },
       });
       const data = response.data;
 
@@ -60,9 +61,13 @@ const ServiceDataChart = ({ serviceDataPreview, submitService }) => {
       const formattedCategories = data.quarter.map((quarter) => `Q${quarter}`);
 
       // Flatten the net_income arrays, remove placeholders, and round up the values
-      const netIncome = data.net_income.map(incomeArray => 
-        incomeArray.filter(value => value !== "-").map(value => Math.ceil(Number(value)))
-      ).flat();
+      const netIncome = data.net_income
+        .map((incomeArray) =>
+          incomeArray
+            .filter((value) => value !== "-")
+            .map((value) => Math.ceil(Number(value)))
+        )
+        .flat();
 
       setOptions((prevOptions) => ({
         ...prevOptions,
@@ -99,7 +104,7 @@ const ServiceDataChart = ({ serviceDataPreview, submitService }) => {
             {" "}
             {/* temporary div, then remove */}
           </div>
-          <Chart options={options} series={series} type="area" width="510" />
+          <CommonGraph />
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}
@@ -136,7 +141,7 @@ const ServiceDataChart = ({ serviceDataPreview, submitService }) => {
             {/* Modal ends */}
           </div>
         </div>
-       
+
         <ReportComponent />
       </div>
     </div>

@@ -10,13 +10,12 @@ import MyContext from "../Components/ContextApi/MyContext";
 import BalanceSheetModel from "./BlanceSheetReport/BalanceSheetModel";
 
 const ReportComponent = () => {
-    const { api } = useContext(MyContext);
+  const { api } = useContext(MyContext);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [firstDropdownValue, setFirstDropdownValue] = useState("1");
   const [secondDropdownValue, setSecondDropdownValue] = useState("");
   const option = [];
-
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -35,16 +34,22 @@ const ReportComponent = () => {
       firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
     }
   }
-  for (let i = 1; i <= simData[0].current_quarter-1; i++) {
+  for (let i = 1; i <= simData[0].current_quarter - 1; i++) {
     option.push(
       <option key={i} value={i}>
-         Quarter {i}
+        Quarter {i}
       </option>
     );
   }
   const handleQuarterSelectChange = (e) => {
     setFirstDropdownValue(e.target.value);
   };
+
+  console.log("First Dropdown:", firstDropdownValue, "Second Dropdown", secondDropdownValue)
+
+  useEffect(() => {
+    setSecondDropdownValue("");
+  }, [firstDropdownValue]);
   // useEffect(() => {
   //   const e = {
   //     target: {
@@ -86,6 +91,7 @@ const ReportComponent = () => {
           width="165px"
           border="1px solid black"
           onChange={(e) => handleQuarterSelectChange(e)}
+          value={firstDropdownValue}
         >
           {option}
         </Select>
@@ -93,9 +99,10 @@ const ReportComponent = () => {
           width="165px"
           border="1px solid black"
           onChange={(e) => handleButtonClick(e)}
+          value={secondDropdownValue}
         >
-          <option value="">Select </option>
-          <option value="cpl">Corporate P&L Statement </option>
+          <option value="">Select</option>
+          <option value="cpl">Corporate P&L Statement</option>
           {/* <option value="hpl">Historical Corporate P&L Statement</option>
           <option value="pcpl">Hyperware P&L Statement</option>
           <option value="mpls">Metaware P&L Statement</option>
@@ -106,14 +113,18 @@ const ReportComponent = () => {
           {/* <option value="odvr">OTHER DECISION VARIABLES REPORT</option> */}
           {/* <option value="far">FORECASTING ACCURACY REPORT</option> */}
         </Select>
-
+        {secondDropdownValue === "" && null}
         {secondDropdownValue === "cpl" ? <ReportModal /> : null}
         {secondDropdownValue === "hpl" ? <ReportModal /> : null}
         {secondDropdownValue === "pcpl" ? <ProductReportModal /> : null}
         {secondDropdownValue === "mpls" ? <ProductReportModal /> : null}
         {secondDropdownValue === "inventory" ? <FGInventoryModal /> : null}
         {secondDropdownValue === "bl" ? <BalanceSheetModel /> : null}
-        <EvaluationReportModal simulation_id={simData[0].simulation_id} firm_key={firm_key_new} selected_quarter={simData[0].current_quarter-1} />
+        <EvaluationReportModal
+          simulation_id={simData[0].simulation_id}
+          firm_key={firm_key_new}
+          selected_quarter={simData[0].current_quarter - 1}
+        />
       </HStack>
     </div>
   );

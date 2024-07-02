@@ -5,6 +5,7 @@ import ForecastPreview from "../../Components/Previews/ForecastPreview";
 import MyContext from "../../Components/ContextApi/MyContext";
 import axios from "axios";
 import ReportComponent from "../../report/ReportComponent";
+import CommonGraph from "../CommonGraph";
 
 const ForecastDataChart = ({
   submitForecast,
@@ -48,21 +49,6 @@ const ForecastDataChart = ({
     setIsModalOpen(!isModalOpen);
   };
 
-  const [options, setOptions] = useState({
-    chart: {
-      id: "area-chart",
-    },
-    xaxis: {
-      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-    },
-  });
-  const [series, setSeries] = useState([
-    {
-      name: "Units Sold",
-      data: [1500, 1560, 1700, 1880, 1970, 2160, 1955],
-    },
-  ]);
-
   const onSubmit = () => {
     if (path === "/forecast") {
       submitForecast();
@@ -77,7 +63,7 @@ const ForecastDataChart = ({
             {" "}
             {/* temporary div, then remove */}
           </div>
-          <Chart options={options} series={series} type="area" width="510" />
+          <CommonGraph />
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}

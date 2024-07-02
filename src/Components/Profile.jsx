@@ -1,7 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Popover, PopoverHandler, PopoverContent } from "@material-tailwind/react";
-import { Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
+import {
+  Popover,
+  PopoverHandler,
+  PopoverContent,
+} from "@material-tailwind/react";
+import {
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 
 const ProfileDropdown = () => {
   const navigate = useNavigate();
@@ -36,7 +45,7 @@ const ProfileDropdown = () => {
   };
 
   const handleLogOut = () => {
-    localStorage.removeItem("user");
+    localStorage.clear();
     setProfile({});
     navigate("/signin");
   };
@@ -104,14 +113,14 @@ const ProfileDropdown = () => {
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
-              <div className="flex items-center justify-center rounded-lg bg-red-500 hover:bg-red-700 text-white">
-                <div
-                  className="p-2 text-white font-bold cursor-pointer rounded-md"
-                  onClick={handleLogOut}
-                >
+              <div
+                onClick={handleLogOut}
+                className="flex items-center justify-center rounded-lg bg-red-500 hover:bg-red-700 text-white"
+              >
+                <button className="p-2 text-white font-bold cursor-pointer rounded-md">
                   {" "}
                   Log Out
-                </div>
+                </button>
               </div>
             </a>
           </div>

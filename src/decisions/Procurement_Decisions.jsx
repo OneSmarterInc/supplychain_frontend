@@ -22,7 +22,6 @@ const Procurement_Decisions = () => {
   let firm_key_new = "";
   if (selectedSim[0]?.firm_data.length) {
     let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
-
       return item.emails.includes(user.email);
     });
     if (firm_obj.length) {
@@ -34,6 +33,9 @@ const Procurement_Decisions = () => {
   useEffect(() => {
     getProcurement();
   }, []);
+
+  const [data, setData] = useState({});
+
   const getProcurement = async () => {
     try {
       const response = await axios.get(`${api}/previous/`, {
@@ -44,17 +46,17 @@ const Procurement_Decisions = () => {
           current_decision: "Procurement",
           current_quarter: selectedSim[0].current_quarter,
           firm_key: firm_key_new,
-
         },
       });
-      const data = response.data;
-      localStorage.setItem("procurementData", JSON.stringify(data));
+
+      localStorage.setItem("procurementData", JSON.stringify(response.data));
+      setData(response.data);
     } catch (error) {
       console.error("Error making GET request:", error);
     }
   };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const submitProcurement = async () => {
     try {
@@ -78,8 +80,8 @@ const Procurement_Decisions = () => {
         sac_units: updatedDCData,
       });
       console.log("POST request successful", response.data);
-      getProcurement()
-      addUserLogger()
+      getProcurement();
+      addUserLogger();
       toast({
         title: "Procurement Submited Successful",
         status: "success",
@@ -87,7 +89,7 @@ const Procurement_Decisions = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/manufacturing")
+      navigate("/manufacturing");
     } catch (error) {
       console.error("Error making POST request:", error);
     }
@@ -105,8 +107,7 @@ const Procurement_Decisions = () => {
         ip_address: "123.345.1",
         username: user.username,
         firm_key: firm_key_new,
-        current_quarter:selectedSim[0].current_quarter,
-
+        current_quarter: selectedSim[0].current_quarter,
       });
       const data = response.data;
       console.log("addUserLoggerData", data);
@@ -135,9 +136,10 @@ const Procurement_Decisions = () => {
         </div>
       </div>
       <div className="sm:grid grid-cols-2 gap-3 m-1">
-        <div className="m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-center">
-          <div className="rounded-lg -2xl h-full  flex flex-col justify-center">
+        <div className="m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-start">
+          <div className="rounded-lg py-3 pb-8  flex flex-col justify-start ">
             <RawMaterial
+              procurementData1={JSON.stringify(data)}
               setAlpha_quantity={setAlpha_quantity}
               setBeta_quantity={setBeta_quantity}
             />

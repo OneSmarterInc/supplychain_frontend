@@ -7,6 +7,7 @@ import DemandPreview from "../../Components/Previews/DemandPreview";
 import axios from "axios";
 import MyContext from "../../Components/ContextApi/MyContext";
 import ReportComponent from "../../report/ReportComponent";
+import CommonGraph from "../CommonGraph";
 
 const DemandDataChart = ({
   metaCh1Value,
@@ -33,65 +34,10 @@ const DemandDataChart = ({
     }
   }
 
-  const [options, setOptions] = useState({
-    chart: {
-      id: "area-chart",
-    },
-    xaxis: {
-      categories: [],
-    },
-  });
-
-  const [series, setSeries] = useState([
-    {
-      name: "Net Income",
-      data: [],
-    },
-  ]);
-
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${api}/graph/`, {
-        params: {
-          simulation_id: selectedSim[0].simulation_id, // replace with actual simulation_id
-          firm_key: firm_key_new // replace with actual firm_key
-        }
-      });
-      const data = response.data;
-
-      // Format the categories to prepend "Q"
-      const formattedCategories = data.quarter.map((quarter) => `Q${quarter}`);
-
-      // Flatten the net_income arrays, remove placeholders, and round up the values
-      const netIncome = data.net_income.map(incomeArray => 
-        incomeArray.filter(value => value !== "-").map(value => Math.ceil(Number(value)))
-      ).flat();
-
-      setOptions((prevOptions) => ({
-        ...prevOptions,
-        xaxis: {
-          categories: formattedCategories,
-        },
-      }));
-
-      setSeries([
-        {
-          name: "Net Income",
-          data: netIncome,
-        },
-      ]);
-    } catch (error) {
-      console.error("Error fetching data", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
   const onSubmit = () => {
     if (path === "/demand") {
       submitDemand();
@@ -105,7 +51,7 @@ const DemandDataChart = ({
             {" "}
             {/* temporary div, then remove */}
           </div>
-          <Chart options={options} series={series} type="area" width="510" />
+          <CommonGraph />
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}
