@@ -1,6 +1,6 @@
 import { Select, HStack } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../Components/ContextApi/MyContext";
 import ReportModal from "../report/CplReport/ReportModal";
@@ -65,7 +65,9 @@ const PlayComponent = ({
       </option>
     );
   }
-
+  useEffect(() => {
+    setSecondDropdownValue("");
+  }, [isReportModalOpen, firstDropdownValue]);
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
     const saveData = (id) => {

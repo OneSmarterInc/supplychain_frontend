@@ -62,7 +62,7 @@ const AdminSideEndedFunction = ({
 
   useEffect(() => {
     setSecondDropdownValue("");
-  }, [isReportModalOpen]);
+  }, [isReportModalOpen, firstDropdownValue]);
   console.log("Second Dropdown Value:", secondDropdownValue);
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
