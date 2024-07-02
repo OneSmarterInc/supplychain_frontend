@@ -56,7 +56,9 @@ const UserSideEndedFunction = ({
       </option>
     );
   }
-
+  useEffect(() => {
+    setSecondDropdownValue("");
+  }, [isReportModalOpen, firstDropdownValue]);
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
   };

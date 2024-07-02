@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) => {
-  const procurementData = JSON.parse(procurementData1);
+  const procurementData = JSON.parse(localStorage.getItem("procurementData"));
   console.log("ProcurementDataRaw-", procurementData);
 
   const [newData, setNewData] = useState({

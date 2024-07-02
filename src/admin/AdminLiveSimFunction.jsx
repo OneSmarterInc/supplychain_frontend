@@ -65,7 +65,7 @@ const AdminSideLiveFunction = ({
 
   useEffect(() => {
     setSecondDropdownValue("");
-  }, [isReportModalOpen]);
+  }, [isReportModalOpen, firstDropdownValue]);
 
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
