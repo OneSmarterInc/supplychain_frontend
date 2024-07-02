@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 
 import TransportationPreview from "../../Components/Previews/TransportationPreview";
 import ReportComponent from "../../report/ReportComponent";
+import CommonGraph from "../CommonGraph";
 
 const TransportationDataChart = ({ Dc1Data, submitTransportation }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,8 +45,7 @@ const TransportationDataChart = ({ Dc1Data, submitTransportation }) => {
           <div className="w-[510px] h-60">
             {" "}
             {/* temporary div, then remove */}
-          </div>
-          <Chart options={options} series={series} type="area" width="510" />
+          </div><CommonGraph/>
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}

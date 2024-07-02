@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import ReportComponent from "../report/ReportComponent";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
+import CommonGraph from "./CommonGraph";
 
 const ITDataChart = ({ submitIt, suppliers, reportValues }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -98,7 +99,8 @@ const ITDataChart = ({ submitIt, suppliers, reportValues }) => {
             {" "}
             {/* temporary div, then remove */}
           </div>
-          <Chart options={options} series={series} type="area" width="510" />
+          {/* <Chart options={options} series={series} type="area" width="510" /> */}
+          <CommonGraph/>
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}
