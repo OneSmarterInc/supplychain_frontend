@@ -44,13 +44,16 @@ const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
   return (
     <Box>
       <Text className="p-5 py-3 pb-0 text-xl">
-      <strong>{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}- {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel2}  </strong>
+        <strong>
+          {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}-{" "}
+          {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel2}{" "}
+        </strong>
       </Text>
       <br />
       <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>
         <Thead>
-        <Tr>
-        <Th fontWeight="bold">
+          <Tr>
+            <Th fontWeight="bold">
               {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}
             </Th>
             <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}</Th>
@@ -75,8 +78,8 @@ const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
                         handleInputChange(channel, region, e.target.value)
                       }
                     >
-                      <option value="true">Yes</option>
-                      <option value="false">No</option>
+                      <option value="0">No</option>
+                      <option value="1">Yes</option>
                     </Select>
                   ) : (
                     <Input

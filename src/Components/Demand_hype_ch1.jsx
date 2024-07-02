@@ -71,8 +71,8 @@ const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {
                         handleInputChange(channel, region, e.target.value)
                       }
                     >
-                      <option value="true">Yes</option>
-                      <option value="false">No</option>
+                      <option value="0">No</option>
+                      <option value="1">Yes</option>
                     </Select>
                   ) : (
                     <Input

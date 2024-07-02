@@ -8,7 +8,6 @@ import ReportModal from "../report/CplReport/ReportModal";
 import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
-import ReportComponent from "../report/ReportComponent";
 
 const AdminSideEndedFunction = ({
   id,
@@ -61,6 +60,10 @@ const AdminSideEndedFunction = ({
     );
   }
 
+  useEffect(() => {
+    setSecondDropdownValue("");
+  }, [isReportModalOpen]);
+  console.log("Second Dropdown Value:", secondDropdownValue);
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
   };
@@ -77,7 +80,7 @@ const AdminSideEndedFunction = ({
     const queryParams = new URLSearchParams({
       simulation_id: filteredSimulation[0]?.simulation_id,
       quarter: firstDropdownValue,
-      firm: Object.keys(simData[0]?.firm_data)[0],
+      firm: selectedFirm.firm_key,
     }).toString();
 
     // Append the query parameters to the URL
@@ -221,10 +224,7 @@ const AdminSideEndedFunction = ({
       </div>
       {isReportModalOpen && (
         <>
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
-            onClick={toggleModal}
-          ></div>
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div className="bg-white rounded-lg shadow-xl p-6 w-2/3 max-w-xl">
               <div className="flex justify-between items-center mb-4">
@@ -236,7 +236,41 @@ const AdminSideEndedFunction = ({
                   X
                 </button>
               </div>
-             <ReportComponent/>
+              <HStack spacing={3}>
+                <Select
+                  width="165px"
+                  border="1px solid black"
+                  onChange={(e) => handleQuarterSelectChange(e)}
+                  value={firstDropdownValue}
+                >
+                  {option}
+                </Select>
+                <Select
+                  width="165px"
+                  border="1px solid black"
+                  onChange={(e) => handleButtonClick(e)}
+                  value={secondDropdownValue}
+                >
+                  {" "}
+                  <option value="">Select</option>
+                  <option value="cpl">Corporate P&L Statement</option>
+                  <option value="pcpl">Hyperware P&L Statement</option>
+                  <option value="inventory">
+                    Finished Goods Inventory Report
+                  </option>
+                </Select>
+              </HStack>
+              <div className="mt-4 flex">
+                {secondDropdownValue === "" && null}
+                {secondDropdownValue === "cpl" && <ReportModal />}
+                {secondDropdownValue === "pcpl" && <ProductReportModal />}
+                {secondDropdownValue === "inventory" && <FGInventoryModal />}
+
+                <div className="px-5">
+                  {" "}
+                  <EvaluationReportModal />
+                </div>
+              </div>
             </div>
           </div>
         </>

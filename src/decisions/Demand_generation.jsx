@@ -145,7 +145,7 @@ const Demand_generation = () => {
       </div>
       <div className="grid grid-cols-2 grid-flow-col gap-2   ">
         <div className="row-span-2 m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-center overflow-scroll  scroll-pt-96">
-          <div className="mt-[620px]"></div>
+          <div className="mt-[460px]"></div>
           <Demand_hype_ch1
             demandData={demandData}
             setHypeCh1ValuetoParent={setHypeCh1Value}

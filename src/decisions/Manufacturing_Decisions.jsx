@@ -190,14 +190,16 @@ const Manufacturing_Decisions = () => {
           </div>
         </div>
         <div className="grid grid-cols-2 grid-flow-col gap-3 m-1">
-          <div className="m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-center">
+          <div className="m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-start">
             <div className="">
               <Text className="p-5 py-3 text-xl">
                 <strong>Report</strong>
               </Text>
               <Table
                 variant="striped"
-                width={"650px"}
+                width={"800px"}
+                mx={"auto"}
+                
                 colorScheme="#C9D5DD"
                 borderWidth="0.5px"
                 className="mx-3 bg-slate-200"

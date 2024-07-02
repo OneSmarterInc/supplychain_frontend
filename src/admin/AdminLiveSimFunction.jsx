@@ -8,7 +8,6 @@ import ReportModal from "../report/CplReport/ReportModal";
 import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
-import ReportComponent from "../report/ReportComponent";
 
 const AdminSideLiveFunction = ({
   id,
@@ -64,8 +63,42 @@ const AdminSideLiveFunction = ({
     );
   }
 
+  useEffect(() => {
+    setSecondDropdownValue("");
+  }, [isReportModalOpen]);
+
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
+  };
+
+  const handleQuarterSelectChange = (e) => {
+    setFirstDropdownValue(e.target.value);
+  };
+
+  const handleButtonClick = async (e) => {
+    const newDropdownValue = e.target.value;
+    setSecondDropdownValue(newDropdownValue);
+
+    // Construct the query parameters
+    const queryParams = new URLSearchParams({
+      simulation_id: filteredSimulation[0]?.simulation_id,
+      quarter: firstDropdownValue,
+      firm: selectedFirm.firm_key,
+    }).toString();
+
+    // Append the query parameters to the URL
+    const url = `${api}/reports/${
+      newDropdownValue ? newDropdownValue : "cpl"
+    }/?${queryParams}`;
+
+    // Make a GET request with the constructed URL
+    try {
+      const response = await axios.get(url);
+      // console.log("GET request successful", response.data);
+      localStorage.setItem("reportData", JSON.stringify(response.data));
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
   };
 
   const addAdminInputModal = () => {
@@ -269,12 +302,13 @@ const AdminSideLiveFunction = ({
                 {" "}
                 <div className="flex items-center">
                   <div className="h-28 flex items-center">
-                    <button
+                    {/* TODO: temporary hide */}
+                    {/* <button
                       onClick={addUserInputModal}
                       className="ml-4 text-lg bg-blue-500 text-white p-1 h-10 px-2 rounded-lg hover:bg-blue-700"
                     >
                       Add User
-                    </button>
+                    </button> */}
                   </div>
                   {isAddUserInputModalOpen && (
                     <div className="modal bg-white p-4 rounded-lg w-fit m-3 shadow-lg mt-4">
@@ -317,7 +351,7 @@ const AdminSideLiveFunction = ({
             onClick={toggleModal}
           ></div>
           <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="bg-gray-200 rounded-lg shadow-xl p-6  max-w-2xl">
+            <div className="bg-white rounded-lg shadow-xl p-6 w-2/3 max-w-xl">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Select Reports</h2>
                 <button
@@ -327,8 +361,39 @@ const AdminSideLiveFunction = ({
                   X
                 </button>
               </div>
-
-              <ReportComponent />
+              <HStack spacing={3}>
+                <Select
+                  width="165px"
+                  border="1px solid black"
+                  onChange={(e) => handleQuarterSelectChange(e)}
+                  value={firstDropdownValue}
+                >
+                  {option}
+                </Select>
+                <Select
+                  width="165px"
+                  border="1px solid black"
+                  onChange={(e) => handleButtonClick(e)}
+                  value={secondDropdownValue}
+                >
+                  {" "}
+                  <option value="">Select</option>
+                  <option value="cpl">Corporate P&L Statement</option>
+                  {/* <option value="pcpl">Hyperware P&L Statement</option>
+                  <option value="inventory">
+                    Finished Goods Inventory Report
+                  </option> */}
+                </Select>
+              </HStack>
+              <div className="mt-4 flex">
+                {secondDropdownValue === "cpl" && <ReportModal />}
+                {secondDropdownValue === "pcpl" && <ProductReportModal />}
+                {secondDropdownValue === "inventory" && <FGInventoryModal />}\
+                <div className="px-5">
+                  {" "}
+                  <EvaluationReportModal />
+                </div>
+              </div>
             </div>
           </div>
         </>
