@@ -38,7 +38,7 @@ const ReportComponent = () => {
   for (let i = 1; i <= simData[0].current_quarter-1; i++) {
     option.push(
       <option key={i} value={i}>
-        Select Quarter {i}
+         Quarter {i}
       </option>
     );
   }
