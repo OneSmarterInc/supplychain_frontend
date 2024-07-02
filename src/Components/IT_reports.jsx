@@ -40,7 +40,7 @@ const IT_reports = ({ setReportValuesFromDecision, ItData }) => {
       <Text className="p-5 py-4 pt-0 text-xl">
         <strong>Reports</strong>
       </Text>
-      <Box className="h-60 overflow-x-hidden overflow-scroll ml-3">
+      <Box className="h-full overflow-x-hidden  ml-3">
         <Table variant="blue">
           <Tbody>
             <Tr>

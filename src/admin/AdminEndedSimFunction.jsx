@@ -8,6 +8,7 @@ import ReportModal from "../report/CplReport/ReportModal";
 import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
+import ReportComponent from "../report/ReportComponent";
 
 const AdminSideEndedFunction = ({
   id,
@@ -155,6 +156,12 @@ const AdminSideEndedFunction = ({
                   <span className="text-green-600">
                     {selectedFirm.firm_key}
                   </span>
+                  <div className="flex space-x-3">
+                    <span>Passcode:</span>
+                    <span className="text-green-500">
+                      {filteredSimulation[0].passcode[selectedFirm.firm_key]}
+                    </span>
+                  </div>
                 </h2>
                 <div className="flex  items-center space-x-3">
                   <button
@@ -184,10 +191,10 @@ const AdminSideEndedFunction = ({
                         <i className="fa-solid fa-user"></i>
                       </h1>
                       <div className="">
-                        <p className="text-lg font-semibold text-gray-700">
+                        {/* <p className="text-lg font-semibold text-gray-700">
                           UserID:{" "}
                           <span className="font-normal">{user.user_id}</span>
-                        </p>
+                        </p> */}
                         <p className="text-lg font-semibold text-gray-700">
                           Email:{" "}
                           <span className="font-normal">{user.email}</span>
@@ -229,40 +236,7 @@ const AdminSideEndedFunction = ({
                   X
                 </button>
               </div>
-              <HStack spacing={3}>
-                <Select
-                  width="165px"
-                  border="1px solid black"
-                  onChange={(e) => handleQuarterSelectChange(e)}
-                  value={firstDropdownValue}
-                >
-                  {option}
-                </Select>
-                <Select
-                  width="165px"
-                  border="1px solid black"
-                  onChange={(e) => handleButtonClick(e)}
-                  value={secondDropdownValue}
-                >
-                  {" "}
-                  <option value="">Select</option>
-                  <option value="cpl">Corporate P&L Statement</option>
-                  <option value="pcpl">Hyperware P&L Statement</option>
-                  <option value="inventory">
-                    Finished Goods Inventory Report
-                  </option>
-                </Select>
-              </HStack>
-              <div className="mt-4 flex">
-                {secondDropdownValue === "cpl" && <ReportModal />}
-                {secondDropdownValue === "pcpl" && <ProductReportModal />}
-                {secondDropdownValue === "inventory" && <FGInventoryModal />}
-
-                <div className="px-5">
-                  {" "}
-                  <EvaluationReportModal />
-                </div>
-              </div>
+             <ReportComponent/>
             </div>
           </div>
         </>

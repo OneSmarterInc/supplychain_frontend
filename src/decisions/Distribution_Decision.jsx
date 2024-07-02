@@ -133,7 +133,7 @@ const Distribution_Decision = () => {
 
   const regions = ["region1", "region2", "region3"];
   const options = {
-    distribution_centerOpt: [0, 1],
+    distribution_centerOpt: [0, 1,2],
     rfidOpt: [0, 1, 2],
     emergency_carrierOpt: [
       selectedSim[0]?.renamedMappedData?.distributerMapp["I"],
