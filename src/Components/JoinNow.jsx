@@ -2,19 +2,12 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import homeimg from "../assets/img.png";
 import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Heading,
-  Image,
-  Input,
-  Flex,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Heading, Image, Input, Flex, Text } from "@chakra-ui/react";
 import logo from "../assets/favicon.png";
 import MyContext from "../Components/ContextApi/MyContext";
 
-const Home = () => {
+
+const JoinNow = () => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
   const userData = JSON.parse(localStorage.getItem("user"));
@@ -26,12 +19,12 @@ const Home = () => {
         const response = await axios.get(`${api}/passcode/`, {
           params: {
             passcode: passcode,
-            email: userData.email,
-          },
+            email: userData.email
+          }
         });
         console.log(response.data);
         // Handle successful response, e.g., navigate to another page
-        navigate("/usersidelive");
+        navigate('/usersidelive');
       } catch (error) {
         console.error("Error fetching data:", error);
         // Handle error, e.g., show error message to the user
@@ -59,7 +52,7 @@ const Home = () => {
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
-          background="#2F4F4F"
+          background="black"
           color="white"
           p={8}
           position="relative"
@@ -68,21 +61,52 @@ const Home = () => {
             position="absolute"
             top="1rem"
             right="1rem"
-            onClick={() => navigate("/signin")}
+            onClick={() => { userData?.isadmin ? navigate('/adminsidelive') : navigate('/usersidelive') }}
             _hover={{ backgroundColor: "grey" }}
             _focus={{ boxShadow: "none" }}
             bg="transparent"
             border="none"
-            color={"white"}
+            color={'white'}
           >
-            Sign In
+            Go to Live
           </Button>
           <Image src={logo} boxSize="100px" mb={8} />
-          <Heading textAlign={"center"} mb={6}>Welcome to Supply Chain Simulation</Heading>
+          <Heading mb={6}>Welcome to Supply Chain Simulation</Heading>
+          <Box display="flex" gap={4} flexDirection="column" width="100%" maxW="400px">
+            {userData?.isadmin && (
+              <Button
+                onClick={() => navigate("/createsim")}
+                colorScheme="blue"
+                size="lg"
+                mb={4}
+              >
+                Create New
+              </Button>
+            )}
+            
+            <hr />
+            <Text mb={2} m={"auto"}>Enter your passcode to join the simulation</Text>
+            
+            <Input 
+              placeholder="Passcode" 
+              mb={4} 
+              value={passcode} 
+              onChange={(e) => setPasscode(e.target.value)} 
+            />
+
+            <Button 
+              colorScheme="green" 
+              size="lg" 
+              mb={"1rem"} 
+              onClick={handleJoin}
+            >
+              Join
+            </Button>
+          </Box>
         </Flex>
       </Flex>
     </>
   );
 };
 
-export default Home;
+export default JoinNow;

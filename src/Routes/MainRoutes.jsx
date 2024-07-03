@@ -20,6 +20,7 @@ import Steps from "../createSimulation/Steps";
 import AdminNavBar from "../Components/AdminNavBar";
 import { PrivateRoute } from "./PrivateRoutes";
 import Inventory from "../Components/Inventory";
+import JoinNow from "../Components/JoinNow";
 
 const MainRoutes = () => {
   const [noOfQuarters, setNoOfQuarters] = useState();
@@ -42,6 +43,17 @@ const MainRoutes = () => {
           <div className="procurement  h-screen">
             <PrivateRoute>
               <Procurement_Decisions />{" "}
+            </PrivateRoute>
+          </div>
+        }
+      />
+      <Route
+        exact
+        path="/joinnow"
+        element={
+          <div className="procurement  h-screen">
+            <PrivateRoute>
+              <JoinNow />{" "}
             </PrivateRoute>
           </div>
         }
@@ -211,7 +223,7 @@ const MainRoutes = () => {
           </div>
         }
       />
-       <Route
+      <Route
         exact
         path="/inventory"
         element={

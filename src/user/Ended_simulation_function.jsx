@@ -131,7 +131,7 @@ const UserSideEndedFunction = ({
             </span>
           </div>
         </div>
-        <p className="text-base p-2">
+        <p className="text-base p-2 text-blue-gray-500">
           start Date {startDate} | End Date {endDate}
         </p>
 

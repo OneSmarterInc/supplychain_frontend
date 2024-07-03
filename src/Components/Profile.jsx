@@ -109,20 +109,16 @@ const ProfileDropdown = () => {
             </a>
           </div>
           <div className="border-t border-gray-200">
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            >
+        
               <div
                 onClick={handleLogOut}
                 className="flex items-center justify-center rounded-lg bg-red-500 hover:bg-red-700 text-white"
               >
                 <button className="p-2 text-white font-bold cursor-pointer rounded-md">
-                  {" "}
                   Log Out
                 </button>
               </div>
-            </a>
+   
           </div>
         </PopoverContent>
       </Popover>
