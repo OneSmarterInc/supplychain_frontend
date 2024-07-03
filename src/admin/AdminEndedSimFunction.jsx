@@ -122,7 +122,7 @@ const AdminSideEndedFunction = ({
   };
 
   return (
-    <div className="flex h-80 pl-96 bg-slate-200 justify-start items-center bg-blue-gray-900">
+    <div className="flex h-full min-h-screen pl-96 bg-slate-200 justify-start items-start bg-blue-gray-900">
       <div className="info min-w-[700px] p-4 bg-blue-gray-800">
         <div className="text-3xl p-2 flex">
           <div className="flex text-white items-center ">
@@ -132,11 +132,11 @@ const AdminSideEndedFunction = ({
             </span>
           </div>
         </div>
-        <p className="text-base p-2">
+        <p className="text-base p-2 text-blue-gray-500">
           start Date {startDate} | End Date {endDate}
         </p>
 
-        <div className="relative">
+        <div className="relative flex items-center bg-blue-gray-700 p-3">
           {firms?.map((firmsdata) => {
             return (
               <button
