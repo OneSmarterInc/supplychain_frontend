@@ -8,6 +8,7 @@ import ReportModal from "../report/CplReport/ReportModal";
 import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
+import EditQuartersDetails from "./EditQuartersDetails";
 
 const AdminSideLiveFunction = ({
   id,
@@ -30,6 +31,8 @@ const AdminSideLiveFunction = ({
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [firstDropdownValue, setFirstDropdownValue] = useState("1");
   const [secondDropdownValue, setSecondDropdownValue] = useState("");
+
+  const [isQuarterModalOpen, setisQuarterModalOpen] = useState(false);
 
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
@@ -181,223 +184,260 @@ const AdminSideLiveFunction = ({
   };
 
   return (
-    <div className="flex h-80 pl-96 bg-slate-200 justify-start items-center bg-blue-gray-900">
-      <div className="info min-w-[700px] p-4 bg-blue-gray-800">
-        <div className="text-3xl w-full  flex items-center justify-between">
-          <div className="flex text-white items-center ">
-            <h1 className="text-3xl"> {batch} |</h1>
-            <span className="text-3xl p-2">Quarter : {currentQuarter}</span>
-          </div>
-          <button
-            onClick={addAdminInputModal}
-            className="ml-4 text-lg h-10 bg-blue-500 text-white p-1 px-2 rounded-lg hover:bg-blue-700"
-          >
-            Add Admin
-          </button>
-          <button
-            // onClick={addAdminInputModal}
-            className="text-lg h-10 bg-green-500 text-white p-1 px-2 rounded-lg hover:bg-green-700"
-            onClick={() => {
-              navigate("/usersidelive");
-            }}
-          >
-            User Side
-          </button>
-        </div>
-
-        <p className="text-base p-3 text-blue-gray-500">
-          start Date {startDate} | End Date {endDate}
-        </p>
-
-        {isAddAdminInputModalOpen && (
-          <div className="modal bg-white p-4 rounded-lg w-fit m-3 shadow-lg mt-4">
-            <input
-              type="email"
-              value={newAdminEmail}
-              onChange={(e) => setNewAdminEmail(e.target.value)}
-              placeholder="Enter admin email"
-              className="p-2 border-2 border-gray-300 w-96 rounded-lg"
-            />
+    <div className="flex justify-center bg-blue-gray-900">
+      <div className="flex h-80  bg-slate-200 justify-center items-center ">
+        <div className="info min-w-[700px] p-4 bg-blue-gray-800">
+          <div className="text-3xl w-full  flex items-center justify-between">
+            <div className="flex text-white items-center ">
+              <h1 className="text-3xl"> {batch} |</h1>
+              <span className="text-3xl p-2">Quarter : {currentQuarter}</span>
+            </div>
             <button
-              onClick={handleAddAdmin}
-              className="ml-4 w-24 bg-green-500 text-white p-2 rounded-lg hover:bg-green-700"
+              onClick={addAdminInputModal}
+              className="ml-4 text-lg h-10 bg-blue-500 text-white p-1 px-2 rounded-lg hover:bg-blue-700"
             >
-              Add
+              Add Admin
+            </button>
+            <button
+              // onClick={addAdminInputModal}
+              className="text-lg h-10 bg-green-500 text-white p-1 px-2 rounded-lg hover:bg-green-700"
+              onClick={() => {
+                navigate("/usersidelive");
+              }}
+            >
+              User Side
+            </button>
+            <button
+              // onClick={addAdminInputModal}
+              className="text-lg h-10 bg-green-500 text-white p-1 px-2 rounded-lg hover:bg-green-700"
+              onClick={() => setisQuarterModalOpen(!isQuarterModalOpen)}
+            >
+              Edit Quarters
             </button>
           </div>
-        )}
 
-        <div className="relative flex items-center bg-blue-gray-700 p-3">
-          {firms?.map((firmsdata) => {
-            return (
+          <p className="text-base p-3 text-blue-gray-500">
+            start Date {startDate} | End Date {endDate}
+          </p>
+
+          {isAddAdminInputModalOpen && (
+            <div className="modal bg-white p-4 rounded-lg w-fit m-3 shadow-lg mt-4">
+              <input
+                type="email"
+                value={newAdminEmail}
+                onChange={(e) => setNewAdminEmail(e.target.value)}
+                placeholder="Enter admin email"
+                className="p-2 border-2 border-gray-300 w-96 rounded-lg"
+              />
               <button
-                key={firmsdata.firm_key}
-                className="w-40 h-10 rounded-lg bg-green-600 text-white text-center p-2 m-2 hover:bg-sky-950"
-                onClick={() => {
-                  handleFirmsUsers(firmsdata);
-                }}
+                onClick={handleAddAdmin}
+                className="ml-4 w-24 bg-green-500 text-white p-2 rounded-lg hover:bg-green-700"
               >
-                {firmsdata ? firmsdata.firm_key : "Unknown Firm"}
+                Add
               </button>
-            );
-          })}
+            </div>
+          )}
 
-          {isFirmModalOpen && selectedFirm && (
-            <div className="modal z-50 bg-white p-4 rounded-lg   fixed top-24 w-[800px] shadow-lg mt-4 ">
-              <div className="buttons my-2 flex  items-center justify-between">
-                <h2 className="text-2xl font-bold mb-4">
-                  Users of{" "}
-                  <span className="text-green-600">
-                    {selectedFirm.firm_key}
-                  </span>
-                  <div className="flex space-x-3">
-                    <span>Passcode:</span>
-                    <span className="text-green-500">
-                      {filteredSimulation[0].passcode[selectedFirm.firm_key]}
+          <div className="relative flex items-center bg-blue-gray-700 p-3">
+            {firms?.map((firmsdata) => {
+              return (
+                <button
+                  key={firmsdata.firm_key}
+                  className="w-40 h-10 rounded-lg bg-green-600 text-white text-center p-2 m-2 hover:bg-sky-950"
+                  onClick={() => {
+                    handleFirmsUsers(firmsdata);
+                  }}
+                >
+                  {firmsdata ? firmsdata.firm_key : "Unknown Firm"}
+                </button>
+              );
+            })}
+
+            {isFirmModalOpen && selectedFirm && (
+              <div className="modal z-50 bg-white p-4 rounded-lg   fixed top-24 w-[800px] shadow-lg mt-4 ">
+                <div className="buttons my-2 flex  items-center justify-between">
+                  <h2 className="text-2xl font-bold mb-4">
+                    Users of{" "}
+                    <span className="text-green-600">
+                      {selectedFirm.firm_key}
                     </span>
-                  </div>
-                </h2>
-                <div className="flex  items-center space-x-3">
-                  <button
-                    onClick={toggleModal}
-                    className="w-28 h-10 rounded-lg bg-green-600 text-white text-center p-2 hover:bg-green-700"
-                  >
-                    Reports
-                  </button>
-                  <h2
-                    onClick={() => {
-                      setIsFirmModalOpen(false);
-                    }}
-                    className="flex justify-end text-red-300 cursor-pointer"
-                  >
-                    close
+                    <div className="flex space-x-3">
+                      <span>Passcode:</span>
+                      <span className="text-green-500">
+                        {filteredSimulation[0].passcode[selectedFirm.firm_key]}
+                      </span>
+                    </div>
                   </h2>
-                </div>
-              </div>
-              <div className="h-80  overflow-y-scroll">
-                {selectedFirm.users.map((user) => (
-                  <div className="p-4 bg-white shadow-md rounded-lg">
-                    <div
-                      key={user.user_id}
-                      className="mb-4 flex items-center space-x-4"
+                  <div className="flex  items-center space-x-3">
+                    <button
+                      onClick={toggleModal}
+                      className="w-28 h-10 rounded-lg bg-green-600 text-white text-center p-2 hover:bg-green-700"
                     >
-                      <h1 className="text-3xl text-blue-500">
-                        <i className="fa-solid fa-user"></i>
-                      </h1>
-                      <div className="">
-                        {/* <p className="text-lg font-semibold text-gray-700">
+                      Reports
+                    </button>
+                    <h2
+                      onClick={() => {
+                        setIsFirmModalOpen(false);
+                      }}
+                      className="flex justify-end text-red-300 cursor-pointer"
+                    >
+                      close
+                    </h2>
+                  </div>
+                </div>
+                <div className="h-80  overflow-y-scroll">
+                  {selectedFirm.users.map((user) => (
+                    <div className="p-4 bg-white shadow-md rounded-lg">
+                      <div
+                        key={user.user_id}
+                        className="mb-4 flex items-center space-x-4"
+                      >
+                        <h1 className="text-3xl text-blue-500">
+                          <i className="fa-solid fa-user"></i>
+                        </h1>
+                        <div className="">
+                          {/* <p className="text-lg font-semibold text-gray-700">
                           UserID:{" "}
                           <span className="font-normal">{user.user_id}</span>
                         </p> */}
-                        <p className="text-lg font-semibold text-gray-700">
-                          Email:{" "}
-                          <span className="font-normal">{user.email}</span>
-                        </p>
+                          <p className="text-lg font-semibold text-gray-700">
+                            Email:{" "}
+                            <span className="font-normal">{user.email}</span>
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-              <div className="">
-                {" "}
-                <div className="flex items-center">
-                  <div className="h-28 flex items-center">
-                    {/* TODO: temporary hide */}
-                    {/* <button
+                  ))}
+                </div>
+                <div className="">
+                  {" "}
+                  <div className="flex items-center">
+                    <div className="h-28 flex items-center">
+                      {/* TODO: temporary hide */}
+                      {/* <button
                       onClick={addUserInputModal}
                       className="ml-4 text-lg bg-blue-500 text-white p-1 h-10 px-2 rounded-lg hover:bg-blue-700"
                     >
                       Add User
                     </button> */}
-                  </div>
-                  {isAddUserInputModalOpen && (
-                    <div className="modal bg-white p-4 rounded-lg w-fit m-3 shadow-lg mt-4">
-                      <input
-                        type="email"
-                        value={newUserEmail}
-                        onChange={(e) => setNewUserEmail(e.target.value)}
-                        placeholder="Enter User email"
-                        className="p-2 border-2 border-gray-300 w-96 rounded-lg"
-                      />
-                      <button
-                        onClick={handleAddUser}
-                        className="ml-4 w-24 bg-green-500 text-white p-2 rounded-lg hover:bg-green-700"
-                      >
-                        Add
-                      </button>
                     </div>
-                  )}
+                    {isAddUserInputModalOpen && (
+                      <div className="modal bg-white p-4 rounded-lg w-fit m-3 shadow-lg mt-4">
+                        <input
+                          type="email"
+                          value={newUserEmail}
+                          onChange={(e) => setNewUserEmail(e.target.value)}
+                          placeholder="Enter User email"
+                          className="p-2 border-2 border-gray-300 w-96 rounded-lg"
+                        />
+                        <button
+                          onClick={handleAddUser}
+                          className="ml-4 w-24 bg-green-500 text-white p-2 rounded-lg hover:bg-green-700"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-        {/* <button
+            )}
+          </div>
+
+         
+          {/* <button
             className="w-32 h-10 rounded-lg bg-blue-600 text-white text-center p-2 mx-2 hover:bg-sky-950"
             onClick={handleSubmit}
           >
             Enter
           </button> */}
-      </div>
-      <div className="graph">
-        <div className="mixed-chart pt-4">
-          {/* <Chart options={options} series={series} type="area" width="450" /> */}
         </div>
-      </div>
-      {isReportModalOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
-            onClick={toggleModal}
-          ></div>
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="bg-white rounded-lg shadow-xl p-6 w-2/3 max-w-xl">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">Select Reports</h2>
-                <button
-                  className="text-red-600 font-bold"
-                  onClick={toggleModal}
-                >
-                  X
-                </button>
+         {/* quarterModal */}
+         {isQuarterModalOpen && (
+            <div className="modal z-40 h-[600px]  bg-blue-gray-700  rounded-lg   fixed top-10  shadow-lg ">
+              <div className="buttons my-2 flex px-4 border-b py-2 pt-1   items-center justify-between">
+                <h2 className="text-2xl font-bold text-white  ">Update Quarter Details: </h2>
+                <div className="flex  items-center space-x-3">
+                  <h2
+                    onClick={() => {
+                      setisQuarterModalOpen(false);
+                    }}
+                    className="flex justify-end text-red-300 hover:bg-red-500 p-2 rounded-md py-1 hover:text-white cursor-pointer"
+                  >
+                    close
+                  </h2>
+                </div>
               </div>
-              <HStack spacing={3}>
-                <Select
-                  width="165px"
-                  border="1px solid black"
-                  onChange={(e) => handleQuarterSelectChange(e)}
-                  value={firstDropdownValue}
-                >
-                  {option}
-                </Select>
-                <Select
-                  width="165px"
-                  border="1px solid black"
-                  onChange={(e) => handleButtonClick(e)}
-                  value={secondDropdownValue}
-                >
-                  {" "}
-                  <option value="">Select</option>
-                  <option value="cpl">Corporate P&L Statement</option>
-                  {/* <option value="pcpl">Hyperware P&L Statement</option>
+              <div className=" h-[500px]  overflow-y-scroll overflow-x-hidden">
+                <EditQuartersDetails
+                  quarter_specific_decisions={
+                    filteredSimulation[0]?.quarter_specific_decisions
+                  }
+                />
+              </div>
+            </div>
+          )}
+
+        <div className="graph">
+          <div className="mixed-chart pt-4">
+            {/* <Chart options={options} series={series} type="area" width="450" /> */}
+          </div>
+        </div>
+        {isReportModalOpen && (
+          <>
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={toggleModal}
+            ></div>
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              <div className="bg-white rounded-lg shadow-xl p-6 w-2/3 max-w-xl">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold">Select Reports</h2>
+                  <button
+                    className="text-red-600 font-bold"
+                    onClick={toggleModal}
+                  >
+                    X
+                  </button>
+                </div>
+                <HStack spacing={3}>
+                  <Select
+                    width="165px"
+                    border="1px solid black"
+                    onChange={(e) => handleQuarterSelectChange(e)}
+                    value={firstDropdownValue}
+                  >
+                    {option}
+                  </Select>
+                  <Select
+                    width="165px"
+                    border="1px solid black"
+                    onChange={(e) => handleButtonClick(e)}
+                    value={secondDropdownValue}
+                  >
+                    {" "}
+                    <option value="">Select</option>
+                    <option value="cpl">Corporate P&L Statement</option>
+                    {/* <option value="pcpl">Hyperware P&L Statement</option>
                   <option value="inventory">
                     Finished Goods Inventory Report
                   </option> */}
-                </Select>
-              </HStack>
-              <div className="mt-4 flex">
-                {secondDropdownValue === "cpl" && <ReportModal />}
-                {secondDropdownValue === "pcpl" && <ProductReportModal />}
-                {secondDropdownValue === "inventory" && <FGInventoryModal />}\
-                <div className="px-5">
-                  {" "}
-                  <EvaluationReportModal />
+                  </Select>
+                </HStack>
+                <div className="mt-4 flex">
+                  {secondDropdownValue === "cpl" && <ReportModal />}
+                  {secondDropdownValue === "pcpl" && <ProductReportModal />}
+                  {secondDropdownValue === "inventory" && <FGInventoryModal />}\
+                  <div className="px-5">
+                    {" "}
+                    <EvaluationReportModal />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
