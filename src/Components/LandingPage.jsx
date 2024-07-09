@@ -10,6 +10,7 @@ import {
 import * as THREE from "three";
 import { Link, useNavigate } from "react-router-dom";
 import { HQBuilding } from "./HQBuilding";
+import ReportComponent from "../report/ReportComponent";
 
 // Ground component
 function Ground({
@@ -89,7 +90,7 @@ function Box({
 function Modal({ title, content, onClose }) {
   const formattedContent = content.replace(/\n/g, "<br/>");
   return (
-    <div className="modal fixed flex justify-end p-5 h-40 top-0 left-0 z-40 w-screen">
+    <div className="modal fixed flex justify-end p-5 px-2 h-40 top-0 left-0 z-40 w-screen">
       <div className="bg-blue-gray-500 min-w-96 p-2 flex justify-between items-start">
         <div className="modal-content ">
           <h2 className="text-xl text-teal-50">{title}</h2>
@@ -128,14 +129,52 @@ function Sidebar({ isOpen, onClose }) {
           &times;
         </button>
       </div>
-      <ul className="flex flex-col space-y-3 my-6 items-start">
+      <ul className="flex flex-col space-y-3 my-5 items-start">
         <li className="hover:bg-blue-gray-800 hover:cursor-pointer w-full p-2 rounded-md">
           <p onClick={() => navigate("/forecast")}>Forecast</p>
         </li>
         <li className="hover:bg-blue-gray-800 hover:cursor-pointer w-full p-2 rounded-md">
+          <p onClick={() => navigate("/manufacturing")}>Manufacturing</p>
+        </li>
+        <li className="hover:bg-blue-gray-800 hover:cursor-pointer w-full p-2 rounded-md">
+          <p onClick={() => navigate("/distribution")}>Distribution</p>
+        </li>
+        <li className="hover:bg-blue-gray-800 hover:cursor-pointer w-full p-2 rounded-md">
           <p onClick={() => navigate("/service")}>Service</p>
         </li>
+        <li className="hover:bg-blue-gray-800 hover:cursor-pointer w-full p-2 rounded-md">
+          <p onClick={() => navigate("/it")}>It</p>
+        </li>
+        <li className="hover:bg-blue-gray-800 hover:cursor-pointer w-full p-2 rounded-md">
+          <p onClick={() => navigate("/demand")}>Demand</p>
+        </li>
+        <li className="hover:bg-blue-gray-800 hover:cursor-pointer w-full p-2 rounded-md">
+          <p onClick={() => navigate("/procurement")}>Procurement</p>
+        </li>
+        <li className="hover:bg-blue-gray-800 hover:cursor-pointer w-full p-2 rounded-md">
+          <p onClick={() => navigate("/transportation")}>Transportation</p>
+        </li>
       </ul>
+      <hr />
+      <div className="bg-blue-gray-600">
+        <h2 className="text-xl my-5">Reports</h2>
+        <div className="">
+          <select className="text-black p-2 rounded-md w-full" name="" id="">
+            <option value="">Quarters</option>
+            <option value="1">Quarter 2</option>
+            <option value="2">Quarter 2</option>
+          </select>
+          <select
+            className="text-black p-2 rounded-md w-full my-2"
+            name=""
+            id=""
+          >
+            <option value="">Select Reports</option>
+            <option value="cpl">CPL</option>
+            <option value="pcpl">PCPL</option>
+          </select>
+        </div>
+      </div>
     </div>
   );
 }
@@ -291,15 +330,15 @@ function LandingPage() {
           isSelected={selectedRegion === "Region 2"}
         />
         <Box
-          position={[150, 4, 0]}
+          position={[159, 4, -35]}
           color="blue"
           label="Crossdocking"
           onClick={() =>
             handleBoxClick("Crossdocking", "Carrier: I,J,K,L,M,N in Region 2")
           }
-          width={30}
+          width={20}
           height={10}
-          depth={30}
+          depth={20}
         />
 
         <Ground
@@ -312,15 +351,15 @@ function LandingPage() {
           isSelected={selectedRegion === "Region 3"}
         />
         <Box
-          position={[30, 3, -120]}
+          position={[39, 3, -155]}
           color="blue"
           label="Crossdocking"
           onClick={() =>
             handleBoxClick("Crossdocking", "Carrier: I,J,K,L,M,N in Region 3")
           }
-          width={30}
+          width={20}
           height={10}
-          depth={30}
+          depth={20}
         />
 
         <Ground
@@ -375,12 +414,12 @@ function LandingPage() {
         />
 
         <Box
-          position={[120, 2.5, -35]}
+          position={[106, 2.5, -35]}
           color="red"
           label="Distribution Center (owned)"
           onClick={() =>
             handleBoxClick(
-              "Distribution Center",
+              "Distribution Center (Region2)",
               "Selected Suppliers are : \n Supplier D."
             )
           }
@@ -390,7 +429,7 @@ function LandingPage() {
         />
 
         <Box
-          position={[0, 2.5, -155]}
+          position={[-14, 2.5, -155]}
           color="red"
           label="Distribution Center (sourced)"
           onClick={() =>
@@ -415,6 +454,12 @@ function LandingPage() {
           minPolarAngle={0} // Prevent flipping the camera upside down
         />
       </Canvas>
+
+      <div className="fixed top-36 right-0 m-2">
+        <button className=" p-1 px-2 rounded-md bg-indigo-300 hover:bg-blue-600 hover:text-white">
+          Rules and Values
+        </button>
+      </div>
     </div>
   );
 }
