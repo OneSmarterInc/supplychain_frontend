@@ -77,9 +77,9 @@ const MainRoutes = () => {
         path="/landingpage"
         element={
           <div className="manufacturing  h-screen ">
-            <PrivateRoute>
-              <LandingPage />
-            </PrivateRoute>{" "}
+            {/* <PrivateRoute> */}
+            <LandingPage />
+            {/* </PrivateRoute>{" "} */}
           </div>
         }
       />
