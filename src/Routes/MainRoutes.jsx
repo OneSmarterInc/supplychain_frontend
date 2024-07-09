@@ -21,6 +21,7 @@ import AdminNavBar from "../Components/AdminNavBar";
 import { PrivateRoute } from "./PrivateRoutes";
 import Inventory from "../Components/Inventory";
 import JoinNow from "../Components/JoinNow";
+import LandingPage from "../Components/LandingPage";
 
 const MainRoutes = () => {
   const [noOfQuarters, setNoOfQuarters] = useState();
@@ -66,6 +67,18 @@ const MainRoutes = () => {
           <div className="manufacturing  h-screen ">
             <PrivateRoute>
               <Manufacturing_Decisions />
+            </PrivateRoute>{" "}
+          </div>
+        }
+      />
+
+      <Route
+        exact
+        path="/landingpage"
+        element={
+          <div className="manufacturing  h-screen ">
+            <PrivateRoute>
+              <LandingPage />
             </PrivateRoute>{" "}
           </div>
         }
