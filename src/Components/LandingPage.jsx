@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Text, Html } from "@react-three/drei";
+import {
+  OrbitControls,
+  Text,
+  Html,
+  useGLTF,
+  Environment,
+} from "@react-three/drei";
 import * as THREE from "three";
 import { Link, useNavigate } from "react-router-dom";
+import { HQBuilding } from "./HQBuilding";
 
 // Ground component
 function Ground({
@@ -244,7 +251,7 @@ function LandingPage() {
       <Canvas shadows camera={{ position: initialCameraPosition, fov: 60 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 20, 10]} castShadow />
-
+        <Environment preset="night" />
         <CameraControls
           targetPosition={cameraPosition}
           targetLookAt={cameraLookAt}
@@ -261,14 +268,17 @@ function LandingPage() {
           onClick={() => handleRegionClick("Region 1")}
           isSelected={selectedRegion === "Region 1"}
         />
+        {/* head quarters */}
         <Box
-          position={[-40, 15, -40]}
-          color="skyblue"
+          label="Head Quarters"
+          position={[-30, 0, -30]}
+          height={0}
+          width={0}
+        />
+        <HQBuilding
           label="Head Quarters"
           onClick={handleHQClick}
-          width={20}
-          height={30}
-          depth={20}
+          position={[-40, -42, -40]}
         />
 
         <Ground
