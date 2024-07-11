@@ -28,7 +28,6 @@ const Demand_generation = () => {
   let firm_key_new = "";
   if (selectedSim[0]?.firm_data.length) {
     let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
-
       return item.emails.includes(user.email);
     });
     if (firm_obj.length) {
@@ -112,8 +111,7 @@ const Demand_generation = () => {
         ip_address: "123.345.1",
         username: user.username,
         firm_key: firm_key_new,
-        current_quarter:selectedSim[0].current_quarter,
-
+        current_quarter: selectedSim[0].current_quarter,
       });
       const data = response.data;
       console.log("addUserLoggerData", data);
@@ -145,7 +143,7 @@ const Demand_generation = () => {
       </div>
       <div className="grid grid-cols-2 grid-flow-col gap-2   ">
         <div className="row-span-2 m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-center overflow-scroll  scroll-pt-96">
-          <div className="mt-[460px]"></div>
+          <div className="mt-[680px]"></div>
           <Demand_hype_ch1
             demandData={demandData}
             setHypeCh1ValuetoParent={setHypeCh1Value}
