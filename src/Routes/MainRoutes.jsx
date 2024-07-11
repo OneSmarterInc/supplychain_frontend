@@ -21,7 +21,7 @@ import AdminNavBar from "../Components/AdminNavBar";
 import { PrivateRoute } from "./PrivateRoutes";
 import Inventory from "../Components/Inventory";
 import JoinNow from "../Components/JoinNow";
-import LandingPage from "../Components/LandingPage";
+import LandingPage from "../Components/LandingPage/LandingPage";
 
 const MainRoutes = () => {
   const [noOfQuarters, setNoOfQuarters] = useState();

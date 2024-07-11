@@ -10,8 +10,6 @@ import {
 import * as THREE from "three";
 import { Link, useNavigate } from "react-router-dom";
 import { HQBuilding } from "./HQBuilding";
-import ReportComponent from "../report/ReportComponent";
-
 // Ground component
 function Ground({
   position,
