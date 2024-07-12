@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import MyContext from "../Components/ContextApi/MyContext";
 import axios from "axios";
 
-const EditQuartersDetails = ({ quarter_specific_decisions }) => {
+const EditQuartersDetails = ({ quarter_specific_decisions, simulation_id }) => {
   const navigate = useNavigate();
   const toast = useToast();
   const { api } = useContext(MyContext);
@@ -121,8 +121,10 @@ const EditQuartersDetails = ({ quarter_specific_decisions }) => {
 
   const handleSubmit = async () => {
     try {
-      await axios.post(`${api}/endpoint`, {
-        quarter_specific_decisions: updated_quarter_specific_decisions,
+      await axios.post(`${api}/update-quarter-specific-decision/`, {
+        simulation_id: simulation_id,
+        quarter_specific_decision:
+          updated_quarter_specific_decisions.quarter_specific_decisions,
       });
       toast({
         title: "Success",
@@ -150,9 +152,7 @@ const EditQuartersDetails = ({ quarter_specific_decisions }) => {
           className="mb-3 bg-blue-gray-800 bg-slate-300 p-4 py-2 pb-3 rounded-xl"
         >
           <div className="flex justify-between w-full">
-            <h3 className="text-xl font-bold mx-2">
-              Quarter {index + 4} :
-            </h3>{" "}
+            <h3 className="text-xl font-bold mx-2">Quarter {index + 4} :</h3>{" "}
             <button
               onClick={() => deleteQuarter(index)}
               className="my-2 px-2 py-1 bg-red-500 text-white rounded-md"

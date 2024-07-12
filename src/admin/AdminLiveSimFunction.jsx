@@ -373,6 +373,7 @@ const AdminSideLiveFunction = ({
                   quarter_specific_decisions={
                     filteredSimulation[0]?.quarter_specific_decisions
                   }
+                  simulation_id = {filteredSimulation[0]?.simulation_id}
                 />
               </div>
             </div>
