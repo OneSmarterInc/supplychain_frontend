@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useToast } from "@chakra-ui/react";
 import ManufacturingCostComponent from "../Components/TableComponents/ManufacturingCostComponent";
+import TransportationTableComponent from "../Components/TableComponents/TransportationTableComponent";
 
 const GDP = () => {
   const navigate = useNavigate();
@@ -382,7 +383,7 @@ const GDP = () => {
   );
 
   // Sub assembly component ends here
-
+  // ----------------------------------------------------------------------------------------------------
   // Manufacturing component Starts here
   const [manufacturingCosts, setManufacturingCosts] = useState([
     {
@@ -470,6 +471,163 @@ const GDP = () => {
   );
 
   // Manufacturing component Ends here
+  // --------------------------------------------------------------------------------------------
+
+  // Transportation Component Starts here
+
+  const [shipments, setShipments] = useState([
+    {
+      carrier: "I",
+      marketRegion1: "disabled",
+      marketRegion2: {
+        cost_surface: 6,
+        cost_air: 8,
+        delivery_inpercent_surface: 70,
+        delivery_change_in_percent_surface: 4,
+        delivery_inpercent_air: 100,
+      },
+      marketRegion3: {
+        cost_surface: 10,
+        cost_air: 14,
+        delivery_inpercent_surface: 70,
+        delivery_change_in_percent_surface: 4,
+        delivery_inpercent_air: 100,
+      },
+    },
+    {
+      carrier: "J",
+      marketRegion1: "disabled",
+      marketRegion2: {
+        cost_surface: 4,
+        cost_air: 8,
+        delivery_inpercent_surface: 40,
+        delivery_change_in_percent_surface: 8,
+        delivery_inpercent_air: 100,
+      },
+      marketRegion3: {
+        cost_surface: 4,
+        cost_air: 10,
+        delivery_inpercent_surface: 30,
+        delivery_change_in_percent_surface: 8,
+        delivery_inpercent_air: 100,
+      },
+    },
+    {
+      carrier: "K",
+      marketRegion1: "disabled",
+      marketRegion2: {
+        cost_surface: 8,
+        cost_air: 10,
+        delivery_inpercent_surface: 70,
+        delivery_change_in_percent_surface: 12,
+        delivery_inpercent_air: 100,
+      },
+      marketRegion3: {
+        cost_surface: 6,
+        cost_air: 12,
+        delivery_inpercent_surface: 60,
+        delivery_change_in_percent_surface: 12,
+        delivery_inpercent_air: 100,
+      },
+    },
+    {
+      carrier: "L",
+      marketRegion1: "disabled",
+      marketRegion2: {
+        cost_surface: 8,
+        cost_air: 10,
+        delivery_inpercent_surface: 75,
+        delivery_change_in_percent_surface: 4,
+        delivery_inpercent_air: 100,
+      },
+      marketRegion3: {
+        cost_surface: 8,
+        cost_air: 16,
+        delivery_inpercent_surface: 60,
+        delivery_change_in_percent_surface: 4,
+        delivery_inpercent_air: 100,
+      },
+    },
+    {
+      carrier: "M",
+      marketRegion1: "disabled",
+      marketRegion2: {
+        cost_surface: 6,
+        cost_air: 10,
+        delivery_inpercent_surface: 65,
+        delivery_change_in_percent_surface: 8,
+        delivery_inpercent_air: 100,
+      },
+      marketRegion3: {
+        cost_surface: 6,
+        cost_air: 12,
+        delivery_inpercent_surface: 75,
+        delivery_change_in_percent_surface: 8,
+        delivery_inpercent_air: 100,
+      },
+    },
+    {
+      carrier: "N",
+      marketRegion1: "disabled",
+      marketRegion2: {
+        cost_surface: 10,
+        cost_air: 12,
+        delivery_inpercent_surface: 82,
+        delivery_change_in_percent_surface: 12,
+        delivery_inpercent_air: 100,
+      },
+      marketRegion3: {
+        cost_surface: 12,
+        cost_air: 18,
+        delivery_inpercent_surface: 78,
+        delivery_change_in_percent_surface: 12,
+        delivery_inpercent_air: 100,
+      },
+    },
+  ]);
+
+  useEffect(() => {
+    console.log("distributerMapp changed:", distributerMapp);
+
+    const updatedShipments = shipments.map((shipment) => {
+      console.log("shipment carrier:", shipment.carrier);
+      console.log("distributerMapp", distributerMapp);
+      const updatedCarrier = Object.keys(distributerMapp).find(
+        (key) => distributerMapp[key] === shipment.carrier
+      );
+      console.log("Updated carrier:", updatedCarrier);
+
+      return {
+        ...shipment,
+        carrier: updatedCarrier || shipment.carrier,
+      };
+    });
+
+    console.log("Updated shipments:", updatedShipments);
+    setShipments(updatedShipments);
+  }, [distributerMapp]);
+
+  const handleTransportationInputChange = (e, index, region, field) => {
+    const { value } = e.target;
+    const updatedShipments = shipments.map((shipment, i) => {
+      if (i === index) {
+        return {
+          ...shipment,
+          [region]: {
+            ...shipment[region],
+            [field]: value,
+          },
+        };
+      }
+      return shipment;
+    });
+    setShipments(updatedShipments);
+  };
+
+  console.log("Shipment:-", shipments);
+
+  // Transportation Component Ends here
+  // --------------------------------------------------------------------------------------------------------------
 
   const updatedCombineSimData = {
     ...combineSimData,
@@ -484,7 +642,7 @@ const GDP = () => {
     renamedMappedData: renamedMappedData,
     sac_config: subAssemblyComponents,
     manufacture_config: manufacturingCosts,
-    carrier_config: null,
+    carrier_config: shipments,
   };
   const handleSubmit = async () => {
     if (updatedCombineSimData?.total_quarters) {
@@ -1041,7 +1199,7 @@ const GDP = () => {
       <div className="">
         <div className="container mx-auto mt-10">
           <h2 className="text-2xl font-bold mb-4">
-            Exhibit 5: Sub-Assembly Component Characteristics
+            Sub-Assembly Component Characteristics
           </h2>
           <table className="w-full table-auto border border-green-700 border-spacing-3 gap-3">
             <thead>
@@ -1230,7 +1388,7 @@ const GDP = () => {
       <div className="">
         <div className="container mx-auto mt-10">
           <h2 className="text-2xl font-bold mb-4">
-            Exhibit 6: Manufacturing Costs (Per Unit)
+            Manufacturing Costs (Per Unit)
           </h2>
           <table className="w-full table-auto border border-gray-300">
             <thead>
@@ -1447,6 +1605,252 @@ const GDP = () => {
         </div>
       </div>{" "}
       {/* Manufacturing Cost component table Ends here */}
+      {/* -------------------------------------------------------------------------------------- */}
+      {/* Transportation component table Starts here */}
+      {/* <TransportationTableComponent /> */}
+      <div className="container mx-auto mt-10">
+        <h2 className="text-2xl font-bold mb-4">
+          Plant-To-DC Transportation Shipments
+        </h2>
+        <table className="w-full table-auto border border-gray-300">
+          <thead>
+            <tr className="bg-blue-100">
+              <th
+                rowSpan="2"
+                className="py-2 w-40 px-4 border-b border-gray-300 text-left"
+              >
+                Carrier
+              </th>
+              <th
+                colSpan="2"
+                className="py-2 px-4 border-b border-l border-r border-gray-300 text-center"
+              >
+                Market Region 1
+              </th>
+              <th
+                colSpan="2"
+                className="py-2 px-4 border-b border-r border-gray-300 text-center"
+              >
+                Market Region 2
+              </th>
+              <th
+                colSpan="2"
+                className="py-2 px-4 border-b border-gray-300 text-center"
+              >
+                Market Region 3
+              </th>
+            </tr>
+            <tr className="bg-blue-100">
+              <th className="py-2 px-4 border-b border-l  border-gray-300 text-center"></th>
+              <th className="py-2 px-4 border-b border-r  border-gray-300 text-center"></th>
+              <th className="py-2 px-4 border-b border-r border-gray-300 text-center">
+                Cost
+              </th>
+              <th className="py-2 px-4 border-b border-r border-gray-300 text-center">
+                Delivery
+              </th>
+              <th className="py-2 px-4 border-b border-r border-gray-300 text-center">
+                Cost
+              </th>
+              <th className="py-2 px-4 border-b  border-gray-300 text-center">
+                Delivery
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {shipments.map((shipment, index) => (
+              <tr
+                key={index}
+                className={`${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}
+              >
+                <td className="py-2 px-4 border-b border-gray-300 text-left">
+                  {/* {shipment.carrier.split("\n").map((line, index) => (
+                  <div key={index}>{line}</div>
+                ))} */}
+                  <p> carrier-{shipment.carrier}, Surface</p>
+                  <p>carrier-{shipment.carrier}, Air</p>
+                </td>
+                <td className="py-2 px-4 border-b  bg-black border-gray-300 text-center"></td>
+                <td className="py-2 px-4 border-b bg-black border-gray-300 text-center"></td>
+                <td className="py-2 px-4 border-b border-gray-300 text-center">
+                  <div className="flex items-center">
+                    <span className="mr-1  text-green-400">$</span>
+                    <input
+                      type="number"
+                      value={shipment.marketRegion2.cost_surface}
+                      onChange={(e) =>
+                        handleTransportationInputChange(
+                          e,
+                          index,
+                          "marketRegion2",
+                          "cost_surface"
+                        )
+                      }
+                      className="w-full border text-center border-gray-300 px-2 py-1"
+                    />
+                  </div>
+                  <div className="flex items-center mt-1">
+                    <span className="mr-1  text-green-400">$</span>
+                    <input
+                      type="number"
+                      value={shipment.marketRegion2.cost_air}
+                      onChange={(e) =>
+                        handleTransportationInputChange(
+                          e,
+                          index,
+                          "marketRegion2",
+                          "cost_air"
+                        )
+                      }
+                      className="w-full border text-center border-gray-300 px-2 py-1"
+                    />
+                  </div>
+                </td>
+                <td className="py-2 flex flex-col justify-center items-center px-4 border-b border-gray-300 text-center">
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      value={shipment.marketRegion2.delivery_inpercent_surface}
+                      onChange={(e) =>
+                        handleTransportationInputChange(
+                          e,
+                          index,
+                          "marketRegion2",
+                          "delivery_inpercent_surface"
+                        )
+                      }
+                      className="w-full border text-center border-gray-300 px-2 py-1"
+                    />
+                    <span className="mx-1  text-green-400">%</span>
+                    <span className="text-red-500">+-</span>
+                    <input
+                      type="text"
+                      value={
+                        shipment.marketRegion2
+                          .delivery_change_in_percent_surface
+                      }
+                      onChange={(e) =>
+                        handleTransportationInputChange(
+                          e,
+                          index,
+                          "marketRegion2",
+                          "delivery_change_in_percent_surface"
+                        )
+                      }
+                      className="w-full border text-center border-gray-300 px-2 py-1"
+                    />
+                    <span className="ml-1  text-green-400">%</span>
+                  </div>
+                  <div className="flex items-center mt-1">
+                    <input
+                      type="text"
+                      value={shipment.marketRegion2.delivery_inpercent_air}
+                      onChange={(e) =>
+                        handleTransportationInputChange(
+                          e,
+                          index,
+                          "marketRegion2",
+                          "delivery_inpercent_air"
+                        )
+                      }
+                      className="w-full border text-center border-gray-300 px-2 py-1"
+                    />
+                    <span className="ml-1  text-green-400">%</span>
+                  </div>
+                </td>
+                <td className="py-2 px-4 border-b border-gray-300 text-center">
+                  <div className="flex items-center">
+                    <span className="mr-1  text-green-400">$</span>
+                    <input
+                      type="number"
+                      value={shipment.marketRegion3.cost_surface}
+                      onChange={(e) =>
+                        handleTransportationInputChange(
+                          e,
+                          index,
+                          "marketRegion3",
+                          "cost_surface"
+                        )
+                      }
+                      className="w-full border text-center border-gray-300 px-2 py-1"
+                    />
+                  </div>
+                  <div className="flex items-center mt-1">
+                    <span className="mr-1  text-green-400">$</span>
+                    <input
+                      type="number"
+                      value={shipment.marketRegion3.cost_air}
+                      onChange={(e) =>
+                        handleTransportationInputChange(
+                          e,
+                          index,
+                          "marketRegion3",
+                          "cost_air"
+                        )
+                      }
+                      className="w-full border text-center border-gray-300 px-2 py-1"
+                    />
+                  </div>
+                </td>
+                <td className="py-2 flex flex-col justify-center items-center px-4 border-b border-gray-300 text-center">
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      value={shipment.marketRegion3.delivery_inpercent_surface}
+                      onChange={(e) =>
+                        handleTransportationInputChange(
+                          e,
+                          index,
+                          "marketRegion3",
+                          "delivery_inpercent_surface"
+                        )
+                      }
+                      className="w-full border text-center border-gray-300 px-2 py-1"
+                    />
+                    <span className="mx-1  text-green-400">%</span>
+                    <span className="text-red-500">+-</span>
+                    <input
+                      type="text"
+                      value={
+                        shipment.marketRegion3
+                          .delivery_change_in_percent_surface
+                      }
+                      onChange={(e) =>
+                        handleTransportationInputChange(
+                          e,
+                          index,
+                          "marketRegion3",
+                          "delivery_change_in_percent_surface"
+                        )
+                      }
+                      className="w-full border text-center border-gray-300 px-2 py-1"
+                    />
+                    <span className="ml-1  text-green-400">%</span>
+                  </div>
+                  <div className="flex items-center mt-1">
+                    <input
+                      type="text"
+                      value={shipment.marketRegion3.delivery_inpercent_air}
+                      onChange={(e) =>
+                        handleTransportationInputChange(
+                          e,
+                          index,
+                          "marketRegion3",
+                          "delivery_inpercent_air"
+                        )
+                      }
+                      className="w-full border text-center border-gray-300 px-2 py-1"
+                    />
+                    <span className="ml-1 text-green-400">%</span>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {/* Transportation component table Ends here */}
+      {/* --------------------------------------------------------------------------------------- */}
       <div className="mt-6 flex justify-center">
         <button
           onClick={handleSubmit}

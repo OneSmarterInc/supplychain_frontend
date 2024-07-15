@@ -6,14 +6,14 @@ import facotry from "../assets/factory.png";
 import { Image } from "@chakra-ui/react";
 import MyContext from "./ContextApi/MyContext";
 import UserNavBar from "./UserNavBar";
+import SuddenDemands from "./SuddenDemands";
 
 const Inventory = () => {
   const { api } = useContext(MyContext);
-  const current_quarter = (localStorage.getItem("inventory_current_quarter")) || [];
-  const firm_key = (localStorage.getItem("inventory_firm_key")) || [];
-  const name = (localStorage.getItem("simulation_name")) || [];
-
-
+  const current_quarter =
+    localStorage.getItem("inventory_current_quarter") || [];
+  const firm_key = localStorage.getItem("inventory_firm_key") || [];
+  const name = localStorage.getItem("simulation_name") || [];
 
   const [data, setData] = useState({
     manufacture: {},
@@ -21,44 +21,47 @@ const Inventory = () => {
     distributionCenter2: {},
     capital: 0,
   });
-  const currencyFormatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
   });
 
   const formatCurrency = (value) => {
-    if (typeof value === 'number') {
+    if (typeof value === "number") {
       return currencyFormatter.format(value);
     }
     return value;
   };
 
   useEffect(() => {
+    const simulation_id = localStorage.getItem("inventory_simulation_id") || [];
+    const firm_key = localStorage.getItem("inventory_firm_key") || [];
+    const current_quarter =
+      localStorage.getItem("inventory_current_quarter") || [];
 
-    const simulation_id = (localStorage.getItem("inventory_simulation_id")) || [];
-    const firm_key = (localStorage.getItem("inventory_firm_key")) || [];
-    const current_quarter = (localStorage.getItem("inventory_current_quarter")) || [];
-
-    axios.get(`${api}/inventory/`, {
-      params: {
-        simulation_id: simulation_id,
-        firm_key: firm_key,
-        current_quarter: 1
-      }
-    })
+    axios
+      .get(`${api}/inventory/`, {
+        params: {
+          simulation_id: simulation_id,
+          firm_key: firm_key,
+          current_quarter: 1,
+        },
+      })
       .then((response) => {
         setData(response.data);
       })
       .catch((error) => {
         console.error("There was an error fetching the data!", error);
       });
-
   }, []);
 
   const convertToArray = (obj) => {
-    return Object.keys(obj).map(key => ({
-      name: key.replace('inventory_', '').replace('_region2', '').replace('_region3', ''),
-      value: obj[key]
+    return Object.keys(obj).map((key) => ({
+      name: key
+        .replace("inventory_", "")
+        .replace("_region2", "")
+        .replace("_region3", ""),
+      value: obj[key],
     }));
   };
 
@@ -71,14 +74,16 @@ const Inventory = () => {
       <UserNavBar />
       <div className="container mx-auto p-4">
         <div className="flex justify-between">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-
-          </h2>
-          <h3 className="text-xl font-bold text-gray-800">{name} | {firm_key} | {current_quarter}th Quarter</h3>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2"></h2>
+          <h3 className="text-xl font-bold text-gray-800">
+            {name} | {firm_key} | {current_quarter}th Quarter
+          </h3>
         </div>
         <div className="mb-4 bg-gray-400 p-4 rounded-md shadow">
           <div className="flex justify-between mb-4">
-            <h3 className="text-xl font-bold text-gray-800">Manufacture | Region 1 | capital - {formatCurrency(data.capital)} </h3>
+            <h3 className="text-xl font-bold text-gray-800">
+              Manufacture | Region 1 | capital - {formatCurrency(data.capital)}{" "}
+            </h3>
           </div>
           <div className="flex justify-between">
             <div className="grid grid-cols-5 gap-4">
@@ -115,7 +120,10 @@ const Inventory = () => {
                   </div>
                 ))}
             </div>
-            <div className="w-34 flex justify-center">   <Image src={facotry} /> </div>
+            <div className="w-34 flex justify-center">
+              {" "}
+              <Image src={facotry} />{" "}
+            </div>
           </div>
         </div>
         <div className="mb-4 bg-gray-400 p-4 rounded-md shadow">
@@ -124,7 +132,6 @@ const Inventory = () => {
             <h3 className="text-xl font-bold text-gray-800 mb-2">
               Distribution Center | Region 2
             </h3>
-
           </div>
           <div className="flex justify-between">
             <div className="grid grid-cols-5 gap-4">
@@ -162,7 +169,10 @@ const Inventory = () => {
                   </div>
                 ))}
             </div>
-            <div className="w-34 flex justify-center">   <Image src={storage} /> </div>
+            <div className="w-34 flex justify-center">
+              {" "}
+              <Image src={storage} />{" "}
+            </div>
           </div>
         </div>
         <div className="mb-4 bg-gray-400 p-4 rounded-md shadow">
@@ -171,7 +181,6 @@ const Inventory = () => {
             <h3 className="text-xl font-bold text-gray-800 mb-2">
               Distribution Center | Region 3
             </h3>
-
           </div>
 
           <div className="flex justify-between">
@@ -210,10 +219,13 @@ const Inventory = () => {
                   </div>
                 ))}
             </div>
-            <div className="w-34 flex justify-center">   <Image src={storage} /> </div>
+            <div className="w-34 flex justify-center">
+              {" "}
+              <Image src={storage} />{" "}
+            </div>
           </div>
         </div>
-
+        <SuddenDemands />
       </div>
     </>
   );
