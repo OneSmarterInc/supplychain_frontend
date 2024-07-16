@@ -58,7 +58,7 @@ const PlayComponent = ({
   selectedSim = JSON.parse(selectedSim);
 
   const option = [];
-  for (let i = 1; i <= selectedSim[0]?.current_quarter-1; i++) {
+  for (let i = 1; i <= selectedSim[0]?.current_quarter - 1; i++) {
     option.push(
       <option key={i} value={i}>
         Select Quarter {i}
@@ -107,14 +107,18 @@ const PlayComponent = ({
   return (
     <div className="flex mt-4 bg-white justify-around items-center mx-10 rounded-lg border-2 border-neutral-600 shadow-xl">
       <div className="flex w-full">
-        <div className="flex-1 flex flex-col items-center justify-center" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-        <div className="info text-center" >
-
+        <div
+          className="flex-1 flex flex-col items-center justify-center"
+          style={{
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="info text-center">
             <h2 className="text-3xl p-2">
               {batch} |
-              <span className="text-3xl p-2">
-                Quarter  {currentQuarter}
-              </span>
+              <span className="text-3xl p-2">Quarter {currentQuarter}</span>
             </h2>
             <p className="text-base p-2">
               Start Date {startDate} | End Date {endDate}
@@ -137,7 +141,11 @@ const PlayComponent = ({
         </div>
         <div className="flex-1">
           <div className="logger">
-            <UserLoggerApi simulation_id={id} firm_key={firm_key_map} current_quarter={selectedSim[0].current_quarter}/>
+            <UserLoggerApi
+              simulation_id={id}
+              firm_key={firm_key_map}
+              current_quarter={selectedSim[0].current_quarter}
+            />
           </div>
         </div>
       </div>
@@ -175,6 +183,11 @@ const PlayComponent = ({
                 >
                   <option value="">Select</option>
                   <option value="cpl">Corporate P&L Statement</option>
+                  <option value="pcpl">Hyperware P&L Statement</option>
+                  <option value="inventory">
+                    Finished Goods Inventory Report
+                  </option>
+                  <option value="bl">Balance Sheet</option>
                   {/* <option value="hpl">Historical Corporate P&L Statement</option>
                   <option value="pcpl">Hyperware P&L Statement</option>
                   <option value="mpls">Metaware P&L Statement</option>
@@ -191,7 +204,7 @@ const PlayComponent = ({
                 {secondDropdownValue === "hpl" && <ReportModal />}
                 {secondDropdownValue === "pcpl" && <ProductReportModal />}
                 {secondDropdownValue === "mpls" && <ReportModal />}
-                {secondDropdownValue === "bl" && <ReportModal />}
+                {secondDropdownValue === "bl" ? <BalanceSheetModel /> : null}
                 {secondDropdownValue === "cfar" && <ReportModal />}
                 {secondDropdownValue === "inventory" && <FGInventoryModal />}
                 {secondDropdownValue === "pir" && <ReportModal />}
@@ -199,7 +212,11 @@ const PlayComponent = ({
                 {secondDropdownValue === "far" && <ReportModal />}
                 <div className="px-5">
                   {" "}
-                  <EvaluationReportModal simulation_id={simData[0].simulation_id} firm_key={firm_key_map} selected_quarter={firstDropdownValue} />
+                  <EvaluationReportModal
+                    simulation_id={simData[0].simulation_id}
+                    firm_key={firm_key_map}
+                    selected_quarter={firstDropdownValue}
+                  />
                 </div>
               </div>
             </div>

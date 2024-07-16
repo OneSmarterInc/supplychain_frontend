@@ -253,11 +253,12 @@ const AdminSideEndedFunction = ({
                 >
                   {" "}
                   <option value="">Select</option>
-                  <option value="cpl">Corporate P&L Statement</option>
-                  <option value="pcpl">Hyperware P&L Statement</option>
-                  <option value="inventory">
-                    Finished Goods Inventory Report
-                  </option>
+                    <option value="cpl">Corporate P&L Statement</option>
+                    <option value="pcpl">Hyperware P&L Statement</option>
+                    <option value="inventory">
+                      Finished Goods Inventory Report
+                    </option>
+                    <option value="bl">Balance Sheet</option>
                 </Select>
               </HStack>
               <div className="mt-4 flex">
@@ -265,6 +266,7 @@ const AdminSideEndedFunction = ({
                 {secondDropdownValue === "cpl" && <ReportModal />}
                 {secondDropdownValue === "pcpl" && <ProductReportModal />}
                 {secondDropdownValue === "inventory" && <FGInventoryModal />}
+                {secondDropdownValue === "bl" ? <BalanceSheetModel /> : null}
 
                 <div className="px-5">
                   {" "}
