@@ -5,7 +5,151 @@ import { SalesPDFDocument } from "./SalesPDFDocument";
 import Chart from "react-apexcharts";
 
 const ReportTable1 = () => {
-  const reportData = JSON.parse(localStorage.getItem("reportData"));
+  const reportData = JSON.parse(localStorage.getItem("reportData")) || [
+    {
+      "Sales Volume": {
+        "All Products": 0,
+        "Product 7-1": 0,
+        "Product 7-2": 0,
+      },
+      "Unfilled Orders": {
+        "All Products": 0,
+        "Product 7-1": 0,
+        "Product 7-2": 0,
+      },
+      Price: {
+        "All Products": 0,
+        "Product 7-1": 0,
+        "Product 7-2": 0,
+      },
+    },
+    {
+      details: {
+        "Product Costs": {
+          "All Products": 0,
+          "Product 7-1": 0,
+          "Product 7-2": 0,
+        },
+        "Order Processing": {
+          "All Products": 0,
+          "Product 7-1": 0,
+          "Product 7-2": 0,
+        },
+        "Replacement Parts": {
+          "All Products": 0,
+          "Product 7-1": 0,
+          "Product 7-2": 0,
+        },
+        "RFID Costs": {
+          "All Products": 0,
+          "Product 7-1": 0,
+          "Product 7-2": 0,
+        },
+        "Transportation Costs": {
+          "All Products": 0,
+          "Product 7-1": 0,
+          "Product 7-2": 0,
+        },
+        "Transportation Rebates": {
+          "All Products": 0,
+        },
+        "Volume Discount": {
+          "All Products": 0,
+        },
+        "Duties and Tariffs": {
+          "All Products": 0,
+          "Product 7-1": 0,
+          "Product 7-2":0,
+        },
+      },
+      "All Products": 0,
+      "Product 7-1": 0,
+      "Product 7-2": 0,
+    },
+    {
+      "All Products": 0,
+      "Product 7-1": 0,
+      "Product 7-2": 0,
+    },
+    {
+      details: {
+        "Administrative O/H": {
+          "All Products": 0,
+          "Product 7-1": 0,
+          "Product 7-2": 0,
+        },
+        "Consulting Fees": {
+          "All Products": 0,
+        },
+        "Corporate O/H": {
+          "All Products": 0,
+        },
+        "Cross Docking": {
+          "All Products": 0,
+        },
+        "Distribution FC": {
+          "All Products": 0,
+        },
+        "Emergency Procurement": {
+          "All Products": 0,
+        },
+        "Emergency Production": {
+          "All Products": 0,
+        },
+        "Forecast Inaccuracy": {
+          "All Products": 0,
+        },
+        "Information Technology": {
+          "All Products": 0,
+        },
+        "Inventory Charges": {
+          "All Products": 0,
+        },
+        Marketing: {
+          "All Products": 0,
+          "Product 7-1": 0,
+          "Product 7-2": 0,
+        },
+        "Plant Capacity FC": {
+          "All Products": 0,
+        },
+        "Procurement FC": {
+          "All Products": 0,
+        },
+        "Production FC": {
+          "All Products": 0,
+        },
+        "Research Studies": {
+          "All Products": 0,
+        },
+        "Service Outsourcing": {
+          "All Products": 0,
+          "Product 7-1": "-",
+          "Product 7-2": "-",
+        },
+        "Unfilled Handling": {
+          "All Products": 0,
+        },
+        "Total Fixed & Other": {
+          "All Products": 0,
+        },
+      },
+    },
+    {
+      "All Products": 0,
+      "Product 7-1": 0,
+      "Product 7-2": 0,
+    },
+    {
+      "All Products": 0,
+    },
+    {
+      "All Products": 0,
+    },
+    {
+      "All Products": 0,
+    },
+  ];
 
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   let user = localStorage.getItem("user");
@@ -40,8 +184,8 @@ const ReportTable1 = () => {
           Math.trunc(OperatingIncome["All Products"]),
           Math.trunc(NonOperatingIncome["All Products"]),
           Math.trunc(Taxes["All Products"]),
-          Math.trunc(NetIncome["All Products"])
-        ]
+          Math.trunc(NetIncome["All Products"]),
+        ],
       },
       {
         name: "Hyperware",
@@ -51,8 +195,8 @@ const ReportTable1 = () => {
           Math.trunc(OperatingIncome["Product 7-1"]),
           Math.trunc(NonOperatingIncome["Product 7-1"]),
           Math.trunc(Taxes["Product 7-1"]),
-          Math.trunc(NetIncome["Product 7-1"])
-        ]
+          Math.trunc(NetIncome["Product 7-1"]),
+        ],
       },
       {
         name: "Metaware",
@@ -62,28 +206,28 @@ const ReportTable1 = () => {
           Math.trunc(OperatingIncome["Product 7-2"]),
           Math.trunc(NonOperatingIncome["Product 7-2"]),
           Math.trunc(Taxes["Product 7-2"]),
-          Math.trunc(NetIncome["Product 7-2"])
-        ]
-      }
+          Math.trunc(NetIncome["Product 7-2"]),
+        ],
+      },
     ],
     options: {
       chart: {
         type: "bar",
-        height: 350
+        height: 350,
       },
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: "55%"
-        }
+          columnWidth: "55%",
+        },
       },
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
       stroke: {
         show: true,
         width: 2,
-        colors: ["transparent"]
+        colors: ["transparent"],
       },
       xaxis: {
         categories: [
@@ -92,47 +236,47 @@ const ReportTable1 = () => {
           "Operating Income",
           "Non Operating Income",
           "Taxes",
-          "Net Income"
-        ]
+          "Net Income",
+        ],
       },
       yaxis: {
         title: {
-          text: "Amount"
+          text: "Amount",
         },
         labels: {
           formatter: function (val) {
             return Math.trunc(val);
-          }
-        }
+          },
+        },
       },
       fill: {
-        opacity: 1
+        opacity: 1,
       },
       tooltip: {
         y: {
           formatter: function (val) {
             return `$ ${Math.trunc(val)}`;
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   };
 
   const formatNumber = (num) => {
     if (typeof num === "number") {
       return new Intl.NumberFormat("en-US", {
-        maximumFractionDigits: 0
+        maximumFractionDigits: 0,
       }).format(num);
     }
     return num;
   };
-  const currencyFormatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
   });
 
   const formatCurrency = (value) => {
-    if (typeof value === 'number') {
+    if (typeof value === "number") {
       return currencyFormatter.format(value);
     }
     return value;
@@ -144,7 +288,7 @@ const ReportTable1 = () => {
         <div>
           <p>Firm: {firm_key_new}</p>
         </div>
-        <div >
+        <div>
           <PDFDownloadLink
             document={
               <SalesPDFDocument
@@ -165,7 +309,6 @@ const ReportTable1 = () => {
             }
           </PDFDownloadLink>
         </div>
-
       </div>
 
       <div id="chart" className="mb-6">
@@ -192,34 +335,33 @@ const ReportTable1 = () => {
               <td className="border font-bold px-4 py-2">{key}</td>
               <td className="border px-4 py-2 text-center">
                 {typeof salesData[key] === "object"
-                  ? (key === "Sales Volume" || key === "Unfilled Orders")
+                  ? key === "Sales Volume" || key === "Unfilled Orders"
                     ? Object.values(salesData[key])[0]
                     : formatCurrency(Object.values(salesData[key])[0])
-                  : (key === "Sales Volume" || key === "Unfilled Orders")
-                    ? salesData[key]
-                    : formatCurrency(salesData[key])}
+                  : key === "Sales Volume" || key === "Unfilled Orders"
+                  ? salesData[key]
+                  : formatCurrency(salesData[key])}
               </td>
               <td className="border px-4 py-2 text-center">
                 {typeof salesData[key] === "object"
-                  ? (key === "Sales Volume" || key === "Unfilled Orders")
+                  ? key === "Sales Volume" || key === "Unfilled Orders"
                     ? Object.values(salesData[key])[1]
                     : formatCurrency(Object.values(salesData[key])[1])
-                  : (key === "Sales Volume" || key === "Unfilled Orders")
-                    ? salesData[key]
-                    : formatCurrency(salesData[key])}
+                  : key === "Sales Volume" || key === "Unfilled Orders"
+                  ? salesData[key]
+                  : formatCurrency(salesData[key])}
               </td>
               <td className="border px-4 py-2 text-center">
                 {typeof salesData[key] === "object"
-                  ? (key === "Sales Volume" || key === "Unfilled Orders")
+                  ? key === "Sales Volume" || key === "Unfilled Orders"
                     ? Object.values(salesData[key])[2]
                     : formatCurrency(Object.values(salesData[key])[2])
-                  : (key === "Sales Volume" || key === "Unfilled Orders")
-                    ? salesData[key]
-                    : formatCurrency(salesData[key])}
+                  : key === "Sales Volume" || key === "Unfilled Orders"
+                  ? salesData[key]
+                  : formatCurrency(salesData[key])}
               </td>
             </tr>
           ))}
-
 
           <tr>
             <td className="font-bold border px-4 py-2">Revenue</td>
@@ -269,13 +411,19 @@ const ReportTable1 = () => {
             <tr key={index}>
               <td className="border px-4 py-2 pl-8">- {detailKey}</td>
               <td className="border px-4 py-2 text-center">
-                {formatCurrency(Fixed_Other_Costs.details[detailKey]["All Products"])}
+                {formatCurrency(
+                  Fixed_Other_Costs.details[detailKey]["All Products"]
+                )}
               </td>
               <td className="border px-4 py-2 text-center">
-                {formatCurrency(Fixed_Other_Costs.details[detailKey]["Product 7-1"])}
+                {formatCurrency(
+                  Fixed_Other_Costs.details[detailKey]["Product 7-1"]
+                )}
               </td>
               <td className="border px-4 py-2 text-center">
-                {formatCurrency(Fixed_Other_Costs.details[detailKey]["Product 7-2"])}
+                {formatCurrency(
+                  Fixed_Other_Costs.details[detailKey]["Product 7-2"]
+                )}
               </td>
             </tr>
           ))}
@@ -329,7 +477,6 @@ const ReportTable1 = () => {
           </tr>
         </tbody>
       </table>
-
     </div>
   );
 };
