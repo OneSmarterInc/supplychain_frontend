@@ -8,6 +8,7 @@ import ReportModal from "../report/CplReport/ReportModal";
 import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
+import BalanceSheetModel from "../report/BlanceSheetReport/BalanceSheetModel";
 
 const AdminSideEndedFunction = ({
   id,

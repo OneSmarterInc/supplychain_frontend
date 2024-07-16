@@ -9,6 +9,7 @@ import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
 import EditQuartersDetails from "./EditQuartersDetails";
+import BalanceSheetModel from "../report/BlanceSheetReport/BalanceSheetModel";
 
 const AdminSideLiveFunction = ({
   id,
