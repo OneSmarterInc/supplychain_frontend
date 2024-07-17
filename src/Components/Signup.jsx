@@ -1,4 +1,3 @@
-
 import { useContext, useEffect, useState } from "react";
 
 import {
@@ -30,9 +29,18 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [university, setUniversity] = useState("");
+  const [course, setCourse] = useState("");
+  const [department, setDepartment] = useState("");
+  const [is_admin] = useState(true);
+  const [my_simulations] = useState({ simulations: [1] });
+  const [my_firms] = useState(null);
+
   const [showPassword, setShowPassword] = useState(false);
   const { api } = useContext(MyContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const toast = useToast();
 
   const handleShowClick = () => setShowPassword(!showPassword);
@@ -44,15 +52,23 @@ const Signup = () => {
       username: name,
       email,
       password,
+      first_name: firstName,
+      last_name: lastName,
+      university,
+      course,
+      department,
+      is_admin,
+      my_simulations,
+      my_firms,
     };
     console.log(data);
 
     try {
-      if (!name || !email || !password) {
+      if (!name || !email || !password || !firstName || !lastName || !university || !course || !department) {
         toast({
           title: "Field is empty",
           description:
-            "Please ensure that you have provided username, email and password.",
+            "Please ensure that you have provided all required fields.",
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -147,6 +163,7 @@ const Signup = () => {
                       />
                     </InputGroup>
                   </FormControl>
+
                   <FormControl>
                     <InputGroup>
                       <InputLeftElement
@@ -170,6 +187,62 @@ const Signup = () => {
                       <Link>forgot password?</Link>
                     </FormHelperText>
                   </FormControl>
+
+                  <FormControl>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        placeholder="First Name"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                      />
+                    </InputGroup>
+                  </FormControl>
+
+                  <FormControl>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        placeholder="Last Name"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                      />
+                    </InputGroup>
+                  </FormControl>
+
+                  <FormControl>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        placeholder="University"
+                        value={university}
+                        onChange={(e) => setUniversity(e.target.value)}
+                      />
+                    </InputGroup>
+                  </FormControl>
+
+                  <FormControl>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        placeholder="Course"
+                        value={course}
+                        onChange={(e) => setCourse(e.target.value)}
+                      />
+                    </InputGroup>
+                  </FormControl>
+
+                  <FormControl>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        placeholder="Department"
+                        value={department}
+                        onChange={(e) => setDepartment(e.target.value)}
+                      />
+                    </InputGroup>
+                  </FormControl>
+
                   <Button
                     borderRadius={0}
                     type="submit"
@@ -180,7 +253,7 @@ const Signup = () => {
                     _hover={{ color: "white" }}
                     onClick={(e) => signupHandler(e)}
                   >
-                  Sign Up
+                    Sign Up
                   </Button>
                 </Stack>
               </form>
