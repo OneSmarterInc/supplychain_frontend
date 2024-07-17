@@ -9,6 +9,7 @@ import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
 import EditQuartersDetails from "./EditQuartersDetails";
+import BalanceSheetModel from "../report/BlanceSheetReport/BalanceSheetModel";
 
 const AdminSideLiveFunction = ({
   id,
@@ -344,7 +345,6 @@ const AdminSideLiveFunction = ({
             )}
           </div>
 
-         
           {/* <button
             className="w-32 h-10 rounded-lg bg-blue-600 text-white text-center p-2 mx-2 hover:bg-sky-950"
             onClick={handleSubmit}
@@ -352,32 +352,34 @@ const AdminSideLiveFunction = ({
             Enter
           </button> */}
         </div>
-         {/* quarterModal */}
-         {isQuarterModalOpen && (
-            <div className="modal z-40 h-[600px]  bg-blue-gray-700  rounded-lg   fixed top-10  shadow-lg ">
-              <div className="buttons my-2 flex px-4 border-b py-2 pt-1   items-center justify-between">
-                <h2 className="text-2xl font-bold text-white  ">Update Quarter Details: </h2>
-                <div className="flex  items-center space-x-3">
-                  <h2
-                    onClick={() => {
-                      setisQuarterModalOpen(false);
-                    }}
-                    className="flex justify-end text-red-300 hover:bg-red-500 p-2 rounded-md py-1 hover:text-white cursor-pointer"
-                  >
-                    close
-                  </h2>
-                </div>
-              </div>
-              <div className=" h-[500px]  overflow-y-scroll overflow-x-hidden">
-                <EditQuartersDetails
-                  quarter_specific_decisions={
-                    filteredSimulation[0]?.quarter_specific_decisions
-                  }
-                  simulation_id = {filteredSimulation[0]?.simulation_id}
-                />
+        {/* quarterModal */}
+        {isQuarterModalOpen && (
+          <div className="modal z-40 h-[600px]  bg-blue-gray-700  rounded-lg   fixed top-10  shadow-lg ">
+            <div className="buttons my-2 flex px-4 border-b py-2 pt-1   items-center justify-between">
+              <h2 className="text-2xl font-bold text-white  ">
+                Update Quarter Details:{" "}
+              </h2>
+              <div className="flex  items-center space-x-3">
+                <h2
+                  onClick={() => {
+                    setisQuarterModalOpen(false);
+                  }}
+                  className="flex justify-end text-red-300 hover:bg-red-500 p-2 rounded-md py-1 hover:text-white cursor-pointer"
+                >
+                  close
+                </h2>
               </div>
             </div>
-          )}
+            <div className=" h-[500px]  overflow-y-scroll overflow-x-hidden">
+              <EditQuartersDetails
+                quarter_specific_decisions={
+                  filteredSimulation[0]?.quarter_specific_decisions
+                }
+                simulation_id={filteredSimulation[0]?.simulation_id}
+              />
+            </div>
+          </div>
+        )}
 
         <div className="graph">
           <div className="mixed-chart pt-4">
@@ -419,16 +421,18 @@ const AdminSideLiveFunction = ({
                     {" "}
                     <option value="">Select</option>
                     <option value="cpl">Corporate P&L Statement</option>
-                    {/* <option value="pcpl">Hyperware P&L Statement</option>
-                  <option value="inventory">
-                    Finished Goods Inventory Report
-                  </option> */}
+                    <option value="pcpl">Hyperware P&L Statement</option>
+                    <option value="inventory">
+                      Finished Goods Inventory Report
+                    </option>
+                    <option value="bl">Balance Sheet</option>
                   </Select>
                 </HStack>
                 <div className="mt-4 flex">
                   {secondDropdownValue === "cpl" && <ReportModal />}
                   {secondDropdownValue === "pcpl" && <ProductReportModal />}
-                  {secondDropdownValue === "inventory" && <FGInventoryModal />}\
+                  {secondDropdownValue === "inventory" && <FGInventoryModal />}
+                  {secondDropdownValue === "bl" ? <BalanceSheetModel /> : null}
                   <div className="px-5">
                     {" "}
                     <EvaluationReportModal />

@@ -8,6 +8,7 @@ import ReportModal from "../report/CplReport/ReportModal";
 import ProductReportModal from "../report/ProductReport/ProductReportModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportModal";
+import BalanceSheetModel from "../report/BlanceSheetReport/BalanceSheetModel";
 
 const UserSideEndedFunction = ({
   id,
@@ -183,20 +184,18 @@ const UserSideEndedFunction = ({
                 >
                   <option value="">Select</option>
                   <option value="cpl">Corporate P&L Statement</option>
-
                   <option value="pcpl">Hyperware P&L Statement</option>
-
                   <option value="inventory">
                     Finished Goods Inventory Report
                   </option>
+                  <option value="bl">Balance Sheet</option>
                 </Select>
               </HStack>
               <div className="mt-4 flex">
                 {secondDropdownValue === "cpl" && <ReportModal />}
-
                 {secondDropdownValue === "pcpl" && <ProductReportModal />}
-
                 {secondDropdownValue === "inventory" && <FGInventoryModal />}
+                {secondDropdownValue === "bl" ? <BalanceSheetModel /> : null}
               </div>
             </div>
           </div>

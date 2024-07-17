@@ -134,6 +134,20 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     simulationData.end_date
   );
 
+  const generateSimulationName = (user) => {
+    const university = user?.university?.split(" ")[0];
+    const firstNameInitial = user.first_name ? user.first_name.charAt(0) : "";
+    const lastNameInitial = user.last_name ? user.last_name.charAt(0) : "";
+    const course = user?.course;
+
+    const simulationName = `${university}-${firstNameInitial}${lastNameInitial}-${course}`;
+    return simulationName;
+  };
+
+  // Generate the simulation name
+  const simulationName = generateSimulationName(user);
+  console.log("simulationName:=", simulationName); // Output: "Amravati-NT-MCA234"
+
   return (
     <>
       <Text width="50%" m="auto" fontSize={20} fontWeight="bold" mt={5}>
@@ -149,14 +163,15 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
         mt={5}
       >
         <label htmlFor="">
-          <strong>Please specify the Name for simulation.</strong>
+          <strong>Please specify the Name for {simulationName?simulationName:"Simulation"}</strong>
         </label>
         <Input
           name="name"
           bgColor="white"
           mt={5}
           mb={10}
-          placeholder="Simulation Name"
+          placeholder={simulationName?simulationName:"Simulation"}
+          defaultValue={simulationName}
           onChange={handleInputChange}
         />
         <label htmlFor="">
