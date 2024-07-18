@@ -71,24 +71,52 @@ const AdminSideLive = () => {
     } catch (error) {}
   };
 
+  const [activeSim, setActiveSim] = useState(simData.length);
+
+  console.log("ActiveSim:", activeSim);
+
   return (
     <div>
       <AdminNavBar />
-      <h2 className="text-3xl p-2 pl-10 bg-blue-gray-900 text-white ">Live Simulation</h2>
-      {simData
-        .filter((item) => item.is_active === true)
-        .reverse()
-        .map((item, index) => (
-          <AdminSideLiveFunction
-            key={index}
-            id={item.simulation_id}
-            batch={item.name}
-            startDate={item.start_date}
-            endDate={item.end_date}
-            time={item.time}
-            currentQuarter={item.current_quarter}
-          />
-        ))}
+      <h2 className="text-3xl p-2 pl-10 bg-blue-gray-900 text-white ">
+        Live Simulation
+      </h2>
+      <div className="flex w-[100%] justify-start space-x-2 bg-blue-gray-900">
+        <div className="bg-blue-gray-800 w-60 p-3 h-full min-h-screen">
+          {simData
+            .filter((item) => item.is_active === true)
+            .map((item, index) => (
+              <div className="">
+                <button
+                  onClick={() => {
+                    setActiveSim(index);
+                  }}
+                  className={`p-2 bg-green-300 mx-1 rounded-md my-2 w-full ${index===activeSim?"bg-green-400":"bg-green-300"} `}
+                >
+                  {item.name}
+                </button>
+              </div>
+            ))}
+        </div>
+        <div className=" w-full">
+          {simData
+            .filter(
+              (item, index) => item.is_active === true && index === activeSim
+            )
+            .reverse()
+            .map((item, index) => (
+              <AdminSideLiveFunction
+                key={index}
+                id={item.simulation_id}
+                batch={item.name}
+                startDate={item.start_date}
+                endDate={item.end_date}
+                time={item.time}
+                currentQuarter={item.current_quarter}
+              />
+            ))}
+        </div>
+      </div>
     </div>
   );
 };

@@ -115,7 +115,7 @@ const AdminSideLiveFunction = ({
 
   useEffect(() => {
     firmsFetch();
-  }, []);
+  }, [filteredSimulation[0]?.simulation_id]);
 
   const handleAddAdmin = async () => {
     try {
@@ -141,10 +141,10 @@ const AdminSideLiveFunction = ({
     }
   };
 
-  const handleAddUser = async () => {
+  const handleAddUser = async (firm_key) => {
     try {
       const response = await axios.post(
-        `${api}/firmsbyadmin/?admin_id=${user.userid}&email=${newUserEmail}&firm_key=${selectedFirm.firm_key}&simulation_id=${filteredSimulation[0]?.simulation_id}`
+        `${api}/firmsbyadmin/?admin_id=${user.userid}&email=${newUserEmail}&firm_key=${firm_key}&simulation_id=${filteredSimulation[0]?.simulation_id}`
       );
       // console.log("User added:", response.data);
       setIsAddUserInputModalOpen(false);
@@ -185,10 +185,10 @@ const AdminSideLiveFunction = ({
   };
 
   return (
-    <div className="flex justify-center bg-blue-gray-900">
-      <div className="flex h-80  bg-slate-200 justify-center items-center ">
-        <div className="info min-w-[700px] p-4 bg-blue-gray-800">
-          <div className="text-3xl w-full  flex items-center justify-between">
+    <div className="flex justify-start w-full   bg-blue-gray-900">
+      <div className="flex  min-h-screen w-full bg-slate-200 justify-center items-start ">
+        <div className="info w-full  mx-2 p-4  bg-blue-gray-800 ">
+          <div className="text-3xl  flex items-center justify-between">
             <div className="flex text-white items-center ">
               <h1 className="text-3xl"> {batch} |</h1>
               <span className="text-3xl p-2">Quarter : {currentQuarter}</span>
@@ -238,9 +238,9 @@ const AdminSideLiveFunction = ({
               </button>
             </div>
           )}
-
+          {/* temporary disabled section */}
           <div className="relative flex items-center bg-blue-gray-700 p-3">
-            {firms?.map((firmsdata) => {
+            {/* {firms?.map((firmsdata) => {
               return (
                 <button
                   key={firmsdata.firm_key}
@@ -252,7 +252,7 @@ const AdminSideLiveFunction = ({
                   {firmsdata ? firmsdata.firm_key : "Unknown Firm"}
                 </button>
               );
-            })}
+            })} */}
 
             {isFirmModalOpen && selectedFirm && (
               <div className="modal z-50 bg-white p-4 rounded-lg   fixed top-24 w-[800px] shadow-lg mt-4 ">
@@ -332,7 +332,7 @@ const AdminSideLiveFunction = ({
                           className="p-2 border-2 border-gray-300 w-96 rounded-lg"
                         />
                         <button
-                          onClick={handleAddUser}
+                          onClick={() => handleAddUser()}
                           className="ml-4 w-24 bg-green-500 text-white p-2 rounded-lg hover:bg-green-700"
                         >
                           Add
@@ -343,6 +343,93 @@ const AdminSideLiveFunction = ({
                 </div>
               </div>
             )}
+          </div>
+          {/* temporary disabled section ends*/}
+          {/* _________________________________________________________________________________________ */}
+
+          {/* Grid of firms */}
+          <div className="grid grid-cols-2 place-content-center place-items-center">
+            {firms?.map((firmsdata) => {
+              return (
+                <div className="modal bg-blue-gray-700 p-4 h-80 w-96   shadow-lg mt-4 ">
+                  <div className="buttons my-2 flex  items-start justify-between">
+                    <h2 className="text-2xl text-white font-bold mb-4">
+                      Users of{" "}
+                      <span className="text-green-600">
+                        {firmsdata.firm_key}
+                      </span>
+                      <div className="flex space-x-3">
+                        <span>Passcode:</span>
+                        <span className="text-green-500">
+                          {filteredSimulation[0].passcode[firmsdata.firm_key]}
+                        </span>
+                      </div>
+                    </h2>
+                    <div className="flex  items-start space-x-3">
+                      <button
+                        onClick={toggleModal}
+                        className="w-24 h-10 rounded-lg bg-green-600 text-white text-center  hover:bg-green-700"
+                      >
+                        Reports
+                      </button>
+                    </div>
+                  </div>
+                  <div className="h-36 overflow-y-scroll">
+                    {firmsdata.users.map((user) => (
+                      <div className="p-3 m-1 bg-white shadow-md rounded-lg">
+                        <div
+                          key={user.user_id}
+                          className="mb-0 flex items-center space-x-4"
+                        >
+                          <h1 className="text-3xl text-blue-500">
+                            <i className="fa-solid fa-user"></i>
+                          </h1>
+                          <div className="">
+                            {/* <p className="text-lg font-semibold text-gray-700">
+                          UserID:{" "}
+                          <span className="font-normal">{user.user_id}</span>
+                        </p> */}
+                            <p className="text-lg font-semibold text-gray-700">
+                              Email:{" "}
+                              <span className="font-normal">{user.email}</span>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="">
+                    {" "}
+                    <div className="flex flex-col bg-blue-gray-300 items-start justify-start">
+                      <div className="modal flex bg-white rounded-lg w-fit m-1 shadow-lg ">
+                        <input
+                          type="email"
+                          value={newUserEmail}
+                          onChange={(e) => setNewUserEmail(e.target.value)}
+                          placeholder="Enter User email"
+                          className="p-2 border-2 border-gray-300 w-full rounded-lg"
+                        />
+                        <button
+                          onClick={() => handleAddUser(firmsdata?.firm_key)}
+                          className="ml-4 w-24 bg-green-500 text-white p-1 rounded-lg hover:bg-green-700"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      {/* TODO: temporary hide */}
+                      {/* <button
+                        onClick={addUserInputModal}
+                        className=" m-2 text-lg bg-blue-500 text-white p-1 h-10 px-2 rounded-lg hover:bg-blue-700"
+                      >
+                        Add User
+                      </button> */}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* <button
