@@ -302,8 +302,8 @@ const AdminSideLiveFunction = ({
                           <span className="font-normal">{user.user_id}</span>
                         </p> */}
                           <p className="text-lg font-semibold text-gray-700">
-                            Email:{" "}
-                            <span className="font-normal">{user.email}</span>
+                            {" "}
+                            <span className="font-normal">{user.username}</span>
                           </p>
                         </div>
                       </div>
@@ -390,8 +390,8 @@ const AdminSideLiveFunction = ({
                           <span className="font-normal">{user.user_id}</span>
                         </p> */}
                             <p className="text-lg font-semibold text-gray-700">
-                              Email:{" "}
-                              <span className="font-normal">{user.email}</span>
+                              {" "}
+                              <span className="font-normal">{user.username}</span>
                             </p>
                           </div>
                         </div>

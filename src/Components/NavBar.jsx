@@ -29,7 +29,7 @@ const NavBar = () => {
           <div className=" bg-gray-800 py-1 px-3 flex justify-between items-center  ">
             <div className="text-2xl flex items-center text-white font-bold ">
               <img src={favicon} className="h-12 w-12 " alt="" />
-              <span>Supplychain Simulation</span>
+              <span>Flexee Simulation</span>
             </div>
             <div className="text-2xl font-serif w-40 flex justify-between items-center mx-3 text-white font-bold pl-14">
               <div className="mx-3">

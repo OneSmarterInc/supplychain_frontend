@@ -13,7 +13,7 @@ const AdminNavBar = () => {
               <div className="flex flex-shrink-0 items-center">
               <img src={favicon} className="h-12 w-12 " alt="" />
                 <p className="text-2xl text-white font-bold">
-                  Supplychain Simulation
+                  Flexee 
                 </p>
               </div>
               <div className="hidden sm:ml-6 sm:block">
