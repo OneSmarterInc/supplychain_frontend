@@ -65,7 +65,7 @@ const ProfileDropdown = () => {
   const handleLogOut = () => {
     localStorage.clear();
     setProfile({});
-    navigate("/signin");
+    navigate("/");
   };
 
   return (

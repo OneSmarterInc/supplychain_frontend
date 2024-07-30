@@ -21,6 +21,7 @@ const NavBar = () => {
     filteredSimulation[0]["quarter_specific_decisions"][current_quarter];
   // const decisions = filteredSimulation[0]['quarter_specific_decisions']["quarter2"];
   console.log("decisions from navbar", decisions);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div>
@@ -35,7 +36,10 @@ const NavBar = () => {
               <div className="mx-3">
                 <ProfileDropdown />
               </div>
-              <Link to="/" className="">
+              <Link
+                to={user?.isadmin ? "/adminsidelive" : "/usersidelive"}
+                className=""
+              >
                 <i className="fa-solid fa-house cursor-pointer"></i>
               </Link>
             </div>

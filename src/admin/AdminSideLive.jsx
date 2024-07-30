@@ -85,13 +85,16 @@ const AdminSideLive = () => {
         <div className="bg-blue-gray-800 w-60 p-3 h-full min-h-screen">
           {simData
             .filter((item) => item.is_active === true)
+            .reverse()
             .map((item, index) => (
               <div className="">
                 <button
                   onClick={() => {
                     setActiveSim(index);
                   }}
-                  className={`p-2 bg-green-300 mx-1 rounded-md my-2 w-full ${index===activeSim?"bg-green-400":"bg-green-300"} `}
+                  className={`p-2 bg-green-300 mx-1 rounded-md my-2 w-full ${
+                    index === activeSim ? "bg-green-400" : "bg-green-300"
+                  } `}
                 >
                   {item.name}
                 </button>
@@ -101,9 +104,10 @@ const AdminSideLive = () => {
         <div className=" w-full">
           {simData
             .filter(
-              (item, index) => item.is_active === true && index === activeSim
+              (item, index) =>
+                item.is_active === true &&
+                simData.length - 1 - index === activeSim
             )
-            .reverse()
             .map((item, index) => (
               <AdminSideLiveFunction
                 key={index}

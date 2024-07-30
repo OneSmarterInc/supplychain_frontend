@@ -50,8 +50,8 @@ const ITDataChart = ({ submitIt, suppliers, reportValues }) => {
       const response = await axios.get(`${api}/graph/`, {
         params: {
           simulation_id: selectedSim[0].simulation_id, // replace with actual simulation_id
-          firm_key: firm_key_new // replace with actual firm_key
-        }
+          firm_key: firm_key_new, // replace with actual firm_key
+        },
       });
       const data = response.data;
 
@@ -59,9 +59,13 @@ const ITDataChart = ({ submitIt, suppliers, reportValues }) => {
       const formattedCategories = data.quarter.map((quarter) => `Q${quarter}`);
 
       // Flatten the net_income arrays, remove placeholders, and round up the values
-      const netIncome = data.net_income.map(incomeArray => 
-        incomeArray.filter(value => value !== "-").map(value => Math.ceil(Number(value)))
-      ).flat();
+      const netIncome = data.net_income
+        .map((incomeArray) =>
+          incomeArray
+            .filter((value) => value !== "-")
+            .map((value) => Math.ceil(Number(value)))
+        )
+        .flat();
 
       setOptions((prevOptions) => ({
         ...prevOptions,
@@ -95,12 +99,9 @@ const ITDataChart = ({ submitIt, suppliers, reportValues }) => {
     <div className="app">
       <div className="row mx-5">
         <div className="mixed-chart flex">
-          <div className="w-[510px] h-60">
-            {" "}
-            {/* temporary div, then remove */}
+          <div className="w-[530px] h-60 mb-10 ">
+            <CommonGraph />
           </div>
-          {/* <Chart options={options} series={series} type="area" width="510" /> */}
-          <CommonGraph/>
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}

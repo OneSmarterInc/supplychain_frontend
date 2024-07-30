@@ -42,10 +42,9 @@ const TransportationDataChart = ({ Dc1Data, submitTransportation }) => {
     <div className="app">
       <div className="row mx-5">
         <div className="mixed-chart flex">
-          <div className="w-[510px] h-60">
-            {" "}
-            {/* temporary div, then remove */}
-          </div><CommonGraph/>
+          <div className="w-[530px] h-60 mb-10 ">
+            <CommonGraph />
+          </div>
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}
@@ -82,8 +81,8 @@ const TransportationDataChart = ({ Dc1Data, submitTransportation }) => {
             {/* Modal ends */}
           </div>
         </div>
-       
-        <ReportComponent/>
+
+        <ReportComponent />
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ const CommonGraph = () => {
       firm_key_new = firm_obj[0].firmName; // note: only one user in one firm so using firm_obj[0]
     }
   }
-  
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -78,7 +78,7 @@ const CommonGraph = () => {
   };
 
   return (
-    <Box w="full" overflowX="auto">
+    <Box w={"full"} height={60} overflowX="auto">
       <Chart options={options} series={series} type="area" width="100%" />
     </Box>
   );

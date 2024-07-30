@@ -187,34 +187,36 @@ const AdminSideLiveFunction = ({
   return (
     <div className="flex justify-start w-full   bg-blue-gray-900">
       <div className="flex  min-h-screen w-full bg-slate-200 justify-center items-start ">
-        <div className="info w-full  mx-2 p-4  bg-blue-gray-800 ">
+        <div className="info w-full min-h-screen  mx-2 p-4  bg-blue-gray-800 ">
           <div className="text-3xl  flex items-center justify-between">
             <div className="flex text-white items-center ">
               <h1 className="text-3xl"> {batch} |</h1>
               <span className="text-3xl p-2">Quarter : {currentQuarter}</span>
             </div>
-            <button
-              onClick={addAdminInputModal}
-              className="ml-4 text-lg h-10 bg-blue-500 text-white p-1 px-2 rounded-lg hover:bg-blue-700"
-            >
-              Add Admin
-            </button>
-            <button
-              // onClick={addAdminInputModal}
-              className="text-lg h-10 bg-green-500 text-white p-1 px-2 rounded-lg hover:bg-green-700"
-              onClick={() => {
-                navigate("/usersidelive");
-              }}
-            >
-              User Side
-            </button>
-            <button
-              // onClick={addAdminInputModal}
-              className="text-lg h-10 bg-green-500 text-white p-1 px-2 rounded-lg hover:bg-green-700"
-              onClick={() => setisQuarterModalOpen(!isQuarterModalOpen)}
-            >
-              Edit Quarters
-            </button>
+            <div className="flex space-x-3">
+              <button
+                onClick={addAdminInputModal}
+                className="ml-4 text-lg h-10 bg-blue-500 text-white p-1 px-2 rounded-lg hover:bg-blue-700"
+              >
+                Add Admin
+              </button>
+              <button
+                // onClick={addAdminInputModal}
+                className="text-lg h-10 bg-purple-500 text-white p-1 px-2 rounded-lg hover:bg-purple-700"
+                onClick={() => {
+                  navigate("/usersidelive");
+                }}
+              >
+                Student View
+              </button>
+              <button
+                // onClick={addAdminInputModal}
+                className="text-lg h-10 bg-green-500 text-white p-1 px-2 rounded-lg hover:bg-green-700"
+                onClick={() => setisQuarterModalOpen(!isQuarterModalOpen)}
+              >
+                Edit Quarters
+              </button>
+            </div>
           </div>
 
           <p className="text-base p-3 text-blue-gray-500">
@@ -379,21 +381,30 @@ const AdminSideLiveFunction = ({
                       <div className="p-3 m-1 bg-white shadow-md rounded-lg">
                         <div
                           key={user.user_id}
-                          className="mb-0 flex items-center space-x-4"
+                          className="mb-0 flex items-center justify-between space-x-4"
                         >
-                          <h1 className="text-3xl text-blue-500">
-                            <i className="fa-solid fa-user"></i>
-                          </h1>
-                          <div className="">
-                            {/* <p className="text-lg font-semibold text-gray-700">
-                          UserID:{" "}
-                          <span className="font-normal">{user.user_id}</span>
-                        </p> */}
-                            <p className="text-lg font-semibold text-gray-700">
-                              {" "}
-                              <span className="font-normal">{user.username}</span>
-                            </p>
+                          <div className="flex space-x-4 items-center">
+                            <h1 className="text-3xl text-blue-500">
+                              <i className="fa-solid fa-user"></i>
+                            </h1>
+                            <div className="">
+                              {/* <p className="text-lg font-semibold text-gray-700">
+                              UserID:{" "}
+                              <span className="font-normal">
+                                {user.user_id}
+                              </span>
+                            </p> */}
+                              <p className="text-lg font-semibold text-gray-700">
+                                {" "}
+                                <span className="font-normal">
+                                  {user?.email ? user?.email : " Unknown User"}
+                                </span>
+                              </p>
+                            </div>
                           </div>
+                          <button className="text-2xl text-red-400 hover:text-red-600">
+                            <i className="fa-solid fa-trash"></i>
+                          </button>
                         </div>
                       </div>
                     ))}

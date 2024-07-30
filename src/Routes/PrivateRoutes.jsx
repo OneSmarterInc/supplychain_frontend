@@ -8,9 +8,11 @@ export const PrivateRoute = ({ children }) => {
   if (userData) {
     if (location.pathname === "/signin" && userData.isadmin) {
       return <Navigate to="/createsim" replace />;
+    } else if (location.pathname === "/signin" && !userData.isadmin) {
+      return <Navigate to="/joinnow" replace />;
     } else {
-      if (location.pathname === "/signin") {
-        return <Navigate to="/" replace />;
+      if (location.pathname === "/") {
+        return <Navigate to="/signin" replace />;
       }
       if (userData.isadmin) {
         return children;
