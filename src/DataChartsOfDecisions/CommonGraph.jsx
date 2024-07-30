@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Box } from "@chakra-ui/react";
 import Chart from "react-apexcharts";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
@@ -17,6 +18,7 @@ const CommonGraph = () => {
       firm_key_new = firm_obj[0].firmName; // note: only one user in one firm so using firm_obj[0]
     }
   }
+  
   useEffect(() => {
     fetchData();
   }, []);
@@ -36,20 +38,19 @@ const CommonGraph = () => {
       data: [],
     },
   ]);
+
   const fetchData = async () => {
     try {
       const response = await axios.get(`${api}/graph/`, {
         params: {
-          simulation_id: selectedSim[0].simulation_id, // replace with actual simulation_id
-          firm_key: firm_key_new, // replace with actual firm_key
+          simulation_id: selectedSim[0].simulation_id,
+          firm_key: firm_key_new,
         },
       });
       const data = response.data;
 
-      // Format the categories to prepend "Q"
       const formattedCategories = data.quarter.map((quarter) => `Q${quarter}`);
 
-      // Flatten the net_income arrays, remove placeholders, and round up the values
       const netIncome = data.net_income
         .map((incomeArray) =>
           incomeArray
@@ -75,11 +76,11 @@ const CommonGraph = () => {
       console.error("Error fetching data", error);
     }
   };
+
   return (
-    <div>
-      {" "}
-      <Chart options={options} series={series} type="area" width="510" />
-    </div>
+    <Box w="full" overflowX="auto">
+      <Chart options={options} series={series} type="area" width="100%" />
+    </Box>
   );
 };
 

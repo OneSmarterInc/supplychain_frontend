@@ -61,37 +61,22 @@ const InfoImg = () => {
   };
 
   return (
-    <div>
-      <div className="relative">
-        <div
-          className="h-64 bg-img bg-cover overflow-hidden bg-no-repeat"
-          style={{
-            backgroundImage: `url(${backgroundImage()})`,
-            width: "900px",
-          }}
-        />
-        <div className="absolute bottom-0 flex flex-row py-2 justify-center">
-          <div
-            style={{ backgroundColor: "whitesmoke" }}
-            className="bg-slate-300 h-16 px-2 flex items-center m-1 rounded-lg"
-          >
-            <h2 className="p-1 text-base pt-0">{firm_key_new} | Q-{selectedSim[0]?.current_quarter}</h2>
-          </div>
-          <div
-            style={{ backgroundColor: "whitesmoke" }}
-            className="bg-slate-300 h-16 flex items-center m-1 rounded-lg"
-          >
-            {/* <h2 className="text-base px-2">({selectedSim[0]?.current_quarter} Quarter)</h2> */}
-          </div>
-          <div
-            style={{ backgroundColor: "whitesmoke" }}
-            className="bg-slate-300 px-2 h-16 m-1 rounded-lg"
-          >
-            <h2 className="text-base p-1 pb-0">Deadline:</h2>
-            <h2 className="text-base p-1 pt-0">{selectedSim[0].quarter_specific_decisions[`quarter${selectedSim[0].current_quarter}`]['quarter_end_time']} EST {formatDate(selectedSim[0].quarter_specific_decisions[`quarter${selectedSim[0].current_quarter}`]['quarter_end_date'])}</h2>
-          </div>
-          <div className="m-auto">
-            <button title="Click to open Inventory" onClick={() => handleInventory(firm_key_new, selectedSim)} className="p-4 bg-blue-500 rounded-md text-white ml-4 hover:bg-blue-700 shadow-md hover:shadow-lg hover:shadow-blue-500/50">Inventory</button>
+    <div className="relative">
+      <div
+        className="h-44 bg-cover bg-no-repeat rounded-sm overflow-hidden"
+        style={{
+          backgroundImage: `url(${backgroundImage()})`,
+          width: "auto",
+        }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex flex-col justify-end p-4">
+          <div className="text-white flex flex-row justify-between w-full">
+            <h2 className="text-base">{firm_key_new} | Q-{selectedSim[0]?.current_quarter}</h2>
+            <div>
+              <h2 className="text-base">Deadline:</h2>
+              <h2 className="text-base">{selectedSim[0].quarter_specific_decisions[`quarter${selectedSim[0].current_quarter}`]['quarter_end_time']} EST {formatDate(selectedSim[0].quarter_specific_decisions[`quarter${selectedSim[0].current_quarter}`]['quarter_end_date'])}</h2>
+            </div>
+            <button title="Click to open Inventory" onClick={() => handleInventory(firm_key_new, selectedSim)} className="bg-blue-500 rounded-md text-white p-2 hover:bg-blue-700 shadow-md hover:shadow-lg hover:shadow-blue-500/50">Inventory</button>
           </div>
         </div>
       </div>

@@ -120,6 +120,8 @@ const ReportComponent = () => {
         {secondDropdownValue === "mpls" ? <ProductReportModal /> : null}
         {secondDropdownValue === "inventory" ? <FGInventoryModal /> : null}
         {secondDropdownValue === "bl" ? <BalanceSheetModel /> : null}
+        <br />
+
         <EvaluationReportModal
           simulation_id={simData[0].simulation_id}
           firm_key={firm_key_new}

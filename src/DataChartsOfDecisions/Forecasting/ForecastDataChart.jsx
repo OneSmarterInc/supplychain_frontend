@@ -59,7 +59,7 @@ const ForecastDataChart = ({
     <div className="app">
       <div className="row mx-5">
         <div className="mixed-chart flex">
-          <div className="w-[510px] h-60">
+          <div className="w-35 h-60">
             {" "}
             {/* temporary div, then remove */}
           </div>
@@ -99,7 +99,6 @@ const ForecastDataChart = ({
             </div>
           </div>
         </div>
-
         <ReportComponent />
       </div>
     </div>
