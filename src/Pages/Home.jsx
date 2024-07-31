@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import homeimg from "../assets/img.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -16,6 +16,7 @@ import MyContext from "../Components/ContextApi/MyContext";
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { api } = useContext(MyContext);
   const userData = JSON.parse(localStorage.getItem("user"));
   const [passcode, setPasscode] = useState("");
@@ -69,16 +70,19 @@ const Home = () => {
             top="1rem"
             right="1rem"
             onClick={() => navigate("/signin")}
-            _hover={{ backgroundColor: "grey" }}
+            _hover={{ backgroundColor: ".gray.200" }}
             _focus={{ boxShadow: "none" }}
             bg="transparent"
             border="none"
-            color={"white"}
+            color={"black"}
+            bgColor={"white"}
           >
-            Sign In
+            {userData?.email ? "Go to Home" : "Sign In"}
           </Button>
           <Image src={logo} boxSize="100px" mb={8} />
-          <Heading textAlign={"center"} mb={6}>Welcome to Supply Chain Simulation</Heading>
+          <Heading textAlign={"center"} mb={6}>
+            Welcome to Supply Chain Simulation
+          </Heading>
         </Flex>
       </Flex>
     </>
