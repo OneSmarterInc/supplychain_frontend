@@ -14,11 +14,11 @@ const NavBar = () => {
 
   console.log("filteredSimulation", filteredSimulation);
 
-  let current_quarter = `quarter${filteredSimulation[0]["current_quarter"]}`; //note: -1 for temporary to sort error
+  let current_quarter = `quarter${filteredSimulation?.[0]?.["current_quarter"]}`; //note: -1 for temporary to sort error
 
   console.log("current_quarter", current_quarter);
   const decisions =
-    filteredSimulation[0]["quarter_specific_decisions"][current_quarter];
+    filteredSimulation[0]?.["quarter_specific_decisions"][current_quarter];
   // const decisions = filteredSimulation[0]['quarter_specific_decisions']["quarter2"];
   console.log("decisions from navbar", decisions);
   const user = JSON.parse(localStorage.getItem("user"));
