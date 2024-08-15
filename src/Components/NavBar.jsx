@@ -44,7 +44,7 @@ const NavBar = () => {
               </Link>
             </div>
           </div>
-          <div className=" hidden sm:block bg-white">
+          {/* <div className=" hidden sm:block bg-white">
             <div className=" flex justify-evenly space-x-4 py-1">
               {decisions?.is_forecasting === true && (
                 <Link
@@ -111,7 +111,7 @@ const NavBar = () => {
                 </Link>
               )}{" "}
             </div>
-          </div>
+          </div> */}
         </div>
       </nav>
     </div>

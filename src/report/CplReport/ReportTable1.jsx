@@ -188,7 +188,7 @@ const ReportTable1 = () => {
         ],
       },
       {
-        name: "Hyperware",
+        name: "Smart Home Asistant",
         data: [
           Math.trunc(Revenues["Product 7-1"]),
           Math.trunc(GrossMargin["Product 7-1"]),
@@ -199,7 +199,7 @@ const ReportTable1 = () => {
         ],
       },
       {
-        name: "Metaware",
+        name: "Smart Tharmo Asistant",
         data: [
           Math.trunc(Revenues["Product 7-2"]),
           Math.trunc(GrossMargin["Product 7-2"]),
@@ -325,8 +325,8 @@ const ReportTable1 = () => {
           <tr className="bg-gray-400 text-white">
             <th className="px-4 py-2">Metric</th>
             <th className="px-4 py-2">All Products</th>
-            <th className="px-4 py-2">Hyperware</th>
-            <th className="px-4 py-2">Metaware</th>
+            <th className="px-4 py-2">Smart Home Asistant</th>
+            <th className="px-4 py-2">Smart Tharmo Asistant</th>
           </tr>
         </thead>
         <tbody>

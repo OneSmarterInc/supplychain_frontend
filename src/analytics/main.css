@@ -1,0 +1,10 @@
+
+.content {
+  display: flex;
+  justify-content: space-between; /* Adjust as needed */
+  gap: 20px; /* Adjust the space between components as needed */
+}
+
+.content > * {
+  flex: 1; /* Make both components take equal width */
+}

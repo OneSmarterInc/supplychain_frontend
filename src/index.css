@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-shadow {
+  @apply shadow-lg;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.55); /* Adjust the offsets as needed */
+}

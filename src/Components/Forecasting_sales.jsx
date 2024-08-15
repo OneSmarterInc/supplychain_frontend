@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, Input, Text, Box } from "@chakra-ui/react";
 
-const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
+const ForecastingSales = ({ setForecastHyperwaretopass }) => {
   const forecastData = JSON.parse(localStorage.getItem("ForecastData"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   
@@ -37,58 +37,52 @@ const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
 
   return (
     <>
-      <Text className="p-5 py-3 text-lg" textAlign="center">
-        <strong>
-          Sales Volume Forecast Product:{" "}
-          {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
-        </strong>
-      </Text>
-      <Box overflowX="auto" p={4}>
-        <Table
-          variant="striped"
-          colorScheme="white"
-          borderWidth="1px"
-          borderRadius="md"
-          width="full"
-        >
-          <Thead fontWeight="bold">
+      <Box className="overflow-x-auto p-4">
+        <Table className="min-w-full bg-white rounded-md shadow-md">
+          <Thead className="bg-gray-100 text-gray-700 font-semibold">
             <Tr>
-              <Th>{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}</Th>
-              <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}</Th>
-              <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}</Th>
-              <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region3}</Th>
+              <Th className="p-3 text-left text-green-500"  style={{color:'#D10000'}}>
+                {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
+              </Th>
+              <Th className="p-3 text-left" >
+                {selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}
+              </Th>
+              <Th className="p-3 text-left">
+                {selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}
+              </Th>
+              <Th className="p-3 text-left">
+                {selectedSim[0]?.renamedMappedData?.RegionMapp?.region3}
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
             {Object.keys(ForecastHyperware).map((channel) => (
-              <Tr key={channel}>
-                <Td>
-                  <strong>
-                    {selectedSim[0]?.renamedMappedData?.ChannelMapp?.[channel] || channel}
-                  </strong>
+              <Tr key={channel} className="border-t">
+                <Td className="p-3 font-medium text-gray-900">
+                  {selectedSim[0]?.renamedMappedData?.ChannelMapp?.[channel] || channel}
                 </Td>
-                <Td>
+                <Td className="p-3">
                   <Input
                     type="number"
                     value={ForecastHyperware[channel]?.region1 || ""}
                     onChange={(e) => handleChange(channel, "region1", e.target.value)}
-                    border="1px solid"
+                    className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                   />
                 </Td>
-                <Td>
+                <Td className="p-3">
                   <Input
                     type="number"
                     value={ForecastHyperware[channel]?.region2 || ""}
                     onChange={(e) => handleChange(channel, "region2", e.target.value)}
-                    border="1px solid"
+                    className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                   />
                 </Td>
-                <Td>
+                <Td className="p-3">
                   <Input
                     type="number"
                     value={ForecastHyperware[channel]?.region3 || ""}
                     onChange={(e) => handleChange(channel, "region3", e.target.value)}
-                    border="1px solid"
+                    className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                   />
                 </Td>
               </Tr>
@@ -100,4 +94,4 @@ const Forecasting_sales = ({ setForecastHyperwaretopass }) => {
   );
 };
 
-export default Forecasting_sales;
+export default ForecastingSales;

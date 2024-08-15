@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { HStack, Select } from "@chakra-ui/react";
-
+import React, { useContext, useState } from "react";
+import { HStack, Tabs, TabList, TabPanels, Tab, TabPanel, Button, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import ReportModal from "./CplReport/ReportModal";
 import ProductReportModal from "./ProductReport/ProductReportModel";
@@ -11,74 +10,48 @@ import BalanceSheetModel from "./BlanceSheetReport/BalanceSheetModel";
 
 const ReportComponent = () => {
   const { api } = useContext(MyContext);
+  const [selectedQuarter, setSelectedQuarter] = useState(1);
+  const [reportData, setReportData] = useState(null);
+  const [activeReport, setActiveReport] = useState("");
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [firstDropdownValue, setFirstDropdownValue] = useState("1");
-  const [secondDropdownValue, setSecondDropdownValue] = useState("");
-  const option = [];
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
   let simData = localStorage.getItem("selectedSim");
   simData = JSON.parse(simData);
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
   user = user.email;
   let firm_key_new = "";
+
   if (simData[0]?.firm_data.length) {
-    let firm_obj = simData[0]?.firm_data.filter((item, index) => {
+    let firm_obj = simData[0]?.firm_data.filter((item) => {
       return item.emails.includes(user);
     });
     if (firm_obj.length) {
-      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+      firm_key_new = firm_obj[0].firmName;
     }
   }
-  for (let i = 1; i <= simData[0].current_quarter - 1; i++) {
-    option.push(
-      <option key={i} value={i}>
-        Quarter {i}
-      </option>
-    );
-  }
-  const handleQuarterSelectChange = (e) => {
-    setFirstDropdownValue(e.target.value);
+
+  const handleQuarterChange = (index) => {
+    setSelectedQuarter(index + 1);
+    setActiveReport("");
+    setReportData(null);
   };
 
-  console.log("First Dropdown:", firstDropdownValue, "Second Dropdown", secondDropdownValue)
+  const handleReportChange = async (reportType) => {
+    setActiveReport(reportType);
 
-  useEffect(() => {
-    setSecondDropdownValue("");
-  }, [firstDropdownValue]);
-  // useEffect(() => {
-  //   const e = {
-  //     target: {
-  //       value: "cpl",
-  //     },
-  //   };
-  //   handleButtonClick(e);
-  // }, []);
-  const handleButtonClick = async (e) => {
-    const newDropdownValue = e.target.value;
-    setSecondDropdownValue(newDropdownValue);
-
-    // Construct the query parameters
     const queryParams = new URLSearchParams({
       simulation_id: simData[0].simulation_id,
-      quarter: firstDropdownValue,
+      quarter: selectedQuarter,
       firm: firm_key_new,
     }).toString();
 
-    // Append the query parameters to the URL
-    const url = `${api}/reports/${
-      newDropdownValue ? newDropdownValue : ""
-    }/?${queryParams}`;
+    const url = `${api}/reports/${reportType}/?${queryParams}`;
 
-    // Make a GET request with the constructed URL
     try {
       const response = await axios.get(url);
       console.log("GET request successful", response.data);
       localStorage.setItem("reportData", JSON.stringify(response.data));
+      setReportData(response.data);
     } catch (error) {
       console.error("Error making GET request:", error);
     }
@@ -86,48 +59,37 @@ const ReportComponent = () => {
 
   return (
     <div>
-      <HStack spacing={3} ml={9}>
-        <Select
-          width="165px"
-          border="1px solid black"
-          onChange={(e) => handleQuarterSelectChange(e)}
-          value={firstDropdownValue}
-        >
-          {option}
-        </Select>
-        <Select
-          width="165px"
-          border="1px solid black"
-          onChange={(e) => handleButtonClick(e)}
-          value={secondDropdownValue}
-        >
-          <option value="">Select</option>
-          <option value="cpl">Corporate P&L Statement</option>
-          <option value="hpl">Historical Corporate P&L Statement</option>
-          <option value="pcpl">Hyperware P&L Statement</option>
-          <option value="mpls">Metaware P&L Statement</option>
-          <option value="bl">Balance Sheet</option>
-          {/* <option value="cfar">Cash FLow Analysis Report</option> */}
-          <option value="inventory">Finished Goods Inventory Report </option>
-          {/* <option value="pir">PROCUREMENT INVENTORY REPORT</option> */}
-          {/* <option value="odvr">OTHER DECISION VARIABLES REPORT</option> */}
-          {/* <option value="far">FORECASTING ACCURACY REPORT</option> */}
-        </Select>
-        {secondDropdownValue === "" && null}
-        {secondDropdownValue === "cpl" ? <ReportModal /> : null}
-        {secondDropdownValue === "hpl" ? <ReportModal /> : null}
-        {secondDropdownValue === "pcpl" ? <ProductReportModal /> : null}
-        {secondDropdownValue === "mpls" ? <ProductReportModal /> : null}
-        {secondDropdownValue === "inventory" ? <FGInventoryModal /> : null}
-        {secondDropdownValue === "bl" ? <BalanceSheetModel /> : null}
-        <br />
-
-        <EvaluationReportModal
-          simulation_id={simData[0].simulation_id}
-          firm_key={firm_key_new}
-          selected_quarter={simData[0].current_quarter - 1}
-        />
-      </HStack>
+      <Tabs isFitted onChange={(index) => handleQuarterChange(index)}>
+        <TabList>
+          {Array.from({ length: simData[0].current_quarter - 1 }, (_, index) => (
+            <Tab key={index}>Quarter {index + 1}</Tab>
+          ))}
+        </TabList>
+        <TabPanels>
+          {Array.from({ length: simData[0].current_quarter - 1 }, (_, index) => (
+            <TabPanel key={index}>
+              <VStack spacing={4}>
+                <HStack spacing={3} wrap="wrap">
+                  <Button onClick={() => handleReportChange("cpl")}>Corporate P&L Statement</Button>
+                  <Button onClick={() => handleReportChange("pcpl")}>Hyperware P&L Statement</Button>
+                  <Button onClick={() => handleReportChange("mpls")}>Metaware P&L Statement</Button>
+                  <Button onClick={() => handleReportChange("bl")}>Balance Sheet</Button>
+                  <Button onClick={() => handleReportChange("inventory")}>Finished Goods Inventory Report</Button>
+                </HStack>
+                {activeReport === "cpl" ? <ReportModal reportData={reportData} /> : null}
+                {activeReport === "pcpl" || activeReport === "mpls" ? <ProductReportModal reportData={reportData} /> : null}
+                {activeReport === "inventory" ? <FGInventoryModal reportData={reportData} /> : null}
+                {activeReport === "bl" ? <BalanceSheetModel reportData={reportData} /> : null}
+                <EvaluationReportModal
+                  simulation_id={simData[0].simulation_id}
+                  firm_key={firm_key_new}
+                  selected_quarter={selectedQuarter}
+                />
+              </VStack>
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
     </div>
   );
 };

@@ -59,13 +59,13 @@ const ForecastDataChart = ({
     <div className="app">
       <div className="row mx-5">
         <div className="mixed-chart flex">
-        <div className="w-[530px] h-60 mb-10 ">
-            <CommonGraph />
+        <div className="w-[530px] h-10 mb-10 ">
+            {/* <CommonGraph /> */}
           </div>
           {/* Preview, Reports and submit buttons */}
           <div className="flex flex-col w-[210px] justify-evenly">
             {/* Modal start */}
-            <div className="modal-start flex flex-col">
+            <div className="modal-start flex flex-row">
               <button
                 onClick={toggleModal}
                 data-modal-target="small-modal"
@@ -97,7 +97,6 @@ const ForecastDataChart = ({
             </div>
           </div>
         </div>
-        <ReportComponent />
       </div>
     </div>
   );

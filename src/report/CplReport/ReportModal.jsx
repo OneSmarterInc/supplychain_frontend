@@ -8,15 +8,12 @@ import {
 } from "@material-tailwind/react";
 import ReportTable1 from "./ReportTable1";
 export default function ReportModal() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleOpen = () => setOpen(!open);
 
   return (
     <>
-      <Button onClick={handleOpen} variant="gradient">
-        Open CPL Report
-      </Button>
       <Dialog size="lg" open={open} handler={handleOpen}>
         <DialogHeader>Report : Corporate P&L </DialogHeader>
         <DialogBody

@@ -71,13 +71,10 @@ const Inventory = () => {
 
   return (
     <>
-      <UserNavBar />
+
       <div className="container mx-auto p-4">
         <div className="flex justify-between">
           <h2 className="text-2xl font-bold text-gray-800 mb-2"></h2>
-          <h3 className="text-xl font-bold text-gray-800">
-            {name} | {firm_key} | {current_quarter}th Quarter
-          </h3>
         </div>
         <div className="mb-4 bg-gray-400 p-4 rounded-md shadow">
           <div className="flex justify-between mb-4">
@@ -225,7 +222,6 @@ const Inventory = () => {
             </div>
           </div>
         </div>
-        <SuddenDemands />
       </div>
     </>
   );

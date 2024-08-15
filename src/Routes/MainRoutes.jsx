@@ -22,6 +22,7 @@ import { PrivateRoute } from "./PrivateRoutes";
 import Inventory from "../Components/Inventory";
 import JoinNow from "../Components/JoinNow";
 import LandingPage from "../Components/LandingPage/LandingPage";
+import Analytics from "../analytics/main";
 
 const MainRoutes = () => {
   const [noOfQuarters, setNoOfQuarters] = useState();
@@ -44,6 +45,18 @@ const MainRoutes = () => {
           <div className="procurement  h-screen">
             <PrivateRoute>
               <Procurement_Decisions />{" "}
+            </PrivateRoute>
+          </div>
+        }
+      />
+
+      <Route
+        exact
+        path="/Dashboard"
+        element={
+          <div className="procurement  h-screen">
+            <PrivateRoute>
+              <Analytics />{" "}
             </PrivateRoute>
           </div>
         }
