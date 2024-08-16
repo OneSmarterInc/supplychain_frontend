@@ -19,8 +19,12 @@ const Slider = () => {
     );
   };
 
+  const goToSlide = (index) => {
+    setCurrentIndex(index);
+  };
+
   return (
-    <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
+    <div className="relative w-full  h-screen flex items-center justify-center overflow-hidden">
       <div
         className="absolute inset-0 flex transition-transform duration-500"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -53,6 +57,19 @@ const Slider = () => {
       >
         &gt;
       </button>
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-2  flex justify-center w-full">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-3 h-3 rounded-full mx-2  border-2 border-red-500 ${
+              currentIndex === index ? "bg-red-600" : "border-red-400 bg-gray-300"
+            }`}
+          ></button>
+        ))}
+      </div>
     </div>
   );
 };

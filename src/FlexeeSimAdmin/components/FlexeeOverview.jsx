@@ -66,7 +66,7 @@ const FlexeeOverview = () => {
                   <h1 className="text-white  text-sm px-2 text-start">
                     Mass production, assembly line, electrical energy
                   </h1>
-                  <div className="h-20 p-1 w-20 bg-pink-950 rounded-full absolute -bottom-10 left-12">
+                  <div className="h-20 p-1 w-20 bg-pink-900  rounded-full absolute -bottom-10 left-12">
                     <img
                       src={routeForecast}
                       alt=""

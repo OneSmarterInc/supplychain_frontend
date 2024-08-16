@@ -1,7 +1,7 @@
 import React from "react";
 function Home() {
   return (
-    <div className="bg-white p-8">
+    <div className="bg-white text-center p-8">
       <div className="mt-16">
         <h2 className="text-4xl font-bold text-gray-700">
           FLEXEE SIMULATION is designed to provide
@@ -9,7 +9,7 @@ function Home() {
         <h2 className="text-3xl font-bold text-red-500 py-2">
           COMPREHENSIVE LEARNING EXPERIENCE
         </h2>
-        <p className="text-gray-500 mt-4 text-xl">
+        <p className="text-gray-500 mt-4 text-3xl">
           in supply chain management and production strategy.
         </p>
       </div>

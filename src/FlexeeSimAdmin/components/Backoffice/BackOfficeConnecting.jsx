@@ -5,7 +5,7 @@ function BackOfficeConnecting() {
   return (
     <div className="bg-white h-screen  pt-0">
       <div  style={{ backgroundImage: `url(${flowers})` }}  className="flex h-80 bg-cover  flex-col space-y-4 justify-end items-center">
-        <div className="ml-4">
+        <div className="ml-4 text-center">
           <p className="text-gray-700 text-[32px] font-medium">
             Please Wait While We Are Processing Your Request.
           </p>
@@ -44,7 +44,7 @@ function BackOfficeConnecting() {
 
       <div className="mt-4">
         <div className=" p-5 rounded-lg">
-          <h3 className="text-4xl font-medium text-gray-800 mb-3">
+          <h3 className="text-4xl text-center font-medium text-gray-800 mb-3">
             BACK OFFICE MANAGEMENT
           </h3>
           <div className="flex justify-center items-center mb-8">
