@@ -6,7 +6,7 @@ import data from './data.json';
 const RevenueDashboard = () => {
   const chart1 = data["chart1"]
   return (
-    <ResponsiveContainer width="60%" height={350}>
+    <ResponsiveContainer width="100%" height={350}>
     <h3 className='pl-6 py-2'>Net Income to Expenses - Previous</h3>
 
       <ComposedChart
