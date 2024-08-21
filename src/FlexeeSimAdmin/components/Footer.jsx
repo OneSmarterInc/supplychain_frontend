@@ -5,49 +5,6 @@ import map from "../Assets/map.png";
 const Footer = () => {
   return (
     <>
-      {/* getting started */}
-      <div className="bg-teal-500 rounded-lg p-10 my-5 text-center mx-28">
-        <h2 className="text-5xl font-bold text-white mb-4">Getting started</h2>
-        <button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 my-2 rounded-full">
-          Start Simulation
-        </button>
-      </div>
-      {/* member ship starts here  */}
-      <div className="m-10 flex justify-evenly">
-        <div className=" flex flex-col items-start justify-center">
-          <h2 className="text-4xl font-bold mb-4">Memberships</h2>
-          <p className="text-gray-500 mb-4">PARTNERS</p>
-          <button className="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-full">
-            Contact us
-          </button>
-        </div>
-        <div className="">
-          <div className="mt-8 grid grid-cols-3 gap-8">
-            <div className="flex flex-col items-center">
-              <img className="h-14 " src={img1} alt="" />
-              <p className="text-gray-700 font-medium mt-2">PULVINAR</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <img className="h-14 " src={img1} alt="" />
-              <p className="text-gray-700 font-medium mt-2">CONSECTETUR</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <img className="h-14 " src={img1} alt="" />
-              <p className="text-gray-700 font-medium mt-2">BIBENDUM</p>
-            </div>
-          </div>
-          <div className="mt-8 grid grid-cols-3 gap-8">
-            <div className="flex flex-col items-center">
-              <img className="h-14 " src={img1} alt="" />
-              <p className="text-gray-700 font-medium mt-2">SOLITUDIN</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <img className="h-14 " src={img1} alt="" />
-              <p className="text-gray-700 font-medium mt-2">ADIPISCING</p>
-            </div>
-          </div>
-        </div>
-      </div>
       {/* footer */}
       <footer className="bg-gray-900 px-3 text-gray-400 py-8">
         <div className="flex justify-between mx-auto px-4">

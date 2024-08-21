@@ -6,7 +6,6 @@ import { Box, Button, Heading, Image, Input, Flex, Text } from "@chakra-ui/react
 import logo from "../assets/favicon.png";
 import MyContext from "../Components/ContextApi/MyContext";
 
-
 const JoinNow = () => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
@@ -16,17 +15,15 @@ const JoinNow = () => {
   const handleJoin = async () => {
     if (userData?.email && passcode) {
       try {
-        const response = await axios.get(`${api}/passcode/`, {
-          params: {
-            passcode: passcode,
-            email: userData.email
-          }
+        const response = await axios.post(`${api}/subscribe/`, {
+          user_id: userData.userid, // Assuming `userData.id` is the correct user ID
+          passcode: passcode
         });
         console.log(response.data);
         // Handle successful response, e.g., navigate to another page
         navigate('/usersidelive');
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error subscribing:", error);
         // Handle error, e.g., show error message to the user
       }
     } else {

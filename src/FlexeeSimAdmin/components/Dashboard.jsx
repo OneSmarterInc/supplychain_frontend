@@ -1,31 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import MyContext from "../../Components/ContextApi/MyContext";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [code, setCode] = useState("");
-  const courses = [
-    {
-      organization: "Wright State University",
-      course: "TFC V8 - MBA 7800 SECTION A90 - BOOK ONLY - SUMMER 2024",
-      members: 8,
-    },
-    {
-      organization: "Wright State University",
-      course: "TFC V8 - MBA 7800 SECTION A90 - SIM ONLY - SUMMER 2024",
-      members: 36,
-    },
-    {
-      organization: "Wright State University",
-      course: "TFC V8 - MBA 7800 SECTION A90 - SIM ONLY - SUMMER 2024",
-      members: 36,
-    },
-    {
-      organization: "Wright State University",
-      course: "TFC V8 - MBA 7800 SECTION A90 - SIM ONLY - SUMMER 2024",
-      members: 36,
-    },
-  ];
+  const [courses, setCourses] = useState([]);
+  const { api } = useContext(MyContext);
+  
+
+  useEffect(() => {
+    // Fetch the data from the API
+    const fetchCourses = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const response = await fetch(`${api}/user/${user.userid}/subscriptions/`);
+        const data = await response.json();
+        // Transform the data to match the structure needed for rendering
+        const transformedCourses = data.map((item) => ({
+          course: item.simulation.course || "Unnamed Course",
+          members: item.simulation.members,
+          organization: `Simulation ${item.simulation.simulation_id}`, // Example: Use simulation ID as organization
+          startDate: item.simulation.start_date,
+          endDate: item.simulation.end_date,
+          passcode: item.simulation.passcode,
+
+        }));
+        setCourses(transformedCourses);
+      } catch (error) {
+        console.error("Error fetching the courses:", error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   const handleSelectedCourse = (course) => {
     localStorage.setItem("SelectedCourse", JSON.stringify(course));
@@ -40,19 +48,18 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen pb-12 bg-gray-50 p-4 px-14 relative">
       <div className="absolute left-1/2 transform top-10 h-[680px] w-[3px] bg-red-500"></div>
-      {/* <div className="absolute left-1/3 transform -translate-x-1/3 top-10 w-1/4 h-[2px] bg-red-500"></div> */}
       <div className="absolute left-1/2 transform -translate-x-full top-10 w-60 h-[2px] bg-red-500"></div>
-      <div className="absolute left-1/2 transform -translate-x-60  top-7 text-red-500 ">
-        <i class="fa-solid fa-caret-left text-xl"></i>
+      <div className="absolute left-1/2 transform -translate-x-60 top-7 text-red-500 ">
+        <i className="fa-solid fa-caret-left text-xl"></i>
       </div>
-      <div className="absolute left-1/2 transform -translate-x-1/2  top-[730px] w-2 h-2 rounded-full border-2 border-red-500 "></div>
+      <div className="absolute left-1/2 transform -translate-x-1/2 top-[730px] w-2 h-2 rounded-full border-2 border-red-500 "></div>
       <div className="absolute left-1/2 transform -translate-x-1/2 top-[750px] w-3 h-3 rounded-full border-2 border-red-500 "></div>
-      <div className="absolute left-1/2 transform -translate-x-1/2  top-[770px] w-4 h-4 rounded-full border-2 border-red-500 "></div>
+      <div className="absolute left-1/2 transform -translate-x-1/2 top-[770px] w-4 h-4 rounded-full border-2 border-red-500 "></div>
 
       <section className="grid grid-cols-2 items-center relative gap-10">
         <div className="text-start">
-          <h2 className="text-3xl font-bold mb-4">THE FRESH CONNECTION</h2>
-          <h3 className="text-2xl mb-4 font-semibold">4 ACTIVE COURSES</h3>
+          <h2 className="text-3xl font-bold mb-4">Flexee Simulation</h2>
+          <h3 className="text-2xl mb-4 font-semibold">{courses.length} ACTIVE COURSES</h3>
         </div>
         <div className="p-2 rounded">
           <h2 className="text-3xl font-bold mb-4 text-start">CODE ENTRY</h2>
@@ -88,11 +95,11 @@ const Dashboard = () => {
                   {course.organization}
                 </div>
                 <div className="text-2xl font-medium">COURSE:</div>
-                <div className="text-gray-700 mb-2  text-xl">
+                <div className="text-gray-700 mb-2 text-xl">
                   {course.course}
                 </div>
                 <div className="text-2xl font-medium">MEMBERS:</div>
-                <div className="text-gray-700  text-xl">
+                <div className="text-gray-700 text-xl">
                   TOTAL NUMBER OF STUDENTS - {course.members}
                 </div>
               </div>
@@ -102,7 +109,6 @@ const Dashboard = () => {
                   Explore Team/Members{" "}
                 </span>
                 <span className="text-5xl">
-                  {" "}
                   <i className="fa-solid fa-arrow-up-right-from-square py-4"></i>
                 </span>
               </div>

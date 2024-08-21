@@ -34,7 +34,7 @@ const Signup = () => {
   const [university, setUniversity] = useState("");
   const [course, setCourse] = useState("");
   const [department, setDepartment] = useState("");
-  const [is_admin] = useState(true);
+  const [is_admin] = useState(false);
   const [my_simulations] = useState({ simulations: [1] });
   const [my_firms] = useState(null);
 

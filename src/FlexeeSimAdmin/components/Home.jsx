@@ -1,5 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 function Home() {
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate()
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem("NewUserEmail", email);
+    navigate("/signup"); // Change "/signup" to your signup page route
+  };
+
   return (
     <div className="bg-white text-center p-8">
       <div className="mt-16">
@@ -14,11 +28,13 @@ function Home() {
         </p>
       </div>
       <div className="mt-16 flex justify-center">
-        <form className="flex space-x-6">
+        <form className="flex space-x-6" onSubmit={handleSubmit}>
           <input
             type="text"
             className="flex-1 border border-gray-300 rounded p-2 py-1 w-96"
             placeholder="Enter Your Email Address"
+            value={email}
+            onChange={handleEmailChange}
           />
           <button
             type="submit"

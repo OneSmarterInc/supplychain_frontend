@@ -31,7 +31,7 @@ const CourseComponent = () => {
         </div>
         <div className="text-start">
           <h2 className="text-[64px] font-medium">
-            YZFU-RY9Q{" "}
+          {SelectedCourse?.passcode}{" "}
             <span className=" font-extralight">
               {" "}
               <i class="fa-solid fa-share-nodes fa-xs"></i>
@@ -51,13 +51,14 @@ const CourseComponent = () => {
         <div className="space-y-2 col-span-4 text-start   pb-8">
           <div className="">
             <p className="   text-[32px]">PAYMENT / PRICINFG</p>
-            <p className="text-[48px] font-semibold ">USD 75.08</p>
+            <p className="text-[48px] font-semibold ">USD 00.00</p>
           </div>
           <div className="">
             <p className=" text-[32px]">DUE DATE</p>
-            <p className="text-[48px] font-semibold ">OCT 20, 2024</p>
+            <p className="text-[48px] font-semibold ">  {SelectedCourse?.endDate}
+            </p>
           </div>
-          <p className="text-gray-500 opacity-60 text-3xl">59 DAYS REMAINING</p>
+          <p className="text-gray-500 opacity-60 text-3xl">0 DAYS REMAINING</p>
         </div>
         <div className="  col-span-3  text-white  text-center cursor-pointer flex justify-center items-center p-10 border-0 border-l-2 border-b-0 border-gray-400 border-opacity-50  ">
           <img src={deploytosim} alt="" className="w-[450px]" />
@@ -75,10 +76,7 @@ const CourseComponent = () => {
               <input type="radio" name="teacher" className="mr-2" />
               <label className="text-xl font-semibold text-gray-400 p-1">CHUCK NEMER N-TEACHER</label>
             </div>
-            <div className="flex items-center">
-              <input type="radio" name="teacher" className="mr-2" />
-              <label className="text-xl font-semibold text-gray-400 p-1">IGOR LOPES MARTINEZ</label>
-            </div>
+           
             <div className="flex items-center text-red-400 font-semibold">
               <input
                 type="radio"

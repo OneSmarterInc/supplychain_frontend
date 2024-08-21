@@ -10,6 +10,7 @@ import EvaluationReportModal from "../report/EvaluationReport/EvaluationReportMo
 import UserLoggerApi from "../LoggerApis/UserLoggerApi";
 import backgroundImage from "../assets/bg.png";
 import BalanceSheetModel from "../report/BlanceSheetReport/BalanceSheetModel";
+
 const PlayComponent = ({
   id,
   batch,
@@ -18,64 +19,35 @@ const PlayComponent = ({
   currentQuarter,
   firm_data,
 }) => {
-  let navigate = useNavigate();
-  let user = JSON.parse(localStorage.getItem("user"));
-  user = user.email;
-
-  let firm_key_map = "";
-  if (firm_data?.length) {
-    let firm_obj = firm_data.filter((item, index) => {
-      return item.emails.includes(user);
-    });
-    if (firm_obj.length) {
-      firm_key_map = firm_obj[0].firmName;
-    }
-  }
-  console.log("Firm Key Map Live sim: ", firm_key_map);
-
-  let simData = localStorage.getItem("simData");
-
+  const navigate = useNavigate();
   const { api } = useContext(MyContext);
-  simData = JSON.parse(simData);
-
-  const filteredSimulation = simData.filter(
-    (item) => item.simulation_id === parseInt(id)
-  );
-  localStorage.setItem("selectedSim", JSON.stringify(filteredSimulation));
-
-  function handleSubmit() {
-    const saveData = (id) => {
-      localStorage.setItem("selectedSim", JSON.stringify(filteredSimulation));
-      localStorage.setItem("selectedSimulation", JSON.stringify(id));
-    };
-    saveData(id);
-    navigate("/forecast");
-  }
-
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [firstDropdownValue, setFirstDropdownValue] = useState("1");
   const [secondDropdownValue, setSecondDropdownValue] = useState("");
-  let selectedSim = localStorage.getItem("selectedSim");
-  selectedSim = JSON.parse(selectedSim);
 
-  const option = [];
-  for (let i = 1; i <= selectedSim[0]?.current_quarter - 1; i++) {
-    option.push(
-      <option key={i} value={i}>
-        Select Quarter {i}
-      </option>
-    );
+  let user = JSON.parse(localStorage.getItem("user"));
+  const email = user.email;
+  let firm_key_map = "";
+
+  if (firm_data?.length) {
+    let firm_obj = firm_data.find((item) => item.emails.includes(email));
+    if (firm_obj) {
+      firm_key_map = firm_obj.firmName;
+    }
   }
+
+  const handleSubmit = () => {
+    localStorage.setItem("selectedSimulation", JSON.stringify(id));
+    navigate("/forecast");
+  };
+
   useEffect(() => {
     setSecondDropdownValue("");
   }, [isReportModalOpen, firstDropdownValue]);
+
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
-    const saveData = (id) => {
-      localStorage.setItem("selectedSim", JSON.stringify(filteredSimulation));
-      localStorage.setItem("selectedSimulation", JSON.stringify(id));
-    };
-    saveData(id);
+    localStorage.setItem("selectedSimulation", JSON.stringify(id));
   };
 
   const handleQuarterSelectChange = (e) => {
@@ -87,7 +59,7 @@ const PlayComponent = ({
     setSecondDropdownValue(newDropdownValue);
 
     const queryParams = new URLSearchParams({
-      simulation_id: simData[0].simulation_id,
+      simulation_id: id,
       quarter: firstDropdownValue,
       firm: firm_key_map,
     }).toString();
@@ -118,8 +90,7 @@ const PlayComponent = ({
         >
           <div className="info text-center">
             <h2 className="text-3xl p-2">
-              {batch} |
-              <span className="text-3xl p-2">Quarter {currentQuarter}</span>
+              {batch} | <span className="text-3xl p-2">Quarter {currentQuarter}</span>
             </h2>
             <p className="text-base p-2">
               Start Date {startDate} | End Date {endDate}
@@ -145,7 +116,7 @@ const PlayComponent = ({
             <UserLoggerApi
               simulation_id={id}
               firm_key={firm_key_map}
-              current_quarter={selectedSim[0].current_quarter}
+              current_quarter={currentQuarter}
             />
           </div>
         </div>
@@ -171,50 +142,36 @@ const PlayComponent = ({
                 <Select
                   width="165px"
                   border="1px solid black"
-                  onChange={(e) => handleQuarterSelectChange(e)}
+                  onChange={handleQuarterSelectChange}
                   value={firstDropdownValue}
                 >
-                  {option}
+                  {Array.from({ length: currentQuarter - 1 }, (_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      Select Quarter {i + 1}
+                    </option>
+                  ))}
                 </Select>
                 <Select
                   width="165px"
                   border="1px solid black"
-                  onChange={(e) => handleButtonClick(e)}
+                  onChange={handleButtonClick}
                   value={secondDropdownValue}
                 >
                   <option value="">Select</option>
                   <option value="cpl">Corporate P&L Statement</option>
                   <option value="pcpl">Hyperware P&L Statement</option>
-                  <option value="inventory">
-                    Finished Goods Inventory Report
-                  </option>
+                  <option value="inventory">Finished Goods Inventory Report</option>
                   <option value="bl">Balance Sheet</option>
-                  {/* <option value="hpl">Historical Corporate P&L Statement</option>
-                  <option value="pcpl">Hyperware P&L Statement</option>
-                  <option value="mpls">Metaware P&L Statement</option>
-                  <option value="bl">Balance Sheet</option> */}
-                  {/* <option value="cfar">Cash Flow Analysis Report</option> */}
-                  {/* <option value="inventory">Finished Goods Inventory Report</option> */}
-                  {/* <option value="pir">Procurement Inventory Report</option> */}
-                  {/* <option value="odvr">Other Decision Variables Report</option> */}
-                  {/* <option value="far">Forecasting Accuracy Report</option> */}
                 </Select>
               </HStack>
               <div className="mt-4 flex">
                 {secondDropdownValue === "cpl" && <ReportModal />}
-                {secondDropdownValue === "hpl" && <ReportModal />}
                 {secondDropdownValue === "pcpl" && <ProductReportModal />}
-                {secondDropdownValue === "mpls" && <ReportModal />}
-                {secondDropdownValue === "bl" ? <BalanceSheetModel /> : null}
-                {secondDropdownValue === "cfar" && <ReportModal />}
                 {secondDropdownValue === "inventory" && <FGInventoryModal />}
-                {secondDropdownValue === "pir" && <ReportModal />}
-                {secondDropdownValue === "odvr" && <ReportModal />}
-                {secondDropdownValue === "far" && <ReportModal />}
+                {secondDropdownValue === "bl" && <BalanceSheetModel />}
                 <div className="px-5">
-                  {" "}
                   <EvaluationReportModal
-                    simulation_id={simData[0].simulation_id}
+                    simulation_id={id}
                     firm_key={firm_key_map}
                     selected_quarter={firstDropdownValue}
                   />

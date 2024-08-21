@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-
 import {
   Flex,
   Heading,
@@ -21,16 +20,28 @@ import { FaUserAlt, FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import MyContext from "./ContextApi/MyContext";
+
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const toast = useToast();
   const { api } = useContext(MyContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const userData = JSON.parse(user);
+      if (userData.isadmin) {
+        navigate("/flexeesim/dashboard");
+      } else {
+        navigate("/usersidelive");
+      }
+    }
+  }, [navigate]);
 
   const loginHandler = async (e) => {
     e.preventDefault();
@@ -54,7 +65,6 @@ const Signin = () => {
         });
       } else {
         const response = await axios.post(`${api}/users/login/`, data);
-        console.log(response.status);
         if (response.status === 200) {
           toast({
             title: "Login successful",
@@ -63,13 +73,11 @@ const Signin = () => {
             isClosable: true,
             position: "top",
           });
-          console.log(response.data);
           const serializedValue = JSON.stringify(response.data);
-          console.log("serializedValue,", serializedValue);
           localStorage.setItem("user", serializedValue);
           if (response.data.isadmin) {
-            navigate("/adminsidelive");
-            setTimeout(function () {
+            navigate("/dashboard");
+            setTimeout(() => {
               toast({
                 title: "Welcome Admin",
                 status: "info",
@@ -80,7 +88,7 @@ const Signin = () => {
             }, 2000);
           } else {
             navigate("/usersidelive");
-            setTimeout(function () {
+            setTimeout(() => {
               toast({
                 title: "Welcome User",
                 status: "info",
@@ -98,7 +106,6 @@ const Signin = () => {
     } catch (error) {
       console.error("Error:", error.code);
       if (error.response && error.response.status === 401) {
-        console.log("User not found. Please sign up.");
         toast({
           title: "User not found",
           description: "Please sign up.",
@@ -108,11 +115,9 @@ const Signin = () => {
           position: "top",
         });
       } else if (error.response && error.response.status === 402) {
-        console.error("Wrong Password");
         toast({
           title: "Wrong Password.",
-          description:
-            "Please check that you have entered the correct password.",
+          description: "Please check that you have entered the correct password.",
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -132,7 +137,6 @@ const Signin = () => {
           flexDirection="column"
           width="100%"
           height="100vh"
-          // backgroundColor="gray.200"
           justifyContent="center"
           alignItems="center"
         >
@@ -168,7 +172,6 @@ const Signin = () => {
                     <InputGroup>
                       <InputLeftElement
                         pointerEvents="none"
-                        // color="gray.300"
                         children={<CFaLock color="gray.300" />}
                       />
                       <Input

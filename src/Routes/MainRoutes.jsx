@@ -52,6 +52,8 @@ import FlexeeBackOfficeReports from "../FlexeeSimAdmin/components/Backoffice/Bac
 import FlexeeBackOfficeFAQS from "../FlexeeSimAdmin/components/Backoffice/BackOfficeFAQS";
 import FlexeeHomeFeatures from "../FlexeeSimAdmin/components/HomeFeatures";
 import FlexeeSlider from "../FlexeeSimAdmin/components/Slider";
+import Sidebar from "../sidebar/Sidebar"
+import FlexeeOverview from "../FlexeeSimAdmin/components/FlexeeOverview";
 
 const MainRoutes = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
@@ -63,7 +65,15 @@ const MainRoutes = () => {
         path="/"
         element={
           <div className="home h-screen">
-            <Home />{" "}
+             <FlexeeNavbar />
+              <FlexeeHome />
+              <FlexeeOverview />
+              <FlexeeHomeFeatures />
+              <FlexeeSlider />
+              <FlexeeTestimonials />
+              <FlexeeValues />
+              <FlexeeDecisionPreview />
+              <FlexeeFooter />
           </div>
         }
       />
@@ -74,6 +84,7 @@ const MainRoutes = () => {
         element={
           <div className="procurement  h-screen">
             <PrivateRoute>
+              <Sidebar />
               <Procurement_Decisions />{" "}
             </PrivateRoute>
           </div>
@@ -86,7 +97,9 @@ const MainRoutes = () => {
         element={
           <div className="procurement  h-screen">
             <PrivateRoute>
+              <Sidebar />
               <Analytics />{" "}
+
             </PrivateRoute>
           </div>
         }
@@ -109,6 +122,8 @@ const MainRoutes = () => {
         element={
           <div className="manufacturing  h-screen ">
             <PrivateRoute>
+            <Sidebar />
+
               <Manufacturing_Decisions />
             </PrivateRoute>{" "}
           </div>
@@ -133,6 +148,7 @@ const MainRoutes = () => {
         element={
           <div className="distribution  h-screen ">
             <PrivateRoute>
+            <Sidebar />
               <Distribution_Decision />
             </PrivateRoute>{" "}
           </div>
@@ -145,6 +161,7 @@ const MainRoutes = () => {
         element={
           <div className="transportation  h-screen ">
             <PrivateRoute>
+            <Sidebar />
               <Transportation_Decision />
             </PrivateRoute>{" "}
           </div>
@@ -158,6 +175,7 @@ const MainRoutes = () => {
           <div className="service  h-screen">
             <PrivateRoute>
               {" "}
+              <Sidebar />
               <Service_Decision />
             </PrivateRoute>{" "}
           </div>
@@ -170,6 +188,7 @@ const MainRoutes = () => {
         element={
           <div className="demand  h-screen ">
             <PrivateRoute>
+            <Sidebar />
               <Demand_generation />
             </PrivateRoute>{" "}
           </div>
@@ -182,6 +201,7 @@ const MainRoutes = () => {
         element={
           <div className="forecast  h-screen ">
             <PrivateRoute>
+            <Sidebar />
               <Forecast />
             </PrivateRoute>{" "}
           </div>
@@ -194,7 +214,8 @@ const MainRoutes = () => {
         element={
           <div className="it  h-screen">
             <PrivateRoute>
-              <IT />
+            <Sidebar />
+            <IT />
             </PrivateRoute>{" "}
           </div>
         }

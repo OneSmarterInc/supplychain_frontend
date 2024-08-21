@@ -1,72 +1,38 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import MyContext from "../../Components/ContextApi/MyContext";
 
 const StudentRequest = () => {
-  // eslint-disable-next-line
-  const [students, setStudents] = useState([
-    {
-      id: 1,
-      name: "Shruti Rathod",
-      studentId: "#54639841",
-      contact: "7759766794",
-      team: "TEAM 02",
-      status: "Active",
-      enrollDate: "Oct, 15 2021 09:45 AM",
-      profileImage: "https://randomuser.me/api/portraits/women/1.jpg",
-    },
-    {
-      id: 2,
-      name: "Shruti Rathod",
-      studentId: "#54639841",
-      contact: "7759766794",
-      team: "TEAM 02",
-      status: "Active",
-      enrollDate: "Oct, 15 2021 09:45 AM",
-      profileImage: "https://randomuser.me/api/portraits/women/2.jpg",
-    },
-    {
-      id: 3,
-      name: "Shruti Rathod",
-      studentId: "#54639841",
-      contact: "7759766794",
-      team: "TEAM 02",
-      status: "Active",
-      enrollDate: "Oct, 15 2021 09:45 AM",
-      profileImage: "https://randomuser.me/api/portraits/women/3.jpg",
-    },
-    {
-      id: 4,
-      name: "Shruti Rathod",
-      studentId: "#54639841",
-      contact: "7759766794",
-      team: "TEAM 02",
-      status: "Active",
-      enrollDate: "Oct, 15 2021 09:45 AM",
-      profileImage: "https://randomuser.me/api/portraits/women/4.jpg",
-    },
-    {
-      id: 5,
-      name: "Shruti Rathod",
-      studentId: "#54639841",
-      contact: "7759766794",
-      team: "TEAM 02",
-      status: "Active",
-      enrollDate: "Oct, 15 2021 09:45 AM",
-      profileImage: "https://randomuser.me/api/portraits/women/5.jpg",
-    },
-    {
-      id: 6,
-      name: "Shruti Rathod",
-      studentId: "#54639841",
-      contact: "7759766794",
-      team: "TEAM 02",
-      status: "Active",
-      enrollDate: "Oct, 15 2021 09:45 AM",
-      profileImage: "https://randomuser.me/api/portraits/women/6.jpg",
-    },
-  ]);
-
+  const [students, setStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All Students");
+  const {api} = useContext(MyContext);
+
+  useEffect(() => {
+    const fetchSubscribers = async () => {
+      try {
+        const response = await fetch(`${api}/simulation/3af3d851/subscribers/?format=json`);
+        const data = await response.json();
+
+        // Transform the data to match the structure needed for rendering
+        const transformedData = data.map((item) => ({
+          id: item.user_detail.userid,
+          name: `${item.user_detail.first_name} ${item.user_detail.last_name}`,
+          studentId: item.user_detail.userid,
+          profileImage: item.user_detail.image || "default-image.png", // Fallback image
+          contact: item.user_detail.email,
+          status: item.user_detail.is_online ? "Online" : "Offline",
+          enrollDate: new Date(item.subscribed_at).toLocaleDateString(),
+          team: null, // Assuming you will assign teams later
+        }));
+
+        setStudents(transformedData);
+      } catch (error) {
+        console.error("Error fetching the students:", error);
+      }
+    };
+
+    fetchSubscribers();
+  }, [api]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -89,19 +55,19 @@ const StudentRequest = () => {
     .filter((student) => {
       return (
         student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.studentId?.toLowerCase().includes(searchTerm.toLowerCase())
+        student.studentId.toString().includes(searchTerm.toLowerCase())
       );
     });
 
   return (
-    <div className=" mx-16  px-6 py-6  border-2  border-t-2 rounded-md   border-gray-400 border-opacity-50">
-      <h2 className="text-4xl text-gray-600 border-0 border-b-2 pb-8 border-opacity-30 border-b-gray-500  font-medium text-start mb-4">
+    <div className="mx-16 px-6 py-6 border-2 border-t-2 rounded-md border-gray-400 border-opacity-50">
+      <h2 className="text-4xl text-gray-600 border-0 border-b-2 pb-8 border-opacity-30 border-b-gray-500 font-medium text-start mb-4">
         STUDENTS / MEMBER REQUEST
       </h2>
       <div className="flex items-center mb-4 p-5">
         <div className="flex items-center mr-4">
           <input
-            type="checkbox"
+            type="radio"
             id="allStudents"
             value="All Students"
             checked={selectedFilter === "All Students"}
@@ -110,15 +76,15 @@ const StudentRequest = () => {
           />
           <label
             htmlFor="allStudents"
-            className="text-gray-700 text-xl mx-2  flex flex-col items-start space-y-1"
+            className="text-gray-700 text-xl mx-2 flex flex-col items-start space-y-1"
           >
             <p> All Students</p>
-            <p className="text-xs text-green-500 ml-1">TOTAL 1065</p>
+            <p className="text-xs text-green-500 ml-1">TOTAL {students.length}</p>
           </label>
         </div>
         <div className="flex items-center mr-4">
           <input
-            type="checkbox"
+            type="radio"
             id="studentsTeam"
             value="Students"
             checked={selectedFilter === "Students"}
@@ -127,7 +93,7 @@ const StudentRequest = () => {
           />
           <label
             htmlFor="studentsTeam"
-            className="text-gray-700  text-xl mx-2    flex flex-col items-start space-y-1"
+            className="text-gray-700 text-xl mx-2 flex flex-col items-start space-y-1"
           >
             <p>Students</p>
             <p className="text-xs text-gray-500 ml-1">TEAM / GROUP ASSIGN</p>
@@ -135,7 +101,7 @@ const StudentRequest = () => {
         </div>
         <div className="flex items-center">
           <input
-            type="checkbox"
+            type="radio"
             id="studentsNotTeam"
             value="StudentsNotTeam"
             checked={selectedFilter === "StudentsNotTeam"}
@@ -144,7 +110,7 @@ const StudentRequest = () => {
           />
           <label
             htmlFor="studentsNotTeam"
-            className="text-gray-700  text-xl mx-2   flex flex-col items-start space-y-1"
+            className="text-gray-700 text-xl mx-2 flex flex-col items-start space-y-1"
           >
             <p>Students</p>
             <p className="text-xs text-gray-500 ml-1">
@@ -160,7 +126,7 @@ const StudentRequest = () => {
             onChange={handleSearchChange}
             className="px-3 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <button className="ml-2 px-3 py-2 rounded-full text-red-500  hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-500">
+          <button className="ml-2 px-3 py-2 rounded-full text-red-500 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-500">
             <i className="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
@@ -171,7 +137,7 @@ const StudentRequest = () => {
             <th className="px-4 py-2 text-left font-bold">
               NAME / STUDENT ID{" "}
               <span className="text-red-500">
-                <i class="fa-solid fa-arrow-down-a-z"></i>
+                <i className="fa-solid fa-arrow-down-a-z"></i>
               </span>
             </th>
             <th className="px-4 py-2 text-left font-bold">CONTACT</th>
@@ -200,12 +166,12 @@ const StudentRequest = () => {
               <td className="px-4 py-2 text-start">
                 <p>{student.contact}</p>
                 <p className="pl-9">
-                <i class="fa-solid fa-envelope"></i>
+                  <i className="fa-solid fa-envelope"></i>
                 </p>
               </td>
               <td className="px-4 py-2 flex justify-center">
                 <div className="relative">
-                  <select className="block  text-gray-700 py-2 px-3 border border-red-300 bg-white rounded-full w-48 text-center shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                  <select className="block text-gray-700 py-2 px-3 border border-red-300 bg-white rounded-full w-48 text-center shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
                     <option value="">Assign Team</option>
                     <option value="team1">TEAM 01</option>
                     <option value="team2">TEAM 02</option>
@@ -214,7 +180,7 @@ const StudentRequest = () => {
                   </select>
                 </div>
               </td>
-              <td className="px-4 py-2 text-start text-green-500 ">
+              <td className="px-4 py-2 text-start text-green-500">
                 {student.status}
               </td>
               <td className="px-4 py-2 text-start w-32">
