@@ -52,7 +52,7 @@ import FlexeeBackOfficeReports from "../FlexeeSimAdmin/components/Backoffice/Bac
 import FlexeeBackOfficeFAQS from "../FlexeeSimAdmin/components/Backoffice/BackOfficeFAQS";
 import FlexeeHomeFeatures from "../FlexeeSimAdmin/components/HomeFeatures";
 import FlexeeSlider from "../FlexeeSimAdmin/components/Slider";
-import Sidebar from "../sidebar/Sidebar"
+import Sidebar from "../sidebar/SideBar"
 import FlexeeOverview from "../FlexeeSimAdmin/components/FlexeeOverview";
 
 const MainRoutes = () => {
@@ -517,7 +517,7 @@ const MainRoutes = () => {
               <FlexeeDashboardNavbar />
               <FlexeeCourseComponent />
               <FlexeeGroupsTeamsComponent />
-              <FlexeeStudentRequest />
+              {/* <FlexeeStudentRequest /> */}
               <FlexeeFooter />
             </div>
           }

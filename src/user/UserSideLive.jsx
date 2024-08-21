@@ -25,10 +25,10 @@ const UserSideLive = () => {
       console.log(response.status);
       if (response.status === 200) {
         console.log("AllData", response.data);
-        const simulations = response.data.map(sub => ({
+        const simulations = response.data.map((sub) => ({
           ...sub.simulation,
           subscribed_at: sub.subscribed_at,
-          is_active: new Date(sub.simulation.end_date) >= new Date() // Assuming active means the simulation hasn't ended yet
+          is_active: new Date(sub.simulation.end_date) >= new Date(), // Assuming active means the simulation hasn't ended yet
         }));
         setSimData(simulations);
         const serializedValue = JSON.stringify(simulations);
@@ -44,16 +44,16 @@ const UserSideLive = () => {
         isClosable: true,
       });
     }
-    
   };
+
+  console.log("simData", simData);
 
   return (
     <div>
       <UserNavBar />
       <h2 className="text-3xl p-2 pl-10 ">Live Simulation</h2>
       {simData
-      
-        .filter((item) => item.is_active === true)
+        .filter((item) => item.is_active === false)
         .reverse()
         .map((item, index) => (
           <PlayComponent
@@ -65,6 +65,7 @@ const UserSideLive = () => {
             time={`${item.decision_open} - ${item.decision_close}`}
             currentQuarter={item.current_quarter || 0} // Assuming current_quarter is part of the data, else default to 0
             firm_data={item.firm_data}
+            selectedSimData = {item}
           />
         ))}
     </div>
