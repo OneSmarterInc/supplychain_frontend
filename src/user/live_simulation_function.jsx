@@ -18,12 +18,17 @@ const PlayComponent = ({
   endDate,
   currentQuarter,
   firm_data,
+  selectedSimData
 }) => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [firstDropdownValue, setFirstDropdownValue] = useState("1");
   const [secondDropdownValue, setSecondDropdownValue] = useState("");
+  
+
+  console.log("SelectedSimData:", selectedSimData)
+
 
   let user = JSON.parse(localStorage.getItem("user"));
   const email = user.email;
@@ -38,6 +43,7 @@ const PlayComponent = ({
 
   const handleSubmit = () => {
     localStorage.setItem("selectedSimulation", JSON.stringify(id));
+    localStorage.setItem("selectedSimData", JSON.stringify(selectedSimData));
     navigate("/forecast");
   };
 
@@ -47,7 +53,7 @@ const PlayComponent = ({
 
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
-    localStorage.setItem("selectedSimulation", JSON.stringify(id));
+    // localStorage.setItem("selectedSimulation", JSON.stringify(id));
   };
 
   const handleQuarterSelectChange = (e) => {

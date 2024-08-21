@@ -1,16 +1,23 @@
 import React, { useContext, useState, useEffect } from "react";
 import MyContext from "../../Components/ContextApi/MyContext";
+import axios from "axios";
 
-const StudentRequest = () => {
+const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
   const [students, setStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All Students");
-  const {api} = useContext(MyContext);
+  const { api } = useContext(MyContext);
+
+  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData"));
+  const passcode = selectedSimData?.passcode;
+  console.log("passcode:", passcode);
 
   useEffect(() => {
     const fetchSubscribers = async () => {
       try {
-        const response = await fetch(`${api}/simulation/3af3d851/subscribers/?format=json`);
+        const response = await fetch(
+          `${api}/simulation/3af3d851/subscribers/?format=json`
+        );
         const data = await response.json();
 
         // Transform the data to match the structure needed for rendering
@@ -59,6 +66,20 @@ const StudentRequest = () => {
       );
     });
 
+  const addToFirm = async (user_id, user_email, passcode, team) => {
+    fetchTeams();
+    setSelectedOption(team + user_id);
+    try {
+      const response = await axios.get(
+        `${api}/post-firms/${user_id}/${user_email}/${passcode}/${team}/`
+      );
+      const data = response.data;
+      console.log("Add to firm data: ", data);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
   return (
     <div className="mx-16 px-6 py-6 border-2 border-t-2 rounded-md border-gray-400 border-opacity-50">
       <h2 className="text-4xl text-gray-600 border-0 border-b-2 pb-8 border-opacity-30 border-b-gray-500 font-medium text-start mb-4">
@@ -79,7 +100,9 @@ const StudentRequest = () => {
             className="text-gray-700 text-xl mx-2 flex flex-col items-start space-y-1"
           >
             <p> All Students</p>
-            <p className="text-xs text-green-500 ml-1">TOTAL {students.length}</p>
+            <p className="text-xs text-green-500 ml-1">
+              TOTAL {students.length}
+            </p>
           </label>
         </div>
         <div className="flex items-center mr-4">
@@ -171,12 +194,22 @@ const StudentRequest = () => {
               </td>
               <td className="px-4 py-2 flex justify-center">
                 <div className="relative">
-                  <select className="block text-gray-700 py-2 px-3 border border-red-300 bg-white rounded-full w-48 text-center shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                  <select
+                    onChange={(e) =>
+                      addToFirm(
+                        student?.id,
+                        student?.contact,
+                        passcode,
+                        e.target.value
+                      )
+                    }
+                    className="block text-gray-700 py-2 px-3 border border-red-300 bg-white rounded-full w-48 text-center shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                  >
                     <option value="">Assign Team</option>
-                    <option value="team1">TEAM 01</option>
-                    <option value="team2">TEAM 02</option>
-                    <option value="team3">TEAM 03</option>
-                    <option value="team4">TEAM 04</option>
+                    <option value="Team 01">TEAM 01</option>
+                    <option value="Team 02">TEAM 02</option>
+                    <option value="Team 03">TEAM 03</option>
+                    <option value="Team 04">TEAM 04</option>
                   </select>
                 </div>
               </td>
