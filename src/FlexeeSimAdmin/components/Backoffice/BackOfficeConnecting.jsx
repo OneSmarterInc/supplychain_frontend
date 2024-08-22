@@ -45,7 +45,7 @@ function BackOfficeConnecting() {
       <div className="mt-4">
         <div className=" p-5 rounded-lg">
           <h3 className="text-4xl text-center font-medium text-gray-800 mb-3">
-            BACK OFFICE MANAGEMENT
+            Flexee Control Center
           </h3>
           <div className="flex justify-center items-center mb-8">
             <div className="w-2 h-2 rounded-full bg-blue-900 mx-1"></div>
