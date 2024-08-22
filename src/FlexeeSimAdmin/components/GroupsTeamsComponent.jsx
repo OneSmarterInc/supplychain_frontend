@@ -6,7 +6,9 @@ import MyContext from "../../Components/ContextApi/MyContext";
 import StudentRequest from "./StudentRequest";
 
 const GroupsTeamsComponent = () => {
-  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData"));
+  const selectedSimData = JSON.parse(localStorage.getItem("SelectedCourse"));
+  console.log("<<<<<><<>>",selectedSimData);
+  
   const passcode = selectedSimData?.passcode;
   const [teams, setTeams] = useState([]);
   const [selectedFirm, setSelectedFirm] = useState("Team 01");
