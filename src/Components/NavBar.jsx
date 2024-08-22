@@ -18,8 +18,7 @@ const NavBar = () => {
 
   console.log("current_quarter", current_quarter);
   const decisions =
-    filteredSimulation[0]?.["quarter_specific_decisions"][current_quarter];
-  // const decisions = filteredSimulation[0]['quarter_specific_decisions']["quarter2"];
+    filteredSimulation[0]["quarter_specific_decisions"][current_quarter]  || null;
   console.log("decisions from navbar", decisions);
   const user = JSON.parse(localStorage.getItem("user"));
 

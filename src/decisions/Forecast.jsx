@@ -29,7 +29,6 @@ const Forecast = () => {
   // const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData"));
   const selectedSim = [selectedSimData];
-
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
   // let firm_key_new = "";
   // if (selectedSim[0]?.firm_data.length) {
