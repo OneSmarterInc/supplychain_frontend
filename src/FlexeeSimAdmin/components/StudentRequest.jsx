@@ -8,7 +8,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
   const [selectedFilter, setSelectedFilter] = useState("All Students");
   const { api } = useContext(MyContext);
 
-  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData"));
+  const selectedSimData = JSON.parse(localStorage.getItem("SelectedCourse"));
   const passcode = selectedSimData?.passcode;
   console.log("passcode:", passcode);
 
@@ -16,7 +16,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
     const fetchSubscribers = async () => {
       try {
         const response = await fetch(
-          `${api}/simulation/3af3d851/subscribers/?format=json`
+          `${api}/simulation/${passcode}/subscribers/?format=json`
         );
         const data = await response.json();
 
