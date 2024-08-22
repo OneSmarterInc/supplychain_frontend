@@ -11,12 +11,17 @@ const MyProvider = ({ children }) => {
   const passcode = selectedSimData?.passcode;
 
   const [firm_key_new, set_firm_key_new] = useState();
-  const getFirmKey = async () => {
-    const response = await axios.get(
-      `https://api.cyberbriefs.org/api3/simulation/get-firm-key/${user.email}/${passcode}/`
-    );
-    const data = response.data;
-    set_firm_key_new(data);
+  const getFirmKey = async () => {  
+    try {
+      const response = await axios.get(
+        `https://api.cyberbriefs.org/api3/simulation/get-firm-key/${user.email}/${passcode}/`
+      );
+      const data = await response.data;
+      set_firm_key_new(data);
+    } catch (error) {
+      console.log("error", error)
+    }
+    
   };
 
   console.log("firm_key_new from context :", firm_key_new)

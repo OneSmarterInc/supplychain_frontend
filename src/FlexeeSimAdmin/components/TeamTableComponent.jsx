@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Piechartimg from "../Assets/Group.png";
 const TeamTableComponent = ({selectedTeam}) => {
   // const selectedTeam = JSON.parse(localStorage.getItem("selectedTeam"));
   console.log("selectedTeam from table:-", selectedTeam)
-  const users = selectedTeam?.users;
+
+  console.log(selectedTeam?.users)
 
   return (
     <div className="bg-white p-0 pt-0 w-full mx-auto">
@@ -79,7 +80,7 @@ const TeamTableComponent = ({selectedTeam}) => {
               </tr>
             </thead>
             <tbody>
-              {users?.map((member, index) => (
+              {selectedTeam?.users?.map((member, index) => (
                 <tr key={index} className="border-b border-gray-200">
                   <td className="py-4 px-4 flex items-center">
                     <img
