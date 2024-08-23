@@ -138,7 +138,7 @@ const Service_Decision = () => {
 
   return (
     <div>
-      <NavBar />
+     
       <div style={{ fontFamily: "ABeeZee" }}>
         <div className="flex justify-between">
           <h1 className="text-2xl text-start pl-6 py-2 ">Service Decision</h1>

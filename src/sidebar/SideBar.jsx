@@ -22,6 +22,11 @@ const Sidebar = () => {
   let simData = localStorage.getItem("selectedSim");
   simData = JSON.parse(simData);
 
+  const selectedSim = JSON.parse(localStorage.getItem("selectedSimData")) || {};
+  const user = JSON.parse(localStorage.getItem("user")) || {};
+  const firm_obj = selectedSim[0]?.firm_data?.filter(item => item.emails.includes(user.email)) || [];
+  const firm_key = firm_obj.length ? firm_obj[0].firmName : "";
+
   let totalQuarters = parseInt(simData?.[0]?.current_quarter) - 1 || 1;
 
   const parentOptions = [
@@ -93,7 +98,7 @@ const Sidebar = () => {
       const queryParams = new URLSearchParams({
         simulation_id: simData[0]?.simulation_id,
         quarter: selectedQuarter.slice(-1),
-        firm: "Firm1",
+        firm: firm_key,
       }).toString();
 
       const url = `${api}/reports/${reportType}/?${queryParams}`;
@@ -141,37 +146,64 @@ const Sidebar = () => {
   return (
     <div className="relative z-50 flex">
       {!isSidebarOpen && (
-        <div className="fixed left-0 top-1/2 transform -translate-y-1/2 bg-[#0E406A] text-gray-300 p-2 rounded-r cursor-pointer">
-          <FiArrowRight onClick={toggleSidebar} size={20} />
+        <div className="fixed left-0 mt-1 top-5 transform -translate-y-1/2 bg-black text-gray-300 p-2 rounded-r cursor-pointer">
+          <i class="fa-solid fa-bars text-2xl text-red-500" onClick={toggleSidebar}></i>
         </div>
       )}
 
       {isSidebarOpen && (
         <div
           ref={sidebarRef}
-          className="fixed left-0 top-0  bg-[#0E406A] text-gray-300 w-60 h-screen "
+          className="fixed left-0 top-0 bg-[#0E406A] text-gray-300 w-60 h-screen"
         >
-          <div className="flex bg-[#383838] w-full h-12 p-2 justify-between items-center mb-4">
-            <span>Menu</span>
+          <div className="flex bg-gray-900 w-full h-12 p-2 justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold pl-4 text-white cursor-pointer" onClick={()=>{navigate('/usersidelive')}}>FLEXEE</h1>
             <FiArrowLeft
               onClick={toggleSidebar}
-              className="cursor-pointer"
-              size={20}
+              className="cursor-pointer text-red-500"
+              size={28}
             />
           </div>
           <ul className="p-4">
-            {parentOptions.map((option, index) => (
-              <li key={index} className="mb-4">
-                <button
-                  onClick={() => handleParentClick(option)}
-                  className={`w-full text-left p-2 rounded ${
-                    activeParent === option.name ? "bg-gray-600" : ""
+            <li className="mb-4">
+              <button
+                onClick={() => handleParentClick(parentOptions[0])}
+                className={`w-full text-left p-2 rounded ${activeParent === parentOptions[0].name ? "bg-gray-700" : ""
                   }`}
-                >
-                  {option.name}
-                </button>
-              </li>
-            ))}
+              >
+                {parentOptions[0].name}
+              </button>
+            </li>
+            <div>
+              <h2 className="text-lg font-semibold text-white mb-2">Activity</h2>
+              <hr className="border-gray-600 mb-2" />
+              {parentOptions.slice(1, 4).map((option, index) => (
+                <li key={index} className="mb-4">
+                  <button
+                    onClick={() => handleParentClick(option)}
+                    className={`w-full text-left p-2 rounded ${activeParent === option.name ? "bg-gray-700" : ""
+                      }`}
+                  >
+                    {option.name}
+                  </button>
+                </li>
+              ))}
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-white mb-2">Resources</h2>
+              <hr className="border-gray-600 mb-2" />
+              {parentOptions.slice(4, 6).map((option, index) => (
+                <li key={index} className="mb-4">
+                  <button
+                    onClick={() => handleParentClick(option)}
+                    className={`w-full text-left p-2 rounded ${activeParent === option.name ? "bg-gray-700" : ""
+                      }`}
+                  >
+                    {option.name}
+                  </button>
+                </li>
+              ))}
+            </div>
           </ul>
         </div>
       )}
@@ -182,7 +214,7 @@ const Sidebar = () => {
           ?.children && (
           <div
             ref={sidebarRef}
-            className="fixed left-48 top-0 w-48 bg-gray-700 text-white h-screen p-4"
+            className="fixed left-60 top-0 w-48 bg-gray-800 text-white h-screen p-4"
           >
             <ul>
               {parentOptions
@@ -191,9 +223,8 @@ const Sidebar = () => {
                   <li key={index} className="mb-4">
                     <button
                       onClick={() => handleQuarterClick(quarter)}
-                      className={`w-full text-left p-2 rounded ${
-                        activeChild === quarter.name ? "bg-gray-500" : ""
-                      }`}
+                      className={`w-full text-left p-2 rounded ${activeChild === quarter.name ? "bg-gray-600" : ""
+                        }`}
                     >
                       {quarter.name}
                     </button>
@@ -206,19 +237,13 @@ const Sidebar = () => {
       {isSidebarOpen && activeChild && type === "Reports" && (
         <div
           ref={sidebarRef}
-          className="fixed left-96 top-0 w-48 bg-gray-600 text-white h-screen p-4"
+          className="fixed left-108 top-0 w-48 bg-gray-700 text-white h-screen p-4"
         >
           <button
             onClick={() => handleReportChange("cpl")}
             className="w-full text-left p-2"
           >
             Corporate P&L Statement
-          </button>
-          <button
-            onClick={() => handleReportChange("pcpl")}
-            className="w-full text-left p-2"
-          >
-            Hyperware P&L Statement
           </button>
           <button
             onClick={() => handleReportChange("mpls")}

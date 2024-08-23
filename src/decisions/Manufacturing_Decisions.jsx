@@ -17,6 +17,8 @@ import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import ManufacturingDataChart from "../DataChartsOfDecisions/Manufacturing/ManufacturingDataChart";
 import { useNavigate } from "react-router-dom";
+import InfoButton from "../Components/InfoButton";
+
 
 const Manufacturing_Decisions = () => {
   const { api } = useContext(MyContext);
@@ -39,19 +41,23 @@ const Manufacturing_Decisions = () => {
     },
   });
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
-  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
+  const currentQuarter = selectedSimData[0]?.current_quarter || 1; // Assuming the current quarter is provided in the sim data
+  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter); // Set the default to the current quarter
+
+  const user = JSON.parse(localStorage.getItem("user")) || {};
+  const selectedSim = selectedSimData;
+  const firm_data = selectedSim[0]?.firm_data ? Object.keys(selectedSim[0].firm_data)[0] : null;
+
   let firm_key_new = "";
-  if (selectedSim[0]?.firm_data.length) {
+  if (Array.isArray(selectedSim[0]?.firm_data)) {
     let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
       return item.emails.includes(user.email);
     });
     if (firm_obj.length) {
-      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+      firm_key_new = firm_obj[0].firmName; // Only one user in one firm, so using firm_obj[0]
     }
   }
-  console.log("Firm Key demand Live Sim: -------", firm_key_new);
 
   useEffect(() => {
     getManufacturing();
@@ -169,32 +175,32 @@ const Manufacturing_Decisions = () => {
 
   return (
     <div>
-      <NavBar />
+    
       <div style={{ fontFamily: "ABeeZee" }} className=" ">
-        <div className="flex justify-between">
-          <h1
-            style={{ fontFamily: "ABeeZee" }}
-            className="text-2xl text-start pl-6 py-2 "
-          >
-            Manufacturing Decision
-          </h1>
-
-          <div className="flex">
-            <h1 className="text-xl text-start px-3 py-2 text-blue-500">
-              {selectedSim[0].name}
-            </h1>
-            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>
-            <h1 className="text-xl text-start px-3 py-2 text-gray-600">
-              {user.username}
-            </h1>
+      <div className="sm:grid grid-cols-1 gap-3 m-1 ">
+        <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
+          <InfoImg decision={"Forecast"} />
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center p-2">
+              <Text>Load data Quarterly</Text>
+              <div className=" pl-4 flex space-x-4">
+                {Array.from(
+                  { length: selectedSimData[0]?.current_quarter || 0 },
+                  (_, i) => (
+                    <div
+                      key={i + 1}
+                      onClick={() => setSelectedQuarter(i + 1)}
+                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${selectedQuarter === i + 1 ? "bg-red-500 border-red-500 text-white" : ""
+                        }`}
+                    >
+                      {i + 1}
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+            <InfoButton />
           </div>
-        </div>
-        <div className="grid grid-cols-2 grid-flow-col gap-3 m-1">
-          <div className="m-3  rounded-2xl  h-screen bg-white p-2  flex flex-col justify-start">
-            <div className="">
-              <Text className="p-5 py-3 text-xl">
-                <strong>Report</strong>
-              </Text>
               <Table
                 variant="striped"
                 width={"600px"}
@@ -275,17 +281,8 @@ const Manufacturing_Decisions = () => {
                   ))}
                 </Tbody>
               </Table>
-            </div>
+           
             <div className="rounded-lg -2xl h-96  flex flex-col justify-start"></div>
-          </div>
-          <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
-            <InfoImg />
-            <div className="py-10">
-              <ManufacturingDataChart
-                submitManufacturing={submitManufacturing}
-                ManufacturingDataPreview={values}
-              />
-            </div>
           </div>
         </div>
       </div>

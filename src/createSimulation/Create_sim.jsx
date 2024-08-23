@@ -23,7 +23,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
   let user = JSON.parse(localStorage.getItem("user"));
 
   const [simulationData, setSimulationData] = useState({
-    name: "Test Simulation",
+    course: "Test Simulation",
     total_quarters: 0,
     firms: 0,
     admin_id: user?.userid,

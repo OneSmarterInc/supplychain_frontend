@@ -54,6 +54,8 @@ import FlexeeHomeFeatures from "../FlexeeSimAdmin/components/HomeFeatures";
 import FlexeeSlider from "../FlexeeSimAdmin/components/Slider";
 import Sidebar from "../sidebar/SideBar";
 import FlexeeOverview from "../FlexeeSimAdmin/components/FlexeeOverview";
+import BackOfficeNavbar from "../decisions/NewNavbar";
+import BackOfficeSidebar from "../decisions/NewSidebar";
 
 const MainRoutes = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
@@ -84,6 +86,7 @@ const MainRoutes = () => {
         element={
           <div className="procurement  h-screen">
             <PrivateRoute>
+            <BackOfficeNavbar />
               <Sidebar />
               <Procurement_Decisions />{" "}
             </PrivateRoute>
@@ -98,6 +101,7 @@ const MainRoutes = () => {
           <div className="procurement  h-screen">
             <PrivateRoute>
               <Sidebar />
+              <BackOfficeNavbar />
               <Analytics />{" "}
 
             </PrivateRoute>
@@ -122,8 +126,8 @@ const MainRoutes = () => {
         element={
           <div className="manufacturing  h-screen ">
             <PrivateRoute>
+            <BackOfficeNavbar />
             <Sidebar />
-
               <Manufacturing_Decisions />
             </PrivateRoute>{" "}
           </div>
@@ -148,6 +152,7 @@ const MainRoutes = () => {
         element={
           <div className="distribution  h-screen ">
             <PrivateRoute>
+            <BackOfficeNavbar />
             <Sidebar />
               <Distribution_Decision />
             </PrivateRoute>{" "}
@@ -157,10 +162,11 @@ const MainRoutes = () => {
 
       <Route
         exact
-        path="/transportation"
+        path="/transport"
         element={
           <div className="transportation  h-screen ">
             <PrivateRoute>
+            <BackOfficeNavbar />
             <Sidebar />
               <Transportation_Decision />
             </PrivateRoute>{" "}
@@ -175,6 +181,7 @@ const MainRoutes = () => {
           <div className="service  h-screen">
             <PrivateRoute>
               {" "}
+            <BackOfficeNavbar />
               <Sidebar />
               <Service_Decision />
             </PrivateRoute>{" "}
@@ -188,6 +195,7 @@ const MainRoutes = () => {
         element={
           <div className="demand  h-screen ">
             <PrivateRoute>
+            <BackOfficeNavbar />
             <Sidebar />
               <Demand_generation />
             </PrivateRoute>{" "}
@@ -201,7 +209,8 @@ const MainRoutes = () => {
         element={
           <div className="forecast  h-screen ">
             <PrivateRoute>
-            <Sidebar />
+            <BackOfficeNavbar />
+            <Sidebar/>
               <Forecast />
             </PrivateRoute>{" "}
           </div>
@@ -214,6 +223,7 @@ const MainRoutes = () => {
         element={
           <div className="it  h-screen">
             <PrivateRoute>
+            <BackOfficeNavbar />
             <Sidebar />
             <IT />
             </PrivateRoute>{" "}
@@ -283,6 +293,8 @@ const MainRoutes = () => {
         element={
           <div className="signup  h-screen">
             <PrivateRoute>
+            
+            <BackOfficeNavbar />
               <UserSideLive />
             </PrivateRoute>
           </div>

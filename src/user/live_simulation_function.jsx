@@ -19,6 +19,7 @@ const PlayComponent = ({
   currentQuarter,
   firm_data,
   selectedSimData
+  
 }) => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
@@ -27,9 +28,17 @@ const PlayComponent = ({
   const [secondDropdownValue, setSecondDropdownValue] = useState("");
   
 
-  console.log("SelectedSimData:", selectedSimData)
-
-
+  console.log("SelectedSimData:", selectedSimData[0])
+console.log("Rendering PlayComponent with props:", {
+  id,
+  batch,
+  startDate,
+  endDate,
+  currentQuarter,
+  firm_data,
+  selectedSimData,
+});
+  
   let user = JSON.parse(localStorage.getItem("user"));
   const email = user.email;
   let firm_key_map = "";
@@ -44,7 +53,8 @@ const PlayComponent = ({
   const handleSubmit = () => {
     localStorage.setItem("selectedSimulation", JSON.stringify(id));
     localStorage.setItem("selectedSimData", JSON.stringify(selectedSimData));
-    navigate("/forecast");
+    localStorage.setItem("selectedSim", JSON.stringify(selectedSimData));
+    navigate("/Forecast");
   };
 
   useEffect(() => {

@@ -121,7 +121,6 @@ const Demand_generation = () => {
   };
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
-      <NavBar />
       <div style={{ fontFamily: "ABeeZee" }} className="flex justify-between">
         <h1
           style={{ fontFamily: "ABeeZee" }}

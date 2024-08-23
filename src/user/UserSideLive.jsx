@@ -4,7 +4,7 @@ import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useToast } from "@chakra-ui/react";
 import PlayComponent from "./live_simulation_function";
-
+import JoinNow from "../Components/JoinNow";
 const UserSideLive = () => {
   const { api } = useContext(MyContext);
   document.body.style.backgroundColor = "#e0e2e4";
@@ -25,10 +25,10 @@ const UserSideLive = () => {
       console.log(response.status);
       if (response.status === 200) {
         console.log("AllData", response.data);
-        const simulations = response.data.map((sub) => ({
+        const simulations = response.data.map(sub => ({
           ...sub.simulation,
           subscribed_at: sub.subscribed_at,
-          is_active: new Date(sub.simulation.end_date) >= new Date(), // Assuming active means the simulation hasn't ended yet
+          is_active: new Date(sub.simulation.end_date) >= new Date() // Assuming active means the simulation hasn't ended yet
         }));
         setSimData(simulations);
         const serializedValue = JSON.stringify(simulations);
@@ -44,16 +44,15 @@ const UserSideLive = () => {
         isClosable: true,
       });
     }
+    
   };
-
-  console.log("simData", simData);
 
   return (
     <div>
-      <UserNavBar />
+    
       <h2 className="text-3xl p-2 pl-10 ">Live Simulation</h2>
       {simData
-        .filter((item) => item.is_active === false)
+        .filter((item) => item.is_active === true)
         .reverse()
         .map((item, index) => (
           <PlayComponent
@@ -63,11 +62,13 @@ const UserSideLive = () => {
             startDate={item.start_date}
             endDate={item.end_date}
             time={`${item.decision_open} - ${item.decision_close}`}
-            currentQuarter={item.current_quarter || 0} // Assuming current_quarter is part of the data, else default to 0
+            currentQuarter={item.current_quarter || 0} 
             firm_data={item.firm_data}
-            selectedSimData = {item}
+            selectedSimData={simData}
           />
         ))}
+
+<JoinNow />
     </div>
   );
 };

@@ -3,6 +3,9 @@ import videoimg from "../Assets/introvideo.png";
 import deploytosim from "../Assets/deploytosimimg.png";
 const CourseComponent = () => {
   const SelectedCourse = JSON.parse(localStorage.getItem("SelectedCourse"));
+  const handleimg = ()=>{
+    alert('Simulation Deployed Successfully')
+  }
   return (
     <div className="bg-white p-8 px-16 w-full mx-auto">
       <header className=" flex justify-between pb-3  ">
@@ -61,7 +64,7 @@ const CourseComponent = () => {
           <p className="text-gray-500 opacity-60 text-3xl">0 DAYS REMAINING</p>
         </div>
         <div className="  col-span-3  text-white  text-center cursor-pointer flex justify-center items-center p-10 border-0 border-l-2 border-b-0 border-gray-400 border-opacity-50  ">
-          <img src={deploytosim} alt="" className="w-[450px]" />
+          <img src={deploytosim} alt="" className="w-[450px]" onClick={handleimg} />
         </div>
       </div>
 
@@ -72,10 +75,7 @@ const CourseComponent = () => {
           </p>
           <div className="bg-red-500 h-0.5 w-24 my-2"></div>
           <div className="space-y-2 text-gray-700">
-            <div className="flex items-center">
-              <input type="radio" name="teacher" className="mr-2" />
-              <label className="text-xl font-semibold text-gray-400 p-1">CHUCK NEMER N-TEACHER</label>
-            </div>
+           
            
             <div className="flex items-center text-red-400 font-semibold">
               <input
@@ -85,7 +85,7 @@ const CourseComponent = () => {
                 checked
                 readOnly
               />
-              <label  className="text-xl font-semibold text-[#ED1C24] p-1">VIKRAM SETHI (YOU)</label>
+              <label  className="text-xl font-semibold text-[#ED1C24] p-1">user01 test (YOU)</label>
             </div>
           </div>
         </div>

@@ -1,9 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
-import homeimg from "../assets/img.png";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Heading, Image, Input, Flex, Text } from "@chakra-ui/react";
-import logo from "../assets/favicon.png";
+import { Box, Button, Input, Flex, useToast } from "@chakra-ui/react";
 import MyContext from "../Components/ContextApi/MyContext";
 
 const JoinNow = () => {
@@ -11,98 +9,123 @@ const JoinNow = () => {
   const { api } = useContext(MyContext);
   const userData = JSON.parse(localStorage.getItem("user"));
   const [passcode, setPasscode] = useState("");
+  const [showInput, setShowInput] = useState(false);
+  const toast = useToast();
+
+  const handleJoinClick = (e) => {
+    e.stopPropagation(); // Prevent the click from triggering the click outside handler
+    setShowInput(true);
+  };
 
   const handleJoin = async () => {
     if (userData?.email && passcode) {
       try {
         const response = await axios.post(`${api}/subscribe/`, {
-          user_id: userData.userid, // Assuming `userData.id` is the correct user ID
-          passcode: passcode
+          user_id: userData.userid,
+          passcode: passcode,
         });
-        console.log(response.data);
-        // Handle successful response, e.g., navigate to another page
-        navigate('/usersidelive');
+        toast({
+          title: "Subscription successful.",
+          description: response.data.message || "You have successfully joined.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        navigate("/usersidelive");
       } catch (error) {
+        toast({
+          title: "Subscription failed.",
+          description: error.response?.data?.message || "An error occurred while subscribing.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
         console.error("Error subscribing:", error);
-        // Handle error, e.g., show error message to the user
       }
     } else {
-      // Handle missing email or passcode
+      toast({
+        title: "Error.",
+        description: "Email or passcode is missing.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
       console.error("Email or passcode is missing");
     }
   };
 
+  const handleClickOutside = (event) => {
+    if (!event.target.closest(".join-now-container")) {
+      setShowInput(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showInput) {
+      document.addEventListener("click", handleClickOutside);
+    } else {
+      document.removeEventListener("click", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [showInput]);
+
   return (
-    <>
-      <Flex height="100vh">
-        {/* Left side with image */}
-        <Box
-          flex="1"
-          backgroundImage={`url(${homeimg})`}
-          backgroundRepeat="no-repeat"
-          backgroundSize="cover"
+    <Flex
+      position="relative"
+      height="0vh"
+      width="100vw"
+      justify="center"
+      align="center"
+      className="join-now-container"
+    >
+      {showInput && (
+        <Input
+          placeholder="Enter Passcode"
+          mb={4}
+          value={passcode}
+          onChange={(e) => setPasscode(e.target.value)}
+          width="200px"
+          position="fixed"
+          bottom="6rem"
+          right="2rem"
+          boxShadow="lg"
+          bg="white"
         />
-
-        {/* Right side with text and buttons */}
-        <Flex
-          flex="1"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          background="black"
-          color="white"
-          p={8}
-          position="relative"
+      )}
+      {showInput && (
+        <Button
+          colorScheme="green"
+          size="lg"
+          mb={"1rem"}
+          onClick={handleJoin}
+          position="fixed"
+          bottom="2rem"
+          right="2rem"
+          boxShadow="lg"
+          _hover={{ bg: "green.500", boxShadow: "xl" }}
+          _active={{ bg: "green.600" }}
         >
-          <Button
-            position="absolute"
-            top="1rem"
-            right="1rem"
-            onClick={() => { userData?.isadmin ? navigate('/adminsidelive') : navigate('/usersidelive') }}
-            _hover={{ backgroundColor: "grey" }}
-            _focus={{ boxShadow: "none" }}
-            bg="transparent"
-            border="none"
-            color={'white'}
-          >
-            Go to Live
-          </Button>
-          <Image src={logo} boxSize="100px" mb={8} />
-          <Heading mb={6}>Welcome to Supply Chain Simulation</Heading>
-          <Box display="flex" gap={4} flexDirection="column" width="100%" maxW="400px">
-            {userData?.isadmin && (
-              <Button
-                onClick={() => navigate("/createsim")}
-                colorScheme="blue"
-                size="lg"
-                mb={4}
-              >
-                Create New
-              </Button>
-            )}
-            
-            <hr />
-            <Text mb={2} m={"auto"}>Enter your passcode to join the simulation</Text>
-            
-            <Input 
-              placeholder="Passcode" 
-              mb={4} 
-              value={passcode} 
-              onChange={(e) => setPasscode(e.target.value)} 
-            />
-
-            <Button 
-              colorScheme="green" 
-              size="lg" 
-              mb={"1rem"} 
-              onClick={handleJoin}
-            >
-              Join
-            </Button>
-          </Box>
-        </Flex>
-      </Flex>
-    </>
+          Submit Passcode
+        </Button>
+      )}
+      {!showInput && (
+        <Button
+          colorScheme="green"
+          size="lg"
+          onClick={handleJoinClick}
+          position="fixed"
+          bottom="2rem"
+          right="2rem"
+          boxShadow="lg"
+          _hover={{ bg: "green.500", boxShadow: "xl" }}
+          _active={{ bg: "green.600" }}
+        >
+          Join Now
+        </Button>
+      )}
+    </Flex>
   );
 };
 

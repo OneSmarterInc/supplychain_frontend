@@ -1,4 +1,3 @@
-import { Toast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useRef, useState, useEffect } from "react";
 
@@ -29,6 +28,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
     selectedSim[0]?.renamedMappedData?.suppliarMapp?.F || "Supplier F",
     selectedSim[0]?.renamedMappedData?.suppliarMapp?.G || "Supplier G",
   ];
+
   const mediumOptions = ["Select", "Air", "Surface"];
 
   const [dcData, setDcData] = useState({});
@@ -72,117 +72,94 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
   setUpdatedDCData(dcData);
 
   return (
-    <div
-      style={{ fontFamily: "ABeeZee" }}
-      className="flex h-full flex-col justify-between bg-slate-200"
-    >
-      <div className="">
-        <h2 className="text-start text-xl py-1 font-semibold px-2  ">
+    <div className="font-sans h-full flex flex-col justify-between">
+      <div>
+        <h2 className="text-left text-2xl py-2 font-semibold px-4">
           Sub Assembly Components Plant & {activeDC}
         </h2>
         <div
           ref={tableRef}
-          className="h-100 ml-2 overflow-scroll border-2 border-opacity-50 border-blue-gray-200"
+          className="h-30 overflow-y-auto ml-4 border-2 border-opacity-50 border-gray-300 rounded-lg"
         >
           {activeDC === "DC1" && dcData?.DC1 !== "closed" && (
-            <table className="table-auto w-full border-separate border-spacing-2 ">
+            <table className="table-auto w-full border-separate border-spacing-2">
               <thead>
-                <tr className="bg-slate-300  ">
-                  <th className="text-center py-3 text-lg ">Name</th>
-                  <th className="text-center py-3 text-lg ">Supplier</th>
-                  <th className="text-center py-3 text-lg ">Medium</th>
-                  <th className="text-center py-3 text-lg w-28">Units</th>
+                <tr className="bg-gray-300">
+                  <th className="text-center py-1 text-lg font-medium">Name</th>
+                  <th className="text-center py-1 text-lg font-medium">Supplier</th>
+                  <th className="text-center py-1 text-lg font-medium">Medium</th>
+                  <th className="text-center py-1 text-lg font-medium">Units</th>
                 </tr>
               </thead>
-              <tbody ref={tableRef} className="h-40 overflow-scroll-auto">
+              <tbody className="overflow-y-auto">
                 {dcData[activeDC]?.map((entry, index) => (
-                  <tr className="bg-slate-300 " key={index}>
-                    <td className="text-center w-28 text-xl">
+                  <tr className="bg-white" key={index}>
+                    <td className="text-center py-2">
                       <input
                         type="text"
-                        className={`p-2 pl-3 pr-2 w-28 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm  placeholder:text-red-400`}
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          !entry.name
+                            ? "border-red-500 outline-red-500"
+                            : "border-green-500 outline-green-500"
+                        }`}
                         value={entry.name}
                         placeholder="Enter Name"
                         onChange={(e) =>
-                          handleInputChange(
-                            activeDC,
-                            index,
-                            "name",
-                            e.target.value
-                          )
+                          handleInputChange(activeDC, index, "name", e.target.value)
                         }
                       />
                     </td>
-                    <td className="text-center py-2 text-xl ">
-                      <p className="flex justify-center">
-                        <select
-                          className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                            entry.supplier.trim() === "Select"
-                              ? "border-red-500 outline-red-500"
-                              : " border-green-500 outline-green-500"
-                          } placeholder:text-red-400`}
-                          name="supplier"
-                          value={entry.supplier}
-                          onChange={(e) =>
-                            handleInputChange(
-                              activeDC,
-                              index,
-                              "supplier",
-                              e.target.value
-                            )
-                          }
-                        >
-                          {supplierOptions?.map((option, i) => (
-                            <option key={i} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                      </p>
-                    </td>
-                    <td className="text-center py-2 text-xl">
-                      <p className="flex justify-center">
-                        <select
-                          className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                            entry.medium.trim() === "Select"
-                              ? "border-red-500 outline-red-500"
-                              : " border-green-500 outline-green-500"
-                          } placeholder:text-red-400`}
-                          name="medium"
-                          value={entry.medium}
-                          onChange={(e) =>
-                            handleInputChange(
-                              activeDC,
-                              index,
-                              "medium",
-                              e.target.value
-                            )
-                          }
-                        >
-                          {mediumOptions?.map((option, i) => (
-                            <option key={i} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                      </p>
-                    </td>
-                    <td className="text-center py-2 text-xl">
-                      <input
-                        type="text"
-                        className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.units === ""
+                    <td className="text-center py-2">
+                      <select
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          entry.supplier.trim() === "Select"
                             ? "border-red-500 outline-red-500"
                             : "border-green-500 outline-green-500"
-                        } placeholder:text-red-400`}
+                        }`}
+                        name="supplier"
+                        value={entry.supplier}
+                        onChange={(e) =>
+                          handleInputChange(activeDC, index, "supplier", e.target.value)
+                        }
+                      >
+                        {supplierOptions.map((option, i) => (
+                          <option key={i} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="text-center py-2">
+                      <select
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          entry.medium.trim() === "Select"
+                            ? "border-red-500 outline-red-500"
+                            : "border-green-500 outline-green-500"
+                        }`}
+                        name="medium"
+                        value={entry.medium}
+                        onChange={(e) =>
+                          handleInputChange(activeDC, index, "medium", e.target.value)
+                        }
+                      >
+                        {mediumOptions.map((option, i) => (
+                          <option key={i} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="text-center py-2">
+                      <input
+                        type="text"
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          !entry.units
+                            ? "border-red-500 outline-red-500"
+                            : "border-green-500 outline-green-500"
+                        }`}
                         value={entry.units}
                         onChange={(e) =>
-                          handleInputChange(
-                            activeDC,
-                            index,
-                            "units",
-                            e.target.value
-                          )
+                          handleInputChange(activeDC, index, "units", e.target.value)
                         }
                       />
                     </td>
@@ -192,104 +169,84 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
             </table>
           )}
           {activeDC === "DC2" && dcData?.DC2 !== "closed" && (
-            <table className="table-auto w-full border-separate border-spacing-2 ">
+            <table className="table-auto w-full border-separate border-spacing-2">
               <thead>
-                <tr className="bg-slate-300  ">
-                  <th className="text-center py-3 text-lg ">Name</th>
-                  <th className="text-center py-3 text-lg ">Supplier</th>
-                  <th className="text-center py-3 text-lg ">Medium</th>
-                  <th className="text-center py-3 text-lg w-28">Units</th>
+                <tr className="bg-gray-300">
+                  <th className="text-center py-3 text-lg font-medium">Name</th>
+                  <th className="text-center py-3 text-lg font-medium">Supplier</th>
+                  <th className="text-center py-3 text-lg font-medium">Medium</th>
+                  <th className="text-center py-3 text-lg font-medium">Units</th>
                 </tr>
               </thead>
-              <tbody className="h-40 overflow-scroll">
+              <tbody className="overflow-y-auto">
                 {dcData[activeDC]?.map((entry, index) => (
-                  <tr className="bg-slate-300 " key={index}>
-                    <td className="text-center w-28 text-xl">
+                  <tr className="bg-white" key={index}>
+                    <td className="text-center py-2">
                       <input
                         type="text"
-                        className={`p-2 pl-3 pr-2 w-28 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm  placeholder:text-red-400`}
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          !entry.name
+                            ? "border-red-500 outline-red-500"
+                            : "border-green-500 outline-green-500"
+                        }`}
                         value={entry.name}
                         placeholder="Enter Name"
                         onChange={(e) =>
-                          handleInputChange(
-                            activeDC,
-                            index,
-                            "name",
-                            e.target.value
-                          )
+                          handleInputChange(activeDC, index, "name", e.target.value)
                         }
                       />
                     </td>
-                    <td className="text-center py-2 text-xl ">
-                      <p className="flex justify-center">
-                        <select
-                          className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                            entry.supplier.trim() === "Select"
-                              ? "border-red-500 outline-red-500"
-                              : " border-green-500 outline-green-500"
-                          } placeholder:text-red-400`}
-                          name="supplier"
-                          value={entry.supplier}
-                          onChange={(e) =>
-                            handleInputChange(
-                              activeDC,
-                              index,
-                              "supplier",
-                              e.target.value
-                            )
-                          }
-                        >
-                          {supplierOptions?.map((option, i) => (
-                            <option key={i} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                      </p>
-                    </td>
-                    <td className="text-center py-2 text-xl">
-                      <p className="flex justify-center">
-                        <select
-                          className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                            entry.medium.trim() === "Select"
-                              ? "border-red-500 outline-red-500"
-                              : " border-green-500 outline-green-500"
-                          } placeholder:text-red-400`}
-                          name="medium"
-                          value={entry.medium}
-                          onChange={(e) =>
-                            handleInputChange(
-                              activeDC,
-                              index,
-                              "medium",
-                              e.target.value
-                            )
-                          }
-                        >
-                          {mediumOptions?.map((option, i) => (
-                            <option key={i} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                      </p>
-                    </td>
-                    <td className="text-center py-2 text-xl">
-                      <input
-                        type="text"
-                        className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.units === ""
+                    <td className="text-center py-2">
+                      <select
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          entry.supplier.trim() === "Select"
                             ? "border-red-500 outline-red-500"
                             : "border-green-500 outline-green-500"
-                        } placeholder:text-red-400`}
+                        }`}
+                        name="supplier"
+                        value={entry.supplier}
+                        onChange={(e) =>
+                          handleInputChange(activeDC, index, "supplier", e.target.value)
+                        }
+                      >
+                        {supplierOptions.map((option, i) => (
+                          <option key={i} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="text-center py-2">
+                      <select
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          entry.medium.trim() === "Select"
+                            ? "border-red-500 outline-red-500"
+                            : "border-green-500 outline-green-500"
+                        }`}
+                        name="medium"
+                        value={entry.medium}
+                        onChange={(e) =>
+                          handleInputChange(activeDC, index, "medium", e.target.value)
+                        }
+                      >
+                        {mediumOptions.map((option, i) => (
+                          <option key={i} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="text-center py-2">
+                      <input
+                        type="text"
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          !entry.units
+                            ? "border-red-500 outline-red-500"
+                            : "border-green-500 outline-green-500"
+                        }`}
                         value={entry.units}
                         onChange={(e) =>
-                          handleInputChange(
-                            activeDC,
-                            index,
-                            "units",
-                            e.target.value
-                          )
+                          handleInputChange(activeDC, index, "units", e.target.value)
                         }
                       />
                     </td>
@@ -299,108 +256,84 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
             </table>
           )}
           {activeDC === "DC3" && dcData?.DC3 !== "closed" && (
-            <table className="table-auto w-full border-separate border-spacing-2 ">
+            <table className="table-auto w-full border-separate border-spacing-2">
               <thead>
-                <tr className="bg-slate-300  ">
-                  <th className="text-center py-3 text-lg ">Name</th>
-                  <th className="text-center py-3 text-lg ">Supplier</th>
-                  <th className="text-center py-3 text-lg ">Medium</th>
-                  <th className="text-center py-3 text-lg w-28">Units</th>
+                <tr className="bg-gray-300">
+                  <th className="text-center py-3 text-lg font-medium">Name</th>
+                  <th className="text-center py-3 text-lg font-medium">Supplier</th>
+                  <th className="text-center py-3 text-lg font-medium">Medium</th>
+                  <th className="text-center py-3 text-lg font-medium">Units</th>
                 </tr>
               </thead>
-              <tbody className="h-40 overflow-scroll">
+              <tbody className="overflow-y-auto">
                 {dcData[activeDC]?.map((entry, index) => (
-                  <tr className="bg-slate-300 " key={index}>
-                    <td className="text-center w-28 text-xl">
+                  <tr className="bg-white" key={index}>
+                    <td className="text-center py-2">
                       <input
                         type="text"
-                        className={`p-2 pl-3 pr-2 w-28 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.demand.trim() === ""
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          !entry.name
                             ? "border-red-500 outline-red-500"
                             : "border-green-500 outline-green-500"
-                        } placeholder:text-red-400`}
+                        }`}
                         value={entry.name}
                         placeholder="Enter Name"
                         onChange={(e) =>
-                          handleInputChange(
-                            activeDC,
-                            index,
-                            "name",
-                            e.target.value
-                          )
+                          handleInputChange(activeDC, index, "name", e.target.value)
                         }
                       />
                     </td>
-                    <td className="text-center py-2 text-xl ">
-                      <p className="flex justify-center">
-                        <select
-                          className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                            entry.supplier.trim() === "Select"
-                              ? "border-red-500 outline-red-500"
-                              : " border-green-500 outline-green-500"
-                          } placeholder:text-red-400`}
-                          name="supplier"
-                          value={entry.supplier}
-                          onChange={(e) =>
-                            handleInputChange(
-                              activeDC,
-                              index,
-                              "supplier",
-                              e.target.value
-                            )
-                          }
-                        >
-                          {supplierOptions?.map((option, i) => (
-                            <option key={i} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                      </p>
-                    </td>
-                    <td className="text-center py-2 text-xl">
-                      <p className="flex justify-center">
-                        <select
-                          className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                            entry.medium.trim() === "Select"
-                              ? "border-red-500 outline-red-500"
-                              : " border-green-500 outline-green-500"
-                          } placeholder:text-red-400`}
-                          name="medium"
-                          value={entry.medium}
-                          onChange={(e) =>
-                            handleInputChange(
-                              activeDC,
-                              index,
-                              "medium",
-                              e.target.value
-                            )
-                          }
-                        >
-                          {mediumOptions?.map((option, i) => (
-                            <option key={i} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                      </p>
-                    </td>
-                    <td className="text-center py-2 text-xl">
-                      <input
-                        type="text"
-                        className={`p-2 pl-3 pr-2 w-32 mx-2 bg-white border border-gray-300 rounded-lg -md shadow-sm sm:text-sm ${
-                          entry.units === ""
+                    <td className="text-center py-2">
+                      <select
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          entry.supplier.trim() === "Select"
                             ? "border-red-500 outline-red-500"
                             : "border-green-500 outline-green-500"
-                        } placeholder:text-red-400`}
+                        }`}
+                        name="supplier"
+                        value={entry.supplier}
+                        onChange={(e) =>
+                          handleInputChange(activeDC, index, "supplier", e.target.value)
+                        }
+                      >
+                        {supplierOptions.map((option, i) => (
+                          <option key={i} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="text-center py-2">
+                      <select
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          entry.medium.trim() === "Select"
+                            ? "border-red-500 outline-red-500"
+                            : "border-green-500 outline-green-500"
+                        }`}
+                        name="medium"
+                        value={entry.medium}
+                        onChange={(e) =>
+                          handleInputChange(activeDC, index, "medium", e.target.value)
+                        }
+                      >
+                        {mediumOptions.map((option, i) => (
+                          <option key={i} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="text-center py-2">
+                      <input
+                        type="text"
+                        className={`p-2 w-full bg-white border border-gray-300 rounded-lg shadow-sm sm:text-sm ${
+                          !entry.units
+                            ? "border-red-500 outline-red-500"
+                            : "border-green-500 outline-green-500"
+                        }`}
                         value={entry.units}
                         onChange={(e) =>
-                          handleInputChange(
-                            activeDC,
-                            index,
-                            "units",
-                            e.target.value
-                          )
+                          handleInputChange(activeDC, index, "units", e.target.value)
                         }
                       />
                     </td>
@@ -412,40 +345,40 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
         </div>
       </div>
 
-      <div className=" h-16 flex justify-end items-center">
-        <div className="pagination">
+      <div className="h-16 flex justify-between items-center px-4 mt-4">
+        <div className="flex space-x-4">
           <button
             onClick={() => handleDCButtonClick("DC1")}
-            className={`h-10 mx-1 bg-blue-gray-400 text-white hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg p-1.5 ${
-              activeDC === "DC1" && "bg-green-800 "
-            }  disabled:bg-gray-400  disabled:cursor-default`}
+            className={`h-10 px-4 bg-blue-600 text-white hover:bg-blue-800 text-lg rounded-lg ${
+              activeDC === "DC1" && "bg-green-700"
+            } disabled:bg-gray-400 disabled:cursor-default`}
             disabled={dcData?.DC1 === "closed"}
           >
             DC 1
           </button>
           <button
             onClick={() => handleDCButtonClick("DC2")}
-            className={`h-10 mx-1 bg-blue-gray-400 text-white hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg p-1.5 ${
-              activeDC === "DC2" && "bg-green-800 "
-            }  disabled:bg-gray-400 disabled:cursor-default `}
+            className={`h-10 px-4 bg-blue-600 text-white hover:bg-blue-800 text-lg rounded-lg ${
+              activeDC === "DC2" && "bg-green-700"
+            } disabled:bg-gray-400 disabled:cursor-default`}
             disabled={dcData?.DC2 === "closed"}
           >
             DC 2
           </button>
           <button
             onClick={() => handleDCButtonClick("DC3")}
-            className={`h-10 mx-1 bg-blue-gray-400 text-white hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg p-1.5 ${
-              activeDC === "DC3" && "bg-green-800 "
-            }  disabled:bg-gray-400 disabled:cursor-default  `}
-            disabled={dcData.DC3 === "closed"}
+            className={`h-10 px-4 bg-blue-600 text-white hover:bg-blue-800 text-lg rounded-lg ${
+              activeDC === "DC3" && "bg-green-700"
+            } disabled:bg-gray-400 disabled:cursor-default`}
+            disabled={dcData?.DC3 === "closed"}
           >
             DC 3
           </button>
         </div>
-        <div className="flex flex-row w-30 justify-center">
+        <div className="flex">
           <button
             onClick={() => onAddEntry(activeDC)}
-            className="h-10 bg-blue-gray-400 text-white  hover:bg-slate-800 text-xl text-center cursor-pointer rounded-lg   p-1.5 mx-2 hover:bg-green-700  "
+            className="h-10 px-6 bg-green-600 text-white hover:bg-green-800 text-lg rounded-lg"
           >
             Add New
           </button>

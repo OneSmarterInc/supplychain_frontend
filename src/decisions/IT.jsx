@@ -131,7 +131,7 @@ const IT = () => {
 
   return (
     <div>
-      <NavBar />
+    
       <div className="flex justify-between">
         <h1 className="text-2xl font-semibold text-start pl-6 py-2 ">
           Information Technology Decision

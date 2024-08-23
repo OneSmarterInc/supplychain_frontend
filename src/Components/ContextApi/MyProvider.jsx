@@ -3,8 +3,8 @@ import MyContext from "./MyContext";
 import { useState } from "react";
 
 const MyProvider = ({ children }) => {
-  // const api = "http://127.0.0.1:8000/api3/simulation"
-  const api = "https://api.cyberbriefs.org/api3/simulation";
+  const api = "http://127.0.0.1:8000/api3/simulation"
+  // const api = "https://api.cyberbriefs.org/api3/simulation";
 
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData"));
   const user = JSON.parse(localStorage.getItem("user"));

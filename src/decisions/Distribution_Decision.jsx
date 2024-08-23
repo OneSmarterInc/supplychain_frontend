@@ -213,7 +213,6 @@ const Distribution_Decision = () => {
   return (
     <div>
       <div style={{ fontFamily: "ABeeZee" }}>
-        <NavBar />
         <div className="flex justify-between">
           <h1
             style={{ fontFamily: "ABeeZee" }}
