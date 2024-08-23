@@ -59,8 +59,8 @@ const InfoImg = ({ decision }) => {
 
       case "/Transportation":
         return transport;
-        
-      case "/Manufacturing":
+
+      case "/Manufacture":
         return manufacturing;
       case "/Distribution":
         return distribution;

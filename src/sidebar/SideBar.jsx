@@ -36,7 +36,7 @@ const Sidebar = () => {
       children: [
         { name: "Forecast", redirect: "/forecast" },
         { name: "Procurement", redirect: "/procurement" },
-        { name: "Manufacturing", redirect: "/manufacturing" },
+        { name: "Manufacture", redirect: "/manufacture" },
         { name: "Distribution", redirect: "/distribution" },
         { name: "Transport", redirect: "/transport" },
         { name: "Service", redirect: "/service" },

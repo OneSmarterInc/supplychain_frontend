@@ -122,7 +122,7 @@ const MainRoutes = () => {
 
       <Route
         exact
-        path="/manufacturing"
+        path="/manufacture"
         element={
           <div className="manufacturing  h-screen ">
             <PrivateRoute>

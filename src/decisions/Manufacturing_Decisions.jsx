@@ -9,16 +9,16 @@ import {
   Input,
   Text,
   useToast,
+  Box,
+  Flex,
 } from "@chakra-ui/react";
 import InfoImg from "../Components/InfoImg";
 import NavBar from "../Components/NavBar";
-// import DataChart from "../Components/DataChart";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import ManufacturingDataChart from "../DataChartsOfDecisions/Manufacturing/ManufacturingDataChart";
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
-
 
 const Manufacturing_Decisions = () => {
   const { api } = useContext(MyContext);
@@ -42,8 +42,8 @@ const Manufacturing_Decisions = () => {
   });
 
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
-  const currentQuarter = selectedSimData[0]?.current_quarter || 1; // Assuming the current quarter is provided in the sim data
-  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter); // Set the default to the current quarter
+  const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const selectedSim = selectedSimData;
@@ -51,11 +51,9 @@ const Manufacturing_Decisions = () => {
 
   let firm_key_new = "";
   if (Array.isArray(selectedSim[0]?.firm_data)) {
-    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
-      return item.emails.includes(user.email);
-    });
+    let firm_obj = selectedSim[0]?.firm_data.filter((item) => item.emails.includes(user.email));
     if (firm_obj.length) {
-      firm_key_new = firm_obj[0].firmName; // Only one user in one firm, so using firm_obj[0]
+      firm_key_new = firm_obj[0].firmName;
     }
   }
 
@@ -104,8 +102,10 @@ const Manufacturing_Decisions = () => {
       console.error("Error making GET request:", error);
     }
   };
+
   const toast = useToast();
   const navigate = useNavigate();
+
   const submitManufacturing = async () => {
     try {
       const response = await axios.post(`${api}/decision/manufacture/`, {
@@ -121,16 +121,14 @@ const Manufacturing_Decisions = () => {
         emergency_limit_hyperware: Number(values.EmergencyLimit.hyperware),
         emergency_limit_metaware: Number(values.EmergencyLimit.metaware),
         volume_flexibility_zero: Number(values.VolumeFlexibility.productZero),
-        volume_flexibility_hyperware: Number(
-          values.VolumeFlexibility.hyperware
-        ),
+        volume_flexibility_hyperware: Number(values.VolumeFlexibility.hyperware),
         volume_flexibility_metaware: Number(values.VolumeFlexibility.metaware),
       });
       console.log("POST request successful", response.data);
       getManufacturing();
       addUserLogger();
       toast({
-        title: "Manufacturing Submitted Successful",
+        title: "Manufacturing Submitted Successfully",
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -141,6 +139,7 @@ const Manufacturing_Decisions = () => {
       console.error("Error making POST request: Manufacturing", error);
     }
   };
+
   const addUserLogger = async () => {
     try {
       const response = await axios.post(`${api}/adduserlogs/`, {
@@ -153,8 +152,7 @@ const Manufacturing_Decisions = () => {
         ip_address: "123.345.1",
         username: user.username,
         firm_key: firm_key_new,
-        current_quarter:selectedSim[0].current_quarter,
-
+        current_quarter: selectedSim[0].current_quarter,
       });
       const data = response.data;
       console.log("addUserLoggerData", data);
@@ -174,119 +172,78 @@ const Manufacturing_Decisions = () => {
   };
 
   return (
-    <div>
-    
-      <div style={{ fontFamily: "ABeeZee" }} className=" ">
-      <div className="sm:grid grid-cols-1 gap-3 m-1 ">
-        <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
-          <InfoImg decision={"Forecast"} />
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center p-2">
-              <Text>Load data Quarterly</Text>
-              <div className=" pl-4 flex space-x-4">
-                {Array.from(
-                  { length: selectedSimData[0]?.current_quarter || 0 },
-                  (_, i) => (
-                    <div
-                      key={i + 1}
-                      onClick={() => setSelectedQuarter(i + 1)}
-                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${selectedQuarter === i + 1 ? "bg-red-500 border-red-500 text-white" : ""
-                        }`}
-                    >
-                      {i + 1}
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
-            <InfoButton />
-          </div>
-              <Table
-                variant="striped"
-                width={"600px"}
-                mx={"auto"}
-                
-                colorScheme="#C9D5DD"
-                borderWidth="0.5px"
-                className="mx-3 bg-slate-200"
+    <Box className="overflow-x-auto p-4">
+      <Box className="m-3 rounded-2xl bg-white p-6 shadow-md">
+        <InfoImg decision={"Forecast"} />
+        <Flex justify="space-between" align="center" mb="4">
+          <Text className="text-lg font-semibold">Load data Quarterly</Text>
+          <Flex space-x-4>
+            {Array.from({ length: selectedSimData[0]?.current_quarter || 0 }, (_, i) => (
+              <Box
+                key={i + 1}
+                onClick={() => setSelectedQuarter(i + 1)}
+                className={`w-8 h-8 rounded-full border cursor-pointer flex items-center justify-center text-sm font-bold ${
+                  selectedQuarter === i + 1
+                    ? "bg-red-500 border-red-500 text-white"
+                    : "bg-gray-100 border-gray-300 text-gray-700"
+                }`}
               >
-                <Thead fontWeight="bold">
-                  <Tr>
-                    <Th fontWeight="bold"></Th>
-                    <Th>Product Zero</Th>
-
-                    <Th>
-                      {
-                        selectedSim[0]?.renamedMappedData?.dataVariabllesMapp
-                          ?.hyperware
-                      }
-                    </Th>
-                    <Th>
-                      {
-                        selectedSim[0]?.renamedMappedData?.dataVariabllesMapp
-                          ?.metaware
-                      }
-                    </Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {Object.keys(values).map((channel) => (
-                    <Tr key={channel}>
-                      <Td>
-                        <strong>{channel}</strong>
-                      </Td>
-                      <Td>
-                        <Input
-                          type="number"
-                          value={values[channel].productZero}
-                          placeholder="Enter"
-                          onChange={(e) =>
-                            handleChange(channel, "productZero", e.target.value)
-                          }
-                          border={`1px solid ${
-                            !values[channel].productZero ? "red" : "green"
-                          }`}
-                          className={`border placeholder:text-red-400`}
-                        />
-                      </Td>
-                      <Td>
-                        <Input
-                          type="number"
-                          value={values[channel].hyperware}
-                          placeholder="Enter"
-                          onChange={(e) =>
-                            handleChange(channel, "hyperware", e.target.value)
-                          }
-                          border={`1px solid ${
-                            !values[channel].hyperware ? "red" : "green"
-                          }`}
-                          className={`border placeholder:text-red-400`}
-                        />
-                      </Td>
-                      <Td>
-                        <Input
-                          type="number"
-                          value={values[channel].metaware}
-                          placeholder="Enter"
-                          onChange={(e) =>
-                            handleChange(channel, "metaware", e.target.value)
-                          }
-                          border={`1px solid ${
-                            !values[channel].metaware ? "red" : "green"
-                          }`}
-                          className={`border placeholder:text-red-400`}
-                        />
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-           
-            <div className="rounded-lg -2xl h-96  flex flex-col justify-start"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+                {i + 1}
+              </Box>
+            ))}
+          </Flex>
+          <InfoButton />
+        </Flex>
+        <Table className="min-w-full bg-white rounded-md shadow-sm">
+          <Thead className="bg-gray-100">
+            <Tr>
+              <Th className="text-left"></Th>
+              <Th className="text-left">Product Zero</Th>
+              <Th className="text-left">
+                {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
+              </Th>
+              <Th className="text-left">
+                {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}
+              </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {Object.keys(values).map((channel) => (
+              <Tr key={channel} className="border-t">
+                <Td className="p-3 font-medium text-gray-900">{channel}</Td>
+                <Td className="p-3">
+                  <Input
+                    type="number"
+                    value={values[channel].productZero}
+                    placeholder="Enter"
+                    onChange={(e) => handleChange(channel, "productZero", e.target.value)}
+                    className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                  />
+                </Td>
+                <Td className="p-3">
+                  <Input
+                    type="number"
+                    value={values[channel].hyperware}
+                    placeholder="Enter"
+                    onChange={(e) => handleChange(channel, "hyperware", e.target.value)}
+                    className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                  />
+                </Td>
+                <Td className="p-3">
+                  <Input
+                    type="number"
+                    value={values[channel].metaware}
+                    placeholder="Enter"
+                    onChange={(e) => handleChange(channel, "metaware", e.target.value)}
+                    className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                  />
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
+    </Box>
   );
 };
 
