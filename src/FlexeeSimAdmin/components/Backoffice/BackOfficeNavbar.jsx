@@ -1,10 +1,54 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import MyContext from "../../../Components/ContextApi/MyContext";
+import { useToast } from "@chakra-ui/react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const BackOfficeNavbar = ({ isSideBarOpen, setIsSideBarOpen }) => {
-
   const handleSidebarOpen = () => {
     setIsSideBarOpen(!isSideBarOpen);
     localStorage.setItem("isSideBarOpen", isSideBarOpen);
+  };
+
+  const navigate = useNavigate();
+  const [code, setCode] = useState("");
+  const [courses, setCourses] = useState([]);
+  const [selectedCoursesFromNavbar, setselectedCoursesFromNavbar] = useState([]);
+  const { api } = useContext(MyContext);
+
+  console.log("Selected Course", selectedCoursesFromNavbar)
+
+  console.log("Courses", courses);
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const response = await axios.get(
+        `${api}/user/${user.userid}/subscriptions/`
+      );
+      // Transform the data to match the structure needed for rendering
+      const transformedCourses = response.data.map((item) => ({
+        course: item.simulation.course || "Unnamed Course",
+        members: item.simulation.members,
+        organization: `Simulation ${item.simulation.simulation_id}`, // Example: Use simulation ID as organization
+        startDate: item.simulation.start_date,
+        endDate: item.simulation.end_date,
+        passcode: item.simulation.passcode,
+      }));
+      setCourses(transformedCourses);
+    } catch (error) {
+      console.error("Error fetching the courses:", error);
+    }
+  };
+
+  const handleSelectedCourse = (course) => {
+    setselectedCoursesFromNavbar(JSON.parse(course));
+
+    localStorage.setItem("BackofficeNavbarSelectedCourse", selectedCoursesFromNavbar)
   };
 
   return (
@@ -55,14 +99,23 @@ const BackOfficeNavbar = ({ isSideBarOpen, setIsSideBarOpen }) => {
                 <div className="relative w-full py-0">
                   <select
                     name=""
+                    defaultValue={courses[0]}
                     id=""
+                    onClick={(e) => handleSelectedCourse(JSON.stringify(e.target.value))}
                     className="px-3 w-full p-3 border-gray-300 border-0 border-b-2 border-l-2 font-normal appearance-none pl-10"
                   >
-                    <option value="">
+                    {/* <option value="">
                       {" "}
                       15745 - Wright State University - Vikram Sethi - MBA 7800
                       - B90 (6375) - Open
-                    </option>
+                    </option> */}
+                    <option value="">Select Course Please</option>
+                    {courses?.map((course) => (
+                      <option  value={JSON.stringify(course)}>
+                        {" "}
+                        {course.course} | {course.organization}{" "}
+                      </option>
+                    ))}
                   </select>
                   <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                     <div className="bg-gray-200  border-0  border-l-2  border-l-red-500 w-24 flex justify-center items-center h-12 absolute right-0 top-1">
