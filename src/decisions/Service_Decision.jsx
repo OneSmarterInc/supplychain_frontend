@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
-  HStack,
   Select,
   Box,
   Table,
@@ -9,22 +8,25 @@ import {
   Tr,
   Th,
   Td,
-  Text,
   useToast,
+  Text,
 } from "@chakra-ui/react";
-import NavBar from "../Components/NavBar";
-// import DataChart from "../Components/DataChart";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
-import ServiceDataChart from "../DataChartsOfDecisions/Service/ServiceDataChart";
 import { useNavigate } from "react-router-dom";
+import InfoButton from "../Components/InfoButton"; // Added InfoButton for consistency
 
 const Service_Decision = () => {
   const { api } = useContext(MyContext);
   const regions = ["region1", "region2", "region3"];
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+
+  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
+  const currentQuarter = selectedSimData[0]?.current_quarter || 1; // Assuming the current quarter is provided in the sim data
+  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter); // Set the default to the current quarter
+
   const toast = useToast();
   const navigate = useNavigate();
   const [serviceValue, setServiceValue] = useState({
@@ -39,17 +41,18 @@ const Service_Decision = () => {
 
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
   let firm_key_new = "";
+
   if (selectedSim[0]?.firm_data.length) {
-    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
-      return item.emails.includes(user.email);
-    });
+    let firm_obj = selectedSim[0]?.firm_data.filter((item) =>
+      item.emails.includes(user.email)
+    );
     if (firm_obj.length) {
-      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+      firm_key_new = firm_obj[0].firmName;
     }
   }
-  console.log("Firm Key demand Live Sim: -------", firm_key_new);
+
   const [ServiceData, setServiceData] = useState();
-  console.log("ServiceData:--", firm_data);
+
   useEffect(() => {
     getService();
   }, []);
@@ -99,7 +102,7 @@ const Service_Decision = () => {
       addUserLogger();
       getService();
       toast({
-        title: "Service Submitted successful",
+        title: "Service Submitted successfully",
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -124,8 +127,7 @@ const Service_Decision = () => {
         ip_address: "123.345.1",
         username: user.username,
         firm_key: firm_key_new,
-        current_quarter:selectedSim[0].current_quarter,
-
+        current_quarter: selectedSim[0].current_quarter,
       });
       const data = response.data;
       console.log("addUserLoggerData", data);
@@ -134,45 +136,41 @@ const Service_Decision = () => {
     }
   };
 
-  console.log("servicevalue", serviceValue);
-
   return (
     <div>
-     
       <div style={{ fontFamily: "ABeeZee" }}>
-        <div className="flex justify-between">
-          <h1 className="text-2xl text-start pl-6 py-2 ">Service Decision</h1>
-
-          <div className="flex">
-            {" "}
-            <h1 className="text-xl text-start px-3 py-2 text-blue-500">
-              {selectedSim[0].name}
-            </h1>{" "}
-            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
-            <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
-              {user.username}
-            </h1>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 grid-flow-col gap-3  m-1">
-          <div className="m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-start">
+      <div className="sm:grid grid-cols-1 gap-3 m-1">
+          <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
+            <InfoImg decision={"Service"} />
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center p-2">
+                <Text>Load data Quarterly</Text>
+                <div className="pl-4 flex space-x-4">
+                  {Array.from(
+                    { length: selectedSim[0]?.current_quarter || 0 },
+                    (_, i) => (
+                      <div
+                        key={i + 1}
+                        onClick={() => setSelectedQuarter(i + 1)}
+                        className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
+                          selectedQuarter === i + 1
+                            ? "bg-red-500 border-red-500 text-white"
+                            : ""
+                        }`}
+                      >
+                        {i + 1}
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+              <InfoButton />
+            </div>
             <Box>
-              <Text className="p-5 font-semibold py-3 pb-0 text-xl">
-                Service
-              </Text>
-              <br />
-              <Table
-                variant="simple"
-                className="bg-slate-300 mx-3"
-                width={"650px"}
-              >
-                <Thead>
+              <Table className="min-w-full bg-white rounded-md shadow-sm">
+                <Thead className="bg-gray-100">
                   <Tr>
-                    <Th> </Th>
-                    {/* {regions.map((region) => (
-                      <Th key={region}>{region}</Th>
-                    ))} */}
-                    
+                    <Th>Service Outsourcing</Th>
                     <Th>
                       {selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}
                     </Th>
@@ -186,7 +184,9 @@ const Service_Decision = () => {
                 </Thead>
                 <Tbody>
                   <Tr>
-                    <Td>Service Outsourcing</Td>
+                    <Td className="p-3 font-medium text-gray-900">
+                      Service Outsourcing
+                    </Td>
                     {regions.map((region) => (
                       <Td key={region}>
                         <Select
@@ -196,8 +196,8 @@ const Service_Decision = () => {
                           border="1px solid black"
                           onChange={(e) => handleChange(region, e.target.value)}
                           value={serviceValue[region]}
+                          className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                         >
-                       
                           <option value="1">1</option>
                           <option value="2">2</option>
                           <option value="3">3</option>
@@ -209,19 +209,24 @@ const Service_Decision = () => {
                 </Tbody>
               </Table>
             </Box>
+               {/* Submit Button */}
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={submitService}
+              className={`${selectedQuarter === currentQuarter
+                  ? "bg-red-500 hover:bg-black-700 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
+              disabled={selectedQuarter !== currentQuarter}
+            >
+              Submit Distribution
+            </button>
           </div>
-          <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
-            <InfoImg />
-            <div className="py-10">
-              <ServiceDataChart
-                submitService={submitService}
-                serviceDataPreview={serviceValue}
-              />
-            </div>
           </div>
         </div>
       </div>
     </div>
+  
   );
 };
 

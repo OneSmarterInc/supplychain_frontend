@@ -39,14 +39,14 @@ const Demand_meta_ch1 = ({ setMetaCh1ValuetoParent }) => {
 
   return (
     <Box>
-      <Text className="p-5 py-3 pb-0 text-xl">
-      <strong>{selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}- {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel1}  </strong>
+      <Text fontSize="xl" fontWeight="bold" p="5" pb="0">
+        {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware} -{" "}
+        {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel1}
       </Text>
-      <br />
-      <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>
-        <Thead>
-        <Tr>
-        <Th fontWeight="bold">
+      <Table variant="simple" bg="white" shadow="sm" rounded="md" mt="4">
+        <Thead bg="gray.100">
+          <Tr>
+            <Th fontWeight="bold">
               {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}
             </Th>
             <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}</Th>
@@ -57,34 +57,36 @@ const Demand_meta_ch1 = ({ setMetaCh1ValuetoParent }) => {
         <Tbody>
           {Object.keys(metaCh1Value).map((channel) => (
             <Tr key={channel}>
-              <Td>{channel}</Td>
+              <Td fontWeight="medium">{channel}</Td>
               {regions.map((region) => (
                 <Td key={region}>
                   {channel === "Active" ? (
                     <Select
                       placeholder="Select"
-                      fontSize={15}
-                      width="100%"
-                      border="1px solid black"
+                      fontSize="sm"
                       value={metaCh1Value[channel][region]}
                       onChange={(e) =>
                         handleInputChange(channel, region, e.target.value)
                       }
+                      borderColor="gray.300"
+                      rounded="md"
+                      focusBorderColor="blue.500"
                     >
-                         <option value="0">No</option>
-                         <option value="1">Yes</option>
+                      <option value="0">No</option>
+                      <option value="1">Yes</option>
                     </Select>
                   ) : (
                     <Input
                       type="number"
                       placeholder={`Enter ${channel}`}
                       value={metaCh1Value[channel][region] || ""}
-                      fontSize={15}
-                      width="100%"
-                      border="1px solid black"
+                      fontSize="sm"
                       onChange={(e) =>
                         handleInputChange(channel, region, e.target.value)
                       }
+                      borderColor="gray.300"
+                      rounded="md"
+                      focusBorderColor="blue.500"
                     />
                   )}
                 </Td>

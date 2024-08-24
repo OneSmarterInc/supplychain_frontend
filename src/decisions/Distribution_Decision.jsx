@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   HStack,
   Select,
@@ -13,32 +13,31 @@ import {
   Button,
   useToast,
 } from "@chakra-ui/react";
-import NavBar from "../Components/NavBar";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
-import DistributionDataChart from "../DataChartsOfDecisions/Distribution/DistributionDataChart";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import InfoButton from "../Components/InfoButton";
 
 const Distribution_Decision = () => {
   const { api } = useContext(MyContext);
-
   const user = JSON.parse(localStorage.getItem("user"));
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
-  const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData"));
+  const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const firm_data = Object.keys(selectedSimData[0]?.firm_data)[0];
+  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
   let firm_key_new = "";
-  if (selectedSim[0]?.firm_data.length) {
-    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
-      return item.emails.includes(user.email);
-    });
+
+  if (selectedSimData[0]?.firm_data.length) {
+    let firm_obj = selectedSimData[0]?.firm_data.filter((item) =>
+      item.emails.includes(user.email)
+    );
     if (firm_obj.length) {
-      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+      firm_key_new = firm_obj[0].firmName;
     }
   }
-  console.log("Firm Key demand Live Sim: -------", firm_key_new);
-  const [DistributionData, setDistributionData] = useState();
 
+  const [DistributionData, setDistributionData] = useState();
   const [values, setValues] = useState({
     distribution_center: {},
     rfid: {},
@@ -47,7 +46,7 @@ const Distribution_Decision = () => {
     fgi_surface_shipping: {},
     sac_surface_shipping: {},
   });
-  console.log("Distribution Values:---", values);
+
   useEffect(() => {
     getDistribution();
   }, []);
@@ -70,10 +69,10 @@ const Distribution_Decision = () => {
       const response = await axios.get(`${api}/previous/`, {
         params: {
           user_id: user.userid,
-          sim_id: selectedSim[0].simulation_id,
-          admin_id: selectedSim[0].admin_id,
+          sim_id: selectedSimData[0].simulation_id,
+          admin_id: selectedSimData[0].admin_id,
           current_decision: "Distribution",
-          current_quarter: selectedSim[0].current_quarter,
+          current_quarter: selectedSimData[0].current_quarter,
           firm_key: firm_key_new,
         },
       });
@@ -86,12 +85,12 @@ const Distribution_Decision = () => {
   };
 
   const [availableCarriers, setAvailableCarriers] = useState([
-    selectedSim[0]?.renamedMappedData?.distributerMapp["I"],
-    selectedSim[0]?.renamedMappedData?.distributerMapp["J"],
-    selectedSim[0]?.renamedMappedData?.distributerMapp["K"],
-    selectedSim[0]?.renamedMappedData?.distributerMapp["L"],
-    selectedSim[0]?.renamedMappedData?.distributerMapp["M"],
-    selectedSim[0]?.renamedMappedData?.distributerMapp["N"],
+    selectedSimData[0]?.renamedMappedData?.distributerMapp["I"],
+    selectedSimData[0]?.renamedMappedData?.distributerMapp["J"],
+    selectedSimData[0]?.renamedMappedData?.distributerMapp["K"],
+    selectedSimData[0]?.renamedMappedData?.distributerMapp["L"],
+    selectedSimData[0]?.renamedMappedData?.distributerMapp["M"],
+    selectedSimData[0]?.renamedMappedData?.distributerMapp["N"],
   ]);
 
   const handleChange = (channel, region, newValue) => {
@@ -133,23 +132,23 @@ const Distribution_Decision = () => {
 
   const regions = ["region1", "region2", "region3"];
   const options = {
-    distribution_centerOpt: [0, 1,2],
+    distribution_centerOpt: [0, 1, 2],
     rfidOpt: [0, 1, 2],
     emergency_carrierOpt: [
-      selectedSim[0]?.renamedMappedData?.distributerMapp["I"],
-      selectedSim[0]?.renamedMappedData?.distributerMapp["J"],
-      selectedSim[0]?.renamedMappedData?.distributerMapp["K"],
-      selectedSim[0]?.renamedMappedData?.distributerMapp["L"],
-      selectedSim[0]?.renamedMappedData?.distributerMapp["M"],
-      selectedSim[0]?.renamedMappedData?.distributerMapp["N"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["I"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["J"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["K"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["L"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["M"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["N"],
     ],
     cross_dockingOpt: [
-      selectedSim[0]?.renamedMappedData?.distributerMapp["I"],
-      selectedSim[0]?.renamedMappedData?.distributerMapp["J"],
-      selectedSim[0]?.renamedMappedData?.distributerMapp["K"],
-      selectedSim[0]?.renamedMappedData?.distributerMapp["L"],
-      selectedSim[0]?.renamedMappedData?.distributerMapp["M"],
-      selectedSim[0]?.renamedMappedData?.distributerMapp["N"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["I"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["J"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["K"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["L"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["M"],
+      selectedSimData[0]?.renamedMappedData?.distributerMapp["N"],
     ],
     fgi_surface_shippingOpt: [0, 1],
     sac_surface_shippingOpt: [0, 1, 2],
@@ -161,11 +160,11 @@ const Distribution_Decision = () => {
   const submitDistribution = async () => {
     try {
       const response = await axios.post(`${api}/decision/distribution/`, {
-        simulation_id: selectedSim[0].simulation_id,
-        admin_id: selectedSim[0].admin_id,
+        simulation_id: selectedSimData[0].simulation_id,
+        admin_id: selectedSimData[0].admin_id,
         user_id: user.userid,
         firm_key: firm_key_new,
-        quarter: selectedSim[0].current_quarter,
+        quarter: selectedSimData[0].current_quarter,
         distribution_center: values.distribution_center,
         rfid: values.rfid,
         emergency_carrier: values.emergency_carrier,
@@ -177,7 +176,7 @@ const Distribution_Decision = () => {
       addUserLogger();
       getDistribution();
       toast({
-        title: "Distribution Submitted Successful",
+        title: "Distribution Submitted Successfully",
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -194,14 +193,14 @@ const Distribution_Decision = () => {
       const response = await axios.post(`${api}/adduserlogs/`, {
         email: user.email,
         user_id: user.userid,
-        simulation_id: selectedSim[0].simulation_id,
-        admin_id: selectedSim[0].admin_id,
+        simulation_id: selectedSimData[0].simulation_id,
+        admin_id: selectedSimData[0].admin_id,
         decision: "Distribution",
         action: "created",
         ip_address: "123.345.1",
         username: user.username,
         firm_key: firm_key_new,
-        current_quarter: selectedSim[0].current_quarter,
+        current_quarter: selectedSimData[0].current_quarter,
       });
       const data = response.data;
       console.log("addUserLoggerData", data);
@@ -213,63 +212,67 @@ const Distribution_Decision = () => {
   return (
     <div>
       <div style={{ fontFamily: "ABeeZee" }}>
-        <div className="flex justify-between">
-          <h1
-            style={{ fontFamily: "ABeeZee" }}
-            className="text-2xl text-start pl-6 py-2 "
-          >
-            Distribution Decision
-          </h1>
-
-          <div className="flex">
-            <h1 className="text-xl text-start px-3 py-2 text-blue-500">
-              {selectedSim[0].name}
-            </h1>
-            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>
-            <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
-              {user.username}
-            </h1>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 grid-flow-col gap-3  m-1">
-          <div className="row-span-2 m-3 rounded-2xl bg-white p-2  flex flex-col justify-start">
+        <div className="sm:grid grid-cols-1 gap-3 m-1">
+          <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
+            <InfoImg decision={"Distribution"} />
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center p-2">
+                <Text>Load data Quarterly</Text>
+                <div className="pl-4 flex space-x-4">
+                  {Array.from(
+                    { length: selectedSimData[0]?.current_quarter || 0 },
+                    (_, i) => (
+                      <div
+                        key={i + 1}
+                        onClick={() => setSelectedQuarter(i + 1)}
+                        className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
+                          selectedQuarter === i + 1
+                            ? "bg-red-500 border-red-500 text-white"
+                            : ""
+                        }`}
+                      >
+                        {i + 1}
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+              <InfoButton />
+            </div>
             <Box>
-              <Text className="p-5 py-3 pb-0 text-xl">
-                <strong>Distribution</strong>
-              </Text>
-              <br />
-              <Table
-                variant="simple"
-                className="bg-slate-300 mx-3"
-                width={"650px"}
-              >
-                <Thead>
+              <Table className="min-w-full bg-white rounded-md shadow-sm">
+                <Thead className="bg-gray-100">
                   <Tr>
                     <Th> </Th>
                     <Th>
-                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}
+                      {selectedSimData[0]?.renamedMappedData?.RegionMapp?.region1}
                     </Th>
                     <Th>
-                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}
+                      {selectedSimData[0]?.renamedMappedData?.RegionMapp?.region2}
                     </Th>
                     <Th>
-                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region3}
+                      {selectedSimData[0]?.renamedMappedData?.RegionMapp?.region3}
                     </Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {Object.keys(values).map((channel, index) =>
                     channel !== "cross_docking" ? (
-                      <Tr key={channel}>
-                        <Td>
-                          <strong>{channel}</strong>
+                      <Tr key={channel} className="border-t">
+                        <Td className="p-3 font-medium text-gray-900">
+                          {channel}
                         </Td>
                         {regions.map((region) => (
                           <Td key={region}>
                             <Select
                               disabled={
-                                (region === "region2" || region==="region3") ? false:
-                                (region === "region1" && (channel === "rfid" || channel === "sac_surface_shipping")) ? false  :true 
+                                region === "region2" || region === "region3"
+                                  ? false
+                                  : region === "region1" &&
+                                    (channel === "rfid" ||
+                                      channel === "sac_surface_shipping")
+                                  ? false
+                                  : true
                               }
                               placeholder="Select"
                               value={values[channel][region.toLowerCase()]}
@@ -280,12 +283,7 @@ const Distribution_Decision = () => {
                                   e.target.value
                                 )
                               }
-                              border={`1px solid ${
-                                !values[channel][region.toLowerCase()]
-                                  ? "red"
-                                  : "green"
-                              }`}
-                              className={`border placeholder:text-red-400`}
+                              className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                               fontSize={15}
                               width="100px"
                             >
@@ -313,8 +311,9 @@ const Distribution_Decision = () => {
                                 <Select
                                   placeholder="Select"
                                   disabled={
-                                    (region === "region2" || region==="region3") ? false:
-                                   true 
+                                    region === "region2" || region === "region3"
+                                      ? false
+                                      : true
                                   }
                                   value={row[region]}
                                   onChange={(e) =>
@@ -324,10 +323,7 @@ const Distribution_Decision = () => {
                                       e.target.value
                                     )
                                   }
-                                  border={`1px solid ${
-                                    !row[region] ? "red" : "green"
-                                  }`}
-                                  className={`border placeholder:text-red-400`}
+                                  className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                                   fontSize={15}
                                   width="100px"
                                 >
@@ -350,6 +346,7 @@ const Distribution_Decision = () => {
                                   addCrossDockingCarrier(e.target.value)
                                 }
                                 width="150px"
+                                className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                               >
                                 {availableCarriers.map((carrier) => (
                                   <option key={carrier} value={carrier}>
@@ -366,16 +363,20 @@ const Distribution_Decision = () => {
                 </Tbody>
               </Table>
             </Box>
+             {/* Submit Button */}
+          <div className="flex justify-end mt-4">
+            
+            <button
+              onClick={submitDistribution}
+              className={`${selectedQuarter === currentQuarter
+                  ? "bg-red-500 hover:bg-black-700 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
+              disabled={selectedQuarter !== currentQuarter}
+            >
+              Submit Distribution
+            </button>
           </div>
-          <div className="rounded-2xl m-3  overflow-hidden    bg-white h-full p-2">
-            <InfoImg />
-            <div className="py-10">
-              {" "}
-              <DistributionDataChart
-                submitDistribution={submitDistribution}
-                DistributionDataPreview={values}
-              />
-            </div>
           </div>
         </div>
       </div>

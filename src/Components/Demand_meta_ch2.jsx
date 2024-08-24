@@ -14,11 +14,9 @@ import {
 
 const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
   const demandData = JSON.parse(localStorage.getItem("demandData"));
-  console.log("DEMANDDATA-FROM-METACH2:--", demandData);
   const regions = ["region1", "region2", "region3"];
 
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
-  // Correctly initialize metaCh2Value with nested objects
   const [metaCh2Value, setMetaCh2Value] = useState({
     Active: { ...demandData?.metaware_channel_two_active },
     Price: { ...demandData?.metaware_channel_two_price },
@@ -39,19 +37,14 @@ const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
     setMetaCh2ValuetoParent(metaCh2Value);
   }, [metaCh2Value, setMetaCh2ValuetoParent]);
 
-  console.log("Meta ch2:", metaCh2Value);
-
   return (
     <Box>
-      <Text className="p-5 py-3 pb-0 text-xl">
-        <strong>
-          {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}-{" "}
-          {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel2}{" "}
-        </strong>
+      <Text fontSize="xl" fontWeight="bold" p="5" pb="0">
+        {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware} -{" "}
+        {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel2}
       </Text>
-      <br />
-      <Table variant="simple" className="bg-slate-300 mx-3" width={"650px"}>
-        <Thead>
+      <Table variant="simple" bg="white" shadow="sm" rounded="md" mt="4">
+        <Thead bg="gray.100">
           <Tr>
             <Th fontWeight="bold">
               {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}
@@ -64,19 +57,20 @@ const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
         <Tbody>
           {Object.keys(metaCh2Value).map((channel) => (
             <Tr key={channel}>
-              <Td>{channel}</Td>
-              {regions?.map((region) => (
+              <Td fontWeight="medium">{channel}</Td>
+              {regions.map((region) => (
                 <Td key={region}>
                   {channel === "Active" ? (
                     <Select
                       placeholder="Select"
-                      fontSize={15}
-                      width="100%"
-                      border="1px solid black"
+                      fontSize="sm"
                       value={metaCh2Value[channel][region]}
                       onChange={(e) =>
                         handleInputChange(channel, region, e.target.value)
                       }
+                      borderColor="gray.300"
+                      rounded="md"
+                      focusBorderColor="blue.500"
                     >
                       <option value="0">No</option>
                       <option value="1">Yes</option>
@@ -86,12 +80,13 @@ const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
                       type="number"
                       placeholder={`Enter ${channel}`}
                       value={metaCh2Value[channel][region] || ""}
-                      fontSize={15}
-                      width="100%"
-                      border="1px solid black"
+                      fontSize="sm"
                       onChange={(e) =>
                         handleInputChange(channel, region, e.target.value)
                       }
+                      borderColor="gray.300"
+                      rounded="md"
+                      focusBorderColor="blue.500"
                     />
                   )}
                 </Td>

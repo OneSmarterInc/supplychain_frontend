@@ -6,11 +6,11 @@ import Demand_meta_ch2 from "../Components/Demand_meta_ch2";
 import NavBar from "../Components/NavBar";
 // import DataChart from "../Components/DataChart";
 import InfoImg from "../Components/InfoImg";
-import DemandDataChart from "../DataChartsOfDecisions/Demand/DemandDataChart";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@chakra-ui/react";
+import { Text, useToast } from "@chakra-ui/react";
+import InfoButton from "../Components/InfoButton";
 
 const Demand_generation = () => {
   const [metaCh1Value, setMetaCh1Value] = useState({});
@@ -25,6 +25,11 @@ const Demand_generation = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
+
+  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
+  const currentQuarter = selectedSimData[0]?.current_quarter || 1; // Assuming the current quarter is provided in the sim data
+  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter); // Set the default to the current quarter
+
   let firm_key_new = "";
   if (selectedSim[0]?.firm_data.length) {
     let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
@@ -121,28 +126,33 @@ const Demand_generation = () => {
   };
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
-      <div style={{ fontFamily: "ABeeZee" }} className="flex justify-between">
-        <h1
-          style={{ fontFamily: "ABeeZee" }}
-          className="text-2xl text-start pl-6 py-2 "
-        >
-          Demand Generation Decision
-        </h1>
-
-        <div className="flex">
-          {" "}
-          <h1 className="text-xl text-start px-3 py-2 text-blue-500">
-            {selectedSim[0].name}
-          </h1>{" "}
-          <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
-          <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
-            {user.username}
-          </h1>
-        </div>
-      </div>
-      <div className="grid grid-cols-2 grid-flow-col gap-2   ">
-        <div className="row-span-2 m-3 rounded-2xl  h-screen bg-white p-2  flex flex-col justify-center overflow-scroll  scroll-pt-96">
-          <div className="mt-[680px]"></div>
+     <div className="sm:grid grid-cols-1 gap-3 m-1">
+          <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
+            <InfoImg decision={"Demand"} />
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center p-2">
+                <Text>Load data Quarterly</Text>
+                <div className="pl-4 flex space-x-4">
+                  {Array.from(
+                    { length: selectedSim[0]?.current_quarter || 0 },
+                    (_, i) => (
+                      <div
+                        key={i + 1}
+                        onClick={() => setSelectedQuarter(i + 1)}
+                        className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
+                          selectedQuarter === i + 1
+                            ? "bg-red-500 border-red-500 text-white"
+                            : ""
+                        }`}
+                      >
+                        {i + 1}
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+              <InfoButton />
+            </div>
           <Demand_hype_ch1
             demandData={demandData}
             setHypeCh1ValuetoParent={setHypeCh1Value}
@@ -159,19 +169,19 @@ const Demand_generation = () => {
             demandData={demandData}
             setMetaCh2ValuetoParent={setMetaCh2Value}
           />
-        </div>
-        <div className=" rounded-2xl m-3     bg-white h-screen p-2">
-          <div className=" bg-cover overflow-hidden bg-no-repeat">
-            <InfoImg />
-          </div>
-          <div className="py-10">
-            <DemandDataChart
-              metaCh1Value={metaCh1Value}
-              metaCh2Value={metaCh2Value}
-              hypeCh1Value={hypeCh1Value}
-              hypeCh2Value={hypeCh2Value}
-              submitDemand={submitDemand}
-            />
+
+               {/* Submit Button */}
+               <div className="flex justify-end mt-4">
+            <button
+              onClick={submitDemand}
+              className={`${selectedQuarter === currentQuarter
+                  ? "bg-red-500 hover:bg-black-700 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
+              disabled={selectedQuarter !== currentQuarter}
+            >
+              Submit Distribution
+            </button>
           </div>
         </div>
       </div>

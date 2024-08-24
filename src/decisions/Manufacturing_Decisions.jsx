@@ -172,78 +172,99 @@ const Manufacturing_Decisions = () => {
   };
 
   return (
-    <Box className="overflow-x-auto p-4">
-      <Box className="m-3 rounded-2xl bg-white p-6 shadow-md">
-        <InfoImg decision={"Forecast"} />
-        <Flex justify="space-between" align="center" mb="4">
-          <Text className="text-lg font-semibold">Load data Quarterly</Text>
-          <Flex space-x-4>
-            {Array.from({ length: selectedSimData[0]?.current_quarter || 0 }, (_, i) => (
-              <Box
-                key={i + 1}
-                onClick={() => setSelectedQuarter(i + 1)}
-                className={`w-8 h-8 rounded-full border cursor-pointer flex items-center justify-center text-sm font-bold ${
-                  selectedQuarter === i + 1
-                    ? "bg-red-500 border-red-500 text-white"
-                    : "bg-gray-100 border-gray-300 text-gray-700"
-                }`}
-              >
-                {i + 1}
-              </Box>
-            ))}
-          </Flex>
-          <InfoButton />
-        </Flex>
-        <Table className="min-w-full bg-white rounded-md shadow-sm">
-          <Thead className="bg-gray-100">
-            <Tr>
-              <Th className="text-left"></Th>
-              <Th className="text-left">Product Zero</Th>
-              <Th className="text-left">
-                {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
-              </Th>
-              <Th className="text-left">
-                {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}
-              </Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {Object.keys(values).map((channel) => (
-              <Tr key={channel} className="border-t">
-                <Td className="p-3 font-medium text-gray-900">{channel}</Td>
-                <Td className="p-3">
-                  <Input
-                    type="number"
-                    value={values[channel].productZero}
-                    placeholder="Enter"
-                    onChange={(e) => handleChange(channel, "productZero", e.target.value)}
-                    className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-                  />
-                </Td>
-                <Td className="p-3">
-                  <Input
-                    type="number"
-                    value={values[channel].hyperware}
-                    placeholder="Enter"
-                    onChange={(e) => handleChange(channel, "hyperware", e.target.value)}
-                    className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-                  />
-                </Td>
-                <Td className="p-3">
-                  <Input
-                    type="number"
-                    value={values[channel].metaware}
-                    placeholder="Enter"
-                    onChange={(e) => handleChange(channel, "metaware", e.target.value)}
-                    className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-                  />
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </Box>
-    </Box>
+    <div>
+      <div style={{ fontFamily: "ABeeZee" }} className=" ">
+        <div className="sm:grid grid-cols-1 gap-3 m-1 ">
+          <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
+            <InfoImg decision={"Forecast"} />
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center p-2">
+                <Text>Load data Quarterly</Text>
+                <div className="pl-4 flex space-x-4">
+                  {Array.from(
+                    { length: selectedSimData[0]?.current_quarter || 0 },
+                    (_, i) => (
+                      <div
+                        key={i + 1}
+                        onClick={() => setSelectedQuarter(i + 1)}
+                        className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${selectedQuarter === i + 1 ? "bg-red-500 border-red-500 text-white" : ""
+                          }`}
+                      >
+                        {i + 1}
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+              <InfoButton />
+            </div>
+            <Table className="w-30 bg-white rounded-md shadow-sm">
+              <Thead className="bg-gray-100">
+                <Tr>
+                  <Th className="text-left"></Th>
+                  <Th className="text-left">Product Zero</Th>
+                  <Th className="text-left">
+                    {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
+                  </Th>
+                  <Th className="text-left">
+                    {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {Object.keys(values).map((channel) => (
+                  <Tr key={channel} className="border-t">
+                    <Td className="p-3 font-medium text-gray-900">{channel}</Td>
+                    <Td className="p-3">
+                      <Input
+                        type="number"
+                        value={values[channel].productZero}
+                        placeholder="Enter"
+                        onChange={(e) => handleChange(channel, "productZero", e.target.value)}
+                        className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                      />
+                    </Td>
+                    <Td className="p-3">
+                      <Input
+                        type="number"
+                        value={values[channel].hyperware}
+                        placeholder="Enter"
+                        onChange={(e) => handleChange(channel, "hyperware", e.target.value)}
+                        className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                      />
+                    </Td>
+                    <Td className="p-3">
+                      <Input
+                        type="number"
+                        value={values[channel].metaware}
+                        placeholder="Enter"
+                        onChange={(e) => handleChange(channel, "metaware", e.target.value)}
+                        className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                      />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+             {/* Submit Button */}
+          <div className="flex justify-end mt-4">
+            
+            <button
+              onClick={submitManufacturing}
+              className={`${selectedQuarter === currentQuarter
+                  ? "bg-red-500 hover:bg-black-700 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
+              disabled={selectedQuarter !== currentQuarter}
+            >
+              Submit Forecast
+            </button>
+          </div>
+            {/* <div className="rounded-lg -2xl h-96  flex flex-col justify-start"></div> */}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
