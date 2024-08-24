@@ -246,12 +246,6 @@ const Sidebar = () => {
             Corporate P&L Statement
           </button>
           <button
-            onClick={() => handleReportChange("mpls")}
-            className="w-full text-left p-2"
-          >
-            Metaware P&L Statement
-          </button>
-          <button
             onClick={() => handleReportChange("bl")}
             className="w-full text-left p-2"
           >
