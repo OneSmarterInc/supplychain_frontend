@@ -76,7 +76,7 @@ const Signin = () => {
           const serializedValue = JSON.stringify(response.data);
           localStorage.setItem("user", serializedValue);
           if (response.data.isadmin) {
-            navigate("/dashboard");
+            navigate("/flexeesim/dashboard");
             setTimeout(() => {
               toast({
                 title: "Welcome Admin",
