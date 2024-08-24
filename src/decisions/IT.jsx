@@ -2,73 +2,74 @@ import React, { useContext, useEffect, useState } from "react";
 import InfoImg from "../Components/InfoImg";
 import IT_suppliers from "../Components/IT_suppliers";
 import IT_reports from "../Components/IT_reports";
-import { HStack, Select, useToast } from "@chakra-ui/react";
+import { HStack, Select, useToast, Text } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
 import DataChart from "../Components/DataChart";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import ITDataChart from "../DataChartsOfDecisions/ITDataChart";
 import { useNavigate } from "react-router-dom";
+import InfoButton from "../Components/InfoButton";
+
 const IT = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
+  const selectedSimData = JSON.parse(localStorage.getItem("selectedSim"));
   const [reportValues, setReportValues] = useState();
   const [suppliers, setSuppliers] = useState();
   const { api } = useContext(MyContext);
+  const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
+  const toast = useToast();
+  const navigate = useNavigate();
 
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
   let firm_key_new = "";
   if (selectedSim[0]?.firm_data.length) {
-    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
-
+    let firm_obj = selectedSim[0]?.firm_data.filter((item) => {
       return item.emails.includes(user.email);
     });
     if (firm_obj.length) {
-      firm_key_new = firm_obj[0].firmName; //note: only one user in one firm so using firm_obj[0]
+      firm_key_new = firm_obj[0].firmName; // Only one user in one firm, so using firm_obj[0]
     }
   }
   console.log("Firm Key demand Live Sim: -------", firm_key_new);
 
   const [ItData, setItData] = useState();
   console.log("ItData:--", ItData);
+
   useEffect(() => {
     getIt();
   }, []);
 
-  useEffect(() => {
-    if (ItData) {
-      // setItValue({
-      //   region1: ItData.It_region_one,
-      //   region2: ItData.It_region_two,
-      //   region3: ItData.It_region_three,
-      // });
-    }
-  }, [ItData]);
-
   const getIt = async () => {
     try {
-      const response = await axios.get(
-        `${api}/previous/`,
-        {
-          params: {
-            user_id: user.userid,
-            sim_id: selectedSim[0].simulation_id,
-            admin_id: selectedSim[0].admin_id,
-            current_decision: "It",
-            current_quarter: selectedSim[0].current_quarter,
-            firm_key: firm_key_new,
-          },
-        }
-      );
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSim[0].simulation_id,
+          admin_id: selectedSim[0].admin_id,
+          current_decision: "It",
+          current_quarter: selectedSim[0].current_quarter,
+          firm_key: firm_key_new,
+        },
+      });
       const data = response.data;
       setItData(data);
       localStorage.setItem("ItData", JSON.stringify(data));
     } catch (error) {
       console.error("Error making GET request:", error);
+      toast({
+        title: "Error fetching IT data",
+        description: error.message || "Something went wrong while fetching IT data.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
     }
   };
-  const toast = useToast();
-  const navigate = useNavigate()
+
   const submitIt = async () => {
     try {
       const response = await axios.post(`${api}/decision/it/`, {
@@ -84,26 +85,34 @@ const IT = () => {
         sync_e: suppliers.E,
         sync_f: suppliers.F,
         sync_g: suppliers.G,
-        ptc: reportValues.procurement,
-        pcr: reportValues.productCost,
-        rpdr: reportValues.replacementParts,
-        rpr: reportValues.retailPipeline,
-        tcr: reportValues.transportationCost,
-        tr: reportValues.transportation,
+        // ptc: reportValues.procurement,
+        // pcr: reportValues.productCost,
+        // rpdr: reportValues.replacementParts,
+        // rpr: reportValues.retailPipeline,
+        // tcr: reportValues.transportationCost,
+        // tr: reportValues.transportation,
       });
       console.log("POST request successful", response.data);
       getIt();
-      addUserLogger()
+      addUserLogger();
       toast({
-        title: "It Submitted successful",
+        title: "IT Submission successful",
         status: "success",
         duration: 9000,
         isClosable: true,
         position: "top",
       });
-      navigate("/transportation")
+      navigate("/Transport");
     } catch (error) {
-      console.error("Error making POST request: Manufacturing", error);
+      console.error("Error making POST request: IT", error);
+      toast({
+        title: "Error submitting IT decision",
+        description: error.message || "Something went wrong while submitting the IT decision.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
     }
   };
 
@@ -119,54 +128,58 @@ const IT = () => {
         ip_address: "123.345.1",
         username: user.username,
         firm_key: firm_key_new,
-        current_quarter:selectedSim[0].current_quarter,
-
+        current_quarter: selectedSim[0].current_quarter,
       });
       const data = response.data;
       console.log("addUserLoggerData", data);
     } catch (error) {
-      console.error("Error making GET request:", error);
+      console.error("Error making POST request for user logger:", error);
     }
   };
 
   return (
-    <div>
-    
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-semibold text-start pl-6 py-2 ">
-          Information Technology Decision
-        </h1>
-
-        <div style={{ fontFamily: "ABeeZee" }} className="flex">
-          {" "}
-          <h1 className="text-xl text-start px-3 py-2 text-blue-500">
-            {selectedSim[0].name}
-          </h1>{" "}
-          <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>{" "}
-          <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
-            {user.username}
-          </h1>
-        </div>
-      </div>
-      <div className="sm:grid grid-cols-2  gap-3 m-1">
-        <div className="m-3 rounded-xl  h-screen bg-white p-2  flex flex-col justify-start">
-          <IT_suppliers
-            ItData={ItData}
-            setSuppliersFromDecision={setSuppliers}
-          />
-          <IT_reports
-            ItData={ItData}
-            setReportValuesFromDecision={setReportValues}
-          />
-        </div>
-        <div className="rounded-2xl m-3  overflow-hidden    bg-white h-screen p-2">
-          <InfoImg />
-          <div className="py-10">
-            <ITDataChart
-              submitIt={submitIt}
-              reportValues={reportValues}
-              suppliers={suppliers}
-            />
+    <div style={{ fontFamily: "ABeeZee" }} className=" ">
+      <div className="sm:grid grid-cols-1 gap-3 m-1 ">
+        <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
+          <InfoImg decision={"IT"} />
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center p-2">
+              <Text>Load data Quarterly</Text>
+              <div className="pl-4 flex space-x-4">
+                {Array.from(
+                  { length: selectedSimData[0]?.current_quarter || 0 },
+                  (_, i) => (
+                    <div
+                      key={i + 1}
+                      onClick={() => setSelectedQuarter(i + 1)}
+                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
+                        selectedQuarter === i + 1
+                          ? "bg-red-500 border-red-500 text-white"
+                          : ""
+                      }`}
+                    >
+                      {i + 1}
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+            <InfoButton />
+          </div>
+          <IT_suppliers ItData={ItData} setSuppliersFromDecision={setSuppliers} />
+          {/* Submit Button */}
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={submitIt}
+              className={`${
+                selectedQuarter === currentQuarter
+                  ? "bg-red-500 hover:bg-black-700 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
+              disabled={selectedQuarter !== currentQuarter}
+            >
+              Submit IT
+            </button>
           </div>
         </div>
       </div>

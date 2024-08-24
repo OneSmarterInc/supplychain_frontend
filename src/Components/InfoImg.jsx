@@ -49,7 +49,7 @@ const InfoImg = ({ decision }) => {
         return procurement;
       case "/Demand":
         return demand;
-      case "/It":
+      case "/IT":
         return it;
       case "/Service":
         return service;

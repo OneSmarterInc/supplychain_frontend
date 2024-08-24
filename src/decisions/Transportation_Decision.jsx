@@ -331,20 +331,7 @@ const Transportation_Decision = () => {
   return (
     <div>
       <div style={{ fontFamily: "ABeeZee" }}>
-        <div className="flex justify-between">
-          <h1 className="text-2xl text-start pl-6 py-2 ">
-            Transportation Decision
-          </h1>
-          <div className="flex">
-            <h1 className="text-xl text-start px-3 py-2 text-blue-500">
-              {selectedSim[0].name}
-            </h1>
-            <h1 className="text-xl text-start px-1 py-2 text-blue-500">|</h1>
-            <h1 className="text-xl text-start px-3 py-2 text-gray-600 ">
-              {user.username}
-            </h1>
-          </div>
-        </div>
+        
         <div className="flex  gap-1 m-1">
           <div className="m-2 min-w-[700px]  rounded-2xl  bg-white p-2 flex flex-col space-y-4 justify-start">
             {TransportationData?.flag_dc2 &&
@@ -361,15 +348,6 @@ const Transportation_Decision = () => {
                 </h1>
               </div>
             )}
-          </div>
-          <div className="rounded-2xl m-2 overflow-hidden bg-white  p-2">
-            <InfoImg />
-            <div className="py-10">
-              <TransportationDataChart
-                submitTransportation={submitTransportation}
-                Dc2Data={Dc2Data}
-              />
-            </div>
           </div>
         </div>
       </div>
