@@ -85,7 +85,7 @@ const Footer = () => {
         </div>
         <div className="text-center mt-8">
           <p className="text-xs">
-            &copy; Flex Simulation 2024 all rights reserved.
+            &copy; The Flexee Simulation System 2024 all rights reserved.
           </p>
           <div className="flex justify-center mt-4">
             <a href="/" className="text-gray-400 hover:text-gray-200 mx-2">

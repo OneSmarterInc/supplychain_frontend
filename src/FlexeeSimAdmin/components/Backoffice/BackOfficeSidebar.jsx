@@ -1,8 +1,13 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import React from "react";
 import logout_img from "../../Assets/logout.png";
 const BackOfficeSidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const handleLogOut = () => {
+    localStorage.clear();
+    navigate("/");
+  };
   return (
     <div className="w-60 fixed top-0 left-0">
       <div className="w-full h-12 text-white">
@@ -30,7 +35,9 @@ const BackOfficeSidebar = () => {
             <Link
               to="/flexeesim/backoffice/user"
               className={`hover:text-gray-500 ${
-                location.pathname === "/flexeesim/" ? "text-red-500" : "text-gray-100"
+                location.pathname === "/flexeesim/"
+                  ? "text-red-500"
+                  : "text-gray-100"
               }`}
             >
               Calculate
@@ -55,7 +62,7 @@ const BackOfficeSidebar = () => {
               REPORTS
             </h2>
             <ul>
-              <li className="mb-1">
+              {/* <li className="mb-1">
                 <Link
                   to="/flexeesim/backoffice/reports"
                   className={`hover:text-gray-500 ${
@@ -78,12 +85,14 @@ const BackOfficeSidebar = () => {
                 >
                   Onsite Reporting
                 </Link>
-              </li>
+              </li> */}
               <li className="mb-1">
                 <Link
-                  to="/flexeesim/"
+                  to="/flexeesim/backoffice/reports"
                   className={`hover:text-gray-500 ${
-                    location.pathname === "/flexeesim/" ? "text-red-500" : "text-gray-100"
+                    location.pathname === "/flexeesim/"
+                      ? "text-red-500"
+                      : "text-gray-100"
                   }`}
                 >
                   KPI Reports
@@ -92,7 +101,7 @@ const BackOfficeSidebar = () => {
             </ul>
           </li>
           <hr className=" opacity-40 my-4" />
-          <li className="mb-4">
+          {/* <li className="mb-4">
             <h2 className="text-lg font-semibold mb-2 mt-2 text-blue-500">
               QUESTIONNAIRE
             </h2>
@@ -101,7 +110,9 @@ const BackOfficeSidebar = () => {
                 <Link
                   to="/flexeesim/"
                   className={`hover:text-gray-500 ${
-                    location.pathname === "/flexeesim/" ? "text-red-500" : "text-gray-100"
+                    location.pathname === "/flexeesim/"
+                      ? "text-red-500"
+                      : "text-gray-100"
                   }`}
                 >
                   Teamrole Answers
@@ -111,15 +122,17 @@ const BackOfficeSidebar = () => {
                 <Link
                   to="/flexeesim/"
                   className={`hover:text-gray-500 ${
-                    location.pathname === "/flexeesim/" ? "text-red-500" : "text-gray-100"
+                    location.pathname === "/flexeesim/"
+                      ? "text-red-500"
+                      : "text-gray-100"
                   }`}
                 >
                   Metaprogram Answers
                 </Link>
               </li>
             </ul>
-          </li>
-          <hr className=" opacity-40 my-4" />
+          </li> */}
+          {/* <hr className=" opacity-40 my-4" /> */}
 
           <li className="mb-4">
             <h2 className="text-lg font-semibold mb-2 mt-2 text-blue-500">
@@ -142,7 +155,9 @@ const BackOfficeSidebar = () => {
                 <Link
                   to="/flexeesim/"
                   className={`hover:text-gray-500 ${
-                    location.pathname === "/flexeesim/" ? "text-red-500" : "text-gray-100"
+                    location.pathname === "/flexeesim/"
+                      ? "text-red-500"
+                      : "text-gray-100"
                   }`}
                 >
                   Manage Pool
@@ -152,7 +167,10 @@ const BackOfficeSidebar = () => {
           </li>
         </ul>
         <div className="fixed bottom-0 left-0">
-          <div className="text-xl h-12 flex items-center justify-center w-60 border border-b-red-500 border-b-4  bg-gray-200 text-red-500  text-center">
+          <div
+            onClick={handleLogOut}
+            className="text-xl h-12 flex items-center justify-center w-60 border border-b-red-500 border-b-4  bg-gray-200 text-red-500  text-center cursor-pointer hover:bg-gray-200"
+          >
             <div className="ml-4  cursor-pointer border-b-red-300  mx-3  flex items-center justify-center">
               {/* <i className="fa-solid fa-sign-out-alt text-red-600 text-4xl"></i> */}
               <img src={logout_img} className="h-8 w-8" alt="" />
