@@ -89,7 +89,7 @@ const DashboardNavbar = () => {
             <div className=" flex items-center">
               <i className="fa-solid fa-home text-red-600 px-2"></i>
               <span
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate("/flexeesim/dashboard")}
                 className="ml-2 cursor-pointer"
               >
                 Dashboard

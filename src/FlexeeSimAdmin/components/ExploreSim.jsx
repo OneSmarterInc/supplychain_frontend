@@ -1,23 +1,25 @@
 import React from "react";
 import BackOfficeImg from "../Assets/BackOfficeBgImg.png"; // Update with your actual image path
 import backgroundImage2 from "../Assets/ExploreSim2.png";
+import { useNavigate } from "react-router-dom";
 
 const ExploreSim = () => {
+  const navigate = useNavigate()
   return (
     <div className="relative min-h-screen bg-gray-100">
       <div className="relative h-full">
         {/* Top Section */}
         <div className="text-center p-8 bg-white">
-          <h1 className="text-[40px] font-semibold">BACKOFFICE</h1>
-          <h2 className="text-[32px] font-normal mt-0">
+          <h1 className="text-[40px] font-semibold">FLEXEE CONTROL CENTER</h1>
+          {/* <h2 className="text-[32px] font-normal mt-0">
             THE FRESH CONNECTION BACKOFFICE
-          </h2>
+          </h2> */}
           <p className="text-gray-700 text-[24px] mt-2">
             Here you can manage the simulation and execute calculations.
             <br />
             You are also able to monitor the performance of your teams.
           </p>
-          <button className="mt-6 px-8 py-3 border-2 border-[#AC090F] bg-[#ED1C24] text-white rounded-full">
+          <button onClick={()=> navigate("/flexeesim/backoffice/user")} className="mt-6 px-8 py-3 border-2 border-[#AC090F] bg-[#ED1C24] text-white rounded-full">
             CONNECT NOW
           </button>
         </div>
