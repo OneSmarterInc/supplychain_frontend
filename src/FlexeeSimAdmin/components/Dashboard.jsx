@@ -44,7 +44,7 @@ const Dashboard = () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
     try {
-      const response = await axios.post(`${api}/simulation/subscribe`, {
+      const response = await axios.post(`${api}/subscribe`, {
         user_id: user.userid,
         passcode: code,
       });
