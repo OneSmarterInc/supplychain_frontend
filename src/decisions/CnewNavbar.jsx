@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileDropdown from "../Components/Profile";
 
-const BackOfficeNavbar = ({ isSideBarOpen, setIsSideBarOpen }) => {
+const CNavbar = ({ isSideBarOpen, setIsSideBarOpen }) => {
   const navigate = useNavigate()
 
   const redirect = () => {
@@ -12,10 +12,10 @@ const BackOfficeNavbar = ({ isSideBarOpen, setIsSideBarOpen }) => {
   return (
     <div className="">
       <div className="w-full  top-0 left-0  ">
-        <div className="flex justify-between items-center  bg-black text-white p-2 h-12">
+        <div className="flex justify-between items-center  bg-black text-white p-1 h-10">
           <div className="flex justify-between w-full">
-            <div className="px-3 cursor-pointer">
-            <h1 className="text-2xl font-bold pl-7 text-white cursor-pointer" onClick={redirect}>FLEXEE</h1>
+            <div className="px-2 cursor-pointer">
+            <h1 className="text-2xl font-bold  text-white cursor-pointer" onClick={redirect}>FLEXEE</h1>
             </div>
             <div className="flex items-center px-3 " >
               <div onClick={redirect} title="Home" >
@@ -39,8 +39,8 @@ const BackOfficeNavbar = ({ isSideBarOpen, setIsSideBarOpen }) => {
               </svg>
               </div>
               {/* <i className="fa-solid fa-bell mx-2 px-3 text-2xl"></i> */}
-              <p className="px-3 text-2xl opacity-50">|</p> <ProfileDropdown />
-              
+              <p className="px-3 text-2xl opacity-50">|</p>
+              <ProfileDropdown />
             </div>
           </div>
         </div>
@@ -49,4 +49,4 @@ const BackOfficeNavbar = ({ isSideBarOpen, setIsSideBarOpen }) => {
   );
 };
 
-export default BackOfficeNavbar;
+export default CNavbar;

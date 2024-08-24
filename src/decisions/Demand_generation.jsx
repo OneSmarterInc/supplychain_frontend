@@ -93,13 +93,13 @@ const Demand_generation = () => {
       addUserLogger();
       getDemand();
       toast({
-        title: "Demand Generation Submit Successful",
+        title: "Demand Decision Submit Successful !.",
         status: "success",
         duration: 9000,
         isClosable: true,
         position: "top",
       });
-      navigate("/");
+      navigate("/usersidelive");
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
     }
@@ -130,7 +130,7 @@ const Demand_generation = () => {
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
             <InfoImg decision={"Demand"} />
             <div className="flex items-center justify-between w-full">
-              <div className="flex items-center p-2">
+            <div className="flex items-center pl-5 pt-2 pb-2">
                 <Text>Load data Quarterly</Text>
                 <div className="pl-4 flex space-x-4">
                   {Array.from(
@@ -180,7 +180,7 @@ const Demand_generation = () => {
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
               disabled={selectedQuarter !== currentQuarter}
             >
-              Submit Distribution
+              Submit Demand
             </button>
           </div>
         </div>

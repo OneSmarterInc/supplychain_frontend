@@ -1,13 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import InfoImg from "../Components/InfoImg";
 import IT_suppliers from "../Components/IT_suppliers";
-import IT_reports from "../Components/IT_reports";
 import { HStack, Select, useToast, Text } from "@chakra-ui/react";
-import NavBar from "../Components/NavBar";
-import DataChart from "../Components/DataChart";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
-import ITDataChart from "../DataChartsOfDecisions/ITDataChart";
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
 
@@ -143,7 +139,7 @@ const IT = () => {
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
           <InfoImg decision={"IT"} />
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center p-2">
+          <div className="flex items-center pl-5 pt-2 pb-2">
               <Text>Load data Quarterly</Text>
               <div className="pl-4 flex space-x-4">
                 {Array.from(

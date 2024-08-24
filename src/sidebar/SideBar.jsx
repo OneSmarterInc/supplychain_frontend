@@ -60,12 +60,29 @@ const Sidebar = () => {
     if (option.redirect) {
       navigate(option.redirect);
       clearReportState();
+      // Close the sidebar only when navigating to a new route
+      setIsSidebarOpen(false);
     } else {
+      // Open the sidebar and set the active parent when there are children
+      setIsSidebarOpen(true);
       setActiveParent(option.name);
       setType(option.name);
       setActiveChild(null);
       setSelectedQuarter(null);
       clearReportState();
+    }
+  };
+  
+  const handleQuarterClick = (quarter) => {
+    setActiveChild(quarter.name);
+    
+    if (!quarter.name.includes("Quarter")) {
+      navigate(`/${quarter.name}`);
+      clearReportState();
+      setIsSidebarOpen(false); // Close the sidebar when navigating to a new route
+    } else {
+      setSelectedQuarter(quarter.name);
+      setIsSidebarOpen(true); // Keep the sidebar open if it's a quarter selection
     }
   };
 
@@ -80,16 +97,6 @@ const Sidebar = () => {
     }
   };
 
-  const handleQuarterClick = (quarter) => {
-    setActiveChild(quarter.name);
-
-    if (!quarter.name.includes("Quarter")) {
-      navigate(`/${quarter.name}`);
-      clearReportState();
-    } else {
-      setSelectedQuarter(quarter.name);
-    }
-  };
 
   const handleReportChange = async (reportType) => {
     if (type === "Reports") {
@@ -146,7 +153,7 @@ const Sidebar = () => {
   return (
     <div className="relative z-50 flex">
       {!isSidebarOpen && (
-        <div className="fixed left-0 mt-1 top-5 transform -translate-y-1/2 bg-black text-gray-300 p-2 rounded-r cursor-pointer">
+        <div className="absolute left-0 mt-0 top-1 transform -translate-y-11 bg-black text-gray-300 pl-3 rounded-r cursor-pointer">
           <i class="fa-solid fa-bars text-2xl text-red-500" onClick={toggleSidebar}></i>
         </div>
       )}

@@ -9,6 +9,7 @@ const UserLoggerApi = ({ simulation_id, firm_key, current_quarter }) => {
   const [selectedUser, setSelectedUser] = useState("");
   const [filteredLogger, setFilteredLogger] = useState([]);
   const { api } = useContext(MyContext);
+
   useEffect(() => {
     fetchUserLogger();
   }, []);
@@ -65,10 +66,16 @@ const UserLoggerApi = ({ simulation_id, firm_key, current_quarter }) => {
         <Box bg="white" overflowY={"scroll"} height={60} p={4} borderRadius="md" boxShadow="sm">
           {filteredLogger.map((logs) => {
             return (
-              <Box key={logs.email} mb={2} >
-                {logs.username && (
+              <Box key={logs.id} mb={2}>
+                {logs.username ? (
                   <h2 className="text-xl">
-                    <span className="text-green-300">{logs.username}</span>{" "}
+                    <span className="text-red-300">{logs.username}</span>{" "}
+                    submitted{" "}
+                    {logs.decision ? logs.decision : "Unknown decision"}
+                  </h2>
+                ) : (
+                  <h2 className="text-xl">
+                    <span className="text-red-300">{logs.email}</span>{" "}
                     submitted{" "}
                     {logs.decision ? logs.decision : "Unknown decision"}
                   </h2>

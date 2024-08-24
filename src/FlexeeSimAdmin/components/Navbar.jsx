@@ -1,10 +1,20 @@
 import React from "react";
 import logo from "../Assets/Vector.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  
   // Check if the user is logged in
-  const user = localStorage.getItem("user");
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleDashboardClick = () => {
+    if (user?.isadmin) {
+      navigate("/flexeesim/dashboard/");
+    } else {
+      navigate("/usersidelive");
+    }
+  };
 
   return (
     <div className="fixed top-0 left-0 w-screen z-50 shadow-md bg-white">
@@ -18,12 +28,12 @@ const Navbar = () => {
         </div>
         <div className="flex items-center space-x-4">
           {user ? (
-            <Link
-              to="/flexeesim/dashboard/"
+            <span
+              onClick={handleDashboardClick}
               className="text-gray-500 hover:text-red-500 hover:underline underline-offset-4 decoration-red-600 cursor-pointer"
             >
               Dashboard
-            </Link>
+            </span>
           ) : (
             <Link
               to="/signin/"

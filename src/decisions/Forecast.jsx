@@ -91,7 +91,7 @@ const Forecast = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/procurement");
+      navigate("/Procurement");
     } catch (error) {
       console.error("Error making POST request: Forecast", error);
       toast({
@@ -113,7 +113,7 @@ const Forecast = () => {
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
           <InfoImg decision={"Forecast"} />
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center p-2">
+          <div className="flex items-center pl-5 pt-2 pb-2">
               <Text>Load data Quarterly</Text>
               <div className=" pl-4 flex space-x-4">
                 {Array.from(

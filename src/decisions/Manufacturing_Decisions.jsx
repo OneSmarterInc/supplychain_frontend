@@ -16,7 +16,6 @@ import InfoImg from "../Components/InfoImg";
 import NavBar from "../Components/NavBar";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
-import ManufacturingDataChart from "../DataChartsOfDecisions/Manufacturing/ManufacturingDataChart";
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
 
@@ -134,7 +133,7 @@ const Manufacturing_Decisions = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/distribution");
+      navigate("/Distribution");
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
     }
@@ -176,9 +175,9 @@ const Manufacturing_Decisions = () => {
       <div style={{ fontFamily: "ABeeZee" }} className=" ">
         <div className="sm:grid grid-cols-1 gap-3 m-1 ">
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
-            <InfoImg decision={"Forecast"} />
+            <InfoImg decision={"Distribution"} />
             <div className="flex items-center justify-between w-full">
-              <div className="flex items-center p-2">
+            <div className="flex items-center pl-5 pt-2 pb-2">
                 <Text>Load data Quarterly</Text>
                 <div className="pl-4 flex space-x-4">
                   {Array.from(
@@ -257,7 +256,7 @@ const Manufacturing_Decisions = () => {
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
               disabled={selectedQuarter !== currentQuarter}
             >
-              Submit Forecast
+              Submit Manufacture
             </button>
           </div>
             {/* <div className="rounded-lg -2xl h-96  flex flex-col justify-start"></div> */}

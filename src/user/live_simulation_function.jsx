@@ -18,27 +18,25 @@ const PlayComponent = ({
   endDate,
   currentQuarter,
   firm_data,
-  selectedSimData
-  
+  selectedSimData,
 }) => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [firstDropdownValue, setFirstDropdownValue] = useState("1");
   const [secondDropdownValue, setSecondDropdownValue] = useState("");
-  
 
-  console.log("SelectedSimData:", selectedSimData[0])
-console.log("Rendering PlayComponent with props:", {
-  id,
-  batch,
-  startDate,
-  endDate,
-  currentQuarter,
-  firm_data,
-  selectedSimData,
-});
-  
+  console.log("SelectedSimData:", selectedSimData[0]);
+  console.log("Rendering PlayComponent with props:", {
+    id,
+    batch,
+    startDate,
+    endDate,
+    currentQuarter,
+    firm_data,
+    selectedSimData,
+  });
+
   let user = JSON.parse(localStorage.getItem("user"));
   const email = user.email;
   let firm_key_map = "";
@@ -63,7 +61,6 @@ console.log("Rendering PlayComponent with props:", {
 
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
-    // localStorage.setItem("selectedSimulation", JSON.stringify(id));
   };
 
   const handleQuarterSelectChange = (e) => {
@@ -94,7 +91,10 @@ console.log("Rendering PlayComponent with props:", {
   };
 
   return (
-    <div className="flex mt-4 bg-white justify-around items-center mx-10 rounded-lg border-2 border-neutral-600 shadow-xl">
+    <div
+      className="flex mt-4 bg-white justify-around items-center mx-10 rounded-lg border-2 border-neutral-600 shadow-xl"
+      style={{ transform: "scale(0.80)", transformOrigin: "center" }}
+    >
       <div className="flex w-full">
         <div
           className="flex-1 flex flex-col items-center justify-center"
@@ -113,14 +113,14 @@ console.log("Rendering PlayComponent with props:", {
             </p>
             <div className="buttons my-2">
               <button
-                className="w-32 h-10 rounded-lg bg-blue-600 text-white text-center p-2 mx-2 hover:bg-sky-950"
+                className="w-32 h-10 rounded-lg bg-red-600 text-white text-center p-2 mx-2 hover:bg-gray-700"
                 onClick={handleSubmit}
               >
                 Enter
               </button>
               <button
                 onClick={toggleModal}
-                className="w-28 h-10 rounded-lg bg-green-600 text-white text-center p-2 hover:bg-green-700"
+                className="w-28 h-10 rounded-lg bg-black text-white text-center p-2 hover:bg-gray-700"
               >
                 Reports
               </button>

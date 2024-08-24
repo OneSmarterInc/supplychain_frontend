@@ -11,7 +11,7 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-
+import logout_img from "../assets/logout.svg";
 import axios from "axios";
 import MyContext from "./ContextApi/MyContext";
 
@@ -50,12 +50,11 @@ const ProfileDropdown = () => {
     try {
       const response = await axios.patch(
         `${api}/user-details/${user?.userid}/`,
-        profile // Directly send the profile state
+        profile
       );
       const data = response.data;
       localStorage.setItem("user", JSON.stringify(data));
-      setProfile(data); // Update the profile state with the new data
-      console.log("Updated profile edit:", data);
+      setProfile(data);
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -72,66 +71,69 @@ const ProfileDropdown = () => {
     <div className="relative">
       <Popover placement="bottom-end">
         <PopoverHandler>
-          <div className="cursor-pointer flex items-center rounded-full bg-blue-gray-100 w-10 h-10 hover:bg-blue-gray-100">
-            <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-xl text-white font-bold">
-              {profile?.email ? profile?.email[0].toUpperCase() : "U"}
+          <div className="cursor-pointer flex items-center">
+            <div className="flex items-center justify-center text-xl text-white font-bold">
+              <i
+                className="fa-solid fa-circle-user mr-2 px-3 text-3xl"
+                title="Profile"
+              ></i>
             </div>
           </div>
         </PopoverHandler>
         <PopoverContent className="mt-2 w-80 bg-white rounded-md shadow-lg z-40">
-          <div className="px-4 py-3 flex justify-between items-start">
+          <div className="px-4 py-3 flex justify-between items-center">
             <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-xl text-white font-bold">
+              <div className="w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center text-2xl text-white font-bold">
                 {profile?.email ? profile?.email[0].toUpperCase() : "U"}
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-900">
-                  {profile?.username || "Unknown User"}
+              <div className="ml-4">
+                <p className="text-lg font-medium text-gray-900">
+                  {profile?.first_name || "Unknown User"} {profile?.last_name || ""}
                 </p>
                 <p className="text-sm text-gray-600">
                   {profile?.email || "No Email"}
                 </p>
               </div>
             </div>
-
             <div
               onClick={openEditModal}
-              className="text-gray-500 hover:text-gray-700 "
+              className="text-gray-500 hover:text-gray-700 cursor-pointer"
             >
-              <span className="material-icons flex space-x-1 hover:scale-125 text-green-400 px-3  cursor-pointer">
-                <p>edit</p> <i className="fa-solid fa-pencil"></i>
+              <span className="flex items-center space-x-1 hover:scale-125 text-green-400">
+                <p className="text-sm">Edit</p>
+                <i className="fa-solid fa-pencil text-sm"></i>
               </span>
             </div>
           </div>
-          <div className="border-t border-gray-200">
-            <div className="">
-              <div className="items-center block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                <span className="material-icons font-bold">Full Name:</span>
-                <span className="ml-3">{profile?.first_name || "N/A"}</span>
-                <span className="ml-1">{profile?.last_name || "N/A"}</span>
-              </div>
-            </div>
-            <div className="items-center block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <span className="material-icons font-bold">department:</span>
-              <span className="ml-3">{profile?.department || "N/A"}</span>
-            </div>
-            <div className="items-center block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <span className="material-icons font-bold">Course:</span>
-              <span className="ml-3">{profile?.course || "N/A"}</span>
-            </div>
-            <div className="items-center block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <span className="material-icons font-bold">University:</span>
-              <span className="ml-3">{profile?.university || "N/A"}</span>
-            </div>
+          <div className="border-t border-gray-200 mt-2">
+            <table className="w-full text-sm text-left text-gray-700 mt-2">
+              <tbody>
+                <tr>
+                  <td className="font-bold">Full Name:</td>
+                  <td>{profile?.first_name || "N/A"} {profile?.last_name || "N/A"}</td>
+                </tr>
+                <tr>
+                  <td className="font-bold">Department:</td>
+                  <td>{profile?.department || "N/A"}</td>
+                </tr>
+                <tr>
+                  <td className="font-bold">Course:</td>
+                  <td>{profile?.course || "N/A"}</td>
+                </tr>
+                <tr>
+                  <td className="font-bold">University:</td>
+                  <td>{profile?.university || "N/A"}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div className="border-t border-gray-200">
+          <div className="border-t border-gray-200 mt-2">
             <div
               onClick={handleLogOut}
-              className="flex items-center justify-center rounded-lg bg-red-500 hover:bg-red-700 text-white"
+              className="flex items-center justify-center rounded-lg bg-gray-500 hover:bg-red-700 text-white p-2 cursor-pointer mt-2"
             >
-              <button className="p-2 text-white font-bold cursor-pointer rounded-md">
-                Log Out
-              </button>
+              <h3 className="px-2">Logout</h3>
+              <img src={logout_img} className="h-5 w-5 px-1" alt="Logout" />
             </div>
           </div>
         </PopoverContent>
@@ -140,10 +142,10 @@ const ProfileDropdown = () => {
       <Dialog open={isEditOpen} handler={closeEditModal}>
         <DialogHeader>Edit Profile</DialogHeader>
         <DialogBody divider>
-          <form className="h-96 overflow-auto" onSubmit={handleSave}>
-            <div className="mb-4">
+          <form className="space-y-4" onSubmit={handleSave}>
+            <div>
               <label className="block text-sm font-medium text-gray-700">
-                UserName
+                Username
               </label>
               <input
                 type="text"
@@ -153,7 +155,7 @@ const ProfileDropdown = () => {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
             </div>
-            <div className="mb-4">
+            <div>
               <label className="block text-sm font-medium text-gray-700">
                 First Name
               </label>
@@ -165,7 +167,7 @@ const ProfileDropdown = () => {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
             </div>
-            <div className="mb-4">
+            <div>
               <label className="block text-sm font-medium text-gray-700">
                 Last Name
               </label>
@@ -177,7 +179,7 @@ const ProfileDropdown = () => {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
             </div>
-            <div className="mb-4">
+            <div>
               <label className="block text-sm font-medium text-gray-700">
                 Department
               </label>
@@ -189,7 +191,7 @@ const ProfileDropdown = () => {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
             </div>
-            <div className="mb-4">
+            <div>
               <label className="block text-sm font-medium text-gray-700">
                 Course
               </label>
@@ -201,7 +203,7 @@ const ProfileDropdown = () => {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
             </div>
-            <div className="mb-4">
+            <div>
               <label className="block text-sm font-medium text-gray-700">
                 University
               </label>

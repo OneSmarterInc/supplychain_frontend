@@ -45,12 +45,12 @@ const JoinNow = () => {
     } else {
       toast({
         title: "Error.",
-        description: "Email or passcode is missing.",
+        description: "Passcode is missing.",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
-      console.error("Email or passcode is missing");
+      console.error("passcode is missing");
     }
   };
 
@@ -88,7 +88,7 @@ const JoinNow = () => {
           onChange={(e) => setPasscode(e.target.value)}
           width="200px"
           position="fixed"
-          bottom="6rem"
+          bottom="7rem"
           right="2rem"
           boxShadow="lg"
           bg="white"
@@ -96,31 +96,31 @@ const JoinNow = () => {
       )}
       {showInput && (
         <Button
-          colorScheme="green"
+          colorScheme="red"
           size="lg"
           mb={"1rem"}
           onClick={handleJoin}
           position="fixed"
-          bottom="2rem"
+          bottom="3rem"
           right="2rem"
           boxShadow="lg"
-          _hover={{ bg: "green.500", boxShadow: "xl" }}
-          _active={{ bg: "green.600" }}
+          _hover={{ bg: "red.500", boxShadow: "xl" }}
+          _active={{ bg: "red.600" }}
         >
           Submit Passcode
         </Button>
       )}
       {!showInput && (
         <Button
-          colorScheme="green"
-          size="lg"
+          colorScheme="red"
+          
           onClick={handleJoinClick}
           position="fixed"
-          bottom="2rem"
+          bottom="4rem"
           right="2rem"
           boxShadow="lg"
-          _hover={{ bg: "green.500", boxShadow: "xl" }}
-          _active={{ bg: "green.600" }}
+          _hover={{ bg: "red.500", boxShadow: "xl" }}
+          _active={{ bg: "red.600" }}
         >
           Join Now
         </Button>

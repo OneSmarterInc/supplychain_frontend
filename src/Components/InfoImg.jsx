@@ -86,11 +86,11 @@ const InfoImg = ({ decision }) => {
 
             <div className="flex">
               <h1 className="text-xl text-start px-3 py-2 text-white">
-                {selectedSim[0]?.name || "Simulation"}
+                {selectedSim[0]?.course || "Simulation"}
               </h1>
               <h1 className="text-xl text-start px-1 py-2 text-red-500">|</h1>
               <h1 className="text-xl text-start px-3 py-2 text-white ">
-                {user.username || "User"}
+                {user.first_name || "User"}
               </h1>
             </div>
           </div>

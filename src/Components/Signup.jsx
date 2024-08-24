@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-
+import { useContext, useState } from "react";
 import {
   Flex,
   Heading,
@@ -61,47 +60,68 @@ const Signup = () => {
       my_simulations,
       my_firms,
     };
-    console.log(data);
 
     try {
-      if (!name || !email || !password || !firstName || !lastName || !university || !course || !department) {
+      // Validate required fields
+      if (
+        !name ||
+        !email ||
+        !password ||
+        !firstName ||
+        !lastName ||
+        !university ||
+        !course ||
+        !department
+      ) {
         toast({
           title: "Field is empty",
-          description:
-            "Please ensure that you have provided all required fields.",
+          description: "Please ensure that you have provided all required fields.",
           status: "error",
           duration: 9000,
           isClosable: true,
           position: "top",
-          colorScheme: "red",
         });
-      } else {
-        const response = await axios.post(`${api}/users/createuser/`, data);
+        return;
+      }
 
-        if (response.status === 201) {
-          toast({
-            title: "Account Created Successfully ",
-            description: "Please sign in to continue",
-            status: "success",
-            duration: 9000,
-            isClosable: true,
-            position: "top",
-          });
-          navigate('/signin');
-          console.log("Signup successful");
-          console.log(response.data);
-        } else {
-          console.log("Signup failed");
-          console.log(response.data);
-        }
+      const response = await axios.post(`${api}/users/createuser/`, data);
+
+      if (response.status === 201) {
+        toast({
+          title: "Account Created Successfully",
+          description: "Please sign in to continue",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+          position: "top",
+        });
+        navigate("/signin");
+      } else {
+        toast({
+          title: "Signup failed",
+          description: "There was a problem creating your account. Please try again.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+          position: "top",
+        });
       }
     } catch (error) {
       console.error("Error:", error.message);
       if (error.response && error.response.status === 409) {
         toast({
           title: "User already registered",
-          description: "Please sign in",
-          status: "success",
+          description: "Please sign in.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+          position: "top",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "An unexpected error occurred. Please try again later.",
+          status: "error",
           duration: 9000,
           isClosable: true,
           position: "top",
@@ -134,7 +154,7 @@ const Signup = () => {
             <Box minW={{ base: "90%", md: "468px" }}>
               <form>
                 <Stack spacing={4} p="1rem">
-                  <FormControl>
+                  <FormControl isRequired>
                     <InputGroup>
                       <InputLeftElement
                         pointerEvents="none"
@@ -149,7 +169,7 @@ const Signup = () => {
                     </InputGroup>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl isRequired>
                     <InputGroup>
                       <InputLeftElement
                         pointerEvents="none"
@@ -157,18 +177,17 @@ const Signup = () => {
                       />
                       <Input
                         type="email"
-                        placeholder="email address"
+                        placeholder="Email Address"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                       />
                     </InputGroup>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl isRequired>
                     <InputGroup>
                       <InputLeftElement
                         pointerEvents="none"
-                        // color="gray.300"
                         children={<CFaLock color="gray.300" />}
                       />
                       <Input
@@ -184,11 +203,11 @@ const Signup = () => {
                       </InputRightElement>
                     </InputGroup>
                     <FormHelperText textAlign="right">
-                      <Link>forgot password?</Link>
+                      <Link>Forgot password?</Link>
                     </FormHelperText>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl isRequired>
                     <InputGroup>
                       <Input
                         type="text"
@@ -199,7 +218,7 @@ const Signup = () => {
                     </InputGroup>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl isRequired>
                     <InputGroup>
                       <Input
                         type="text"
@@ -210,7 +229,7 @@ const Signup = () => {
                     </InputGroup>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl isRequired>
                     <InputGroup>
                       <Input
                         type="text"
@@ -221,7 +240,7 @@ const Signup = () => {
                     </InputGroup>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl isRequired>
                     <InputGroup>
                       <Input
                         type="text"
@@ -232,7 +251,7 @@ const Signup = () => {
                     </InputGroup>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl isRequired>
                     <InputGroup>
                       <Input
                         type="text"
@@ -251,7 +270,7 @@ const Signup = () => {
                     color={"white"}
                     width="full"
                     _hover={{ color: "white" }}
-                    onClick={(e) => signupHandler(e)}
+                    onClick={signupHandler}
                   >
                     Sign Up
                   </Button>
@@ -260,7 +279,7 @@ const Signup = () => {
             </Box>
           </Stack>
           <Box>
-            already have an account?{" "}
+            Already have an account?{" "}
             <Link to="/signin">
               <span style={{ color: "tomato" }}>Sign in</span>
             </Link>

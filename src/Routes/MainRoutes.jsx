@@ -1,3 +1,7 @@
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";  // Import the ProtectedRoute component
+// Import your components
 import Demand_generation from "../decisions/Demand_generation";
 import Distribution_Decision from "../decisions/Distribution_Decision";
 import Forecast from "../decisions/Forecast";
@@ -10,15 +14,12 @@ import Transportation_Decision from "../decisions/Transportation_Decision";
 import Admin from "../Components/Admin";
 import Signin from "../Components/Signin";
 import Signup from "../Components/Signup";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminSideLive from "../admin/AdminSideLive";
 import AdminSideEnded from "../admin/AdminSideEnded";
 import UserSideLive from "../user/UserSideLive";
 import UserSideEnded from "../user/UserSideEnded";
-import { useState } from "react";
 import Steps from "../createSimulation/Steps";
 import AdminNavBar from "../Components/AdminNavBar";
-import { PrivateRoute } from "./PrivateRoutes";
 import Inventory from "../Components/Inventory";
 import JoinNow from "../Components/JoinNow";
 import LandingPage from "../Components/LandingPage/LandingPage";
@@ -56,39 +57,45 @@ import Sidebar from "../sidebar/SideBar";
 import FlexeeOverview from "../FlexeeSimAdmin/components/FlexeeOverview";
 import BackOfficeNavbar from "../decisions/NewNavbar";
 import BackOfficeSidebar from "../decisions/NewSidebar";
+import NewFooter from "../decisions/NewFooter";
+import CNavbar from "../decisions/CnewNavbar";
+import { PrivateRoute } from "./PrivateRoutes";
 
 const MainRoutes = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const [noOfQuarters, setNoOfQuarters] = useState();
+
   return (
     <Routes>
+      {/* Public Routes */}
       <Route
         exact
         path="/"
         element={
           <div className="home h-screen">
-             <FlexeeNavbar />
-              <FlexeeHome />
-              <FlexeeOverview />
-              <FlexeeHomeFeatures />
-              <FlexeeSlider />
-              <FlexeeTestimonials />
-              <FlexeeValues />
-              <FlexeeDecisionPreview />
-              <FlexeeFooter />
+            <FlexeeNavbar />
+            <FlexeeHome />
+            <FlexeeOverview />
+            <FlexeeHomeFeatures />
+            <FlexeeSlider />
+            <FlexeeTestimonials />
+            <FlexeeValues />
+            <FlexeeDecisionPreview />
+            <FlexeeFooter />
           </div>
         }
       />
 
+      {/* Protected Routes */}
       <Route
         exact
         path="/procurement"
         element={
-          <div className="procurement  h-screen">
+          <div className="procurement h-screen">
             <PrivateRoute>
-            <BackOfficeNavbar />
+              <BackOfficeNavbar />
               <Sidebar />
-              <Procurement_Decisions />{" "}
+              <Procurement_Decisions />
             </PrivateRoute>
           </div>
         }
@@ -96,25 +103,25 @@ const MainRoutes = () => {
 
       <Route
         exact
-        path="/Dashboard"
+        path="/dashboard"
         element={
-          <div className="procurement  h-screen">
+          <div className="procurement h-screen">
             <PrivateRoute>
-              <Sidebar />
               <BackOfficeNavbar />
-              <Analytics />{" "}
-
+              <Sidebar />
+              <Analytics />
             </PrivateRoute>
           </div>
         }
       />
+
       <Route
         exact
         path="/joinnow"
         element={
-          <div className="procurement  h-screen">
+          <div className="procurement h-screen">
             <PrivateRoute>
-              <JoinNow />{" "}
+              <JoinNow />
             </PrivateRoute>
           </div>
         }
@@ -124,12 +131,12 @@ const MainRoutes = () => {
         exact
         path="/manufacture"
         element={
-          <div className="manufacturing  h-screen ">
+          <div className="manufacturing h-screen">
             <PrivateRoute>
-            <BackOfficeNavbar />
-            <Sidebar />
+              <BackOfficeNavbar />
+              <Sidebar />
               <Manufacturing_Decisions />
-            </PrivateRoute>{" "}
+            </PrivateRoute>
           </div>
         }
       />
@@ -138,10 +145,8 @@ const MainRoutes = () => {
         exact
         path="/landingpage"
         element={
-          <div className="manufacturing  h-screen ">
-            {/* <PrivateRoute> */}
+          <div className="manufacturing h-screen">
             <LandingPage />
-            {/* </PrivateRoute>{" "} */}
           </div>
         }
       />
@@ -150,12 +155,12 @@ const MainRoutes = () => {
         exact
         path="/distribution"
         element={
-          <div className="distribution  h-screen ">
+          <div className="distribution h-screen">
             <PrivateRoute>
-            <BackOfficeNavbar />
-            <Sidebar />
+              <BackOfficeNavbar />
+              <Sidebar />
               <Distribution_Decision />
-            </PrivateRoute>{" "}
+            </PrivateRoute>
           </div>
         }
       />
@@ -164,12 +169,12 @@ const MainRoutes = () => {
         exact
         path="/transport"
         element={
-          <div className="transportation  h-screen ">
+          <div className="transportation h-screen">
             <PrivateRoute>
-            <BackOfficeNavbar />
-            <Sidebar />
+              <BackOfficeNavbar />
+              <Sidebar />
               <Transportation_Decision />
-            </PrivateRoute>{" "}
+            </PrivateRoute>
           </div>
         }
       />
@@ -178,13 +183,12 @@ const MainRoutes = () => {
         exact
         path="/service"
         element={
-          <div className="service  h-screen">
+          <div className="service h-screen">
             <PrivateRoute>
-              {" "}
-            <BackOfficeNavbar />
+              <BackOfficeNavbar />
               <Sidebar />
               <Service_Decision />
-            </PrivateRoute>{" "}
+            </PrivateRoute>
           </div>
         }
       />
@@ -193,12 +197,12 @@ const MainRoutes = () => {
         exact
         path="/demand"
         element={
-          <div className="demand  h-screen ">
+          <div className="demand h-screen">
             <PrivateRoute>
-            <BackOfficeNavbar />
-            <Sidebar />
+              <BackOfficeNavbar />
+              <Sidebar />
               <Demand_generation />
-            </PrivateRoute>{" "}
+            </PrivateRoute>
           </div>
         }
       />
@@ -207,12 +211,12 @@ const MainRoutes = () => {
         exact
         path="/forecast"
         element={
-          <div className="forecast  h-screen ">
+          <div className="forecast h-screen">
             <PrivateRoute>
-            <BackOfficeNavbar />
-            <Sidebar/>
+              <BackOfficeNavbar />
+              <Sidebar />
               <Forecast />
-            </PrivateRoute>{" "}
+            </PrivateRoute>
           </div>
         }
       />
@@ -221,12 +225,12 @@ const MainRoutes = () => {
         exact
         path="/it"
         element={
-          <div className="it  h-screen">
+          <div className="it h-screen">
             <PrivateRoute>
-            <BackOfficeNavbar />
-            <Sidebar />
-            <IT />
-            </PrivateRoute>{" "}
+              <BackOfficeNavbar />
+              <Sidebar />
+              <IT />
+            </PrivateRoute>
           </div>
         }
       />
@@ -235,7 +239,7 @@ const MainRoutes = () => {
         exact
         path="/admin"
         element={
-          <div className="admin  h-screen">
+          <div className="admin h-screen">
             <Admin />
           </div>
         }
@@ -245,10 +249,8 @@ const MainRoutes = () => {
         exact
         path="/signin"
         element={
-          <div className="signin  h-screen">
-            <PrivateRoute>
-              <Signin />{" "}
-            </PrivateRoute>
+          <div className="signin h-screen">
+            <Signin />
           </div>
         }
       />
@@ -257,32 +259,8 @@ const MainRoutes = () => {
         exact
         path="/signup"
         element={
-          <div className="signup  h-screen">
-            <Signup />{" "}
-          </div>
-        }
-      />
-
-      <Route
-        exact
-        path="/adminsidelive"
-        element={
-          <div className="signup  h-screen">
-            <PrivateRoute>
-              <AdminSideLive />
-            </PrivateRoute>
-          </div>
-        }
-      />
-
-      <Route
-        exact
-        path="/adminsideended"
-        element={
-          <div className="signup  h-screen">
-            <PrivateRoute>
-              <AdminSideEnded />
-            </PrivateRoute>
+          <div className="signup h-screen">
+            <Signup />
           </div>
         }
       />
@@ -291,10 +269,9 @@ const MainRoutes = () => {
         exact
         path="/usersidelive"
         element={
-          <div className="signup  h-screen">
+          <div className="signup h-screen">
             <PrivateRoute>
-            
-            <BackOfficeNavbar />
+              <CNavbar />
               <UserSideLive />
             </PrivateRoute>
           </div>
@@ -305,18 +282,19 @@ const MainRoutes = () => {
         exact
         path="/usersideended"
         element={
-          <div className="signup  h-screen">
+          <div className="signup h-screen">
             <PrivateRoute>
               <UserSideEnded />
             </PrivateRoute>
           </div>
         }
       />
+
       <Route
         exact
         path="/inventory"
         element={
-          <div className="signup  h-screen">
+          <div className="signup h-screen">
             <PrivateRoute>
               <Inventory />
             </PrivateRoute>
@@ -330,27 +308,21 @@ const MainRoutes = () => {
         element={
           <div className="createsim h-screen">
             <div className="navbar pb-4">
-              {" "}
               <PrivateRoute>
                 <AdminNavBar />
               </PrivateRoute>
             </div>
-
-            <Steps
-              setNoOfQuarters={setNoOfQuarters}
-              noOfQuarters={noOfQuarters}
-            />
-            {""}
+            <Steps setNoOfQuarters={setNoOfQuarters} noOfQuarters={noOfQuarters} />
           </div>
         }
       />
 
-      {/* <FlexeeSimRoutes /> */}
-
+      {/* FlexeeSim Protected Routes */}
       <Route
-          exact
-          path="/flexeesim/"
-          element={
+        exact
+        path="/flexeesim/"
+        element={
+          <ProtectedRoute>
             <div className="pt-20">
               <FlexeeNavbar />
               <FlexeeHome />
@@ -362,187 +334,209 @@ const MainRoutes = () => {
               <FlexeeDecisionPreview />
               <FlexeeFooter />
             </div>
-          }
-        />
-        <Route
-          exact
-          path="/flexeesim/aboutus"
-          element={
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        exact
+        path="/flexeesim/aboutus"
+        element={
+          <ProtectedRoute>
             <div className="pt-20">
               <FlexeeNavbar />
               <FlexeeAboutUs />
               <FlexeeFooter />
             </div>
-          }
-        />
-        <Route
-          exact
-          path="/flexeesim/features"
-          element={
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        exact
+        path="/flexeesim/features"
+        element={
+          <ProtectedRoute>
             <div className="pt-20">
-              <FlexeeNavbar /> <FlexeeFeatures />
+              <FlexeeNavbar />
+              <FlexeeFeatures />
               <FlexeeFooter />
             </div>
-          }
-        />
-        <Route
-          exact
-          path="/flexeesim/preview"
-          element={
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        exact
+        path="/flexeesim/preview"
+        element={
+          <ProtectedRoute>
             <div className="pt-20">
               <FlexeeNavbar />
               <FlexeeDecisionPreview />
               <FlexeeFooter />
             </div>
-          }
-        />
-        <Route
-          exact
-          path="/flexeesim/dashboard"
-          element={
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        exact
+        path="/flexeesim/dashboard"
+        element={
+          <ProtectedRoute>
             <div className="mt-52">
               <FlexeeDashboardNavbar />
               <FlexeeDashboard />
               <FlexeeExploreSim />
               <FlexeeFooter />
             </div>
-          }
-        />
-        <Route
-          exact
-          path="/flexeesim/backoffice"
-          element={
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        exact
+        path="/flexeesim/backoffice"
+        element={
+          <ProtectedRoute>
             <div className="">
               <FlexeeBackOfficeConnecting />
             </div>
-          }
-        />
-        <Route
-          exact
-          path="/flexeesim/backoffice/user"
-          element={
-            <div className="">
-              <div className="flex justify-start items-start ">
-                {isSideBarOpen && <FlexeeBackOfficeSidebar />}
+          </ProtectedRoute>
+        }
+      />
 
-                <div className={`w-full ${isSideBarOpen ? "ml-60 " : "ml-0"}`}>
-                  <div className="pb-10">
-                    <FlexeeBackOfficeNavbar
-                      setIsSideBarOpen={setIsSideBarOpen}
-                      isSideBarOpen={isSideBarOpen}
-                    />
-                  </div>
-                  <div className="pb-20">
-                    <FlexeeBackOfficeUser />
-                  </div>
+      <Route
+        exact
+        path="/flexeesim/backoffice/user"
+        element={
+          <ProtectedRoute>
+            <div className="flex justify-start items-start">
+              {isSideBarOpen && <FlexeeBackOfficeSidebar />}
+              <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+                <div className="pb-10">
+                  <FlexeeBackOfficeNavbar
+                    setIsSideBarOpen={setIsSideBarOpen}
+                    isSideBarOpen={isSideBarOpen}
+                  />
+                </div>
+                <div className="pb-20">
+                  <FlexeeBackOfficeUser />
                 </div>
               </div>
-              <div className={`w-full  ${isSideBarOpen ? "ml-60 " : "ml-0"}`}>
-                <FlexeeBackOfficeFooter />
-              </div>
             </div>
-          }
-        />
-        <Route
-          exact
-          path="/flexeesim/backoffice/rankings"
-          element={
-            <div className="">
-              <div className="flex justify-start items-start ">
-                {isSideBarOpen && <FlexeeBackOfficeSidebar />}
+            <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+              <FlexeeBackOfficeFooter />
+            </div>
+          </ProtectedRoute>
+        }
+      />
 
-                <div className={`w-full ${isSideBarOpen ? "ml-60 " : "ml-0"}`}>
-                  <div className="pb-10">
-                    <FlexeeBackOfficeNavbar
-                      setIsSideBarOpen={setIsSideBarOpen}
-                      isSideBarOpen={isSideBarOpen}
-                    />
-                  </div>
-                  <div className="pb-20">
-                    <FlexeeBackOfficeRankings />
-                  </div>
+      <Route
+        exact
+        path="/flexeesim/backoffice/rankings"
+        element={
+          <ProtectedRoute>
+            <div className="flex justify-start items-start">
+              {isSideBarOpen && <FlexeeBackOfficeSidebar />}
+              <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+                <div className="pb-10">
+                  <FlexeeBackOfficeNavbar
+                    setIsSideBarOpen={setIsSideBarOpen}
+                    isSideBarOpen={isSideBarOpen}
+                  />
+                </div>
+                <div className="pb-20">
+                  <FlexeeBackOfficeRankings />
                 </div>
               </div>
-              <div className={`w-full ${isSideBarOpen ? "ml-60 " : "ml-0"}`}>
-                <FlexeeBackOfficeFooter />
-              </div>
             </div>
-          }
-        />
-        <Route
-          exact
-          path="/flexeesim/backoffice/reports"
-          element={
-            <div className="">
-              <div className="flex justify-start items-start ">
-                {isSideBarOpen && <FlexeeBackOfficeSidebar />}
+            <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+              <FlexeeBackOfficeFooter />
+            </div>
+          </ProtectedRoute>
+        }
+      />
 
-                <div className={`w-full ${isSideBarOpen ? "ml-60 " : "ml-0"}`}>
-                  <div className="pb-10">
-                    <FlexeeBackOfficeNavbar
-                      setIsSideBarOpen={setIsSideBarOpen}
-                      isSideBarOpen={isSideBarOpen}
-                    />
-                  </div>
-                  <div className="pb-20">
-                    <FlexeeBackOfficeReports />
-                  </div>
+      <Route
+        exact
+        path="/flexeesim/backoffice/reports"
+        element={
+          <ProtectedRoute>
+            <div className="flex justify-start items-start">
+              {isSideBarOpen && <FlexeeBackOfficeSidebar />}
+              <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+                <div className="pb-10">
+                  <FlexeeBackOfficeNavbar
+                    setIsSideBarOpen={setIsSideBarOpen}
+                    isSideBarOpen={isSideBarOpen}
+                  />
+                </div>
+                <div className="pb-20">
+                  <FlexeeBackOfficeReports />
                 </div>
               </div>
-              <div className={`w-full ${isSideBarOpen ? "ml-60 " : "ml-0"}`}>
-                <FlexeeBackOfficeFooter />
-              </div>
             </div>
-          }
-        />
-        <Route
-          exact
-          path="/flexeesim/backoffice/faqs"
-          element={
-            <div className="">
-              <div className="flex justify-start items-start ">
-                {isSideBarOpen && <FlexeeBackOfficeSidebar />}
+            <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+              <FlexeeBackOfficeFooter />
+            </div>
+          </ProtectedRoute>
+        }
+      />
 
-                <div className={`w-full ${isSideBarOpen ? "ml-60 " : "ml-0"}`}>
-                  <div className="pb-10">
-                    <FlexeeBackOfficeNavbar
-                      setIsSideBarOpen={setIsSideBarOpen}
-                      isSideBarOpen={isSideBarOpen}
-                    />
-                  </div>
-                  <div className="pb-20">
-                    <FlexeeBackOfficeFAQS />
-                  </div>
+      <Route
+        exact
+        path="/flexeesim/backoffice/faqs"
+        element={
+          <ProtectedRoute>
+            <div className="flex justify-start items-start">
+              {isSideBarOpen && <FlexeeBackOfficeSidebar />}
+              <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+                <div className="pb-10">
+                  <FlexeeBackOfficeNavbar
+                    setIsSideBarOpen={setIsSideBarOpen}
+                    isSideBarOpen={isSideBarOpen}
+                  />
+                </div>
+                <div className="pb-20">
+                  <FlexeeBackOfficeFAQS />
                 </div>
               </div>
-              <div className={`w-full ${isSideBarOpen ? "ml-60 " : "ml-0"}`}>
-                <FlexeeBackOfficeFooter />
-              </div>
             </div>
-          }
-        />
-        <Route
-          exact
-          path="/flexeesim/dashboard/courses"
-          element={
+            <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+              <FlexeeBackOfficeFooter />
+            </div>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        exact
+        path="/flexeesim/dashboard/courses"
+        element={
+          <ProtectedRoute>
             <div className="mt-48">
               <FlexeeDashboardNavbar />
               <FlexeeCourseComponent />
               <FlexeeGroupsTeamsComponent />
-              {/* <FlexeeStudentRequest /> */}
               <FlexeeFooter />
             </div>
-          }
-        />
-        <Route
-          exact
-          path="/flexeesim/register"
-          element={
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        exact
+        path="/flexeesim/register"
+        element={
+          <ProtectedRoute>
             <div className="">
               <FlexeeRegister />
             </div>
-          }
-        />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

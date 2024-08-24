@@ -182,7 +182,7 @@ const Distribution_Decision = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/service");
+      navigate("/Service");
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
     }
@@ -209,6 +209,12 @@ const Distribution_Decision = () => {
     }
   };
 
+  const formatKey = (key) => {
+    return key
+      .replace(/_/g, ' ') // Replace underscores with spaces
+      .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
+  };
+
   return (
     <div>
       <div style={{ fontFamily: "ABeeZee" }}>
@@ -216,7 +222,7 @@ const Distribution_Decision = () => {
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
             <InfoImg decision={"Distribution"} />
             <div className="flex items-center justify-between w-full">
-              <div className="flex items-center p-2">
+              <div className="flex items-center pl-5 pt-2 pb-2">
                 <Text>Load data Quarterly</Text>
                 <div className="pl-4 flex space-x-4">
                   {Array.from(
@@ -260,7 +266,7 @@ const Distribution_Decision = () => {
                     channel !== "cross_docking" ? (
                       <Tr key={channel} className="border-t">
                         <Td className="p-3 font-medium text-gray-900">
-                          {channel}
+                          {formatKey(channel)}
                         </Td>
                         {regions.map((region) => (
                           <Td key={region}>
@@ -300,7 +306,7 @@ const Distribution_Decision = () => {
                       <React.Fragment key={channel}>
                         <Tr>
                           <Td colSpan={regions.length + 1}>
-                            <strong>{channel}</strong>
+                            <strong>{formatKey(channel)}</strong>
                           </Td>
                         </Tr>
                         {values.cross_docking.map((row, rowIndex) => (

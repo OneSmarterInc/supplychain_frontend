@@ -15,7 +15,6 @@ import NavBar from "../Components/NavBar";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
-import TransportationDataChart from "../DataChartsOfDecisions/Transportation/TransportationDataChart";
 import { useNavigate } from "react-router-dom";
 
 const Transportation_Decision = () => {
