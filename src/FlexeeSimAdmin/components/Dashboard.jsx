@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import MyContext from "../../Components/ContextApi/MyContext";
 
 const Dashboard = () => {
@@ -7,42 +8,57 @@ const Dashboard = () => {
   const [code, setCode] = useState("");
   const [courses, setCourses] = useState([]);
   const { api } = useContext(MyContext);
-  
 
   useEffect(() => {
-    // Fetch the data from the API
-    const fetchCourses = async () => {
-      try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const response = await fetch(`${api}/user/${user.userid}/subscriptions/`);
-        const data = await response.json();
-        // Transform the data to match the structure needed for rendering
-        const transformedCourses = data.map((item) => ({
-          course: item.simulation.course || "Unnamed Course",
-          members: item.simulation.members,
-          organization: `Simulation ${item.simulation.simulation_id}`, // Example: Use simulation ID as organization
-          startDate: item.simulation.start_date,
-          endDate: item.simulation.end_date,
-          passcode: item.simulation.passcode,
-
-        }));
-        setCourses(transformedCourses);
-      } catch (error) {
-        console.error("Error fetching the courses:", error);
-      }
-    };
-
+    // Fetch the subscribed simulations on component mount
     fetchCourses();
   }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const response = await axios.get(`${api}/user/${user.userid}/subscriptions/`);
+      // Transform the data to match the structure needed for rendering
+      const transformedCourses = response.data.map((item) => ({
+        course: item.simulation.course || "Unnamed Course",
+        members: item.simulation.members,
+        organization: `Simulation ${item.simulation.simulation_id}`, // Example: Use simulation ID as organization
+        startDate: item.simulation.start_date,
+        endDate: item.simulation.end_date,
+        passcode: item.simulation.passcode,
+      }));
+      setCourses(transformedCourses);
+    } catch (error) {
+      console.error("Error fetching the courses:", error);
+    }
+  };
 
   const handleSelectedCourse = (course) => {
     localStorage.setItem("SelectedCourse", JSON.stringify(course));
     navigate("/flexeesim/dashboard/courses");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted code:", code);
+
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    try {
+      const response = await axios.post(`${api}/simulation/subscribe`, {
+        user_id: user.userid,
+        passcode: code,
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        console.log("Successfully subscribed to the simulation.");
+        setCode(""); // Clear the input field
+        fetchCourses(); // Refresh the subscribed simulations list
+      } else {
+        console.error("Failed to subscribe to the simulation.");
+      }
+    } catch (error) {
+      console.error("Error during subscription:", error);
+    }
   };
 
   return (
