@@ -1,20 +1,21 @@
 import { useContext, useEffect, useState } from "react";
+import signin from '../assets/signin.png';
+import graphics from '../assets/graphic.png'
 import {
   Flex,
-  Heading,
+  Box,
   Input,
   Button,
   InputGroup,
   Stack,
   InputLeftElement,
   chakra,
-  Box,
-  Avatar,
   FormControl,
   FormHelperText,
   InputRightElement,
   Text,
   useToast,
+  Image,
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -131,90 +132,77 @@ const Signin = () => {
   const handleShowClick = () => setShowPassword(!showPassword);
 
   return (
-    <Flex w={"99vw"} justifyContent={"space-between"}>
-      <Box w={"20%"} m={"auto"}>
-        <Flex
-          flexDirection="column"
-          width="100%"
-          height="100vh"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Stack
-            flexDir="column"
-            mb="2"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Avatar bg="black" />
-            <Heading color="black">Welcome Back</Heading>
-            <Text color="gray.500" fontWeight={"600"}>
-              Sign in to continue.
-            </Text>
-            <Box minW={{ base: "90%", md: "468px" }}>
-              <form>
-                <Stack spacing={4} p="1rem">
-                  <FormControl>
-                    <InputGroup>
-                      <InputLeftElement
-                        pointerEvents="none"
-                        children={<CFaUserAlt color="gray.300" />}
-                      />
-                      <Input
-                        type="email"
-                        placeholder="email address"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </InputGroup>
-                  </FormControl>
-                  <FormControl>
-                    <InputGroup>
-                      <InputLeftElement
-                        pointerEvents="none"
-                        children={<CFaLock color="gray.300" />}
-                      />
-                      <Input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                      <InputRightElement width="4.5rem">
-                        <Button h="1.75rem" size="sm" onClick={handleShowClick}>
-                          {showPassword ? "Hide" : "Show"}
-                        </Button>
-                      </InputRightElement>
-                    </InputGroup>
-                    <FormHelperText textAlign="right">
-                      <Link>forgot password?</Link>
-                    </FormHelperText>
-                  </FormControl>
-
-                  <Button
-                    borderRadius={0}
-                    type="submit"
-                    variant="solid"
-                    bgColor={"black"}
-                    color={"white"}
-                    width="full"
-                    onClick={loginHandler}
-                    _hover={{ color: "white" }}
-                  >
-                    Login
-                  </Button>
-                </Stack>
-              </form>
-            </Box>
-          </Stack>
-          <Box>
-            New user?{" "}
-            <Link to="/signup">
-              <span style={{ color: "tomato" }}>Sign up</span>
-            </Link>
-          </Box>
-        </Flex>
+    <Flex direction="column" alignItems="center" w="100%" h="100vh" pt={'2rem'} backgroundImage={`url(${graphics})`}
+      backgroundPosition="center"
+      backgroundSize="cover"
+      backgroundRepeat="no-repeat">
+       <Box w={{ base: "90%", md: "30%" }} mt="5%">
+        <Box bg="white" p={6} rounded="md" shadow="md"  >
+          <form onSubmit={loginHandler}>
+            <Stack spacing={4}>
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={<CFaUserAlt color="gray.300" />}
+                  />
+                  <Input
+                    type="email"
+                    placeholder="Registered Email / Username"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </InputGroup>
+              </FormControl>
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={<CFaLock color="gray.300" />}
+                  />
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button h="1.75rem" size="sm" onClick={handleShowClick}>
+                      {showPassword ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+                <FormHelperText textAlign="right">
+                  <Link to="/forgot-password">Forgot Password?</Link>
+                </FormHelperText>
+              </FormControl>
+              <Button
+                type="submit"
+                colorScheme="red"
+                w="full"
+                mt={4}
+                mb={2}
+              >
+                Login
+              </Button>
+            </Stack>
+          </form>
+        </Box>
+        <Text mt={4} textAlign="center">
+          No account yet?{" "}
+          <Link to="/signup" style={{ color: "tomato" }}>
+            Register as a new user.
+          </Link>
+        </Text>
       </Box>
+
+      <Image
+        src={signin}
+        alt="Supply Chain Image"
+        mt="auto"
+        w="full"
+        h={'50%'}
+      />
     </Flex>
   );
 };

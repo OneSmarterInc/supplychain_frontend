@@ -1,109 +1,70 @@
 import React from "react";
-import img1 from "../Assets/wifiService.png";
-import map from "../Assets/map.png";
+import map from "../Assets/map.png"; // Replace with your actual map image
+// import markerIcon from "../Assets/markerIcon.png"; // Replace with your actual marker ico÷n image
 
 const Footer = () => {
   return (
-    <>
-      {/* footer */}
-      <footer className="bg-gray-900 px-3 text-gray-400 py-8">
-        <div className="flex justify-between mx-auto px-4">
-          <div className="flex w-full justify-between">
-            <div className="h-28 w-44">
-              <div className="">
-              <img src={map} alt="" className="h-full w-full" />
-              </div>
-              <h1>Where are we now?</h1>
+    <footer className="bg-white text-gray-700 py-12">
+      <div className="max-w-screen-xl mx-auto px-4 md:px-8">
+        {/* Top Section */}
+        <div className="flex flex-wrap justify-between items-center text-center md:text-left">
+          {/* Map Section */}
+          <div className="w-full md:w-1/3 mb-8 md:mb-0">
+            <h3 className="uppercase tracking-wide text-gray-500 mb-4">Where we are now</h3>
+            <div className="relative inline-block mx-auto md:mx-0">
+              <img src={map} alt="World Map" className="w-full h-auto" />
+              {/* <img src={markerIcon} alt="Location Marker" className="absolute bottom-16 left-1/2 transform -translate-x-1/2" /> */}
             </div>
+            <p className="text-gray-500 mt-2 text-sm italic">Rio de Janeiro, Brazil</p>
+          </div>
 
-            <div className="flex justify-evenly w-full">
-              <div className="w-full px-4 mb-6 text-start pl-20">
-                <h3 className="text-white font-bold mb-4">Product</h3>
-                <ul>
-                  <li>
-                    <a href="/" className="hover:text-gray-200">
-                      All Jobs
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/" className="hover:text-gray-200">
-                      Companies
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/" className="hover:text-gray-200">
-                      Candidates
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="w-full  px-4 mb-6 text-start">
-                <h3 className="text-white font-bold mb-4">Resources</h3>
-                <ul>
-                  <li>
-                    <a href="/" className="hover:text-gray-200">
-                      Blog
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/" className="hover:text-gray-200">
-                      User guides
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/" className="hover:text-gray-200">
-                      Webinars
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="w-full  px-4 mb-6 text-start">
-                <h3 className="text-white font-bold mb-4">Company</h3>
-                <ul>
-                  <li>
-                    <a href="/" className="hover:text-gray-200">
-                      About
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/" className="hover:text-gray-200">
-                      Join us
-                    </a>
-                  </li>
-                </ul>
-              </div>
+          {/* Social Media Section */}
+          <div className="w-full md:w-1/3 mb-8 md:mb-0">
+            <h3 className="uppercase tracking-wide text-gray-500 mb-4">Follow us</h3>
+            <div className="flex justify-center space-x-6">
+              <a href="/" aria-label="Instagram" className="text-gray-700 hover:text-red-600">
+                <i className="fab fa-instagram text-2xl"></i>
+              </a>
+              <a href="/" aria-label="Facebook" className="text-gray-700 hover:text-red-600">
+                <i className="fab fa-facebook-f text-2xl"></i>
+              </a>
+              <a href="/" aria-label="Pinterest" className="text-gray-700 hover:text-red-600">
+                <i className="fab fa-pinterest text-2xl"></i>
+              </a>
+              <a href="/" aria-label="YouTube" className="text-gray-700 hover:text-red-600">
+                <i className="fab fa-youtube text-2xl"></i>
+              </a>
             </div>
           </div>
-          <div className="flex flex-col items-start justify-start">
-            <h1 className="text-3xl text-start">
-              Are You ready to experiance Simulation?
-            </h1>
-            <button className="p-2 my-3 px-4 h-10  bg-teal-300  text-white">
-              Try Now
-            </button>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="border-t border-gray-200 mt-8 pt-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex justify-center space-x-4 mb-4 md:mb-0">
+              <a href="/" className="text-gray-500 hover:text-gray-700">
+                SUPPORT
+              </a>
+              <span className="text-gray-500">•</span>
+              <a href="/" className="text-gray-500 hover:text-gray-700">
+                JOIN US
+              </a>
+              <span className="text-gray-500">•</span>
+              <a href="/" className="text-gray-500 hover:text-gray-700">
+                PRIVACY POLICY
+              </a>
+              <span className="text-gray-500">•</span>
+              <a href="/" className="text-gray-500 hover:text-gray-700">
+                TERMS OF SERVICE
+              </a>
+            </div>
+            <p className="text-gray-500 text-xs">
+              &copy; flex simulation 2024 all rights reserved.
+            </p>
           </div>
         </div>
-        <div className="text-center mt-8">
-          <p className="text-xs">
-            &copy; The Flexee Simulation System 2024 all rights reserved.
-          </p>
-          <div className="flex justify-center mt-4">
-            <a href="/" className="text-gray-400 hover:text-gray-200 mx-2">
-              <i className="fab fa-twitter"></i>
-            </a>
-            <a href="/" className="text-gray-400 hover:text-gray-200 mx-2">
-              <i className="fab fa-facebook-f"></i>
-            </a>
-            <a href="/" className="text-gray-400 hover:text-gray-200 mx-2">
-              <i className="fab fa-linkedin-in"></i>
-            </a>
-            <a href="/" className="text-gray-400 hover:text-gray-200 mx-2">
-              <i className="fab fa-youtube"></i>
-            </a>
-          </div>
-        </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   );
 };
 

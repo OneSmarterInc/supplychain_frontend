@@ -20,7 +20,7 @@ const ProfileDropdown = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   let user = JSON.parse(localStorage.getItem("user"));
-  const { api } = useContext(MyContext);
+  const { api, api1 } = useContext(MyContext);
   const [profile, setProfile] = useState({
     username: user?.username,
     email: user?.email,
@@ -30,6 +30,7 @@ const ProfileDropdown = () => {
     course: user?.course,
     university: user?.university,
     userType: user?.isadmin ? "Admin" : "User",
+    image:user?.image
   });
 
   const openEditModal = () => {
@@ -72,11 +73,14 @@ const ProfileDropdown = () => {
       <Popover placement="bottom-end">
         <PopoverHandler>
           <div className="cursor-pointer flex items-center">
-            <div className="flex items-center justify-center text-xl text-white font-bold">
-              <i
-                className="fa-solid fa-circle-user mr-2 px-3 text-3xl"
-                title="Profile"
-              ></i>
+            <div className="flex items-center justify-center text-xl text-red font-bold px-2 mr-3">
+             
+              <img
+                    src={`${api1}${profile?.image}` || "default-image.png"} 
+                    alt={profile.first_name}
+                    className="h-7 w-7 rounded-full"
+                  />
+             
             </div>
           </div>
         </PopoverHandler>
@@ -84,7 +88,11 @@ const ProfileDropdown = () => {
           <div className="px-4 py-3 flex justify-between items-center">
             <div className="flex items-center">
               <div className="w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center text-2xl text-white font-bold">
-                {profile?.email ? profile?.email[0].toUpperCase() : "U"}
+              <img
+                    src={`${api1}${profile?.image}` || "default-image.png"} 
+                    alt={profile.first_name}
+                    className="h-12 w-12 rounded-full"
+                  />
               </div>
               <div className="ml-4">
                 <p className="text-lg font-medium text-gray-900">

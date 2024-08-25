@@ -60,6 +60,8 @@ import BackOfficeSidebar from "../decisions/NewSidebar";
 import NewFooter from "../decisions/NewFooter";
 import CNavbar from "../decisions/CnewNavbar";
 import { PrivateRoute } from "./PrivateRoutes";
+import BackOfficeFooter from "../FlexeeSimAdmin/components/Backoffice/BackOfficeFooter";
+import Footer from "../FlexeeSimAdmin/components/Footer";
 
 const MainRoutes = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
@@ -77,10 +79,10 @@ const MainRoutes = () => {
             <FlexeeHome />
             <FlexeeOverview />
             <FlexeeHomeFeatures />
-            <FlexeeSlider />
-            <FlexeeTestimonials />
+            {/* <FlexeeSlider /> */}
+            {/* <FlexeeTestimonials /> */}
             <FlexeeValues />
-            <FlexeeDecisionPreview />
+            {/* <FlexeeDecisionPreview /> */}
             <FlexeeFooter />
           </div>
         }
@@ -385,11 +387,11 @@ const MainRoutes = () => {
         path="/flexeesim/dashboard"
         element={
           <ProtectedRoute>
-            <div className="mt-52">
+            <div className="" style={{marginTop:'6.7rem'}}>
               <FlexeeDashboardNavbar />
               <FlexeeDashboard />
               <FlexeeExploreSim />
-              <FlexeeFooter />
+              <BackOfficeFooter />
             </div>
           </ProtectedRoute>
         }
@@ -516,11 +518,11 @@ const MainRoutes = () => {
         path="/flexeesim/dashboard/courses"
         element={
           <ProtectedRoute>
-            <div className="mt-48">
+            <div className="" style={{marginTop:'7.5rem'}}>
               <FlexeeDashboardNavbar />
               <FlexeeCourseComponent />
               <FlexeeGroupsTeamsComponent />
-              <FlexeeFooter />
+              <BackOfficeFooter />
             </div>
           </ProtectedRoute>
         }

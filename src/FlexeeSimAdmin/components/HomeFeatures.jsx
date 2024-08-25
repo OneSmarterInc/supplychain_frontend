@@ -3,9 +3,9 @@ import featuresImg from "../Assets/FeaturesImg.png";
 
 const HomeFeatures = () => {
   return (
-    <div className="flex flex-col items-center justify-center">
-      <div className="pb-10">
-        <img src={featuresImg} alt="" className="w-full h-96" />
+    <div className="flex flex-col items-center justify-center p-4">
+      <div className="pb-10 w-full max-w-5xl">
+        <img src={featuresImg} alt="Features" className="w-full h-auto" />
       </div>
     </div>
   );
