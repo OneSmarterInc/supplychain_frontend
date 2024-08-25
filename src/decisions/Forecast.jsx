@@ -84,6 +84,7 @@ const Forecast = () => {
       });
       console.log("POST request successful", response.data);
       await getForecast();
+      addUserLogger();
       toast({
         title: "Forecast Submitted Successfully",
         status: "success",
@@ -104,11 +105,29 @@ const Forecast = () => {
       });
     }
   };
+  const addUserLogger = async () => {
+    try {
+      const response = await axios.post(`${api}/adduserlogs/`, {
+        email: user.email,
+        user_id: user.userid,
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        decision: "Transportation",
+        action: "created",
+        ip_address: "123.345.1",
+        username: user.first_name +" "+ user.last_name,
+        firm_key: firm_key_new,
+        current_quarter:selectedSim[0].current_quarter,
 
+      });
+      const data = response.data;
+      console.log("addUserLoggerData", data);
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
   return (
-    <div style={{ fontFamily: "ABeeZee" }} className="">
-     
-
+    <div style={{ fontFamily: "ABeeZee" }}>
       <div className="sm:grid grid-cols-1 gap-3 m-1 ">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
           <InfoImg decision={"Forecast"} />

@@ -198,7 +198,7 @@ const Distribution_Decision = () => {
         decision: "Distribution",
         action: "created",
         ip_address: "123.345.1",
-        username: user.username,
+        username: user.first_name +" "+ user.last_name,
         firm_key: firm_key_new,
         current_quarter: selectedSimData[0].current_quarter,
       });

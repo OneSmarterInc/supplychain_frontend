@@ -43,13 +43,13 @@ const ForecastingSales = ({ setForecastHyperwaretopass }) => {
             <Th className="p-3 text-left text-green-500" style={{ color: "#D10000" }}>
               {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware || "Smart Home Assistant"}
             </Th>
-            <Th className="p-3 text-left">
+            <Th className="p-3 " textAlign="center">
               {selectedSim[0]?.renamedMappedData?.RegionMapp?.region1 || "Region 1"}
             </Th>
-            <Th className="p-3 text-left">
+            <Th className="p-3" textAlign="center">
               {selectedSim[0]?.renamedMappedData?.RegionMapp?.region2 || "Region 2"}
             </Th>
-            <Th className="p-3 text-left">
+            <Th className="p-3" textAlign="center">
               {selectedSim[0]?.renamedMappedData?.RegionMapp?.region3 || "Region 3"}
             </Th>
           </Tr>
@@ -65,7 +65,7 @@ const ForecastingSales = ({ setForecastHyperwaretopass }) => {
                   type="number"
                   value={ForecastHyperware[channel]?.region1 || ""}
                   onChange={(e) => handleChange(channel, "region1", e.target.value)}
-                  className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                  className="border-gray-300 text-center rounded-md focus:ring focus:ring-blue-200"
                 />
               </Td>
               <Td className="p-3">
@@ -73,7 +73,7 @@ const ForecastingSales = ({ setForecastHyperwaretopass }) => {
                   type="number"
                   value={ForecastHyperware[channel]?.region2 || ""}
                   onChange={(e) => handleChange(channel, "region2", e.target.value)}
-                  className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                  className="border-gray-300 text-center rounded-md focus:ring focus:ring-blue-200"
                 />
               </Td>
               <Td className="p-3">
@@ -81,7 +81,7 @@ const ForecastingSales = ({ setForecastHyperwaretopass }) => {
                   type="number"
                   value={ForecastHyperware[channel]?.region3 || ""}
                   onChange={(e) => handleChange(channel, "region3", e.target.value)}
-                  className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                  className="border-gray-300 text-center rounded-md focus:ring focus:ring-blue-200"
                 />
               </Td>
             </Tr>

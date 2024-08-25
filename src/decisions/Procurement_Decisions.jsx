@@ -114,7 +114,7 @@ const Procurement_Decisions = () => {
         decision: "Procurement",
         action: "created",
         ip_address: "123.345.1",
-        username: user.username,
+        username:user.first_name +" "+ user.last_name,
         firm_key: firm_key_new,
         current_quarter: selectedSim[0]?.current_quarter || 0,
       });
@@ -128,8 +128,6 @@ const Procurement_Decisions = () => {
 
   return (
     <div style={{ fontFamily: "ABeeZee", height:'100vh' }}>
-     
-
      <div className="sm:grid grid-cols-1 gap-3 m-1 ">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
           <InfoImg decision={"Procurement"} />

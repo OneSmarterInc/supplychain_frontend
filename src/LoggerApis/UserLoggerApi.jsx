@@ -64,7 +64,7 @@ const UserLoggerApi = ({ simulation_id, firm_key, current_quarter }) => {
           </Select>
         </HStack>
         <Box bg="white" overflowY={"scroll"} height={60} p={4} borderRadius="md" boxShadow="sm">
-          {filteredLogger.map((logs) => {
+          {filteredLogger.slice().reverse().map((logs) => {
             return (
               <Box key={logs.id} mb={2}>
                 {logs.username ? (
