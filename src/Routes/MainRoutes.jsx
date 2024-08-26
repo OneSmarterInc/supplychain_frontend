@@ -387,7 +387,7 @@ const MainRoutes = () => {
         path="/flexeesim/dashboard"
         element={
           <ProtectedRoute>
-            <div className="bg-white" style={{marginTop:'6.7rem'}}>
+            <div className="bg-white" style={{marginTop:'6rem', paddingTop:"1rem"}}>
               <FlexeeDashboardNavbar />
               <FlexeeDashboard />
               <FlexeeExploreSim />

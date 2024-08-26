@@ -11,7 +11,6 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
 
   const selectedSimData = JSON.parse(localStorage.getItem("SelectedCourse"));
   const passcode = selectedSimData?.passcode;
-
   useEffect(() => {
     const fetchSubscribers = async () => {
       try {
@@ -19,25 +18,31 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
           `${api}/simulation/${passcode}/subscribers/?format=json`
         );
         const data = await response.json();
-
-        // Transform the data to match the structure needed for rendering
-        const transformedData = data.map((item) => ({
-          id: item.user_detail.userid,
-          name: `${item.user_detail.first_name} ${item.user_detail.last_name}`,
-          studentId: item.user_detail.userid,
-          profileImage: item.user_detail.image || "default-image.png", // Fallback image
-          contact: item.user_detail.email,
-          status: item.user_detail.is_online ? "Online" : "Offline",
-          enrollDate: new Date(item.subscribed_at).toLocaleDateString(),
-          team: null, // Assuming you will assign teams later
-        }));
-
+  
+        // Filter out admin users before transforming the data
+        const filteredData = data.filter(item => !item.user_detail.is_admin);
+  
+        // Transform the data to include team information from local storage
+        const transformedData = filteredData.map((item) => {
+          const savedTeam = localStorage.getItem(`team_${item.user_detail.userid}`);
+          return {
+            id: item.user_detail.userid,
+            name: `${item.user_detail.first_name} ${item.user_detail.last_name}`,
+            studentId: item.user_detail.userid,
+            profileImage: item.user_detail.image || "default-image.png", // Fallback image
+            contact: item.user_detail.email,
+            status: item.user_detail.is_online ? "Online" : "Offline",
+            enrollDate: new Date(item.subscribed_at).toLocaleDateString(),
+            team: savedTeam || "", // Load team from local storage if available
+          };
+        });
+  
         setStudents(transformedData);
       } catch (error) {
         console.error("Error fetching the students:", error);
       }
     };
-
+  
     fetchSubscribers();
   }, [api]);
 
@@ -54,9 +59,9 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
       if (selectedFilter === "All Students") {
         return true;
       } else if (selectedFilter === "Students") {
-        return student.team !== null;
+        return student.team !== "";
       } else {
-        return student.team === null;
+        return student.team === "";
       }
     })
     .filter((student) => {
@@ -75,6 +80,16 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
       );
       const data = response.data;
       console.log("Add to firm data: ", data);
+
+      // Save the selected team to local storage
+      localStorage.setItem(`team_${user_id}`, team);
+
+      // Update the student list with the new team assignment
+      setStudents((prevStudents) =>
+        prevStudents.map((student) =>
+          student.id === user_id ? { ...student, team } : student
+        )
+      );
     } catch (error) {
       console.log("Error", error);
     }
@@ -203,7 +218,10 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
                         e.target.value
                       )
                     }
-                    className="block text-gray-700 py-2 px-3 border border-red-300 bg-white rounded-full w-full text-center shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                    value={student.team || ""}
+                    className="block text-gray-700 py-2 px-3 border border-red-300 bg-white rounded-full w-full text-center shadow
+
+-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
                   >
                     <option value="">Assign Team</option>
                     {teams.map((team, index) => (
