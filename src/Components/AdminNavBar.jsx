@@ -6,7 +6,7 @@ import favicon from "../assets/favicon.png";
 const AdminNavBar = () => {
   return (
     <div>
-      <nav className="bg-gray-800">
+      <nav className="">
         <div className="mx-auto  px-6 ">
           <div className="relative flex h-16 items-center justify-end">
             <div className="flex w-screen items-center  justify-between">

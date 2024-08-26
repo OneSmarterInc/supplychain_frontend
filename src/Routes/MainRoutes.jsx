@@ -74,7 +74,7 @@ const MainRoutes = () => {
         exact
         path="/"
         element={
-          <div className="home h-screen">
+          <div className="home h-screen bg-white">
             <FlexeeNavbar />
             <FlexeeHome />
             <FlexeeOverview />
@@ -387,7 +387,7 @@ const MainRoutes = () => {
         path="/flexeesim/dashboard"
         element={
           <ProtectedRoute>
-            <div className="" style={{marginTop:'6.7rem'}}>
+            <div className="bg-white" style={{marginTop:'6.7rem'}}>
               <FlexeeDashboardNavbar />
               <FlexeeDashboard />
               <FlexeeExploreSim />

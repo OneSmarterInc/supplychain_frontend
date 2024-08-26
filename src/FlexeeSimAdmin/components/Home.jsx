@@ -29,17 +29,17 @@ function Home() {
         </p>
       </div>
       <div className="mt-8 md:mt-16 flex justify-center">
-        <form className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6 w-full max-w-lg" onSubmit={handleSubmit}>
+        <form className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6 w-full max-w-xl" onSubmit={handleSubmit}>
           <input
             type="email"
-            className="flex-1 border border-gray-300 rounded p-2 py-1 w-full md:w-96"
+            className="flex-1 border border-gray-300 rounded p-3 py-2 w-full md:w-full"
             placeholder="Enter Your Email Address"
             value={email}
             onChange={handleEmailChange}
           />
           <button
             type="submit"
-            className="bg-red-500 w-full md:w-28 text-white p-2 rounded"
+            className="bg-red-500 w-full md:w-36 text-white p-3 rounded"
           >
             GET STARTED
           </button>
