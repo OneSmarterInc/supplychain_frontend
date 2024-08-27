@@ -22,7 +22,6 @@ const ProfileDropdown = () => {
   let user = JSON.parse(localStorage.getItem("user"));
   const { api, api1 } = useContext(MyContext);
   const [profile, setProfile] = useState({
-    username: user?.username,
     email: user?.email,
     department: user?.department,
     first_name: user?.first_name,
@@ -30,7 +29,7 @@ const ProfileDropdown = () => {
     course: user?.course,
     university: user?.university,
     userType: user?.isadmin ? "Admin" : "User",
-    image:user?.image
+    image: user?.image
   });
 
   const openEditModal = () => {
@@ -46,12 +45,32 @@ const ProfileDropdown = () => {
     setProfile({ ...profile, [name]: value });
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setProfile({ ...profile, image: file });
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
     try {
+      const formData = new FormData();
+      formData.append("email", profile.email);
+      formData.append("department", profile.department);
+      formData.append("first_name", profile.first_name);
+      formData.append("last_name", profile.last_name);
+      formData.append("course", profile.course);
+      formData.append("university", profile.university);
+      if (profile.image) {
+        formData.append("image", profile.image);
+      }
+
       const response = await axios.patch(
         `${api}/user-details/${user?.userid}/`,
-        profile
+        formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
       );
       const data = response.data;
       localStorage.setItem("user", JSON.stringify(data));
@@ -74,13 +93,11 @@ const ProfileDropdown = () => {
         <PopoverHandler>
           <div className="cursor-pointer flex items-center">
             <div className="flex items-center justify-center text-xl text-red font-bold px-2 mr-3">
-             
               <img
-                    src={`${api1}${profile?.image}` || "default-image.png"} 
-                    alt={profile.first_name}
-                    className="h-7 w-7 rounded-full"
-                  />
-             
+                src={profile?.image ? `${api1}${profile.image}` : 'https://cdn-icons-png.flaticon.com/512/1077/1077012.png'}
+                alt={profile?.first_name || 'Default User'}
+                className="h-7 w-7 rounded-full"
+              />
             </div>
           </div>
         </PopoverHandler>
@@ -88,11 +105,12 @@ const ProfileDropdown = () => {
           <div className="px-4 py-3 flex justify-between items-center">
             <div className="flex items-center">
               <div className="w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center text-2xl text-white font-bold">
-              <img
-                    src={`${api1}${profile?.image}` || "default-image.png"} 
-                    alt={profile.first_name}
-                    className="h-12 w-12 rounded-full"
-                  />
+                <img
+                  src={profile?.image ? `${api1}${profile.image}` : 'https://cdn-icons-png.flaticon.com/512/1077/1077012.png'}
+
+                  alt={profile.first_name}
+                  className="h-12 w-12 rounded-full"
+                />
               </div>
               <div className="ml-4">
                 <p className="text-lg font-medium text-gray-900">
@@ -150,19 +168,7 @@ const ProfileDropdown = () => {
       <Dialog open={isEditOpen} handler={closeEditModal}>
         <DialogHeader>Edit Profile</DialogHeader>
         <DialogBody divider>
-          <form className="space-y-4" onSubmit={handleSave}>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Username
-              </label>
-              <input
-                type="text"
-                name="username"
-                value={profile?.username || ""}
-                onChange={handleInputChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              />
-            </div>
+          <form className="space-y-4" onSubmit={handleSave} encType="multipart/form-data">
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 First Name
@@ -222,6 +228,25 @@ const ProfileDropdown = () => {
                 onChange={handleInputChange}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Profile Picture
+              </label>
+              <div className="flex items-center">
+                <img
+                  src={`${api1}${profile?.image}` || "default-image.png"}
+                  alt={profile.first_name}
+                  className="h-16 w-16 rounded-full mr-4"
+                />
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                />
+              </div>
             </div>
           </form>
         </DialogBody>

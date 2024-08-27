@@ -28,16 +28,17 @@ const Navbar = () => {
           {user ? (
             <span
               onClick={handleDashboardClick}
-              className="text-sm md:text-base text-gray-500 hover:text-red-500 hover:underline underline-offset-4 decoration-red-600 cursor-pointer"
+              className="text-sm md:text-base text-Red-500 hover:text-red-500 hover:underline underline-offset-4 decoration-red-600 cursor-pointer font-bold"
             >
               Dashboard
             </span>
           ) : (
             <Link
               to="/signin/"
-              className="text-sm md:text-base text-gray-500 hover:text-red-500 hover:underline underline-offset-4 decoration-red-600 cursor-pointer"
+              className="text-sm md:text-base text-Red-500 hover:text-red-500 hover: underline-offset-4 decoration-red-600 cursor-pointer font-bold"
             >
               Sign In
+              <i className="fa fa-user pl-3"></i>
             </Link>
           )}
         </div>

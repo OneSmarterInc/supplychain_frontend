@@ -109,7 +109,7 @@ const Signin = () => {
       if (error.response && error.response.status === 401) {
         toast({
           title: "User not found",
-          description: "Please sign up.",
+          description: "Please check your email or  Sign up.",
           status: "error",
           duration: 9000,
           isClosable: true,

@@ -149,7 +149,6 @@ const Sidebar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isSidebarOpen]);
-
   return (
     <div className="relative z-50 flex">
       {!isSidebarOpen && (
@@ -157,7 +156,7 @@ const Sidebar = () => {
           <i class="fa-solid fa-bars text-2xl text-red-500" onClick={toggleSidebar}></i>
         </div>
       )}
-
+  
       {isSidebarOpen && (
         <div
           ref={sidebarRef}
@@ -214,7 +213,7 @@ const Sidebar = () => {
           </ul>
         </div>
       )}
-
+  
       {isSidebarOpen &&
         activeParent &&
         parentOptions.find((option) => option.name === activeParent)
@@ -240,11 +239,11 @@ const Sidebar = () => {
             </ul>
           </div>
         )}
-
+  
       {isSidebarOpen && activeChild && type === "Reports" && (
         <div
           ref={sidebarRef}
-          className="fixed left-108 top-0 w-48 bg-gray-700 text-white h-screen p-4"
+          className="fixed left-[15rem] top-0 w-48 bg-gray-700 text-white h-screen p-4"
         >
           <button
             onClick={() => handleReportChange("cpl")}
@@ -264,7 +263,7 @@ const Sidebar = () => {
           >
             Finished Goods Inventory Report
           </button>
-
+  
           {activeReport === "cpl" && reportData && (
             <ReportModal reportData={reportData} />
           )}

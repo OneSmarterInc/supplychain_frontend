@@ -1,21 +1,43 @@
 import React from "react";
-import map from "../Assets/map.png"; // Replace with your actual map image
-// import markerIcon from "../Assets/markerIcon.png"; // Replace with your actual marker ico÷n image
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Define a custom icon (optional)
+const customIcon = new L.Icon({
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+});
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-gray-700 py-12">
+    <footer className="bg-white text-gray-700 py-2">
       <div className="max-w-screen-xl mx-auto px-4 md:px-8">
         {/* Top Section */}
         <div className="flex flex-wrap justify-between items-center text-center md:text-left">
           {/* Map Section */}
           <div className="w-full md:w-1/3 mb-8 md:mb-0">
             <h3 className="uppercase tracking-wide text-gray-500 mb-4">Where we are now</h3>
-            <div className="relative inline-block mx-auto md:mx-0">
-              <img src={map} alt="World Map" className="w-full h-auto" />
-              {/* <img src={markerIcon} alt="Location Marker" className="absolute bottom-16 left-1/2 transform -translate-x-1/2" /> */}
+            <div className="relative mx-auto md:mx-0 h-64 w-full">
+              <MapContainer
+                center={[39.7589, -84.1916]} // Dayton, OH coordinates
+                zoom={3}
+                scrollWheelZoom={false}
+                className="h-full"
+              >
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <Marker position={[39.7589, -84.1916]} icon={customIcon}>
+                  <Popup>
+                    Dayton, OH - Your location.
+                  </Popup>
+                </Marker>
+              </MapContainer>
             </div>
-            <p className="text-gray-500 mt-2 text-sm italic">Rio de Janeiro, Brazil</p>
           </div>
 
           {/* Social Media Section */}

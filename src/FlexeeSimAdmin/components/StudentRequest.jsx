@@ -11,6 +11,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
 
   const selectedSimData = JSON.parse(localStorage.getItem("SelectedCourse"));
   const passcode = selectedSimData?.passcode;
+  
   useEffect(() => {
     const fetchSubscribers = async () => {
       try {
@@ -18,7 +19,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
           `${api}/simulation/${passcode}/subscribers/?format=json`
         );
         const data = await response.json();
-  
+        
         // Filter out admin users before transforming the data
         const filteredData = data.filter(item => !item.user_detail.is_admin);
   
@@ -34,6 +35,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
             status: item.user_detail.is_online ? "Online" : "Offline",
             enrollDate: new Date(item.subscribed_at).toLocaleDateString(),
             team: savedTeam || "", // Load team from local storage if available
+            simulationId: item.simulation_id // Add simulationId for unsubscribe
           };
         });
   
@@ -52,6 +54,18 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
 
   const handleFilterChange = (event) => {
     setSelectedFilter(event.target.value);
+  };
+
+  const handleUnsubscribe = async (userId, simulationId) => {
+    try {
+      await axios.delete(`${api}/unsubscribe/${userId}/${simulationId}/`);
+      // Update the student list by removing the unsubscribed student
+      setStudents((prevStudents) =>
+        prevStudents.filter(student => student.id !== userId)
+      );
+    } catch (error) {
+      console.log("Error unsubscribing the student:", error);
+    }
   };
 
   const filteredStudents = students
@@ -239,7 +253,10 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
                 {student.enrollDate}
               </td>
               <td className="px-4 py-2 text-center">
-                <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                <i 
+                  className="fa-solid fa-trash text-red-500 cursor-pointer hover:scale-110"
+                  onClick={() => handleUnsubscribe(student.id, student.simulationId)}
+                ></i>
               </td>
             </tr>
           ))}

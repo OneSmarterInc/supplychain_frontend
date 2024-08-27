@@ -45,14 +45,14 @@ const TeamTableComponent = ({ selectedTeam }) => {
                       </div>
                     </td>
                     <td className="py-4 px-4 text-start">
-                      <p className="text-sm text-black">Received Amount</p>
-                      <p className="text-green-500">{member.amount || "N/A"}</p>
+                      <p className="text-sm text-black">Email</p>
+                      <p className="text-green-500">{member.email || "-"}</p>
                     </td>
                     <td className="py-4 px-4 text-start">
-                      <p className="text-sm text-black">Validity</p>
-                      <p className="text-green-500">{member.validity || "N/A"}</p>
+                      <p className="text-sm text-black">University</p>
+                      <p className="text-green-500">{member.university || "N/A"}</p>
                     </td>
-                    <td className="py-4 px-4 text-center text-blue-400 hover:text-blue-500 cursor-pointer">
+                    {/* <td className="py-4 px-4 text-center text-blue-400 hover:text-blue-500 cursor-pointer">
                       <svg
                         className="h-8 w-8"
                         width="24"
@@ -70,7 +70,7 @@ const TeamTableComponent = ({ selectedTeam }) => {
                         <line x1="16" y1="12" x2="12" y2="16" />
                         <line x1="16" y1="12" x2="12" y2="8" />
                       </svg>
-                    </td>
+                    </td> */}
                   </tr>
                 ))
               ) : (

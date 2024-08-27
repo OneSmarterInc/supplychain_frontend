@@ -245,11 +245,11 @@ const Distribution_Decision = () => {
               </div>
               <InfoButton />
             </div>
-            <Box>
-              <Table className="min-w-full bg-white rounded-md shadow-sm">
-                <Thead className="bg-gray-100">
+            <Box className="ml-4 mr-4">
+            <Table variant="simple" bg="white" mt="4" className=" rounded-md">
+            <Thead className="bg-gray-100 text-gray-700 font-semibold">
                   <Tr>
-                    <Th> </Th>
+                    <Th style={{ color: "#D10000" }}> Distribution </Th>
                     <Th>
                       {selectedSimData[0]?.renamedMappedData?.RegionMapp?.region1}
                     </Th>

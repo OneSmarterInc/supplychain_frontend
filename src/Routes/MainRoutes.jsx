@@ -62,6 +62,8 @@ import CNavbar from "../decisions/CnewNavbar";
 import { PrivateRoute } from "./PrivateRoutes";
 import BackOfficeFooter from "../FlexeeSimAdmin/components/Backoffice/BackOfficeFooter";
 import Footer from "../FlexeeSimAdmin/components/Footer";
+import Members from "../Components/Members";
+import ForgotPassword from "../Components/ForgotPassword";
 
 const MainRoutes = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
@@ -87,6 +89,13 @@ const MainRoutes = () => {
           </div>
         }
       />
+      <Route
+        exact
+        path="/forgot-password"
+        element={
+          <ForgotPassword />
+        }
+        />
 
       {/* Protected Routes */}
       <Route
@@ -112,6 +121,21 @@ const MainRoutes = () => {
               <BackOfficeNavbar />
               <Sidebar />
               <Analytics />
+            </PrivateRoute>
+          </div>
+        }
+      />
+
+
+      <Route
+        exact
+        path="/members"
+        element={
+          <div className="procurement h-screen">
+            <PrivateRoute>
+              <BackOfficeNavbar />
+              <Sidebar />
+              <Members />
             </PrivateRoute>
           </div>
         }
@@ -390,7 +414,7 @@ const MainRoutes = () => {
             <div className="bg-white" style={{marginTop:'6rem', paddingTop:"1rem"}}>
               <FlexeeDashboardNavbar />
               <FlexeeDashboard />
-              <FlexeeExploreSim />
+              {/* <FlexeeExploreSim /> */}
               <BackOfficeFooter />
             </div>
           </ProtectedRoute>

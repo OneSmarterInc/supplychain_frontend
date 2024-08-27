@@ -114,7 +114,7 @@ const Demand_generation = () => {
         decision: "Demand",
         action: "created",
         ip_address: "123.345.1",
-        username: user.first_name +" "+ user.last_name,
+        username: user.first_name + " " + user.last_name,
         firm_key: firm_key_new,
         current_quarter: selectedSim[0].current_quarter,
       });
@@ -126,57 +126,65 @@ const Demand_generation = () => {
   };
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
-     <div className="sm:grid grid-cols-1 gap-3 m-1">
-          <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
-            <InfoImg decision={"Demand"} />
-            <div className="flex items-center justify-between w-full">
+      <div className="sm:grid grid-cols-1 gap-3 m-1">
+        <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
+          <InfoImg decision={"Demand"} />
+          <div className="flex items-center justify-between w-full">
             <div className="flex items-center pl-5 pt-2 pb-2">
-                <Text>Load data Quarterly</Text>
-                <div className="pl-4 flex space-x-4">
-                  {Array.from(
-                    { length: selectedSim[0]?.current_quarter || 0 },
-                    (_, i) => (
-                      <div
-                        key={i + 1}
-                        onClick={() => setSelectedQuarter(i + 1)}
-                        className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
-                          selectedQuarter === i + 1
-                            ? "bg-red-500 border-red-500 text-white"
-                            : ""
+              <Text>Load data Quarterly</Text>
+              <div className="pl-4 flex space-x-4">
+                {Array.from(
+                  { length: selectedSim[0]?.current_quarter || 0 },
+                  (_, i) => (
+                    <div
+                      key={i + 1}
+                      onClick={() => setSelectedQuarter(i + 1)}
+                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${selectedQuarter === i + 1
+                          ? "bg-red-500 border-red-500 text-white"
+                          : ""
                         }`}
-                      >
-                        {i + 1}
-                      </div>
-                    )
-                  )}
-                </div>
+                    >
+                      {i + 1}
+                    </div>
+                  )
+                )}
               </div>
-              <InfoButton />
             </div>
-          <Demand_hype_ch1
-            demandData={demandData}
-            setHypeCh1ValuetoParent={setHypeCh1Value}
-          />
-          <Demand_hype_ch2
-            demandData={demandData}
-            setHypeCh2ValuetoParent={setHypeCh2Value}
-          />
-          <Demand_meta_ch1
-            demandData={demandData}
-            setMetaCh1ValuetoParent={setMetaCh1Value}
-          />
-          <Demand_meta_ch2
-            demandData={demandData}
-            setMetaCh2ValuetoParent={setMetaCh2Value}
-          />
-
-               {/* Submit Button */}
-               <div className="flex justify-end mt-4">
+            <InfoButton />
+          </div>
+          <div className="m-3 rounded-2xl bg-white flex flex-col justify-start border-2 px-2">
+            <Text fontSize="xl" fontWeight="bold" p="5" pb="0">
+              {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
+            </Text>
+            <Demand_hype_ch1
+              demandData={demandData}
+              setHypeCh1ValuetoParent={setHypeCh1Value}
+            />
+            <Demand_hype_ch2
+              demandData={demandData}
+              setHypeCh2ValuetoParent={setHypeCh2Value}
+            />
+          </div>
+          <div className="m-3 rounded-2xl bg-white flex flex-col justify-start border-2 px-2">
+          <Text fontSize="xl" fontWeight="bold" p="5" pb="0">
+              {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}
+            </Text>
+            <Demand_meta_ch1
+              demandData={demandData}
+              setMetaCh1ValuetoParent={setMetaCh1Value}
+            />
+            <Demand_meta_ch2
+              demandData={demandData}
+              setMetaCh2ValuetoParent={setMetaCh2Value}
+            />
+          </div>
+          {/* Submit Button */}
+          <div className="flex justify-end mt-4">
             <button
               onClick={submitDemand}
               className={`${selectedQuarter === currentQuarter
-                  ? "bg-red-500 hover:bg-black-700 text-white"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                ? "bg-red-500 hover:bg-black-700 text-white"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
               disabled={selectedQuarter !== currentQuarter}
             >

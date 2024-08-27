@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MyContext from "../../Components/ContextApi/MyContext";
+import ExploreSim from "./ExploreSim";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const Dashboard = () => {
         startDate: item.simulation.start_date,
         endDate: item.simulation.end_date,
         passcode: item.simulation.passcode,
+        simulation_id:item.simulation_id
       }));
       setCourses(transformedCourses);
     } catch (error) {
@@ -60,15 +62,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen pb-12 bg-white-full p-0 px-6 relative pt-1.5 max-w-screen-full mx-auto">
-      <div className="absolute left-1/2 transform top-9 min-h-[680px] w-[2px] bg-red-500"></div>
-      <div className="absolute left-1/2 transform -translate-x-full top-9 w-40 h-[2px] bg-red-500"></div>
-      <div className="absolute left-1/2 transform -translate-x-40 top-6 text-red-500">
+    <div className="pb-12 bg-white-full p-0 px-6 relative pt-1.5 max-w-screen-full mx-auto">
+      <div className="absolute left-1/2 transform top-10 min-h-full w-[2px] bg-red-500"></div>
+      <div className="absolute left-1/2 transform -translate-x-full top-10 w-40 h-[2px] bg-red-500"></div>
+      <div className="absolute left-1/2 transform -translate-x-40 top-7 text-red-500">
         <i className="fa-solid fa-caret-left text-lg"></i>
       </div>
-      <div className="absolute left-1/2 transform -translate-x-1/2 top-[730px] w-2 h-2 rounded-full border-2 border-red-500 "></div>
-      <div className="absolute left-1/2 transform -translate-x-1/2 top-[750px] w-3 h-3 rounded-full border-2 border-red-500 "></div>
-      <div className="absolute left-1/2 transform -translate-x-1/2 top-[770px] w-4 h-4 rounded-full border-2 border-red-500 "></div>
+      <div className="absolute left-1/2 transform -translate-x-1/2 top-full w-2 h-2 rounded-full border-2 border-red-500 mt-12"></div>
+      <div className="absolute left-1/2 transform -translate-x-1/2 top-full w-3 h-3 rounded-full border-2 border-red-500 mt-16"></div>
+      <div className="absolute left-1/2 transform -translate-x-1/2 top-full w-4 h-4 rounded-full border-2 border-red-500 mt-20"></div>
 
       <section className="grid grid-cols-1 md:grid-cols-2 items-center relative gap-6">
         <div className="text-start">
@@ -89,46 +91,53 @@ const Dashboard = () => {
               type="submit"
               className="bg-red-500 w-28 text-white p-2 rounded"
             >
-              SUBMIT
+              {courses.length === 0 ? "Connect Now" : "SUBMIT"}
             </button>
           </form>
         </div>
       </section>
 
       <section className="w-full my-2">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {courses.map((course, index) => (
-            <div
-              key={index}
-              onClick={() => handleSelectedCourse(course)}
-              className="bg-white hover:bg-gray-200 h-64 cursor-pointer text-start p-4 px-8 rounded-md relative shadow-sm border border-gray-500 border-opacity-20 group"
-            >
-              <div>
-                <div className="text-xl font-medium">ORGANIZATION:</div>
-                <div className="text-gray-700 text-lg mb-2">
-                  {course.organization}
+        {courses.length === 0 ? (
+          <div className="text-left text-gray-700 font-semibold">
+            No courses have been created yet. Please subscribe to a simulation to get started.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {courses.map((course, index) => (
+              <div
+                key={index}
+                onClick={() => handleSelectedCourse(course)}
+                className="bg-white hover:bg-gray-200 h-64 cursor-pointer text-start p-4 px-8 rounded-md relative shadow-sm border border-gray-500 border-opacity-20 group"
+              >
+                <div>
+                  <div className="text-xl font-medium">ORGANIZATION:</div>
+                  <div className="text-gray-700 text-lg mb-2">
+                    {course.organization}
+                  </div>
+                  <div className="text-xl font-medium">COURSE:</div>
+                  <div className="text-gray-700 mb-2 text-lg">
+                    {course.course}
+                  </div>
+                  <div className="text-xl font-medium">MEMBERS:</div>
+                  <div className="text-gray-700 text-lg">
+                    TOTAL NUMBER OF STUDENTS - {course.members}
+                  </div>
                 </div>
-                <div className="text-xl font-medium">COURSE:</div>
-                <div className="text-gray-700 mb-2 text-lg">
-                  {course.course}
-                </div>
-                <div className="text-xl font-medium">MEMBERS:</div>
-                <div className="text-gray-700 text-lg">
-                  TOTAL NUMBER OF STUDENTS - {course.members}
+                <div className="text-[#ED1C24] flex items-start space-x-2 text-right absolute top-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <span>
+                    <i className="fa-regular fa-circle-dot px-1 text-xs"></i>
+                    Explore Team/Members{" "}
+                  </span>
+                  <span className="text-3xl">
+                    <i className="fa-solid fa-arrow-up-right-from-square py-4"></i>
+                  </span>
                 </div>
               </div>
-              <div className="text-[#ED1C24] flex items-start space-x-2 text-right absolute top-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span>
-                  <i className="fa-regular fa-circle-dot px-1 text-xs"></i>
-                  Explore Team/Members{" "}
-                </span>
-                <span className="text-3xl">
-                  <i className="fa-solid fa-arrow-up-right-from-square py-4"></i>
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+            <ExploreSim />
+          </div>
+        )}
       </section>
     </div>
   );

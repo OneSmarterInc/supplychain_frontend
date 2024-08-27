@@ -15,8 +15,6 @@ import {
   InputRightElement,
   Text,
   useToast,
-  RadioGroup,
-  Radio,
   HStack,
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock, FaCamera } from "react-icons/fa";
@@ -24,7 +22,6 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import MyContext from "./ContextApi/MyContext";
 import graphics from '../assets/graphic.png'
-
 
 import maleProfile from "../assets/male.jpeg";  // Replace with actual path
 import femaleProfile from "../assets/female.webp";  // Replace with actual path
@@ -34,7 +31,6 @@ const CFaLock = chakra(FaLock);
 const CFaCamera = chakra(FaCamera);
 
 const Signup = () => {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -62,13 +58,70 @@ const Signup = () => {
     setSelectedDefaultImage(image);
     setProfileImage(null);
   };
+
   const signupHandler = async (e) => {
     e.preventDefault();
-  
+
+    // Basic email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Password validation regex (at least 6 characters, 1 uppercase, 1 symbol, 1 number)
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+    // First and last name validation
+    if (firstName.trim() === lastName.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "First name and last name cannot be the same.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+
+    // Email validation
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+
+    // Password validation
+    if (!passwordRegex.test(password)) {
+      toast({
+        title: "Invalid Password",
+        description: "Password must be at least 6 characters long, include one capital letter, one symbol, and one number.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+
+    if (!email || !password || !firstName || !lastName || !university || !course || !department) {
+      toast({
+        title: "Field is empty",
+        description: "Please ensure that you have provided all required fields.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+
     const formData = new FormData();
-  
+
     // Append other form fields
-    formData.append("username", name);
     formData.append("email", email);
     formData.append("password", password);
     formData.append("first_name", firstName);
@@ -76,36 +129,23 @@ const Signup = () => {
     formData.append("university", university);
     formData.append("course", course);
     formData.append("department", department);
-  
+
     // Append the profile image (either the selected file or default image)
     if (profileImage) {
       formData.append("image", profileImage);
     } else if (selectedDefaultImage) {
-      // Convert the selected default image URL to a blob and append it
       const response = await fetch(selectedDefaultImage);
       const blob = await response.blob();
       formData.append("image", blob, selectedDefaultImage.split('/').pop());
     }
-  
+
     try {
-      if (!name || !email || !password || !firstName || !lastName || !university || !course || !department) {
-        toast({
-          title: "Field is empty",
-          description: "Please ensure that you have provided all required fields.",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-          position: "top",
-        });
-        return;
-      }
-  
       const response = await axios.post(`${api}/users/createuser/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-  
+
       if (response.status === 201) {
         toast({
           title: "Account Created Successfully",
@@ -149,8 +189,9 @@ const Signup = () => {
       }
     }
   };
+
   return (
-    <Flex w={"100vw"} justifyContent={"center"} alignItems={"center"} h={"100vh"}  backgroundImage={`url(${graphics})`}>
+    <Flex w={"100vw"} justifyContent={"center"} alignItems={"center"} h={"100vh"} backgroundImage={`url(${graphics})`}>
       <Box w={{ base: "90%", md: "50%" }}>
         <Flex
           flexDirection="column"
@@ -163,9 +204,9 @@ const Signup = () => {
         >
           <Heading color="black">Register with your e-mail</Heading>
           <Text mt={2} mb={6} color="gray.500" textAlign="center">
-            Please enter your e-mail address and a password to start the registration process. You will receive a confirmation e-mail to activate your account.
+            Please enter your e-mail address and a password to start the registration process.
           </Text>
-          
+
           {/* Profile Image Selection */}
           <Box mb={4} textAlign="center">
             <Text fontWeight={"600"}>Choose Profile Image</Text>
@@ -182,36 +223,12 @@ const Signup = () => {
                 cursor="pointer"
                 border={selectedDefaultImage === femaleProfile ? "2px solid blue" : "none"}
               />
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                display="none"
-                id="profile-upload"
-              />
-              <Button as="label" htmlFor="profile-upload" leftIcon={<CFaCamera />} colorScheme="teal">
-                Upload Image
-              </Button>
             </HStack>
           </Box>
 
           <Box minW={{ base: "90%", md: "80%" }}>
-            <form>
+            <form onSubmit={signupHandler}>
               <Stack spacing={4}>
-                <FormControl isRequired>
-                  <InputGroup>
-                    <InputLeftElement
-                      pointerEvents="none"
-                      children={<CFaUserAlt color="gray.300" />}
-                    />
-                    <Input
-                      type="text"
-                      placeholder="User Name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </InputGroup>
-                </FormControl>
 
                 <FormControl isRequired>
                   <InputGroup>
@@ -246,6 +263,9 @@ const Signup = () => {
                       </Button>
                     </InputRightElement>
                   </InputGroup>
+                  <FormHelperText>
+                    Password must be at least 6 characters long, include one capital letter, one symbol, and one number.
+                  </FormHelperText>
                 </FormControl>
 
                 {/* Additional Fields */}
@@ -310,7 +330,6 @@ const Signup = () => {
                   variant="solid"
                   colorScheme="red"
                   width="full"
-                  onClick={signupHandler}
                 >
                   Register
                 </Button>

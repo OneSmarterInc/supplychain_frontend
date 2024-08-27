@@ -25,39 +25,32 @@ const PlayComponent = ({
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [firstDropdownValue, setFirstDropdownValue] = useState("1");
   const [secondDropdownValue, setSecondDropdownValue] = useState("");
-
-  console.log("SelectedSimData:", selectedSimData[0]);
-  console.log("Rendering PlayComponent with props:", {
-    id,
-    batch,
-    startDate,
-    endDate,
-    currentQuarter,
-    firm_data,
-    selectedSimData,
-  });
+  const [isUserAssigned, setIsUserAssigned] = useState(false);
 
   let user = JSON.parse(localStorage.getItem("user"));
   const email = user.email;
   let firm_key_map = "";
 
-  if (firm_data?.length) {
-    let firm_obj = firm_data.find((item) => item.emails.includes(email));
-    if (firm_obj) {
-      firm_key_map = firm_obj.firmName;
+  useEffect(() => {
+    if (firm_data?.length) {
+      let firm_obj = firm_data.find((item) => item.emails.includes(email));
+      if (firm_obj) {
+        firm_key_map = firm_obj.firmName;
+        setIsUserAssigned(true);
+      } else {
+        setIsUserAssigned(false);
+      }
     }
-  }
+  }, [firm_data, email]);
 
   const handleSubmit = () => {
-    localStorage.setItem("selectedSimulation", JSON.stringify(id));
-    localStorage.setItem("selectedSimData", JSON.stringify(selectedSimData));
-    localStorage.setItem("selectedSim", JSON.stringify(selectedSimData));
-    navigate("/Forecast");
+    if (isUserAssigned) {
+      localStorage.setItem("selectedSimulation", JSON.stringify(id));
+      localStorage.setItem("selectedSimData", JSON.stringify(selectedSimData));
+      localStorage.setItem("selectedSim", JSON.stringify(selectedSimData));
+      navigate("/Forecast");
+    }
   };
-
-  useEffect(() => {
-    setSecondDropdownValue("");
-  }, [isReportModalOpen, firstDropdownValue]);
 
   const toggleModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
@@ -113,18 +106,29 @@ const PlayComponent = ({
             </p>
             <div className="buttons my-2">
               <button
-                className="w-32 h-10 rounded-lg bg-red-600 text-white text-center p-2 mx-2 hover:bg-gray-700"
+                className={`w-32 h-10 rounded-lg text-white text-center p-2 mx-2 ${
+                  isUserAssigned ? "bg-red-600 hover:bg-gray-700" : "bg-gray-400 cursor-not-allowed"
+                }`}
                 onClick={handleSubmit}
+                disabled={!isUserAssigned}
               >
                 Enter
               </button>
               <button
                 onClick={toggleModal}
-                className="w-28 h-10 rounded-lg bg-black text-white text-center p-2 hover:bg-gray-700"
+                className={`w-28 h-10 rounded-lg text-white text-center p-2 mx-2 ${
+                  isUserAssigned ? "bg-black hover:bg-gray-700" : "bg-gray-400 cursor-not-allowed"
+                }`}
+                disabled={!isUserAssigned}
               >
                 Reports
               </button>
             </div>
+            {!isUserAssigned && (
+              <p className="text-red-600 mt-2">
+                You will be assigned to a team by faculty soon. Once assigned, you will receive an email.
+              </p>
+            )}
           </div>
         </div>
         <div className="flex-1">

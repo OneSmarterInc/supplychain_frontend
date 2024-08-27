@@ -10,7 +10,7 @@ import transport from "../assets/transport.png";
 import manufacturing from "../assets/manufacturing.png";
 import procurement from "../assets/procurement.png";
 import Inventory from "./Inventory";
-import { Text } from "@chakra-ui/react";
+import { Button, Text } from "@chakra-ui/react";
 
 const InfoImg = ({ decision }) => {
   const location = useLocation();
@@ -53,13 +53,10 @@ const InfoImg = ({ decision }) => {
         return it;
       case "/Service":
         return service;
-
       case "/Transport":
         return transport;
-
       case "/Transportation":
         return transport;
-
       case "/Manufacture":
         return manufacturing;
       case "/Distribution":
@@ -74,7 +71,7 @@ const InfoImg = ({ decision }) => {
   return (
     <div className="relative">
       <div
-        className="h-28 bg-cover bg-no-repeat rounded-sm overflow-hidden"
+        className="h-28 bg-cover bg-no-repeat overflow-hidden"
         style={{
           backgroundImage: `url(${backgroundImage()})`,
           width: "auto",
@@ -109,7 +106,7 @@ const InfoImg = ({ decision }) => {
             <button 
               title="Click to open Inventory" 
               onClick={handleInventory} 
-              className="bg-red-500 rounded-md text-white h-10 pl-2 pr-2 hover:bg-red-700 shadow-md hover:shadow-lg hover:shadow-grey-500/50"
+              className="bg-[#D10000] rounded-md text-white h-10 px-2  hover:bg-red-700 shadow-md hover:shadow-lg hover:shadow-grey-500/50"
             >
               Inventory
             </button>
@@ -132,8 +129,10 @@ const InfoImg = ({ decision }) => {
           },
         }}
       >
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Button onClick={closeModal} bg="#D10000" color="white">Close</Button>
+    </div> 
         <Inventory />
-        <button onClick={closeModal}>Close</button>
       </Modal>
     </div>
   );

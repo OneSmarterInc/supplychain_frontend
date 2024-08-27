@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, Input, Flex, useToast } from "@chakra-ui/react";
 import MyContext from "../Components/ContextApi/MyContext";
 
-const JoinNow = () => {
+const JoinNow = ({ refreshSimulations }) => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
   const userData = JSON.parse(localStorage.getItem("user"));
@@ -31,6 +31,10 @@ const JoinNow = () => {
           duration: 5000,
           isClosable: true,
         });
+        // Clear the input box
+        setPasscode("");
+        // Refresh simulations after successful subscription
+        refreshSimulations();
         navigate("/usersidelive");
       } catch (error) {
         toast({
@@ -113,7 +117,7 @@ const JoinNow = () => {
       {!showInput && (
         <Button
           colorScheme="red"
-          
+
           onClick={handleJoinClick}
           position="fixed"
           bottom="4rem"

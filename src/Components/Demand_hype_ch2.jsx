@@ -39,15 +39,11 @@ const Demand_hype_ch2 = ({ setHypeCh2ValuetoParent }) => {
 
   return (
     <Box>
-      <Text fontSize="xl" fontWeight="bold" p="5" pb="0">
-        {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware} -{" "}
-        {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel2}
-      </Text>
-      <Table variant="simple" bg="white" shadow="sm" rounded="md" mt="4">
-        <Thead bg="gray.100">
+      <Table variant="simple" bg="white" mt="4" className="shadow-md rounded-md">
+      <Thead className="bg-gray-100 text-gray-700 font-semibold">
           <Tr>
-            <Th fontWeight="bold">
-              {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
+            <Th fontWeight="bold" style={{ color: "#D10000" }}>
+            {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel2}
             </Th>
             <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}</Th>
             <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}</Th>
@@ -78,7 +74,7 @@ const Demand_hype_ch2 = ({ setHypeCh2ValuetoParent }) => {
                   ) : (
                     <Input
                       type="number"
-                      placeholder={`Enter ${channel}`}
+                      placeholder={`Enter ${channel} in $`}
                       value={hypeCh2Value[channel][region] || ""}
                       fontSize="sm"
                       onChange={(e) =>
