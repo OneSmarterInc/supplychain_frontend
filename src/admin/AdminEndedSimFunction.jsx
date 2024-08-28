@@ -1,8 +1,6 @@
-import { Select, Text, HStack } from "@chakra-ui/react";
+import { Select, HStack } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import Chart from "react-apexcharts"; // Ensure you've installed react-apexcharts
-import { useNavigate } from "react-router-dom";
 import MyContext from "../Components/ContextApi/MyContext";
 import ReportModal from "../report/CplReport/ReportModal";
 import ProductReportModal from "../report/ProductReport/ProductReportModel";
@@ -17,7 +15,6 @@ const AdminSideEndedFunction = ({
   endDate,
   currentQuarter,
 }) => {
-  let navigate = useNavigate();
   let simData = localStorage.getItem("simData");
 
   useEffect(() => {

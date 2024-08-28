@@ -17,7 +17,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) 
         beta_quantity: procurementData?.beta_quantity || "",
       });
     }
-  }, []);
+  }, [procurementData]);
 
   useEffect(() => {
     setAlpha_quantity(newData.alpha_quantity);

@@ -30,6 +30,7 @@ const Sidebar = () => {
   let totalQuarters = parseInt(simData?.[0]?.current_quarter) - 1 || 1;
 
   const parentOptions = [
+    { name: "Home", redirect: "/usersidelive" },
     { name: "Dashboard", redirect: "/dashboard" },
     {
       name: "Decisions",
@@ -38,7 +39,7 @@ const Sidebar = () => {
         { name: "Procurement", redirect: "/procurement" },
         { name: "Manufacture", redirect: "/manufacture" },
         { name: "Distribution", redirect: "/distribution" },
-        // { name: "Transport", redirect: "/transport" },
+        { name: "Transport", redirect: "/transport" },
         { name: "Service", redirect: "/service" },
         { name: "Demand", redirect: "/demand" },
         { name: "IT", redirect: "/it" },
@@ -252,7 +253,7 @@ const Sidebar = () => {
             Corporate P&L Statement
           </button>
           <button
-            onClick={() => handleReportChange("bl")}
+            onClick={() => handleReportChange("bls")}
             className="w-full text-left p-2"
           >
             Balance Sheet

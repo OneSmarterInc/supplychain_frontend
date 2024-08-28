@@ -1,5 +1,4 @@
 import React from "react";
-import Piechartimg from "../Assets/Group.png";
 
 const TeamTableComponent = ({ selectedTeam }) => {
   return (

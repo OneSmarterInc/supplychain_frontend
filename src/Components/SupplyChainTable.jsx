@@ -1,10 +1,8 @@
-import axios from "axios";
 import React, { useRef, useState, useEffect } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, Input, Select, Box, Button } from "@chakra-ui/react";
 
 const SupplyChainTable = ({ setUpdatedDCData }) => {
   const tableRef = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeDC, setActiveDC] = useState("DC1");
   const [procurementData, setProcurementData] = useState({});
   const [selectedSim, setSelectedSim] = useState([]);
@@ -39,10 +37,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
       setDcData(procurementData?.sac_units);
     }
   }, [procurementData?.sac_units]);
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
 
   const handleDCButtonClick = (dc) => {
     setActiveDC(dc);

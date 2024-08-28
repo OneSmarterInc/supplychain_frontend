@@ -13,7 +13,7 @@ import {
   InputRightElement,
   Text,
   useToast,
-  Image,
+
   Heading,
 } from "@chakra-ui/react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
@@ -66,6 +66,22 @@ const ForgotPassword = () => {
 
   const resetPasswordHandler = async (e) => {
     e.preventDefault();
+  
+    // Password validation
+    const passwordValidationRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    if (!passwordValidationRegex.test(newPassword)) {
+      toast({
+        title: "Invalid Password",
+        description:
+          "Password must be at least 6 characters long, include at least one capital letter, one symbol, and one number.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+  
     if (newPassword !== confirmPassword) {
       toast({
         title: "Passwords do not match",
@@ -77,7 +93,7 @@ const ForgotPassword = () => {
       });
       return;
     }
-
+  
     try {
       const response = await axios.post(`${api}/reset-password/`, {
         email,
@@ -107,7 +123,6 @@ const ForgotPassword = () => {
       });
     }
   };
-
   return (
     <Flex direction="column" alignItems="center" w="100%" h="100vh" pt={'12rem'} backgroundImage={`url(${graphics})`}
       backgroundPosition="center"

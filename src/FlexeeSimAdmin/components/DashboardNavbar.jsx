@@ -6,17 +6,8 @@ import ProfileDropdown from "../../Components/Profile";
 const DashboardNavbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [profileOpen, setProfileOpen] = useState(false);
+  
   const course = JSON.parse(localStorage.getItem("SelectedCourse")) || {};
-
-  const handleLogOut = () => {
-    localStorage.clear();
-    navigate("/"); // Redirect to login after logout
-  };
-
-  const toggleProfileDropdown = () => {
-    setProfileOpen(!profileOpen);
-  };
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
 

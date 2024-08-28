@@ -9,7 +9,7 @@ import {
   Td,
   Select,
   Input,
-  Text,
+ 
 } from "@chakra-ui/react";
 
 const Demand_meta_ch1 = ({ setMetaCh1ValuetoParent }) => {

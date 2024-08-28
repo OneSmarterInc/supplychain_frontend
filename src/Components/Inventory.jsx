@@ -14,20 +14,10 @@ const Inventory = () => {
     capital: 0,
   });
 
-  const currencyFormatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
-
-  const formatCurrency = (value) => {
-    return typeof value === "number" ? currencyFormatter.format(value) : value;
-  };
-
   useEffect(() => {
     const simulation_id = localStorage.getItem("inventory_simulation_id") || [];
     const firm_key = localStorage.getItem("inventory_firm_key") || [];
-    const current_quarter = localStorage.getItem("inventory_current_quarter") || [];
-
+   
     axios
       .get(`${api}/inventory/`, {
         params: {

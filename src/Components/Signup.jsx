@@ -17,7 +17,7 @@ import {
   useToast,
   HStack,
 } from "@chakra-ui/react";
-import { FaUserAlt, FaLock, FaCamera } from "react-icons/fa";
+import { FaUserAlt, FaLock} from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import MyContext from "./ContextApi/MyContext";
@@ -28,7 +28,6 @@ import femaleProfile from "../assets/female.webp";  // Replace with actual path
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
-const CFaCamera = chakra(FaCamera);
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -48,11 +47,11 @@ const Signup = () => {
 
   const handleShowClick = () => setShowPassword(!showPassword);
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    setProfileImage(file);
-    setSelectedDefaultImage(null);
-  };
+  // const handleImageUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   setProfileImage(file);
+  //   setSelectedDefaultImage(null);
+  // };
 
   const handleDefaultImageSelect = (image) => {
     setSelectedDefaultImage(image);

@@ -5,7 +5,6 @@ import ProtectedRoute from "./ProtectedRoute";  // Import the ProtectedRoute com
 import Demand_generation from "../decisions/Demand_generation";
 import Distribution_Decision from "../decisions/Distribution_Decision";
 import Forecast from "../decisions/Forecast";
-import Home from "../Pages/Home";
 import IT from "../decisions/IT";
 import Manufacturing_Decisions from "../decisions/Manufacturing_Decisions";
 import Procurement_Decisions from "../decisions/Procurement_Decisions";
@@ -22,9 +21,7 @@ import Steps from "../createSimulation/Steps";
 import AdminNavBar from "../Components/AdminNavBar";
 import Inventory from "../Components/Inventory";
 import JoinNow from "../Components/JoinNow";
-import LandingPage from "../Components/LandingPage/LandingPage";
 import Analytics from "../analytics/main";
-import FlexeeSimRoutes from "../FlexeeSimAdmin/FlexeeSimRoutes";
 
 // Flexeesim routes
 import FlexeeAboutUs from "../FlexeeSimAdmin/components/AboutUs";
@@ -37,10 +34,8 @@ import FlexeeTestimonials from "../FlexeeSimAdmin/components/Testimonials";
 import FlexeeValues from "../FlexeeSimAdmin/components/Values";
 import FlexeeNavbar from "../FlexeeSimAdmin/components/Navbar";
 import FlexeeDashboard from "../FlexeeSimAdmin/components/Dashboard";
-import FlexeeExploreSim from "../FlexeeSimAdmin/components/ExploreSim";
 import FlexeeCourseComponent from "../FlexeeSimAdmin/components/CourseComponent";
 import FlexeeGroupsTeamsComponent from "../FlexeeSimAdmin/components/GroupsTeamsComponent";
-import FlexeeStudentRequest from "../FlexeeSimAdmin/components/StudentRequest";
 import FlexeeDashboardNavbar from "../FlexeeSimAdmin/components/DashboardNavbar";
 import FlexeeRegister from "../FlexeeSimAdmin/components/Register";
 import FlexeeBackOfficeUser from "../FlexeeSimAdmin/components/Backoffice/BackOfficeUser";
@@ -56,12 +51,9 @@ import FlexeeSlider from "../FlexeeSimAdmin/components/Slider";
 import Sidebar from "../sidebar/SideBar";
 import FlexeeOverview from "../FlexeeSimAdmin/components/FlexeeOverview";
 import BackOfficeNavbar from "../decisions/NewNavbar";
-import BackOfficeSidebar from "../decisions/NewSidebar";
-import NewFooter from "../decisions/NewFooter";
 import CNavbar from "../decisions/CnewNavbar";
 import { PrivateRoute } from "./PrivateRoutes";
 import BackOfficeFooter from "../FlexeeSimAdmin/components/Backoffice/BackOfficeFooter";
-import Footer from "../FlexeeSimAdmin/components/Footer";
 import Members from "../Components/Members";
 import ForgotPassword from "../Components/ForgotPassword";
 
@@ -166,17 +158,6 @@ const MainRoutes = () => {
           </div>
         }
       />
-
-      <Route
-        exact
-        path="/landingpage"
-        element={
-          <div className="manufacturing h-screen">
-            <LandingPage />
-          </div>
-        }
-      />
-
       <Route
         exact
         path="/distribution"
@@ -299,6 +280,7 @@ const MainRoutes = () => {
             <PrivateRoute>
               <CNavbar />
               <UserSideLive />
+              <BackOfficeFooter />
             </PrivateRoute>
           </div>
         }
@@ -330,7 +312,7 @@ const MainRoutes = () => {
 
       <Route
         exact
-        path="/createsim"
+        path="/flexee/admin-center/super/createsim"
         element={
           <div className="createsim h-screen">
             <div className="navbar pb-4">
@@ -342,6 +324,23 @@ const MainRoutes = () => {
           </div>
         }
       />
+
+      <Route
+        exact
+        path="/flexee/admin-center/super/admin-list"
+        element={
+          <div className="createsim h-screen">
+            <div className="navbar pb-4">
+              <PrivateRoute>
+                <AdminSideLive />
+              </PrivateRoute>
+            </div>
+            <Steps setNoOfQuarters={setNoOfQuarters} noOfQuarters={noOfQuarters} />
+          </div>
+        }
+      />
+
+
 
       {/* FlexeeSim Protected Routes */}
       <Route
@@ -439,15 +438,13 @@ const MainRoutes = () => {
         element={
           <ProtectedRoute>
             <div className="flex justify-start items-start">
-              {isSideBarOpen && <FlexeeBackOfficeSidebar />}
-              <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+              <div className={`w-full`}>
                 <div className="pb-10">
                   <FlexeeBackOfficeNavbar
-                    setIsSideBarOpen={setIsSideBarOpen}
-                    isSideBarOpen={isSideBarOpen}
                   />
+                  <FlexeeBackOfficeSidebar />
                 </div>
-                <div className="pb-20">
+                <div className="">
                   <FlexeeBackOfficeUser />
                 </div>
               </div>

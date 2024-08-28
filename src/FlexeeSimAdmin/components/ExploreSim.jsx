@@ -1,6 +1,4 @@
 import React from "react";
-import BackOfficeImg from "../Assets/BackOfficeBgImg.png"; // Update with your actual image path
-import backgroundImage2 from "../Assets/ExploreSim2.png";
 import { useNavigate } from "react-router-dom";
 
 const ExploreSim = () => {
@@ -14,7 +12,7 @@ const ExploreSim = () => {
             Here you can manage the simulation and  monitor the performance of your teams.
           </p>
           <button
-            onClick={() => navigate("/flexeesim/backoffice/user")}
+            onClick={() => navigate("/flexeesim/backoffice/")}
             className="mt-5 px-6  bg-red-500 w-58 text-white p-2 rounded text-sm md:text-xl"
           >
             CONNECT NOW

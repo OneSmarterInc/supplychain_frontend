@@ -26,23 +26,25 @@ const PlayComponent = ({
   const [firstDropdownValue, setFirstDropdownValue] = useState("1");
   const [secondDropdownValue, setSecondDropdownValue] = useState("");
   const [isUserAssigned, setIsUserAssigned] = useState(false);
-
+  const [firm, setFirm] = useState("");
   let user = JSON.parse(localStorage.getItem("user"));
   const email = user.email;
   let firm_key_map = "";
-
+  
   useEffect(() => {
-    if (firm_data?.length) {
-      let firm_obj = firm_data.find((item) => item.emails.includes(email));
+    if (Array.isArray(firm_data) && firm_data.length > 0) {
+      let firm_obj = firm_data.find((item) => item.emails?.includes(email));
       if (firm_obj) {
+        setFirm(firm_obj.firmName)
         firm_key_map = firm_obj.firmName;
         setIsUserAssigned(true);
       } else {
         setIsUserAssigned(false);
       }
+    } else {
+      setIsUserAssigned(false);
     }
   }, [firm_data, email]);
-
   const handleSubmit = () => {
     if (isUserAssigned) {
       localStorage.setItem("selectedSimulation", JSON.stringify(id));
@@ -135,7 +137,7 @@ const PlayComponent = ({
           <div className="logger">
             <UserLoggerApi
               simulation_id={id}
-              firm_key={firm_key_map}
+              firm_key={firm}
               current_quarter={currentQuarter}
             />
           </div>
@@ -179,9 +181,8 @@ const PlayComponent = ({
                 >
                   <option value="">Select</option>
                   <option value="cpl">Corporate P&L Statement</option>
-                  <option value="pcpl">Hyperware P&L Statement</option>
-                  <option value="inventory">Finished Goods Inventory Report</option>
                   <option value="bl">Balance Sheet</option>
+                  <option value="inventory">Finished Goods Inventory Report</option>
                 </Select>
               </HStack>
               <div className="mt-4 flex">

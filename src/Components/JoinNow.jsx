@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Input, Flex, useToast } from "@chakra-ui/react";
+import { Button, Input, Flex, useToast } from "@chakra-ui/react";
 import MyContext from "../Components/ContextApi/MyContext";
 
 const JoinNow = ({ refreshSimulations }) => {

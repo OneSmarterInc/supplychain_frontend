@@ -93,7 +93,7 @@ const QuarterDetails = () => {
 
   const handleSubmit = async () => {
     try {
-      navigate("/createsim?step=3");
+      navigate("/flexee/admin-center/super/createsim?step=3");
     } catch (error) {
       console.log("Error", error.message);
     }

@@ -24,6 +24,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
 
   const [simulationData, setSimulationData] = useState({
     course: "Test Simulation",
+    orgnization: "Wright state",
     total_quarters: 0,
     firms: 0,
     admin_id: user?.userid,
@@ -43,7 +44,6 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     }
   }, [simulationData.start_date, simulationData.total_quarters]);
 
-  // Function to get current date in YYYY-MM-DD format
   function getCurrentDate() {
     const today = new Date();
     const year = today.getFullYear();
@@ -54,14 +54,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
 
   function calculateEndDate(startDate, quarters) {
     const startDateObj = new Date(startDate);
-
-    console.log(
-      "startDateObj * quarters+4",
-      startDateObj.getDate() + quarters * 4
-    );
-
     startDateObj.setDate(startDateObj.getDate() + quarters * 4);
-
     return startDateObj.toISOString().split("T")[0];
   }
 
@@ -85,8 +78,8 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
       const numberOfFirms = Math.max(0, parseInt(value, 10) || 0);
       const newfirm_data = new Array(numberOfFirms).fill().map(() => ({
         firmName: "",
-        email: "",
         emails: [],
+        users: [],
       }));
       setSimulationData((prev) => ({ ...prev, firm_data: newfirm_data }));
     }
@@ -113,26 +106,16 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     });
   };
 
-  // Setting simulation data from steps
   setSimulationDataFromSteps(simulationData);
 
-  // Handle next button click
   const handleNext = async () => {
-    // temporary navigate without conditions
     setNoOfQuarters(simulationData.total_quarters);
     localStorage.setItem("noOfQuarters", [simulationData.total_quarters]);
     localStorage.setItem("createSimData", JSON.stringify(simulationData));
     if (simulationData.total_quarters) {
-      navigate("/createsim?step=2");
+      navigate("/flexee/admin-center/super/createsim?step=2");
     }
   };
-
-  console.log(
-    "simulationData.start_date",
-    simulationData.start_date,
-    "simulationData.end_date",
-    simulationData.end_date
-  );
 
   const generateSimulationName = (user) => {
     const university = user?.university?.split(" ")[0];
@@ -144,9 +127,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     return simulationName;
   };
 
-  // Generate the simulation name
   const simulationName = generateSimulationName(user);
-  console.log("simulationName:=", simulationName); // Output: "Amravati-NT-MCA234"
 
   return (
     <>
@@ -163,21 +144,34 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
         mt={5}
       >
         <label htmlFor="">
-          <strong>Please specify the Name for {simulationName?simulationName:"Simulation"}</strong>
+          <strong>Please specify the Name for {simulationName ? simulationName : "Simulation"}</strong>
         </label>
         <Input
           name="name"
           bgColor="white"
           mt={5}
           mb={10}
-          placeholder={simulationName?simulationName:"Simulation"}
+          placeholder={simulationName ? simulationName : "Simulation"}
           defaultValue={simulationName}
           onChange={handleInputChange}
         />
+
+        <label htmlFor="">
+          <strong>Please specify the Name for the organization</strong>
+        </label>
+        <Input
+          name="orgnization"
+          bgColor="white"
+          mt={5}
+          mb={10}
+          placeholder="Organization"
+          value={simulationData.orgnization}
+          onChange={handleInputChange}
+        />
+
         <label htmlFor="">
           <strong>
-            Please specify the number of quarters you would like to include in
-            the simulation.
+            Please specify the number of quarters you would like to include in the simulation.
           </strong>
         </label>
         <Input
@@ -191,8 +185,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
         />
         <label htmlFor="">
           <strong>
-            Please specify the number of firms you would like to include in the
-            simulation.
+            Please specify the number of firms you would like to include in the simulation.
           </strong>
         </label>
         <Input
@@ -245,14 +238,12 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
               </Box>
             </Box>
           ))}
-          {/* Display emails */}
           {simulationData.firm_data.map((firm, index) => (
             <Button key={index} onClick={() => setSelectedFirmIndex(index)}>
               View Emails for {firm.firmName || `Firm ${index + 1}`}
             </Button>
           ))}
 
-          {/* Modal for displaying emails */}
           {selectedFirmIndex !== null && (
             <Modal
               isOpen={selectedFirmIndex !== null}
@@ -304,8 +295,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
         <Box mb={10}>
           <label htmlFor="">
             <strong>
-              Please specify the Start Date - Time and End Date - Time for
-              simulation.
+              Please specify the Start Date - Time and End Date - Time for simulation.
             </strong>
           </label>
           <Box display="flex" gap={3}>
@@ -317,7 +307,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
               placeholder="Start Date - Time"
               value={simulationData.start_date}
               onChange={handleInputChange}
-              min={getCurrentDate()} // Ensure start date cannot be before current date
+              min={getCurrentDate()}
               required
             />
             <Input
@@ -327,7 +317,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
               mt={5}
               placeholder="End Date - Time"
               value={simulationData.end_date}
-              min={simulationData.start_date} // Ensure end date cannot be before start date
+              min={simulationData.start_date}
               onChange={handleInputChange}
             />
           </Box>
@@ -335,11 +325,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
 
         <label htmlFor="">
           <strong>
-            Specify the start and end times for decisions in the simulation.
-            Decisions will be active during this timeframe each day and
-            inaccessible outside these hours. For example, if the start time is
-            1 PM and the end time is 5 PM, decisions will be accessible between
-            1 PM and 5 PM daily.
+            Specify the start and end times for decisions in the simulation. Decisions will be active during this timeframe each day and inaccessible outside these hours. For example, if the start time is 1 PM and the end time is 5 PM, decisions will be accessible between 1 PM and 5 PM daily.
           </strong>
         </label>
         <Box display="flex" gap={3}>

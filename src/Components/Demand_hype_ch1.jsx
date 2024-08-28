@@ -9,7 +9,7 @@ import {
   Td,
   Select,
   Input,
-  Text,
+  
 } from "@chakra-ui/react";
 
 const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {

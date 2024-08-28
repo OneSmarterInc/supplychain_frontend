@@ -32,11 +32,11 @@ const Forecast = () => {
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const selectedSim = selectedSimData;
   const firm_data = selectedSim[0]?.firm_data ? Object.keys(selectedSim[0].firm_data)[0] : null;
-
+  
   let firm_key_new = "";
-  if (Array.isArray(selectedSim[0]?.firm_data)) {
-    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
-      return item.emails.includes(user.email);
+  if (selectedSim[0]?.firm_data && Array.isArray(selectedSim[0].firm_data)) {
+    let firm_obj = selectedSim[0].firm_data.filter((item) => {
+      return item.emails && item.emails.includes(user.email);
     });
     if (firm_obj.length) {
       firm_key_new = firm_obj[0].firmName; // Only one user in one firm, so using firm_obj[0]
