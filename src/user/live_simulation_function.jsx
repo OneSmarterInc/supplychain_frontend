@@ -47,11 +47,17 @@ const PlayComponent = ({
   }, [firm_data, email]);
   const handleSubmit = () => {
     if (isUserAssigned) {
+      // Filter selectedSimData based on simulation_id matching the id
+      const filteredSimData = selectedSimData.filter(sim => sim.simulation_id === id);
+  
+      // Storing filtered data and other items in local storage
       localStorage.setItem("selectedSimulation", JSON.stringify(id));
-      localStorage.setItem("selectedSimData", JSON.stringify(selectedSimData));
-      localStorage.setItem("selectedSim", JSON.stringify(selectedSimData));
+      localStorage.setItem("selectedSimData", JSON.stringify(filteredSimData));
+      localStorage.setItem("selectedSim", JSON.stringify(filteredSimData));
+  
+      // Navigate to the Forecast page
       navigate("/Forecast");
-    }
+  }
   };
 
   const toggleModal = () => {
@@ -181,7 +187,7 @@ const PlayComponent = ({
                 >
                   <option value="">Select</option>
                   <option value="cpl">Corporate P&L Statement</option>
-                  <option value="bl">Balance Sheet</option>
+                  <option value="bls">Balance Sheet</option>
                   <option value="inventory">Finished Goods Inventory Report</option>
                 </Select>
               </HStack>
@@ -189,7 +195,7 @@ const PlayComponent = ({
                 {secondDropdownValue === "cpl" && <ReportModal />}
                 {secondDropdownValue === "pcpl" && <ProductReportModal />}
                 {secondDropdownValue === "inventory" && <FGInventoryModal />}
-                {secondDropdownValue === "bl" && <BalanceSheetModel />}
+                {secondDropdownValue === "bls" && <BalanceSheetModel />}
                 <div className="px-5">
                   <EvaluationReportModal
                     simulation_id={id}

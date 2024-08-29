@@ -659,7 +659,7 @@ const GDP = () => {
           isClosable: true,
           position: "top",
         });
-        navigate("/adminsidelive");
+        // navigate("/adminsidelive");
       } catch (error) {
         console.error("Error submitting form:", error);
       }

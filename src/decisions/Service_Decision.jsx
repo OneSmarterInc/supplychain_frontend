@@ -55,7 +55,7 @@ const Service_Decision = () => {
 
   useEffect(() => {
     getService();
-  }, []);
+  }, [selectedQuarter]);
 
   useEffect(() => {
     if (ServiceData) {

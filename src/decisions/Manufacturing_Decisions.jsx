@@ -175,7 +175,7 @@ const Manufacturing_Decisions = () => {
       <div style={{ fontFamily: "ABeeZee" }} className=" ">
         <div className="sm:grid grid-cols-1 gap-3 m-1 ">
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
-            <InfoImg decision={"Distribution"} />
+            <InfoImg decision={"Manufacture"} />
             <div className="flex items-center justify-between w-full">
             <div className="flex items-center pl-5 pt-2 pb-2">
                 <Text>Load data Quarterly</Text>
@@ -218,7 +218,7 @@ const Manufacturing_Decisions = () => {
                       <Input
                         type="number"
                         value={values[channel].productZero}
-                        placeholder="Enter"
+                        placeholder="Enter in units"
                         onChange={(e) => handleChange(channel, "productZero", e.target.value)}
                         className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                       />
@@ -227,7 +227,7 @@ const Manufacturing_Decisions = () => {
                       <Input
                         type="number"
                         value={values[channel].hyperware}
-                        placeholder="Enter"
+                        placeholder="Enter in units"
                         onChange={(e) => handleChange(channel, "hyperware", e.target.value)}
                         className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                       />
@@ -236,7 +236,7 @@ const Manufacturing_Decisions = () => {
                       <Input
                         type="number"
                         value={values[channel].metaware}
-                        placeholder="Enter"
+                        placeholder="Enter in units"
                         onChange={(e) => handleChange(channel, "metaware", e.target.value)}
                         className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                       />

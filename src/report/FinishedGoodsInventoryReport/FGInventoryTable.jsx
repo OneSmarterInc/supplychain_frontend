@@ -11,17 +11,14 @@ const FGInventoryTable = () => {
   return (
     <div>
       <div className="heading flex justify-between font-bold">
-        <div>
-          <p>Firm : l </p>
-        </div>
       </div>
       <table className="w-full text-start whitespace-nowrap">
         <thead>
           <tr>
             <th className="px-4 py-2">Metric</th>
             <th className="px-4 py-2">Product Zero</th>
-            <th className="px-4 py-2">Hyperware</th>
-            <th className="px-4 py-2">Metaware</th>
+            <th className="px-4 py-2">Smart Home Asistant</th>
+            <th className="px-4 py-2">Smart Tharmo Asistant</th>
           </tr>
         </thead>
         <tbody>

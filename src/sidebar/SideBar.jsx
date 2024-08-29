@@ -4,6 +4,8 @@ import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useNavigate } from "react-router-dom";
 import ReportModal from "../report/CplReport/ReportModal";
+import BalanceSheetModel from "../report/BlanceSheetReport/BalanceSheetModel";
+import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 
 const Sidebar = () => {
   const { api } = useContext(MyContext);
@@ -267,6 +269,12 @@ const Sidebar = () => {
   
           {activeReport === "cpl" && reportData && (
             <ReportModal reportData={reportData} />
+          )}
+          {activeReport === "bls" && reportData && (
+            <BalanceSheetModel reportData={reportData} />
+          )}
+           {activeReport === "inventory" && reportData && (
+            <FGInventoryModal reportData={reportData} />
           )}
         </div>
       )}

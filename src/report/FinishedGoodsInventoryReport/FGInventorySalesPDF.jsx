@@ -73,20 +73,15 @@ const FGInventorySalesPDF = ({ reportData }) => (
     <Page style={styles.page}>
       <View style={styles.heading}>
         <View>
-          <Text>FIRM 1: SRTM Pty.</Text>
-          <Text>FINISHED GOODS INVENTORY REPORT, MONTH 56</Text>
-        </View>
-        <View>
-          <Text>INDUSTRY HHH</Text>
-          <Text>PAGE 1</Text>
+
         </View>
       </View>
       <View style={styles.table}>
         <View style={styles.tableRow}>
           <Text style={styles.tableColHeader}>Metric</Text>
           <Text style={styles.tableColHeader}>Product 1-0</Text>
-          <Text style={styles.tableColHeader}>Product 1-1</Text>
-          <Text style={styles.tableColHeader}>Product 1-2</Text>
+          <Text style={styles.tableColHeader}>Smart Home Asistant</Text>
+          <Text style={styles.tableColHeader}>Smart Tharmo Asistant</Text>
         </View>
 
         {/* Beginning Inventory Section */}

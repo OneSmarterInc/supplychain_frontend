@@ -144,10 +144,10 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
         mt={5}
       >
         <label htmlFor="">
-          <strong>Please specify the Name for {simulationName ? simulationName : "Simulation"}</strong>
+          <strong>Please specify the Name for Simulation</strong>
         </label>
         <Input
-          name="name"
+          name="course"
           bgColor="white"
           mt={5}
           mb={10}
