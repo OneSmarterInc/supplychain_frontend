@@ -14,10 +14,14 @@ const Inventory = () => {
     capital: 0,
   });
 
+  const [selectedSim, setSelectedSim] = useState([]);
+
   useEffect(() => {
     const simulation_id = localStorage.getItem("inventory_simulation_id") || [];
     const firm_key = localStorage.getItem("inventory_firm_key") || [];
-   
+    const simData = JSON.parse(localStorage.getItem("selectedSim")) || [];
+    setSelectedSim(simData);
+
     axios
       .get(`${api}/inventory/`, {
         params: {
@@ -30,9 +34,16 @@ const Inventory = () => {
       .catch((error) => console.error("Error fetching data", error));
   }, [api]);
 
+  // Map component names using renamedMappedData
+  const getMappedName = (name) => {
+    return (
+      selectedSim[0]?.renamedMappedData?.componentMapp?.[name] ||  selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.[name ] || name
+    );
+  };
+
   const convertToArray = (obj) =>
     Object.keys(obj).map((key) => ({
-      name: key.replace("inventory_", "").replace(/_region\d/, ""),
+      name: getMappedName(key.replace("inventory_", "").replace(/_region\d/, "")),
       value: obj[key],
     }));
 
@@ -45,21 +56,21 @@ const Inventory = () => {
     ));
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4" style={{width:'70%'}}>
       <div className="bg-white p-4 rounded shadow-sm mb-4">
         <h3 className="text-xl font-bold mb-4">Manufacture | Region 1</h3>
         <div className="flex items-start">
           <div className="grid grid-cols-5 gap-4">
             {renderDataBlocks(
               convertToArray(data.manufacture).filter(
-                (item) => item.name !== "hyperware" && item.name !== "metaware"
+                (item) => item.name !== getMappedName("hyperware") && item.name !== getMappedName("metaware")
               )
             )}
           </div>
           <div className="grid grid-cols-2 gap-4 p-2 bg-gray-100 rounded">
             {renderDataBlocks(
               convertToArray(data.manufacture).filter(
-                (item) => item.name === "hyperware" || item.name === "metaware"
+                (item) => item.name === getMappedName("hyperware") || item.name === getMappedName("metaware")
               ),
               "bg-gray-50"
             )}
@@ -75,9 +86,9 @@ const Inventory = () => {
             {renderDataBlocks(
               convertToArray(data.distributionCenter1).filter(
                 (item) =>
-                  item.name !== "hyperware" &&
-                  item.name !== "metaware" &&
-                  item.name !== "zero"
+                  item.name !== getMappedName("hyperware") &&
+                  item.name !== getMappedName("metaware") &&
+                  item.name !== getMappedName("zero")
               )
             )}
           </div>
@@ -85,9 +96,9 @@ const Inventory = () => {
             {renderDataBlocks(
               convertToArray(data.distributionCenter1).filter(
                 (item) =>
-                  item.name === "hyperware" ||
-                  item.name === "metaware" ||
-                  item.name === "zero"
+                  item.name === getMappedName("hyperware") ||
+                  item.name === getMappedName("metaware") ||
+                  item.name === getMappedName("zero")
               ),
               "bg-gray-50"
             )}
@@ -103,9 +114,9 @@ const Inventory = () => {
             {renderDataBlocks(
               convertToArray(data.distributionCenter2).filter(
                 (item) =>
-                  item.name !== "hyperware" &&
-                  item.name !== "metaware" &&
-                  item.name !== "zero"
+                  item.name !== getMappedName("hyperware") &&
+                  item.name !== getMappedName("metaware") &&
+                  item.name !== getMappedName("zero")
               )
             )}
           </div>
@@ -113,9 +124,9 @@ const Inventory = () => {
             {renderDataBlocks(
               convertToArray(data.distributionCenter2).filter(
                 (item) =>
-                  item.name === "hyperware" ||
-                  item.name === "metaware" ||
-                  item.name === "zero"
+                  item.name === getMappedName("hyperware") ||
+                  item.name === getMappedName("metaware") ||
+                  item.name === getMappedName("zero")
               ),
               "bg-gray-50"
             )}

@@ -2,22 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import RawMaterial from "../Components/RawMaterial";
 import SupplyChainTable from "../Components/SupplyChainTable";
 import InfoImg from "../Components/InfoImg";
-// import DataChart from "../Components/DataChart";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
-
 import { Text, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
 
 const Procurement_Decisions = () => {
   const { api } = useContext(MyContext);
-  const [updatedDCData, setUpdatedDCData] = useState();
-  const [alpha_quantity, setAlpha_quantity] = useState({});
-  const [beta_quantity, setBeta_quantity] = useState({});
+  const [updatedDCData, setUpdatedDCData] = useState([]);
+  const [alpha_quantity, setAlpha_quantity] = useState("");
+  const [beta_quantity, setBeta_quantity] = useState("");
 
-  
-  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
+  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || [];
+  const sel = JSON.parse(localStorage.getItem("selectedSim")) || [];
   const currentQuarter = selectedSimData[0]?.current_quarter || 1; // Assuming the current quarter is provided in the sim data
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter); // Set the default to the current quarter
 
@@ -27,23 +25,22 @@ const Procurement_Decisions = () => {
 
   let firm_key_new = "";
   if (Array.isArray(selectedSim[0]?.firm_data)) {
-    let firm_obj = selectedSim[0]?.firm_data.filter((item, index) => {
+    let firm_obj = selectedSim[0]?.firm_data.filter((item) => {
       return item.emails.includes(user.email);
     });
     if (firm_obj.length) {
       firm_key_new = firm_obj[0].firmName; // Only one user in one firm, so using firm_obj[0]
     }
   }
+  
   const toast = useToast();
+  const navigate = useNavigate();
+
+  const [data, setData] = useState({});
 
   useEffect(() => {
     getProcurement();
-  }, []);
-
-
-
-
-  const [data, setData] = useState({});
+  }, [selectedQuarter]); // Fetch data whenever the selectedQuarter changes
 
   const getProcurement = async () => {
     try {
@@ -53,19 +50,19 @@ const Procurement_Decisions = () => {
           sim_id: selectedSim[0]?.simulation_id || "",
           admin_id: selectedSim[0]?.admin_id || "",
           current_decision: "Procurement",
-          current_quarter: selectedSim[0]?.current_quarter || 0,
+          current_quarter: selectedQuarter, // Use selectedQuarter
           firm_key: firm_key_new,
         },
       });
 
+      console.log("API Response:", response.data); // Logging the response
+
       localStorage.setItem("procurementData", JSON.stringify(response.data));
       setData(response.data);
     } catch (error) {
-      console.error("Error making GET request:", error);
+      console.error("Error making GET request:", error.response ? error.response.data : error.message); // More detailed error logging
     }
   };
-
-  const navigate = useNavigate();
 
   const submitProcurement = async () => {
     try {
@@ -83,13 +80,14 @@ const Procurement_Decisions = () => {
         admin_id: selectedSim[0]?.admin_id || "",
         user_id: user.userid,
         firm_key: firm_key_new,
-        quarter: selectedSim[0]?.current_quarter || 0,
+        quarter: selectedQuarter, // Use selectedQuarter here
         alpha_quantity: Number(alpha_quantity),
         beta_quantity: Number(beta_quantity),
         sac_units: updatedDCData,
       });
+
       console.log("POST request successful", response.data);
-      getProcurement();
+      getProcurement(); // Fetch the updated data
       addUserLogger();
       toast({
         title: "Procurement Submitted Successfully",
@@ -100,7 +98,7 @@ const Procurement_Decisions = () => {
       });
       navigate("/Manufacture");
     } catch (error) {
-      console.error("Error making POST request:", error);
+      console.error("Error making POST request:", error.response ? error.response.data : error.message); // More detailed error logging
     }
   };
 
@@ -114,25 +112,25 @@ const Procurement_Decisions = () => {
         decision: "Procurement",
         action: "created",
         ip_address: "123.345.1",
-        username:user.first_name +" "+ user.last_name,
+        username: user.first_name + " " + user.last_name,
         firm_key: firm_key_new,
-        current_quarter: selectedSim[0]?.current_quarter || 0,
+        current_quarter: selectedQuarter,
       });
       console.log("addUserLoggerData", response.data);
     } catch (error) {
-      console.error("Error making GET request:", error);
+      console.error("Error making POST request:", error.response ? error.response.data : error.message); // More detailed error logging
     }
   };
 
   document.body.style.backgroundColor = "#e0e2e4";
 
   return (
-    <div style={{ fontFamily: "ABeeZee", height:'100vh' }}>
-     <div className="sm:grid grid-cols-1 gap-3 m-1 ">
+    <div style={{ fontFamily: "ABeeZee", height: '100vh' }}>
+      <div className="sm:grid grid-cols-1 gap-3 m-1 ">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
           <InfoImg decision={"Procurement"} />
           <div className="flex items-center justify-between w-full">
-          <div className="flex items-center pl-5 pt-2 pb-2">
+            <div className="flex items-center pl-5 pt-2 pb-2">
               <Text>Load data Quarterly</Text>
               <div className=" pl-4 flex space-x-4">
                 {Array.from(
@@ -153,23 +151,21 @@ const Procurement_Decisions = () => {
             <InfoButton />
           </div>
           <RawMaterial
-              procurementData1={JSON.stringify(data)}
-              setAlpha_quantity={setAlpha_quantity}
-              setBeta_quantity={setBeta_quantity}
-            />
-          
+            procurementData1={JSON.stringify(data)}
+            setAlpha_quantity={setAlpha_quantity}
+            setBeta_quantity={setBeta_quantity}
+          />
           <div className="rounded-lg -2xl h-100vh  flex flex-col justify-center">
             <SupplyChainTable setUpdatedDCData={setUpdatedDCData} />
           </div>
-        
+
           {/* Submit Button */}
           <div className="flex justify-end mt-4">
-            
             <button
               onClick={submitProcurement}
               className={`${selectedQuarter === currentQuarter
-                  ? "bg-red-500 hover:bg-black-700 text-white"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                ? "bg-red-500 hover:bg-black-700 text-white"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
               disabled={selectedQuarter !== currentQuarter}
             >
@@ -177,9 +173,8 @@ const Procurement_Decisions = () => {
             </button>
           </div>
         </div>
-        </div>
       </div>
-    
+    </div>
   );
 };
 

@@ -86,7 +86,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                     <Td className="p-3" textAlign="left">
                       <Input
                         type="text"
-                        value={entry.name}
+                        value={selectedSim[0]?.renamedMappedData?.componentMapp[entry.name]}
                         placeholder="Enter Name"
                         onChange={(e) =>
                           handleInputChange(activeDC, index, "name", e.target.value)
