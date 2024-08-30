@@ -75,7 +75,7 @@ const Service_Decision = () => {
           sim_id: selectedSim[0].simulation_id,
           admin_id: selectedSim[0].admin_id,
           current_decision: "Service",
-          current_quarter: selectedSim[0].current_quarter,
+          current_quarter: selectedQuarter,
           firm_key: firm_key_new,
         },
       });
@@ -89,31 +89,32 @@ const Service_Decision = () => {
 
   const submitService = async () => {
     try {
-      const response = await axios.post(`${api}/decision/service/`, {
-        simulation_id: selectedSim[0].simulation_id,
-        admin_id: selectedSim[0].admin_id,
-        user_id: user.userid,
-        firm_key: firm_key_new,
-        quarter: selectedSim[0].current_quarter,
-        service_region_one: serviceValue.region1,
-        service_region_two: serviceValue.region2,
-        service_region_three: serviceValue.region3,
-      });
-      addUserLogger();
-      getService();
-      toast({
-        title: "Service Submitted successfully",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top",
-      });
-      navigate("/Demand");
-      console.log("POST request successful", response.data);
+        console.log("Submitting service with values:", serviceValue);
+        const response = await axios.post(`${api}/decision/service/`, {
+            simulation_id: selectedSim[0].simulation_id,
+            admin_id: selectedSim[0].admin_id,
+            user_id: user.userid,
+            firm_key: firm_key_new,
+            quarter: selectedSim[0].current_quarter,
+            service_region_one: serviceValue.region1,
+            service_region_two: serviceValue.region2,
+            service_region_three: serviceValue.region3,
+        });
+        console.log("POST request successful", response.data);
+        addUserLogger();
+        getService();
+        toast({
+            title: "Service Submitted successfully",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+            position: "top",
+        });
+        navigate("/Demand");
     } catch (error) {
-      console.error("Error making POST request: Service", error);
+        console.error("Error making POST request: Service", error.response?.data || error.message);
     }
-  };
+};
 
   const addUserLogger = async () => {
     try {

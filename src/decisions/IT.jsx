@@ -36,7 +36,7 @@ const IT = () => {
 
   useEffect(() => {
     getIt();
-  }, []);
+  }, [selectedQuarter]);
 
   const getIt = async () => {
     try {
@@ -46,7 +46,7 @@ const IT = () => {
           sim_id: selectedSim[0].simulation_id,
           admin_id: selectedSim[0].admin_id,
           current_decision: "It",
-          current_quarter: selectedSim[0].current_quarter,
+          current_quarter:selectedQuarter,
           firm_key: firm_key_new,
         },
       });

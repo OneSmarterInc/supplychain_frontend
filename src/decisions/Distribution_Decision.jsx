@@ -49,7 +49,7 @@ const Distribution_Decision = () => {
 
   useEffect(() => {
     getDistribution();
-  }, []);
+  }, [selectedQuarter]);
 
   useEffect(() => {
     if (DistributionData) {
@@ -72,7 +72,7 @@ const Distribution_Decision = () => {
           sim_id: selectedSimData[0].simulation_id,
           admin_id: selectedSimData[0].admin_id,
           current_decision: "Distribution",
-          current_quarter: selectedSimData[0].current_quarter,
+          current_quarter: selectedQuarter,
           firm_key: firm_key_new,
         },
       });
