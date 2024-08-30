@@ -58,7 +58,7 @@ const Manufacturing_Decisions = () => {
 
   useEffect(() => {
     getManufacturing();
-  }, []);
+  }, [selectedQuarter]);
 
   useEffect(() => {
     if (ManufacturingData) {
@@ -90,7 +90,7 @@ const Manufacturing_Decisions = () => {
           sim_id: selectedSim[0].simulation_id,
           admin_id: selectedSim[0].admin_id,
           current_decision: "Manufacture",
-          current_quarter: selectedSim[0].current_quarter,
+          current_quarter: selectedQuarter,
           firm_key: firm_key_new,
         },
       });
