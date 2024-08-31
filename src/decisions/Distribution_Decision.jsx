@@ -182,7 +182,7 @@ const Distribution_Decision = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/Service");
+      navigate("/Transport");
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
     }

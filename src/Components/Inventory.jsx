@@ -27,7 +27,7 @@ const Inventory = () => {
         params: {
           simulation_id,
           firm_key,
-          current_quarter: 1,
+          current_quarter:  simData[0].current_quarter,
         },
       })
       .then((response) => setData(response.data))
@@ -56,8 +56,8 @@ const Inventory = () => {
     ));
 
   return (
-    <div className="container mx-auto p-4" style={{width:'70%'}}>
-      <div className="bg-white p-4 rounded shadow-sm mb-4">
+    <div className="container mx-auto p-0" style={{width:'80%'}}>
+      <div className="bg-white p-0 rounded shadow-sm mb-4">
         <h3 className="text-xl font-bold mb-4">Manufacture | Region 1</h3>
         <div className="flex items-start">
           <div className="grid grid-cols-5 gap-4">

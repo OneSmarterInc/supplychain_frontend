@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MyContext from "../../Components/ContextApi/MyContext";
 import ExploreSim from "./ExploreSim";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -21,14 +23,17 @@ const Dashboard = () => {
       const transformedCourses = response.data.map((item) => ({
         course: item.simulation.course || "Unnamed Course",
         members: item.simulation.members,
-        organization: `Wright State University`,
+        orgnization: item.simulation.orgnization,
         startDate: item.simulation.start_date,
         endDate: item.simulation.end_date,
         passcode: item.simulation.passcode,
-        simulation_id:item.simulation_id
+        simulation_id: item.simulation_id,
+
       }));
       setCourses(transformedCourses);
+      
     } catch (error) {
+      toast.error("Error fetching the courses. Please try again.");
       console.error("Error fetching the courses:", error);
     }
   };
@@ -49,20 +54,29 @@ const Dashboard = () => {
         passcode: code,
       });
 
-      if (response.status === 200 || response.status === 201) {
-        console.log("Successfully subscribed to the simulation.");
+      if (response.status === 200){
+        
+        toast.error("already subscribed to this simulation.")
+      }
+
+      else if(response.status === 201) {
+        toast.success("Successfully subscribed to the simulation.");
         setCode("");
         fetchCourses();
-      } else {
+      }
+       else {
+        toast.error("Failed to subscribe to the simulation.");
         console.error("Failed to subscribe to the simulation.");
       }
     } catch (error) {
+      toast.error("Error during subscription. Please try again.");
       console.error("Error during subscription:", error);
     }
   };
 
   return (
     <div className="pb-12 bg-white-full p-0 px-6 relative pt-1.5 max-w-screen-full mx-auto">
+      <ToastContainer />
       <div className="absolute left-1/2 transform top-10 min-h-full w-[2px] bg-red-500"></div>
       <div className="absolute left-1/2 transform -translate-x-full top-10 w-40 h-[2px] bg-red-500"></div>
       <div className="absolute left-1/2 transform -translate-x-40 top-7 text-red-500">
@@ -113,7 +127,7 @@ const Dashboard = () => {
                 <div>
                   <div className="text-xl font-medium">ORGANIZATION:</div>
                   <div className="text-gray-700 text-lg mb-2">
-                    {course.organization}
+                    {course.orgnization}
                   </div>
                   <div className="text-xl font-medium">COURSE:</div>
                   <div className="text-gray-700 mb-2 text-lg">

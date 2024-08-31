@@ -151,10 +151,11 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
           bgColor="white"
           mt={5}
           mb={10}
-          placeholder={simulationName ? simulationName : "Simulation"}
-          defaultValue={simulationName}
+          placeholder="Enter Simulation Name"
+          value={simulationData.course}
           onChange={handleInputChange}
         />
+        
 
         <label htmlFor="">
           <strong>Please specify the Name for the organization</strong>

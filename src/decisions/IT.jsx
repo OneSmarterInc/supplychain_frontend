@@ -98,7 +98,7 @@ const IT = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/Transport");
+      navigate("/usersidelive");
     } catch (error) {
       console.error("Error making POST request: IT", error);
       toast({

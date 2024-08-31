@@ -18,21 +18,6 @@
         },
         {
           "month": "Quarter3", "income": 25000, "expense": 24000
-        },
-        {
-          "month": "Quarter4", "income": 27000, "expense": 26000
-        },
-        {
-          "month": "Quarter5", "income": 29000, "expense": 28000
-        },
-        {
-          "month": "Quarter6", "income": 30000, "expense": 30000
-        },
-        {
-          "month": "Quarter7", "income": 31000, "expense": 32000
-        },
-        {
-          "month": "Quarter8", "income": 33000, "expense": 31000
         }
       ],
       "Chart2":[

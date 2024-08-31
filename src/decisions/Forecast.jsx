@@ -83,8 +83,8 @@ const Forecast = () => {
         metaware_channel_two: ForecastMetaware.channel2,
       });
       console.log("POST request successful", response.data);
-      await getForecast();
-      addUserLogger();
+      // alert( "Forecast Submitted Successfully")
+      // await getForecast();
       toast({
         title: "Forecast Submitted Successfully",
         status: "success",
@@ -92,6 +92,7 @@ const Forecast = () => {
         isClosable: true,
         position: "top",
       });
+      addUserLogger();
       navigate("/Procurement");
     } catch (error) {
       console.error("Error making POST request: Forecast", error);

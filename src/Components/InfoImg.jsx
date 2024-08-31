@@ -129,7 +129,7 @@ const InfoImg = ({ decision }) => {
           },
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', width:'80px' }}>
       <Button onClick={closeModal} bg="#D10000" color="white">Close</Button>
     </div> 
         <Inventory />

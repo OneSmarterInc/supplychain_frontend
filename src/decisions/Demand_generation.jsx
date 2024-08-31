@@ -99,7 +99,7 @@ const Demand_generation = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/usersidelive");
+      navigate("/IT");
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
     }

@@ -147,26 +147,24 @@ const Transportation_Decision = () => {
   useEffect(() => {
     getTransportation();
   }, [selectedQuarter]); // Add selectedQuarter as a dependency here
-
   useEffect(() => {
     if (TransportationData) {
       if (TransportationData.flag_dc2) {
-        if (Object.keys(TransportationData.dc_two).length === 0) {
+        if (TransportationData.dc_two && Object.keys(TransportationData.dc_two).length === 0) {
           setDc2Data(defaultDc2Data);
-        } else {
+        } else if (TransportationData.dc_two) {
           setDc2Data(TransportationData.dc_two);
         }
       }
       if (TransportationData.flag_dc3) {
-        if (Object.keys(TransportationData.dc_three).length === 0) {
+        if (TransportationData.dc_three && Object.keys(TransportationData.dc_three).length === 0) {
           setDc3Data(defaultDc3Data);
-        } else {
+        } else if (TransportationData.dc_three) {
           setDc3Data(TransportationData.dc_three);
         }
       }
     }
   }, [TransportationData]);
-
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
@@ -233,7 +231,7 @@ const Transportation_Decision = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/usersidelive");
+      navigate("/Service");
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
     }

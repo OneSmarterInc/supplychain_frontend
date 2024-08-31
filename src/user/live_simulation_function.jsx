@@ -122,7 +122,7 @@ const PlayComponent = ({
               >
                 Enter
               </button>
-              <button
+              {/* <button
                 onClick={toggleModal}
                 className={`w-28 h-10 rounded-lg text-white text-center p-2 mx-2 ${
                   isUserAssigned ? "bg-black hover:bg-gray-700" : "bg-gray-400 cursor-not-allowed"
@@ -130,7 +130,7 @@ const PlayComponent = ({
                 disabled={!isUserAssigned}
               >
                 Reports
-              </button>
+              </button> */}
             </div>
             {!isUserAssigned && (
               <p className="text-red-600 mt-2">
