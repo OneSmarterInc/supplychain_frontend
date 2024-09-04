@@ -165,7 +165,7 @@ const Service_Decision = () => {
                   )}
                 </div>
               </div>
-              <InfoButton />
+              <InfoButton decision="Service" />
             </div>
             <Box>
               <Table className="min-w-full bg-white rounded-md shadow-sm">
@@ -199,6 +199,7 @@ const Service_Decision = () => {
                           value={serviceValue[region]}
                           className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                         >
+                          <option value="1">0</option>
                           <option value="1">1</option>
                           <option value="2">2</option>
                           <option value="3">3</option>

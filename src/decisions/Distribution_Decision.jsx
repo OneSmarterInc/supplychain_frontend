@@ -81,6 +81,8 @@ const Distribution_Decision = () => {
       localStorage.setItem("DistributionData", JSON.stringify(data));
     } catch (error) {
       console.error("Error making GET request:", error);
+      setDistributionData();
+
     }
   };
 
@@ -243,7 +245,7 @@ const Distribution_Decision = () => {
                   )}
                 </div>
               </div>
-              <InfoButton />
+              <InfoButton decision="Distribution"/>
             </div>
             <Box className="ml-4 mr-4">
             <Table variant="simple" bg="white" mt="4" className=" rounded-md">

@@ -10,6 +10,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) 
     beta_quantity: "",
   });
 
+  // Update newData when procurementData changes, only once (on mount) or when procurementData is updated
   useEffect(() => {
     if (procurementData) {
       setNewData({
@@ -19,6 +20,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) 
     }
   }, [procurementData]);
 
+  // Keep the parent component informed of the changes in alpha and beta quantities
   useEffect(() => {
     setAlpha_quantity(newData.alpha_quantity);
     setBeta_quantity(newData.beta_quantity);
@@ -28,7 +30,9 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (value >= 0 && !value.includes("-")) {
+
+    // Allow the field to be empty or a valid non-negative number
+    if (value === "" || (!isNaN(value) && Number(value) >= 0)) {
       setNewData((prevState) => ({
         ...prevState,
         [name]: value,
@@ -38,10 +42,6 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) 
 
   return (
     <Box className="overflow-x-auto p-4" style={{ fontFamily: "ABeeZee" }}>
-      {/* <h2 className="text-left text-2xl py-2 px-1 font-semibold">
-        Raw Materials
-      </h2> */}
-
       <Table className="min-w-full bg-white rounded-md shadow-md">
         <Thead className="bg-gray-100 text-gray-700 font-semibold">
           <Tr>
@@ -66,7 +66,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) 
                 name="alpha_quantity"
                 onChange={handleChange}
                 placeholder="Enter Units"
-                value={newData.alpha_quantity}
+                defaultValue={newData.alpha_quantity}
                 required
               />
             </Td>
@@ -87,7 +87,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) 
                 name="beta_quantity"
                 onChange={handleChange}
                 placeholder="Enter Units"
-                value={newData.beta_quantity}
+                defaultValue={newData.beta_quantity}
                 required
               />
             </Td>

@@ -66,6 +66,8 @@ const Forecast = () => {
       localStorage.setItem("ForecastData", JSON.stringify(data));
     } catch (error) {
       console.error("Error making GET request:", error);
+      setForecastData({});
+
     }
   };
 
@@ -151,19 +153,19 @@ const Forecast = () => {
                 )}
               </div>
             </div>
-            <InfoButton />
+            <InfoButton decision="Forecast"/>
           </div>
           <Forecasting_sales
             key={`hyperware-${selectedQuarter}`} // Add a key prop to force re-render
             setForecastHyperwaretopass={setForecastHyperware}
-            forecastData={ForecastData[`Q${selectedQuarter}`]?.hyperware || {}}
+            forecastData={ForecastData || {}}
           />
 
           <div className="py-2">
             <Forecasting_sales2
               key={`metaware-${selectedQuarter}`} // Add a key prop to force re-render
               setForecastMetawaretopass={setForecastMetaware}
-              forecastData={ForecastData[`Q${selectedQuarter}`]?.metaware || {}}
+              forecastData={ForecastData || {}}
             />
           </div>
 

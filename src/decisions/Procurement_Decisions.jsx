@@ -148,7 +148,7 @@ const Procurement_Decisions = () => {
                 )}
               </div>
             </div>
-            <InfoButton />
+            <InfoButton decision="Procurement" />
           </div>
           <RawMaterial
             procurementData1={JSON.stringify(data)}

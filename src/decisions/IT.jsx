@@ -160,7 +160,7 @@ const IT = () => {
                 )}
               </div>
             </div>
-            <InfoButton />
+            <InfoButton decision="IT" />
           </div>
           <IT_suppliers ItData={ItData} setSuppliersFromDecision={setSuppliers} />
           {/* Submit Button */}

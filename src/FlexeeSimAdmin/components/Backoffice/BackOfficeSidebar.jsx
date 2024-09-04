@@ -30,30 +30,33 @@ const BackOfficeSidebar = () => {
   let totalQuarters = parseInt(simData?.[0]?.current_quarter) - 1 || 1;
 
   const parentOptions = [
-    { name: "Home", redirect: "/" },
-    { name: "Dashboard", redirect: "/dashboard" },
-    {
-      name: "Decisions",
-      children: [
-        { name: "Forecast", redirect: "/forecast" },
-        { name: "Procurement", redirect: "/procurement" },
-        { name: "Manufacture", redirect: "/manufacture" },
-        { name: "Distribution", redirect: "/distribution" },
-        { name: "Transport", redirect: "/transport" },
-        { name: "Service", redirect: "/service" },
-        { name: "Demand", redirect: "/demand" },
-        { name: "IT", redirect: "/it" },
-      ],
-    },
-    {
-      name: "Reports",
-      children: Array.from({ length: totalQuarters }, (_, i) => ({
-        name: `Quarter ${i + 1}`,
-        redirect: null,
-      })),
-    },
-    { name: "Members", redirect: "/members" },
-    { name: "FAQ's", redirect: "/faqs" },
+    { name: "Home", redirect: "/flexeesim/dashboard" },
+    // { name: "Dashboard", redirect: "/flexeesim/backoffice/user" },
+    { name: "Users", redirect: "/flexeesim/backoffice/user" },
+    {name: "Reports", redirect:"/flexeesim/backoffice/reports"},
+    {name: "Decisions", redirect:"/flexeesim/backoffice/decisions"},
+    // {
+    //   name: "Decisions",
+    //   children: [
+    //     { name: "Forecast", redirect: "/forecast" },
+    //     { name: "Procurement", redirect: "/procurement" },
+    //     { name: "Manufacture", redirect: "/manufacture" },
+    //     { name: "Distribution", redirect: "/distribution" },
+    //     { name: "Transport", redirect: "/transport" },
+    //     { name: "Service", redirect: "/service" },
+    //     { name: "Demand", redirect: "/demand" },
+    //     { name: "IT", redirect: "/it" },
+    //   ],
+    // },
+    // {
+    //   name: "Reports",
+    //   children: Array.from({ length: totalQuarters }, (_, i) => ({
+    //     name: `Quarter ${i + 1}`,
+    //     redirect: null,
+    //   })),
+    // },
+    // { name: "Members", redirect: "/members" },
+    // { name: "FAQ's", redirect: "/faqs" },
     { name: "Manual" },
   ];
 
@@ -151,9 +154,9 @@ const BackOfficeSidebar = () => {
     };
   }, [isSidebarOpen]);
   return (
-    <div className="relative z-50 flex">
+    <div className="relative flex z-100">
       {!isSidebarOpen && (
-        <div className="absolute left-0 mt-0 top-0 transform -translate-y-20 bg-black text-gray-300 pl-3 rounded-r cursor-pointer">
+        <div className="absolute left-0 mt-0 top-0 transform -translate-y-10 bg-black text-gray-300 pl-3 rounded-r cursor-pointer">
           <i class="fa-solid fa-bars text-2xl text-red-500" onClick={toggleSidebar}></i>
         </div>
       )}
@@ -164,7 +167,7 @@ const BackOfficeSidebar = () => {
           className="fixed left-0 top-0 bg-[#0E406A] text-gray-300 w-60 h-screen"
         >
           <div className="flex bg-gray-900 w-full h-12 p-2 justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold pl-4 text-white cursor-pointer" onClick={()=>{navigate('/usersidelive')}}>FLEXEE</h1>
+            <h1 className="text-2xl font-bold pl-4 text-white cursor-pointer" onClick={()=>{navigate('/flexeesim/dashboard')}}>FLEXEE</h1>
             <FiArrowLeft
               onClick={toggleSidebar}
               className="cursor-pointer text-red-500"

@@ -22,6 +22,7 @@ import InfoButton from "../Components/InfoButton";
 const Manufacturing_Decisions = () => {
   const { api } = useContext(MyContext);
   const [ManufacturingData, setManufacturingData] = useState();
+  const [lastValidManufacturingData, setLastValidManufacturingData] = useState(null); // Store last valid data
   const [values, setValues] = useState({
     Production: {
       productZero: 0,
@@ -79,6 +80,8 @@ const Manufacturing_Decisions = () => {
           metaware: ManufacturingData.volume_flexibility_metaware,
         },
       });
+      // Store the last valid data on successful fetch
+      setLastValidManufacturingData(ManufacturingData);
     }
   }, [ManufacturingData]);
 
@@ -99,6 +102,13 @@ const Manufacturing_Decisions = () => {
       localStorage.setItem("ManufacturingData", JSON.stringify(data));
     } catch (error) {
       console.error("Error making GET request:", error);
+
+      // Revert to last valid data if the current fetch fails
+      if (lastValidManufacturingData) {
+        setManufacturingData(lastValidManufacturingData);
+      } else {
+        setManufacturingData();
+      }
     }
   };
 
@@ -177,7 +187,7 @@ const Manufacturing_Decisions = () => {
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
             <InfoImg decision={"Manufacture"} />
             <div className="flex items-center justify-between w-full">
-            <div className="flex items-center pl-5 pt-2 pb-2">
+              <div className="flex items-center pl-5 pt-2 pb-2">
                 <Text>Load data Quarterly</Text>
                 <div className="pl-4 flex space-x-4">
                   {Array.from(
@@ -186,8 +196,9 @@ const Manufacturing_Decisions = () => {
                       <div
                         key={i + 1}
                         onClick={() => setSelectedQuarter(i + 1)}
-                        className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${selectedQuarter === i + 1 ? "bg-red-500 border-red-500 text-white" : ""
-                          }`}
+                        className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
+                          selectedQuarter === i + 1 ? "bg-red-500 border-red-500 text-white" : ""
+                        }`}
                       >
                         {i + 1}
                       </div>
@@ -195,7 +206,7 @@ const Manufacturing_Decisions = () => {
                   )}
                 </div>
               </div>
-              <InfoButton />
+              <InfoButton decision="Manufacture" />
             </div>
             <Table className="w-30 bg-white rounded-md shadow-sm">
               <Thead className="bg-gray-100">
@@ -245,21 +256,20 @@ const Manufacturing_Decisions = () => {
                 ))}
               </Tbody>
             </Table>
-             {/* Submit Button */}
-          <div className="flex justify-end mt-4">
-            
-            <button
-              onClick={submitManufacturing}
-              className={`${selectedQuarter === currentQuarter
-                  ? "bg-red-500 hover:bg-black-700 text-white"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            {/* Submit Button */}
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={submitManufacturing}
+                className={`${
+                  selectedQuarter === currentQuarter
+                    ? "bg-red-500 hover:bg-black-700 text-white"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
-              disabled={selectedQuarter !== currentQuarter}
-            >
-              Submit Manufacture
-            </button>
-          </div>
-            {/* <div className="rounded-lg -2xl h-96  flex flex-col justify-start"></div> */}
+                disabled={selectedQuarter !== currentQuarter}
+              >
+                Submit Manufacture
+              </button>
+            </div>
           </div>
         </div>
       </div>

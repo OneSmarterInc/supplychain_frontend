@@ -1,13 +1,51 @@
-import React, { useState } from 'react';
-import {
-  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend, Tooltip
-} from 'recharts';
-import data from './data.json'
+import React, { useState, useEffect } from 'react';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
-const evaluation = data['evaluation']
-
-const FirmRadarChart = () => {
+const FirmRadarChart = ({ apiData }) => {
   const [highlightedDataKey, setHighlightedDataKey] = useState(null);
+  const [evaluation, setEvaluation] = useState([]);
+  console.log(apiData);
+  
+  const transformData = (apiData) => {
+    return [
+      {
+        metric: 'Net Income to Revenues',
+        Firm3: apiData.net_income_to_revenues_firm_3,
+        Worst: apiData.net_income_to_revenues_worst,
+        Average: apiData.net_income_to_revenues_average,
+        Best: apiData.net_income_to_revenues_best,
+      },
+      {
+        metric: 'Return on Assets',
+        Firm3: apiData.return_on_assets_firm_3,
+        Worst: apiData.return_on_assets_worst,
+        Average: apiData.return_on_assets_average,
+        Best: apiData.return_on_assets_best,
+      },
+      {
+        metric: 'Net Asset Turns',
+        Firm3: apiData.net_asset_turns_firm_3,
+        Worst: apiData.net_asset_turns_worst,
+        Average: apiData.net_asset_turns_average,
+        Best: apiData.net_asset_turns_best,
+      },
+      {
+        metric: 'Inventory Turnover',
+        Firm3: apiData.inventory_turnover_firm_3,
+        Worst: apiData.inventory_turnover_worst,
+        Average: apiData.inventory_turnover_average,
+        Best: apiData.inventory_turnover_best,
+      },
+      
+      // Add other metrics as needed
+    ];
+  };
+
+  useEffect(() => {
+    if (apiData) {
+      setEvaluation(transformData(apiData));
+    }
+  }, [apiData]);
 
   const handleLegendMouseEnter = (dataKey) => {
     setHighlightedDataKey(dataKey);
@@ -19,7 +57,6 @@ const FirmRadarChart = () => {
 
   return (
     <div>
-      <h3 className='pl-6 py-2'>Evaluation report your firm to industry  - Previous</h3>
       <ResponsiveContainer width="100%" height={400}>
         <RadarChart outerRadius={150} data={evaluation}>
           <PolarGrid />
@@ -27,8 +64,8 @@ const FirmRadarChart = () => {
           <PolarRadiusAxis />
           <Tooltip />
           <Radar 
-            name="you" 
-            dataKey="your's" 
+            name="Firm 3" 
+            dataKey="Firm3" 
             stroke="#8884d8" 
             fill="#8884d8" 
             fillOpacity={highlightedDataKey === 'Firm3' || highlightedDataKey === null ? 0.6 : 0.1} 

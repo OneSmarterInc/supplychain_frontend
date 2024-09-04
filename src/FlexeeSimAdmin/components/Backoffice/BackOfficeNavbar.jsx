@@ -10,9 +10,6 @@ const BackOfficeNavbar = () => {
   const { api } = useContext(MyContext);
   const [courses, setCourses] = useState([]);
 
-  console.log("Selected Course", selectedCoursesFromNavbar);
-  console.log("Courses", courses);
-
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -20,11 +17,10 @@ const BackOfficeNavbar = () => {
         const response = await axios.get(
           `${api}/user/${user.userid}/subscriptions/`
         );
-        // Transform the data to match the structure needed for rendering
         const transformedCourses = response.data.map((item) => ({
           course: item.simulation.course || "Unnamed Course",
           members: item.simulation.members,
-          organization: `Simulation ${item.simulation.simulation_id}`, // Example: Use simulation ID as organization
+          organization: `Simulation ${item.simulation.simulation_id}`,
           startDate: item.simulation.start_date,
           endDate: item.simulation.end_date,
           passcode: item.simulation.passcode,
@@ -36,6 +32,12 @@ const BackOfficeNavbar = () => {
     };
 
     fetchCourses();
+
+    // Load the selected course from localStorage
+    const savedCourse = JSON.parse(localStorage.getItem("BackofficeNavbarSelectedCourse"));
+    if (savedCourse) {
+      setSelectedCoursesFromNavbar(savedCourse);
+    }
   }, [api]);
 
   const handleSelectedCourse = (course) => {
@@ -48,7 +50,7 @@ const BackOfficeNavbar = () => {
   };
 
   const redirect = () => {
-    navigate("/usersidelive");
+    navigate("/flexeesim/dashboard");
   };
 
   return (
@@ -57,7 +59,7 @@ const BackOfficeNavbar = () => {
         <div className="flex justify-between items-center bg-black text-white p-2 h-12">
           <div className="flex justify-between w-full">
             <div className="px-3 cursor-pointer">
-              <h1 className="text-2xl font-bold pl-7 text-white cursor-pointer">
+              <h1 className="text-2xl font-bold pl-7 text-white cursor-pointer" onClick={redirect}>
                 FLEXEE
               </h1>
             </div>
@@ -86,42 +88,7 @@ const BackOfficeNavbar = () => {
             </div>
           </div>
         </div>
-        <div className="">
-          <div className="flex h-10">
-            <div className="w-full text-start">
-              <div
-                className={`text-xl flex text-start items-start justify-between font-bold bg-white`}
-              >
-                <h1 className="w-[280px] text-right font-medium bg-slate-200 pr-10 pl-0 p-3 border">
-                  SELECT A POOL{" "}
-                </h1>
-                <div className="relative w-full py-0">
-                  <select
-                    name=""
-                    defaultValue=""
-                    id=""
-                    onChange={(e) =>
-                      handleSelectedCourse(e.target.value)
-                    }
-                    className="px-3 w-full p-3 border-gray-300 border-0 border-b-2 border-l-2 font-normal appearance-none pl-10"
-                  >
-                    <option value="">Select Course Please</option>
-                    {courses?.map((course, index) => (
-                      <option key={index} value={JSON.stringify(course)}>
-                        {course.course} | {course.organization}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <div className="bg-gray-200 border-0 border-l-2 border-l-red-500 w-24 flex justify-center items-center h-12 absolute right-0 top-1">
-                      <i className="fa-solid fa-chevron-down"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
   );

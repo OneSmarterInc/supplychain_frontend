@@ -18,7 +18,7 @@ const ForecastBarChart = () => {
   return (
     <div className="w-full">
       <ResponsiveContainer width="100%" height={400}>
-        <h3 className="pl-6 py-2">Forecast with Actual Demand - Previous</h3>
+        {/* <h3 className="pl-6 py-2">Forecast with Actual Demand - Previous</h3> */}
 
         <BarChart
           data={chart3}

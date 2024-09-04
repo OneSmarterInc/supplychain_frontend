@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, Input, Box } from "@chakra-ui/react";
 
-const ForecastingSales = ({ setForecastHyperwaretopass }) => {
-  const forecastData = JSON.parse(localStorage.getItem("ForecastData")) || {};
+const ForecastingSales = ({ setForecastHyperwaretopass, forecastData }) => {
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim")) || [{}];
 
-  const initialForecast = {
-    channel1: forecastData?.hyperware_channel_one || {
-      region1: "",
-      region2: "",
-      region3: "",
-    },
-    channel2: forecastData?.hyperware_channel_two || {
-      region1: "",
-      region2: "",
-      region3: "",
-    },
-    // Add more channels and regions as needed
-  };
+  // Initialize ForecastHyperware state with forecastData whenever forecastData changes
+  const [ForecastHyperware, setForecastHyperware] = useState({
+    channel1: forecastData?.hyperware_channel_one || { region1: "", region2: "", region3: "" },
+    channel2: forecastData?.hyperware_channel_two || { region1: "", region2: "", region3: "" },
+  });
 
-  const [ForecastHyperware, setForecastHyperware] = useState(initialForecast);
+  // Sync ForecastHyperware with forecastData whenever forecastData changes
+  useEffect(() => {
+    setForecastHyperware({
+      channel1: forecastData?.hyperware_channel_one || { region1: "", region2: "", region3: "" },
+      channel2: forecastData?.hyperware_channel_two || { region1: "", region2: "", region3: "" },
+    });
+  }, [forecastData]);
+
+  useEffect(() => {
+    setForecastHyperwaretopass(ForecastHyperware);
+  }, [ForecastHyperware, setForecastHyperwaretopass]);
 
   const handleChange = (channel, region, newValue) => {
     setForecastHyperware((prevForecastHyperware) => ({
@@ -30,10 +31,6 @@ const ForecastingSales = ({ setForecastHyperwaretopass }) => {
       },
     }));
   };
-
-  useEffect(() => {
-    setForecastHyperwaretopass(ForecastHyperware);
-  }, [ForecastHyperware, setForecastHyperwaretopass]);
 
   return (
     <Box className="overflow-x-auto p-4">

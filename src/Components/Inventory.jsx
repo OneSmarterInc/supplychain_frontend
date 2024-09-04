@@ -27,7 +27,7 @@ const Inventory = () => {
         params: {
           simulation_id,
           firm_key,
-          current_quarter:  simData[0].current_quarter,
+          current_quarter: simData[0]?.current_quarter,
         },
       })
       .then((response) => setData(response.data))
@@ -37,7 +37,9 @@ const Inventory = () => {
   // Map component names using renamedMappedData
   const getMappedName = (name) => {
     return (
-      selectedSim[0]?.renamedMappedData?.componentMapp?.[name] ||  selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.[name ] || name
+      selectedSim[0]?.renamedMappedData?.componentMapp?.[name] ||
+      selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.[name] ||
+      name
     );
   };
 
@@ -50,39 +52,42 @@ const Inventory = () => {
   const renderDataBlocks = (dataArray, additionalClasses = "") =>
     dataArray.map((item) => (
       <div key={item.name} className={`p-2 text-center ${additionalClasses}`}>
-        <h3 className="text-lg font-bold mb-1">{item.value}</h3>
-        <p className="text-gray-600">{item.name}</p>
+        <h3 className="text-base md:text-lg font-bold mb-1">{item.value}</h3>
+        <p className="text-gray-600 text-sm md:text-base">{item.name}</p>
       </div>
     ));
 
   return (
-    <div className="container mx-auto p-0" style={{width:'80%'}}>
-      <div className="bg-white p-0 rounded shadow-sm mb-4">
-        <h3 className="text-xl font-bold mb-4">Manufacture | Region 1</h3>
-        <div className="flex items-start">
-          <div className="grid grid-cols-5 gap-4">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="bg-white p-4 rounded shadow-sm mb-4">
+        <h3 className="text-lg md:text-xl font-bold mb-4">Manufacture | Region 1</h3>
+        <div className="flex flex-wrap">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {renderDataBlocks(
               convertToArray(data.manufacture).filter(
-                (item) => item.name !== getMappedName("hyperware") && item.name !== getMappedName("metaware")
+                (item) =>
+                  item.name !== getMappedName("hyperware") &&
+                  item.name !== getMappedName("metaware")
               )
             )}
           </div>
-          <div className="grid grid-cols-2 gap-4 p-2 bg-gray-100 rounded">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2 bg-gray-100 rounded">
             {renderDataBlocks(
               convertToArray(data.manufacture).filter(
-                (item) => item.name === getMappedName("hyperware") || item.name === getMappedName("metaware")
+                (item) =>
+                  item.name === getMappedName("hyperware") ||
+                  item.name === getMappedName("metaware")
               ),
               "bg-gray-50"
             )}
           </div>
-          <Image src={factory} boxSize="80px" />
         </div>
       </div>
 
       <div className="bg-white p-4 rounded shadow-sm mb-4">
-        <h3 className="text-xl font-bold mb-4">Distribution Center | Region 2</h3>
-        <div className="flex items-start">
-          <div className="grid grid-cols-5 gap-4">
+        <h3 className="text-lg md:text-xl font-bold mb-4">Distribution Center | Region 2</h3>
+        <div className="flex flex-wrap">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {renderDataBlocks(
               convertToArray(data.distributionCenter1).filter(
                 (item) =>
@@ -92,7 +97,7 @@ const Inventory = () => {
               )
             )}
           </div>
-          <div className="grid grid-cols-3 gap-4 p-2 bg-gray-100 rounded">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2 bg-gray-100 rounded">
             {renderDataBlocks(
               convertToArray(data.distributionCenter1).filter(
                 (item) =>
@@ -103,14 +108,13 @@ const Inventory = () => {
               "bg-gray-50"
             )}
           </div>
-          <Image src={storage} boxSize="80px" />
         </div>
       </div>
 
       <div className="bg-white p-4 rounded shadow-sm">
-        <h3 className="text-xl font-bold mb-4">Distribution Center | Region 3</h3>
-        <div className="flex items-start">
-          <div className="grid grid-cols-5 gap-4">
+        <h3 className="text-lg md:text-xl font-bold mb-4">Distribution Center | Region 3</h3>
+        <div className="flex flex-wrap">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {renderDataBlocks(
               convertToArray(data.distributionCenter2).filter(
                 (item) =>
@@ -120,7 +124,7 @@ const Inventory = () => {
               )
             )}
           </div>
-          <div className="grid grid-cols-3 gap-4 p-2 bg-gray-100 rounded">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2 bg-gray-100 rounded">
             {renderDataBlocks(
               convertToArray(data.distributionCenter2).filter(
                 (item) =>
@@ -131,7 +135,6 @@ const Inventory = () => {
               "bg-gray-50"
             )}
           </div>
-          <Image src={storage} boxSize="80px" />
         </div>
       </div>
     </div>

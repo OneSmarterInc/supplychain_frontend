@@ -10,7 +10,7 @@ import transport from "../assets/transport.png";
 import manufacturing from "../assets/manufacturing.png";
 import procurement from "../assets/procurement.png";
 import Inventory from "./Inventory";
-import { Button, Text } from "@chakra-ui/react";
+import { Box, Button, Text } from "@chakra-ui/react";
 
 const InfoImg = ({ decision }) => {
   const location = useLocation();
@@ -71,7 +71,7 @@ const InfoImg = ({ decision }) => {
   return (
     <div className="relative">
       <div
-        className="h-28 bg-cover bg-no-repeat overflow-hidden"
+        className="h-28 bg-cover bg-no-repeat overflow-hidden rounded-lg"
         style={{
           backgroundImage: `url(${backgroundImage()})`,
           width: "auto",
@@ -103,9 +103,9 @@ const InfoImg = ({ decision }) => {
               <hr />
               <Text color="red" pl="6" fontSize="1.1rem">Quarter Deadline</Text>
             </div>
-            <button 
-              title="Click to open Inventory" 
-              onClick={handleInventory} 
+            <button
+              title="Click to open Inventory"
+              onClick={handleInventory}
               className="bg-[#D10000] rounded-md text-white h-10 px-2  hover:bg-red-700 shadow-md hover:shadow-lg hover:shadow-grey-500/50"
             >
               Inventory
@@ -118,20 +118,11 @@ const InfoImg = ({ decision }) => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Inventory Modal"
-        style={{
-          content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-          },
-        }}
+
       >
-        <div style={{ display: 'flex', justifyContent: 'flex-end', width:'80px' }}>
-      <Button onClick={closeModal} bg="#D10000" color="white">Close</Button>
-    </div> 
+        <Box display="flex" justifyContent="flex-end" w="100%">
+          <Button onClick={closeModal} bg="#D10000" color="white">Close</Button>
+        </Box>
         <Inventory />
       </Modal>
     </div>

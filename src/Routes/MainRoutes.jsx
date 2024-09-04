@@ -56,6 +56,7 @@ import { PrivateRoute } from "./PrivateRoutes";
 import BackOfficeFooter from "../FlexeeSimAdmin/components/Backoffice/BackOfficeFooter";
 import Members from "../Components/Members";
 import ForgotPassword from "../Components/ForgotPassword";
+import BackOfficeDecision from "../FlexeeSimAdmin/components/Backoffice/BackOfficeDecision";
 
 const MainRoutes = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
@@ -439,7 +440,7 @@ const MainRoutes = () => {
           <ProtectedRoute>
             <div className="flex justify-start items-start">
               <div className={`w-full`}>
-                <div className="pb-10">
+                <div className="pb-0">
                   <FlexeeBackOfficeNavbar
                   />
                   <FlexeeBackOfficeSidebar />
@@ -449,7 +450,7 @@ const MainRoutes = () => {
                 </div>
               </div>
             </div>
-            <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+            <div>
               <FlexeeBackOfficeFooter />
             </div>
           </ProtectedRoute>
@@ -475,9 +476,9 @@ const MainRoutes = () => {
                 </div>
               </div>
             </div>
-            <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+            
               <FlexeeBackOfficeFooter />
-            </div>
+           
           </ProtectedRoute>
         }
       />
@@ -489,50 +490,56 @@ const MainRoutes = () => {
           <ProtectedRoute>
             <div className="flex justify-start items-start">
               {isSideBarOpen && <FlexeeBackOfficeSidebar />}
-              <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
-                <div className="pb-10">
+              <div className={`w-full`}>
+                <div className="">
                   <FlexeeBackOfficeNavbar
                     setIsSideBarOpen={setIsSideBarOpen}
                     isSideBarOpen={isSideBarOpen}
                   />
                 </div>
+                <FlexeeBackOfficeSidebar />
                 <div className="pb-20">
                   <FlexeeBackOfficeReports />
                 </div>
               </div>
             </div>
-            <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
+            
               <FlexeeBackOfficeFooter />
-            </div>
+            
           </ProtectedRoute>
         }
       />
 
+
       <Route
         exact
-        path="/flexeesim/backoffice/faqs"
+        path="/flexeesim/backoffice/decisions"
         element={
           <ProtectedRoute>
             <div className="flex justify-start items-start">
               {isSideBarOpen && <FlexeeBackOfficeSidebar />}
-              <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
-                <div className="pb-10">
+              <div className={`w-full`}>
+                <div className="">
                   <FlexeeBackOfficeNavbar
                     setIsSideBarOpen={setIsSideBarOpen}
                     isSideBarOpen={isSideBarOpen}
                   />
                 </div>
+                <FlexeeBackOfficeSidebar />
                 <div className="pb-20">
-                  <FlexeeBackOfficeFAQS />
+                  <BackOfficeDecision />
                 </div>
               </div>
             </div>
-            <div className={`w-full ${isSideBarOpen ? "ml-60" : "ml-0"}`}>
-              <FlexeeBackOfficeFooter />
-            </div>
+           
+              <BackOfficeFooter />
+           
           </ProtectedRoute>
         }
       />
+      
+
+
 
       <Route
         exact

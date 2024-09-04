@@ -342,7 +342,7 @@ const Transportation_Decision = () => {
                 )}
               </div>
             </div>
-            <InfoButton />
+            <InfoButton decision="Transport" />
           </div>
           <div className="flex gap-1 m-1">
             <div className="m-2 min-w-[700px] rounded-2xl bg-white p-2 flex flex-col space-y-4 justify-start">

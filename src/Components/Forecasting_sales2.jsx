@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, Input, Box } from "@chakra-ui/react";
 
-const ForecastingSales2 = ({ setForecastMetawaretopass }) => {
-  const forecastData = JSON.parse(localStorage.getItem("ForecastData")) || {};
+const ForecastingSales2 = ({ setForecastMetawaretopass, forecastData }) => {
+  // const forecastData = JSON.parse(localStorage.getItem("ForecastData")) || {};
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim")) || [{}];
 
-  const initialForecast = {
-    channel1: forecastData?.metaware_channel_one || {
-      region1: 0,
-      region2: 0,
-      region3: 0,
-    },
-    channel2: forecastData?.metaware_channel_two || {
-      region1: 0,
-      region2: 0,
-      region3: 0,
-    },
-    // Add more channels and regions as needed
-  };
+  // Initialize ForecastMetaware state with forecastData whenever forecastData changes
+  const [ForecastMetaware, setForecastMetaware] = useState({
+    channel1: forecastData?.metaware_channel_one || { region1: 0, region2: 0, region3: 0 },
+    channel2: forecastData?.metaware_channel_two || { region1: 0, region2: 0, region3: 0 },
+  });
 
-  const [ForecastMetaware, setForecastMetaware] = useState(initialForecast);
+  // Sync ForecastMetaware with forecastData whenever forecastData changes
+  useEffect(() => {
+    setForecastMetaware({
+      channel1: forecastData?.metaware_channel_one || { region1: 0, region2: 0, region3: 0 },
+      channel2: forecastData?.metaware_channel_two || { region1: 0, region2: 0, region3: 0 },
+    });
+  }, [forecastData]);
+
+  useEffect(() => {
+    setForecastMetawaretopass(ForecastMetaware);
+  }, [ForecastMetaware, setForecastMetawaretopass]);
 
   const handleChange = (channel, region, newValue) => {
     setForecastMetaware((prevForecastMetaware) => ({
@@ -30,10 +32,6 @@ const ForecastingSales2 = ({ setForecastMetawaretopass }) => {
       },
     }));
   };
-
-  useEffect(() => {
-    setForecastMetawaretopass(ForecastMetaware);
-  }, [ForecastMetaware, setForecastMetawaretopass]);
 
   return (
     <Box className="overflow-x-auto p-4">

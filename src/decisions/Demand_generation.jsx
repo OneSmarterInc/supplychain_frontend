@@ -150,7 +150,7 @@ const Demand_generation = () => {
                 )}
               </div>
             </div>
-            <InfoButton />
+            <InfoButton decision="Demand" />
           </div>
           <div className="m-3 rounded-2xl bg-white flex flex-col justify-start border-2 px-2">
             <Text fontSize="xl" fontWeight="bold" p="5" pb="0">
