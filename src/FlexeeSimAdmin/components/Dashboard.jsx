@@ -5,12 +5,14 @@ import MyContext from "../../Components/ContextApi/MyContext";
 import ExploreSim from "./ExploreSim";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Puff } from "react-loader-spinner"; // Import 
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [code, setCode] = useState("");
   const [courses, setCourses] = useState([]);
   const { api } = useContext(MyContext);
+  const [isLoading, setIsLoading] = useState(false); // Loader state
 
   useEffect(() => {
     fetchCourses();
@@ -18,6 +20,7 @@ const Dashboard = () => {
 
   const fetchCourses = async () => {
     try {
+      setIsLoading(true); 
       const user = JSON.parse(localStorage.getItem("user"));
       const response = await axios.get(`${api}/user/${user.userid}/subscriptions/`);
       const transformedCourses = response.data.map((item) => ({
@@ -31,10 +34,13 @@ const Dashboard = () => {
 
       }));
       setCourses(transformedCourses);
+      setIsLoading(false); 
       
     } catch (error) {
       toast.error("Error fetching the courses. Please try again.");
       console.error("Error fetching the courses:", error);
+      setIsLoading(false); 
+
     }
   };
 
@@ -112,7 +118,11 @@ const Dashboard = () => {
       </section>
 
       <section className="w-full my-2">
-        {courses.length === 0 ? (
+      {isLoading ? (
+          <div className="flex justify-center items-center">
+            <Puff color="red" height={100} width={100} /> {/* Loader */}
+          </div>
+        ) : courses.length === 0 ? (
           <div className="text-left text-gray-700 font-semibold">
             No courses have been created yet. Please subscribe to a simulation to get started.
           </div>
