@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import MyContext from "../../../Components/ContextApi/MyContext";
+import { Puff } from "react-loader-spinner";
 
 const BackOfficeUser = () => {
   const [users, setUsers] = useState([]);
@@ -14,6 +15,7 @@ const BackOfficeUser = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
+        setLoading(true)
         const user = JSON.parse(localStorage.getItem("user"));
         const response = await axios.get(
           `${api}/user/${user.userid}/subscriptions/`
@@ -26,7 +28,10 @@ const BackOfficeUser = () => {
           endDate: item.simulation.end_date,
           passcode: item.simulation.passcode,
         }));
+
         setCourses(transformedCourses);
+        setLoading(false)
+        
 
         // Set the first course as selected by default
         if (transformedCourses.length > 0) {
@@ -34,6 +39,8 @@ const BackOfficeUser = () => {
         }
       } catch (error) {
         console.error("Error fetching the courses:", error);
+        setLoading(false)
+
       }
     };
 
@@ -75,7 +82,13 @@ const BackOfficeUser = () => {
   const handleSelectedCourse = (course) => {
     setSelectedCourse(JSON.parse(course));
   };
-
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Puff color="red" height={100} width={100} /> {/* Loader */}
+      </div>
+    );
+  }
   if (!selectedCourse) {
     return (
       <p className="text-gray-500">
@@ -121,7 +134,9 @@ const BackOfficeUser = () => {
           USERS
         </h3>
         {loading ? (
-          <p>Loading users...</p>
+          <div className="flex justify-center items-center">
+            <Puff color="red" height={100} width={100} /> {/* Loader */}
+          </div>
         ) : users.length > 0 ? (
           <>
             <table className="w-full text-left border-collapse">

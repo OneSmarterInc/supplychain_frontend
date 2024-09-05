@@ -77,7 +77,7 @@ const CourseComponent = () => {
             <p className="text-xl font-normal">
               <span className="opacity-50">ORGANIZATION:</span>{" "}
               <span className="text-gray-900 font-medium">
-                {SelectedCourse?.organization}
+                {SelectedCourse?.orgnization}
               </span>
             </p>
           </div>

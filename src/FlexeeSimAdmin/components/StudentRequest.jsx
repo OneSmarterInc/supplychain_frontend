@@ -25,7 +25,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
   
         // Transform the data to include team information from local storage
         const transformedData = filteredData.map((item) => {
-          const savedTeam = localStorage.getItem(`team_${item.user_detail.userid}`);
+          const savedTeam = localStorage.getItem(`${passcode}_team_${item.user_detail.userid}`);
           return {
             id: item.user_detail.userid,
             name: `${item.user_detail.first_name} ${item.user_detail.last_name}`,
@@ -96,7 +96,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
       console.log("Add to firm data: ", data);
 
       // Save the selected team to local storage
-      localStorage.setItem(`team_${user_id}`, team);
+      localStorage.setItem(`${passcode}_team_${user_id}`, team);
 
       // Update the student list with the new team assignment
       setStudents((prevStudents) =>
@@ -154,7 +154,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
             type="radio"
             id="studentsNotTeam"
             value="StudentsNotTeam"
-            checked={selectedFilter === "StudentsNotTeam"}
+            checked={selectedFilter === "StudentsNotTeam"} 
             onChange={handleFilterChange}
             className="mr-2"
           />

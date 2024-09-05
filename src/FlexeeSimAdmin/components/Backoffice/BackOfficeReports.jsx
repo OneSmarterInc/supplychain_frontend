@@ -132,7 +132,7 @@ const BackOfficeUser = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Puff color="#00BFFF" height={100} width={100} />
+        <Puff color="red" height={100} width={100} />
       </div>
     );
   }

@@ -207,8 +207,16 @@ const BackOfficeDecision = () => {
   };
 
   return (
-    <div className="bg-gray-100 m-0 min-h-screen">
-      <ToastContainer />
+    <>
+      {/* <ToastContainer /> */}
+      {loading ? (
+        <div className="flex justify-center items-center h-screen">
+              <Puff color="red" height={100} width={100} />
+            </div>
+          ) : (
+            
+            
+      <div className="bg-gray-100 m-0 min-h-screen">
       <div className="flex h-10">
         <div className="w-full text-start">
           <div className="text-xl flex text-start items-start justify-between font-bold bg-white">
@@ -234,6 +242,7 @@ const BackOfficeDecision = () => {
           </div>
         </div>
       </div>
+          
 
       <div className="px-4 lg:px-10 mt-10 rounded-2xl bg-white py-6 flex flex-col justify-start mx-4">
         {teams.length > 0 && (
@@ -297,7 +306,7 @@ const BackOfficeDecision = () => {
 
         {loading ? (
           <div className="flex justify-center items-center h-screen">
-            <Puff color="#00BFFF" height={100} width={100} />
+            <Puff color="#red" height={100} width={100} />
           </div>
         ) : reportData ? (
           <>
@@ -362,7 +371,7 @@ const BackOfficeDecision = () => {
           <h2 className="text-lg font-bold">User Logs</h2>
           {loading ? (
             <div className="flex justify-center items-center">
-              <Puff color="#00BFFF" height={100} width={100} />
+              <Puff color="red" height={100} width={100} />
             </div>
           ) : (
             renderLogsTable()
@@ -370,6 +379,8 @@ const BackOfficeDecision = () => {
         </div>
       </div>
     </div>
+    )}
+  </>
   );
 };
 
