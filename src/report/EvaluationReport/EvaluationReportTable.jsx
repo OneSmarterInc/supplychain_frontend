@@ -34,7 +34,7 @@ const EvaluationReportTable = (Data) => {
         <thead>
           <tr>
             <th className="px-4 py-2">Metric</th>
-            <th className="px-4 py-2">Firm 3</th>
+            <th className="px-4 py-2">You </th>
             <th className="px-4 py-2">Worst</th>
             <th className="px-4 py-2">Industry Average</th>
             <th className="px-4 py-2">Best</th>

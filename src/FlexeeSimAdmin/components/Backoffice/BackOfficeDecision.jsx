@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import MyContext from "../../../Components/ContextApi/MyContext";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Import Toast styles
+import "react-toastify/dist/ReactToastify.css";
 import { Puff } from "react-loader-spinner";
 import { ForecastingSales2View, ForecastingSalesView } from "./view/ForecastView";
 import ProcurementView from "./view/ProcurementView";
@@ -11,6 +11,7 @@ import TransportView from "./view/TransportVIew";
 import DemandView from "./view/DemandView";
 import ITView from "./view/ITView";
 import ServiceView from "./view/ServiceVIew";
+import { Table, Thead, Tbody, Tr, Th, Td, Input, Box } from "@chakra-ui/react";
 
 const BackOfficeDecision = () => {
   const [users, setUsers] = useState([]);
@@ -22,6 +23,7 @@ const BackOfficeDecision = () => {
   const [selectedQuarter, setSelectedQuarter] = useState(null);
   const [reportData, setReportData] = useState(null);
   const [selectedDecision, setSelectedDecision] = useState(null);
+  const [logs, setLogs] = useState([]); // State for user logs
   const { api } = useContext(MyContext);
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -47,7 +49,6 @@ const BackOfficeDecision = () => {
         if (transformedCourses.length > 0) {
           setSelectedCourse(transformedCourses[0]);
         }
-        // toast.success("Courses fetched successfully!");
       } catch (error) {
         toast.error("Error fetching courses.");
         console.error("Error fetching the courses:", error);
@@ -71,7 +72,6 @@ const BackOfficeDecision = () => {
           users: firm.users,
         }));
         setTeams(flattenedTeams);
-        // toast.success("Teams fetched successfully!");
       } catch (error) {
         toast.error("Error fetching teams.");
         console.error("Error fetching teams:", error);
@@ -85,12 +85,11 @@ const BackOfficeDecision = () => {
     }
   }, [api, selectedCourse]);
 
-  // Trigger decision data fetch when team or quarter changes
   useEffect(() => {
     if (selectedDecision && selectedQuarter && selectedTeam) {
       handleDecisionClick(selectedDecision);
     }
-  }, [selectedTeam, selectedQuarter]); // Watch for changes in selectedTeam or selectedQuarter
+  }, [selectedTeam, selectedQuarter]);
 
   const handleSelectedCourse = (e) => {
     const selectedCourse = courses.find((course) => course.course === e.target.value);
@@ -127,7 +126,6 @@ const BackOfficeDecision = () => {
       const response = await axios.get(url);
       setReportData(response.data);
       setSelectedDecision(decision);
-      // toast.success(`${decision} data fetched successfully!`);
     } catch (error) {
       toast.error("Error fetching decision data.");
       console.error("Error fetching decision data:", error);
@@ -136,38 +134,81 @@ const BackOfficeDecision = () => {
     }
   };
 
-  const renderTable = (data) => {
-    if (!data) return null;
+  // Fetch Logs
+  const fetchLogs = async () => {
+    if (!selectedCourse || !selectedTeam || !selectedQuarter) return;
+    try {
+      setLoading(true);
+      const response = await axios.get(`${api}/adduserlogs/`, {
+        params: {
+          simulation_id: selectedCourse.simulationId,
+          firm_key: selectedTeam.teamName,
+          current_quarter: selectedQuarter,
+        },
+      });
+      setLogs(response.data); // Set logs data
+    } catch (error) {
+      console.error("Error fetching user logs:", error);
+      toast.error("Error fetching user logs.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const renderRow = (item, keyPrefix = "") => {
-      if (typeof item === "object" && item !== null) {
-        return Object.entries(item).map(([key, value]) => (
-          <tr key={keyPrefix + key}>
-            <td>{key}</td>
-            <td>{typeof value === "object" ? renderRow(value, keyPrefix + key + "-") : value}</td>
-          </tr>
-        ));
-      }
-      return null;
-    };
+  useEffect(() => {
+    if (selectedCourse && selectedTeam && selectedQuarter) {
+      fetchLogs();
+    }
+  }, [selectedCourse, selectedTeam, selectedQuarter]);
 
+  // Render Logs Table
+  const renderLogsTable = () => {
+    if (!logs.length) return <p>No logs available for this selection.</p>;
     return (
-      <table className="w-full border-collapse">
-        <thead>
-          <tr>
-            <th className="border p-2">Key</th>
-            <th className="border p-2">Value</th>
-          </tr>
-        </thead>
-        <tbody>{renderRow(data)}</tbody>
-      </table>
-
+      <Table className="min-w-full bg-white rounded-md shadow-md">
+        <Thead className="bg-gray-100 text-gray-700 font-semibold">
+          <Tr>
+            <th className="px-4 py-2">Name</th>
+            <th className="px-4 py-2">Email</th>
+            <th className="px-4 py-2">Decision</th>
+            <th className="px-4 py-2">Action</th>
+            <th className="px-4 py-2">Date</th>
+            {/* <th className="px-4 py-2">IP Address</th> */}
+            <th className="px-4 py-2">Firm</th>
+            <th className="px-4 py-2">Quarter</th>
+          </Tr>
+        </Thead>
+        <tbody>
+          {logs.map((log) => (
+            <tr key={log.id} className="border-t">
+              <td className="border px-4 py-2">{log.username}</td>
+              <td className="border px-4 py-2">{log.email}</td>
+              <td className="border px-4 py-2">{log.decision}</td>
+              <td className="border px-4 py-2">{log.action}</td>
+              <td className="border px-4 py-2">
+                {new Date(log.date).toLocaleString('en-US', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                  hour12: true // This will show the time in 12-hour format with AM/PM
+                })}
+              </td>
+              {/* <td className="border px-4 py-2">{log.ip_address}</td> */}
+              <td className="border px-4 py-2">{log.firm_key}</td>
+              <td className="border px-4 py-2">{log.current_quarter}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     );
   };
 
   return (
     <div className="bg-gray-100 m-0 min-h-screen">
-
+      <ToastContainer />
       <div className="flex h-10">
         <div className="w-full text-start">
           <div className="text-xl flex text-start items-start justify-between font-bold bg-white">
@@ -241,7 +282,7 @@ const BackOfficeDecision = () => {
                 <button
                   key={index}
                   onClick={() => handleDecisionClick(decision)}
-                  
+
                   className={`px-4 py-2 text-gray-700 rounded-lg ${selectedDecision === decision ? "bg-red-800 text-white" : "bg-gray-100"
                     } hover:bg-gray-300 border-gray-300 text-gray-700 focus:outline-none`}
                 >
@@ -250,7 +291,7 @@ const BackOfficeDecision = () => {
               ))}
             </div>
           </div>
-          
+
         )}
         <hr />
 
@@ -316,12 +357,17 @@ const BackOfficeDecision = () => {
           <div></div>
         )}
 
-        {/* Conditionally render other tables based on selectedDecision
-        {reportData && selectedDecision !== "Forecast" && (
-          <div className="overflow-auto mt-10">
-            {renderTable(reportData)}
-          </div>
-        )} */}
+        {/* User Logs Section */}
+        <div className="mt-8">
+          <h2 className="text-lg font-bold">User Logs</h2>
+          {loading ? (
+            <div className="flex justify-center items-center">
+              <Puff color="#00BFFF" height={100} width={100} />
+            </div>
+          ) : (
+            renderLogsTable()
+          )}
+        </div>
       </div>
     </div>
   );

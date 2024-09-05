@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ReportModal from "../report/CplReport/ReportModal";
 import BalanceSheetModel from "../report/BlanceSheetReport/BalanceSheetModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
+import CashFlowContainer from "../report/CashFlowReport/CashFlowContainer";
 
 const Sidebar = () => {
   const { api } = useContext(MyContext);
@@ -75,10 +76,10 @@ const Sidebar = () => {
       clearReportState();
     }
   };
-  
+
   const handleQuarterClick = (quarter) => {
     setActiveChild(quarter.name);
-    
+
     if (!quarter.name.includes("Quarter")) {
       navigate(`/${quarter.name}`);
       clearReportState();
@@ -159,14 +160,14 @@ const Sidebar = () => {
           <i class="fa-solid fa-bars text-2xl text-red-500" onClick={toggleSidebar}></i>
         </div>
       )}
-  
+
       {isSidebarOpen && (
         <div
           ref={sidebarRef}
           className="fixed left-0 top-0 bg-[#0E406A] text-gray-300 w-60 h-screen"
         >
           <div className="flex bg-gray-900 w-full h-12 p-2 justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold pl-4 text-white cursor-pointer" onClick={()=>{navigate('/usersidelive')}}>FLEXEE</h1>
+            <h1 className="text-2xl font-bold pl-4 text-white cursor-pointer" onClick={() => { navigate('/usersidelive') }}>FLEXEE</h1>
             <FiArrowLeft
               onClick={toggleSidebar}
               className="cursor-pointer text-red-500"
@@ -216,7 +217,7 @@ const Sidebar = () => {
           </ul>
         </div>
       )}
-  
+
       {isSidebarOpen &&
         activeParent &&
         parentOptions.find((option) => option.name === activeParent)
@@ -242,7 +243,7 @@ const Sidebar = () => {
             </ul>
           </div>
         )}
-  
+
       {isSidebarOpen && activeChild && type === "Reports" && (
         <div
           ref={sidebarRef}
@@ -260,21 +261,33 @@ const Sidebar = () => {
           >
             Balance Sheet
           </button>
+
+          <button
+            onClick={() => handleReportChange("cash")}
+            className="w-full text-left p-2"
+          >
+            Cash Flow
+          </button>
+
           <button
             onClick={() => handleReportChange("inventory")}
             className="w-full text-left p-2"
           >
             Finished Goods Inventory Report
           </button>
-  
+
           {activeReport === "cpl" && reportData && (
             <ReportModal reportData={reportData} />
           )}
           {activeReport === "bls" && reportData && (
             <BalanceSheetModel reportData={reportData} />
           )}
-           {activeReport === "inventory" && reportData && (
+          {activeReport === "inventory" && reportData && (
             <FGInventoryModal reportData={reportData} />
+          )}
+          
+          {activeReport === "cash" && reportData && (
+            <CashFlowContainer reportData={reportData} />
           )}
         </div>
       )}

@@ -110,23 +110,27 @@ const Forecast = () => {
   };
   const addUserLogger = async () => {
     try {
+      // Fetch user's IP address using a third-party service like ipify
+      const ipResponse = await axios.get('https://api.ipify.org?format=json');
+      const userIp = ipResponse.data.ip; // Get the IP address from the response
+  
       const response = await axios.post(`${api}/adduserlogs/`, {
         email: user.email,
         user_id: user.userid,
         simulation_id: selectedSim[0].simulation_id,
         admin_id: selectedSim[0].admin_id,
-        decision: "Transportation",
+        decision: "Forecast",
         action: "created",
-        ip_address: "123.345.1",
-        username: user.first_name +" "+ user.last_name,
+        ip_address: userIp,  // Use the actual IP address
+        username: `${user.first_name} ${user.last_name}`,
         firm_key: firm_key_new,
-        current_quarter:selectedSim[0].current_quarter,
-
+        current_quarter: selectedSim[0].current_quarter,
       });
+      
       const data = response.data;
       console.log("addUserLoggerData", data);
     } catch (error) {
-      console.error("Error making GET request:", error);
+      console.error("Error making request:", error);
     }
   };
   return (
