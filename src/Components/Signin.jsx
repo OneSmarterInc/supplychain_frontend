@@ -136,7 +136,7 @@ const Signin = () => {
       backgroundPosition="center"
       backgroundSize="cover"
       backgroundRepeat="no-repeat">
-       <Box w={{ base: "90%", md: "30%" }} mt="5%">
+       <Box w={{ base: "90%", md: "30%" }} mt="2%">
         <Box bg="white" p={6} rounded="md" shadow="md"  >
           <form onSubmit={loginHandler}>
             <Stack spacing={4}>
@@ -201,7 +201,7 @@ const Signin = () => {
         alt="Supply Chain Image"
         mt="auto"
         w="full"
-        h={'50%'}
+        h={'55%'}
       />
     </Flex>
   );

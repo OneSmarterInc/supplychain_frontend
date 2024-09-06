@@ -57,6 +57,7 @@ import BackOfficeFooter from "../FlexeeSimAdmin/components/Backoffice/BackOffice
 import Members from "../Components/Members";
 import ForgotPassword from "../Components/ForgotPassword";
 import BackOfficeDecision from "../FlexeeSimAdmin/components/Backoffice/BackOfficeDecision";
+import Manual from "../Components/Manual";
 
 const MainRoutes = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
@@ -281,6 +282,20 @@ const MainRoutes = () => {
             <PrivateRoute>
               <CNavbar />
               <UserSideLive />
+              <BackOfficeFooter />
+            </PrivateRoute>
+          </div>
+        }
+      />
+
+<Route
+        exact
+        path="/manual"
+        element={
+          <div className="signup h-screen">
+            <PrivateRoute>
+              <CNavbar />
+              <Manual />
               <BackOfficeFooter />
             </PrivateRoute>
           </div>

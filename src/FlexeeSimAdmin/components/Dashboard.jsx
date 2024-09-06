@@ -20,27 +20,28 @@ const Dashboard = () => {
 
   const fetchCourses = async () => {
     try {
-      setIsLoading(true); 
+      setIsLoading(true);
       const user = JSON.parse(localStorage.getItem("user"));
       const response = await axios.get(`${api}/user/${user.userid}/subscriptions/`);
+      
+      // Transform courses data and sort by startDate or endDate in descending order
       const transformedCourses = response.data.map((item) => ({
         course: item.simulation.course || "Unnamed Course",
         members: item.simulation.members,
         orgnization: item.simulation.orgnization,
-        startDate: item.simulation.start_date,
-        endDate: item.simulation.end_date,
+        startDate: new Date(item.simulation.start_date),
+        endDate: new Date(item.simulation.end_date),
         passcode: item.simulation.passcode,
         simulation_id: item.simulation_id,
-
-      }));
+      })).sort((a, b) => b.startDate - a.startDate); // Sorting by startDate
+      
       setCourses(transformedCourses);
-      setIsLoading(false); 
+      setIsLoading(false);
       
     } catch (error) {
       toast.error("Error fetching the courses. Please try again.");
       console.error("Error fetching the courses:", error);
-      setIsLoading(false); 
-
+      setIsLoading(false);
     }
   };
 

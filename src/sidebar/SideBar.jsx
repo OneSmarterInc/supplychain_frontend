@@ -56,8 +56,13 @@ const Sidebar = () => {
       })),
     },
     { name: "Members", redirect: "/members" },
+    // Update the Manual option to trigger a download
+    { 
+      name: "Download Manual", 
+      download: true, 
+      fileUrl: "/manual.docx"  // Assuming the file is stored in the public directory
+    },
     { name: "FAQ's", redirect: "/faqs" },
-    { name: "Manual" },
   ];
 
   const handleParentClick = (option) => {
@@ -66,6 +71,12 @@ const Sidebar = () => {
       clearReportState();
       // Close the sidebar only when navigating to a new route
       setIsSidebarOpen(false);
+    } else if (option.download) {
+      // If it's a download option, trigger file download
+      const link = document.createElement('a');
+      link.href = option.fileUrl;
+      link.download = 'manual.docx';  // Set the name for the downloaded file
+      link.click();
     } else {
       // Open the sidebar and set the active parent when there are children
       setIsSidebarOpen(true);
@@ -187,7 +198,7 @@ const Sidebar = () => {
             <div>
               <h2 className="text-lg font-semibold text-white mb-2">Activity</h2>
               <hr className="border-gray-600 mb-2" />
-              {parentOptions.slice(1, 4).map((option, index) => (
+              {parentOptions.slice(1, 5).map((option, index) => (
                 <li key={index} className="mb-4">
                   <button
                     onClick={() => handleParentClick(option)}
@@ -202,7 +213,7 @@ const Sidebar = () => {
             <div>
               <h2 className="text-lg font-semibold text-white mb-2">Resources</h2>
               <hr className="border-gray-600 mb-2" />
-              {parentOptions.slice(4, 6).map((option, index) => (
+              {parentOptions.slice(5, 7).map((option, index) => (
                 <li key={index} className="mb-4">
                   <button
                     onClick={() => handleParentClick(option)}
