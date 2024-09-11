@@ -272,7 +272,7 @@ const MainRoutes = () => {
         path="/usersidelive"
         element={
           <PrivateRoute>
-            <div className="" style={{minHeight:'96vh'}}>
+            <div className="" style={{minHeight:'100vh'}}>
               <FlexeeDashboardNavbar />
 
               <UserSideLive />
@@ -424,7 +424,7 @@ const MainRoutes = () => {
         path="/flexeesim/dashboard"
         element={
           <ProtectedRoute>
-            <div className="bg-white" style={{minHeight:'96vh'}}>
+            <div className="bg-white" style={{minHeight:'100vh'}}>
               <FlexeeDashboardNavbar />
               <FlexeeDashboard />
               {/* <FlexeeExploreSim /> */}
