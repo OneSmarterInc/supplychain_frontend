@@ -85,7 +85,6 @@ const Manufacturing_Decisions = () => {
       setLastValidManufacturingData(ManufacturingData); // Store the last valid data
     }
   }, [ManufacturingData]);
-
   const getManufacturing = async () => {
     try {
       const response = await axios.get(`${api}/previous/`, {
@@ -103,15 +102,38 @@ const Manufacturing_Decisions = () => {
       localStorage.setItem("ManufacturingData", JSON.stringify(data));
     } catch (error) {
       console.error("Error making GET request:", error);
-      // Revert to last valid data if the current fetch fails
+  
+      // Clear state and local storage on error
+      setManufacturingData(null);
+      localStorage.removeItem("ManufacturingData");
+  
+      // Reset inputs (optional: ensure it clears form fields as well)
+      setValues({
+        Production: {
+          productZero: "",
+          hyperware: "",
+          metaware: "",
+        },
+        EmergencyLimit: {
+          productZero: "",
+          hyperware: "",
+          metaware: "",
+        },
+        VolumeFlexibility: {
+          productZero: "",
+          hyperware: "",
+          metaware: "",
+        },
+      });
+  
+      // Optionally revert to last valid data if available
       if (lastValidManufacturingData) {
         setManufacturingData(lastValidManufacturingData);
-      } else {
-        setManufacturingData();
       }
     }
   };
 
+  
   // Load previous quarter data
   const loadPreviousQuarter = async () => {
     if (currentQuarter <= 1) return;
