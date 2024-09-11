@@ -87,6 +87,17 @@ const Service_Decision = () => {
       localStorage.setItem("ServiceData", JSON.stringify(data));
     } catch (error) {
       console.error("Error making GET request:", error);
+
+      // Clear state and local storage on error
+      setServiceData(null);
+      localStorage.removeItem("ServiceData");
+
+      // Reset the form inputs
+      setServiceValue({
+        region1: "",
+        region2: "",
+        region3: "",
+      });
     }
   };
 
@@ -187,11 +198,11 @@ const Service_Decision = () => {
   return (
     <div>
       <div style={{ fontFamily: "ABeeZee" }}>
-      <div className="sm:grid grid-cols-1 gap-3 m-1">
+        <div className="sm:grid grid-cols-1 gap-3 m-1">
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
             <InfoImg decision={"Service"} />
             <div className="flex items-center justify-between w-full">
-            <div className="flex items-center pl-5 pt-2 pb-2">
+              <div className="flex items-center pl-5 pt-2 pb-2">
                 <Text>Load data Quarterly</Text>
                 <div className="pl-4 flex space-x-4">
                   {Array.from(
