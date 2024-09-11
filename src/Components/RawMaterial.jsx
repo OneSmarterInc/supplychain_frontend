@@ -18,7 +18,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) 
         beta_quantity: procurementData?.beta_quantity || "",
       });
     }
-  }, [procurementData]);
+  }, []);
 
   // Keep the parent component informed of the changes in alpha and beta quantities
   useEffect(() => {

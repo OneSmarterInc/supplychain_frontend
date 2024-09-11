@@ -55,11 +55,11 @@ const Sidebar = () => {
         redirect: null,
       })),
     },
-    { name: "Members", redirect: "/members" },
+    { name: "Members and Logs", redirect: "/members" },
     // Update the Manual option to trigger a download
     { 
       name: "Download Manual", 
-      download: true, 
+      download: true,
       fileUrl: "/manual.docx"  // Assuming the file is stored in the public directory
     },
     { name: "FAQ's", redirect: "/faqs" },

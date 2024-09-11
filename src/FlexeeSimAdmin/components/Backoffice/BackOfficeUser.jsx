@@ -98,7 +98,7 @@ const BackOfficeUser = () => {
   }
 
   return (
-    <div className="bg-gray-100 m-0  h-screen">
+    <div className="bg-gray-100 m-0">
       <div className="flex h-10">
         <div className="w-full text-start">
           <div className="text-xl flex text-start items-start justify-between font-bold bg-white">

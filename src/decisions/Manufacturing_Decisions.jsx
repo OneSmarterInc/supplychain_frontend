@@ -10,10 +10,9 @@ import {
   Text,
   useToast,
   Box,
-  Flex,
+  Spinner,
 } from "@chakra-ui/react";
 import InfoImg from "../Components/InfoImg";
-import NavBar from "../Components/NavBar";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useNavigate } from "react-router-dom";
@@ -23,27 +22,29 @@ const Manufacturing_Decisions = () => {
   const { api } = useContext(MyContext);
   const [ManufacturingData, setManufacturingData] = useState();
   const [lastValidManufacturingData, setLastValidManufacturingData] = useState(null); // Store last valid data
+  const [loading, setLoading] = useState(false); // Add loading state
+  const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false); // Loading state for previous quarter
   const [values, setValues] = useState({
     Production: {
-      productZero: 0,
-      hyperware: 0,
-      metaware: 0,
+      productZero: "",
+      hyperware: "",
+      metaware: "",
     },
     EmergencyLimit: {
-      productZero: 0,
-      hyperware: 0,
-      metaware: 0,
+      productZero: "",
+      hyperware: "",
+      metaware: "",
     },
     VolumeFlexibility: {
-      productZero: 0,
-      hyperware: 0,
-      metaware: 0,
+      productZero: "",
+      hyperware: "",
+      metaware: "",
     },
   });
 
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
-  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
+  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter); // Dynamic quarter selection
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const selectedSim = selectedSimData;
@@ -58,7 +59,8 @@ const Manufacturing_Decisions = () => {
   }
 
   useEffect(() => {
-    getManufacturing();
+    setLoading(true); // Start loading when quarter is changed
+    getManufacturing().finally(() => setLoading(false)); // Stop loading after data is fetched
   }, [selectedQuarter]);
 
   useEffect(() => {
@@ -80,8 +82,7 @@ const Manufacturing_Decisions = () => {
           metaware: ManufacturingData.volume_flexibility_metaware,
         },
       });
-      // Store the last valid data on successful fetch
-      setLastValidManufacturingData(ManufacturingData);
+      setLastValidManufacturingData(ManufacturingData); // Store the last valid data
     }
   }, [ManufacturingData]);
 
@@ -102,7 +103,6 @@ const Manufacturing_Decisions = () => {
       localStorage.setItem("ManufacturingData", JSON.stringify(data));
     } catch (error) {
       console.error("Error making GET request:", error);
-
       // Revert to last valid data if the current fetch fails
       if (lastValidManufacturingData) {
         setManufacturingData(lastValidManufacturingData);
@@ -112,10 +112,76 @@ const Manufacturing_Decisions = () => {
     }
   };
 
+  // Load previous quarter data
+  const loadPreviousQuarter = async () => {
+    if (currentQuarter <= 1) return;
+
+    const previousQuarter = currentQuarter - 1;
+    setIsLoadingLastQuarter(true);
+    try {
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSim[0].simulation_id,
+          admin_id: selectedSim[0].admin_id,
+          current_decision: "Manufacture",
+          current_quarter: previousQuarter,
+          firm_key: firm_key_new,
+        },
+      });
+
+      const previousData = response.data;
+      setManufacturingData(previousData); // Set previous quarter's data
+      toast({
+        title: `Loaded data from Quarter ${previousQuarter}`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    } catch (error) {
+      console.error("Error loading previous quarter data:", error);
+      toast({
+        title: "Failed to load previous quarter data",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    } finally {
+      setIsLoadingLastQuarter(false);
+    }
+  };
+
   const toast = useToast();
   const navigate = useNavigate();
 
+  // Validate inputs before submission
+  const validateInputs = () => {
+    const channels = ["Production", "EmergencyLimit", "VolumeFlexibility"];
+    for (const channel of channels) {
+      const regions = ["productZero", "hyperware", "metaware"];
+      for (const region of regions) {
+        if (!values[channel][region]) {
+          toast({
+            title: "Validation Error",
+            description: `Please fill in all the required fields for ${channel} in ${region}.`,
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "top",
+          });
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
   const submitManufacturing = async () => {
+    if (!validateInputs()) return; // Stop submission if validation fails
+
+    setLoading(true); // Start loading on submission
     try {
       const response = await axios.post(`${api}/decision/manufacture/`, {
         simulation_id: selectedSim[0].simulation_id,
@@ -133,7 +199,6 @@ const Manufacturing_Decisions = () => {
         volume_flexibility_hyperware: Number(values.VolumeFlexibility.hyperware),
         volume_flexibility_metaware: Number(values.VolumeFlexibility.metaware),
       });
-      console.log("POST request successful", response.data);
       getManufacturing();
       addUserLogger();
       toast({
@@ -146,6 +211,8 @@ const Manufacturing_Decisions = () => {
       navigate("/Distribution");
     } catch (error) {
       console.error("Error making POST request: Manufacturing", error);
+    } finally {
+      setLoading(false); // Stop loading after submission
     }
   };
 
@@ -159,7 +226,7 @@ const Manufacturing_Decisions = () => {
         decision: "Manufacturing",
         action: "created",
         ip_address: "123.345.1",
-        username: user.first_name +" "+ user.last_name,
+        username: user.first_name + " " + user.last_name,
         firm_key: firm_key_new,
         current_quarter: selectedSim[0].current_quarter,
       });
@@ -208,66 +275,82 @@ const Manufacturing_Decisions = () => {
               </div>
               <InfoButton decision="Manufacture" />
             </div>
-            <Table className="w-30 bg-white rounded-md shadow-sm">
-              <Thead className="bg-gray-100">
-                <Tr>
-                  <Th className="text-left"></Th>
-                  <Th className="text-left">Product Zero</Th>
-                  <Th className="text-left">
-                    {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
-                  </Th>
-                  <Th className="text-left">
-                    {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Object.keys(values).map((channel) => (
-                  <Tr key={channel} className="border-t">
-                    <Td className="p-3 font-medium text-gray-900">{channel}</Td>
-                    <Td className="p-3">
-                      <Input
-                        type="number"
-                        value={values[channel].productZero}
-                        placeholder="Enter in units"
-                        onChange={(e) => handleChange(channel, "productZero", e.target.value)}
-                        className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-                      />
-                    </Td>
-                    <Td className="p-3">
-                      <Input
-                        type="number"
-                        value={values[channel].hyperware}
-                        placeholder="Enter in units"
-                        onChange={(e) => handleChange(channel, "hyperware", e.target.value)}
-                        className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-                      />
-                    </Td>
-                    <Td className="p-3">
-                      <Input
-                        type="number"
-                        value={values[channel].metaware}
-                        placeholder="Enter in units"
-                        onChange={(e) => handleChange(channel, "metaware", e.target.value)}
-                        className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-                      />
-                    </Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
+            {loading ? (
+              <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
+                <Spinner size="xl" /> {/* Show Spinner while loading */}
+              </Box>
+            ) : (
+              <>
+                <Table className="w-30 bg-white rounded-md shadow-sm">
+                  <Thead className="bg-gray-100">
+                    <Tr>
+                      <Th className="text-left"></Th>
+                      <Th className="text-left">Product Zero</Th>
+                      <Th className="text-left">
+                        {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware}
+                      </Th>
+                      <Th className="text-left">
+                        {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware}
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {Object.keys(values).map((channel) => (
+                      <Tr key={channel} className="border-t">
+                        <Td className="p-3 font-medium text-gray-900">{channel}</Td>
+                        <Td className="p-3">
+                          <Input
+                            type="number"
+                            value={values[channel].productZero}
+                            placeholder="Enter in units"
+                            onChange={(e) => handleChange(channel, "productZero", e.target.value)}
+                            className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                          />
+                        </Td>
+                        <Td className="p-3">
+                          <Input
+                            type="number"
+                            value={values[channel].hyperware}
+                            placeholder="Enter in units"
+                            onChange={(e) => handleChange(channel, "hyperware", e.target.value)}
+                            className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                          />
+                        </Td>
+                        <Td className="p-3">
+                          <Input
+                            type="number"
+                            value={values[channel].metaware}
+                            placeholder="Enter in units"
+                            onChange={(e) => handleChange(channel, "metaware", e.target.value)}
+                            className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                          />
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </>
+            )}
             {/* Submit Button */}
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-between mt-4">
+              <div
+                onClick={loadPreviousQuarter}
+                className="font-bold py-2 px-4 text-red-400 cursor-pointer"
+                disabled={isLoadingLastQuarter || currentQuarter <= 1}
+              >
+                <span className="text-black">To load inputs from the previous quarter, </span>
+                {isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
+              </div>
               <button
                 onClick={submitManufacturing}
                 className={`${
-                  selectedQuarter === currentQuarter
+                  selectedQuarter === currentQuarter && !loading
                     ? "bg-red-500 hover:bg-black-700 text-white"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
-                disabled={selectedQuarter !== currentQuarter}
+                disabled={selectedQuarter !== currentQuarter || loading}
               >
-                Submit Manufacture
+                {loading ? <Spinner size="sm" /> : "Submit Manufacture"} {/* Show Spinner on button */}
               </button>
             </div>
           </div>

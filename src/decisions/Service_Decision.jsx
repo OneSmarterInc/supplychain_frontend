@@ -10,6 +10,7 @@ import {
   Td,
   useToast,
   Text,
+  Spinner, // Import Spinner from Chakra UI
 } from "@chakra-ui/react";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
@@ -24,7 +25,7 @@ const Service_Decision = () => {
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
 
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
-  const currentQuarter = selectedSimData[0]?.current_quarter || 1; // Assuming the current quarter is provided in the sim data
+  const currentQuarter = selectedSimData[0]?.current_quarter || 1;
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter); // Set the default to the current quarter
 
   const toast = useToast();
@@ -34,6 +35,9 @@ const Service_Decision = () => {
     region2: "",
     region3: "",
   });
+  const [loading, setLoading] = useState(false); // Add loading state
+  const [ServiceData, setServiceData] = useState();
+  const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false); // Add loading state for previous quarter
 
   const handleChange = (region, value) => {
     setServiceValue({ ...serviceValue, [region]: value });
@@ -51,10 +55,9 @@ const Service_Decision = () => {
     }
   }
 
-  const [ServiceData, setServiceData] = useState();
-
   useEffect(() => {
-    getService();
+    setLoading(true); // Start loading before fetching service data
+    getService().finally(() => setLoading(false)); // Stop loading after data is fetched
   }, [selectedQuarter]);
 
   useEffect(() => {
@@ -87,34 +90,78 @@ const Service_Decision = () => {
     }
   };
 
-  const submitService = async () => {
+  // Function to load the previous quarter's data
+  const loadPreviousQuarter = async () => {
+    if (currentQuarter <= 1) return;
+
+    const previousQuarter = currentQuarter - 1;
+    setIsLoadingLastQuarter(true);
     try {
-        console.log("Submitting service with values:", serviceValue);
-        const response = await axios.post(`${api}/decision/service/`, {
-            simulation_id: selectedSim[0].simulation_id,
-            admin_id: selectedSim[0].admin_id,
-            user_id: user.userid,
-            firm_key: firm_key_new,
-            quarter: selectedSim[0].current_quarter,
-            service_region_one: serviceValue.region1,
-            service_region_two: serviceValue.region2,
-            service_region_three: serviceValue.region3,
-        });
-        console.log("POST request successful", response.data);
-        addUserLogger();
-        getService();
-        toast({
-            title: "Service Submitted successfully",
-            status: "success",
-            duration: 9000,
-            isClosable: true,
-            position: "top",
-        });
-        navigate("/Demand");
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSim[0].simulation_id,
+          admin_id: selectedSim[0].admin_id,
+          current_decision: "Service",
+          current_quarter: previousQuarter,
+          firm_key: firm_key_new,
+        },
+      });
+
+      const previousData = response.data;
+      setServiceData(previousData); // Set the previous quarter's data to the current state
+      toast({
+        title: `Loaded data from Quarter ${previousQuarter}`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
-        console.error("Error making POST request: Service", error.response?.data || error.message);
+      console.error("Error loading previous quarter data:", error);
+      toast({
+        title: "Failed to load previous quarter data",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    } finally {
+      setIsLoadingLastQuarter(false);
     }
-};
+  };
+
+  const submitService = async () => {
+    setLoading(true); // Start loading on submit
+    try {
+      console.log("Submitting service with values:", serviceValue);
+      const response = await axios.post(`${api}/decision/service/`, {
+        simulation_id: selectedSim[0].simulation_id,
+        admin_id: selectedSim[0].admin_id,
+        user_id: user.userid,
+        firm_key: firm_key_new,
+        quarter: selectedSim[0].current_quarter,
+        service_region_one: serviceValue.region1,
+        service_region_two: serviceValue.region2,
+        service_region_three: serviceValue.region3,
+      });
+      console.log("POST request successful", response.data);
+      addUserLogger();
+      getService();
+      toast({
+        title: "Service Submitted successfully",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      navigate("/Demand");
+    } catch (error) {
+      console.error("Error making POST request: Service", error.response?.data || error.message);
+    } finally {
+      setLoading(false); // Stop loading after submission
+    }
+  };
 
   const addUserLogger = async () => {
     try {
@@ -167,68 +214,82 @@ const Service_Decision = () => {
               </div>
               <InfoButton decision="Service" />
             </div>
-            <Box>
-              <Table className="min-w-full bg-white rounded-md shadow-sm">
-                <Thead className="bg-gray-100">
-                  <Tr>
-                    <Th>Service Outsourcing</Th>
-                    <Th>
-                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}
-                    </Th>
-                    <Th>
-                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}
-                    </Th>
-                    <Th>
-                      {selectedSim[0]?.renamedMappedData?.RegionMapp?.region3}
-                    </Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td className="p-3 font-medium text-gray-900">
-                      Service Outsourcing
-                    </Td>
-                    {regions.map((region) => (
-                      <Td key={region}>
-                        <Select
-                          placeholder="Select"
-                          fontSize={15}
-                          width="100%"
-                          border="1px solid black"
-                          onChange={(e) => handleChange(region, e.target.value)}
-                          value={serviceValue[region]}
-                          className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-                        >
-                          <option value="1">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                        </Select>
+
+            {/* Show Spinner while loading */}
+            {loading ? (
+              <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
+                <Spinner size="xl" />
+              </Box>
+            ) : (
+              <Box>
+                <Table className="min-w-full bg-white rounded-md shadow-sm">
+                  <Thead className="bg-gray-100">
+                    <Tr>
+                      <Th>Service Outsourcing</Th>
+                      <Th>
+                        {selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}
+                      </Th>
+                      <Th>
+                        {selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}
+                      </Th>
+                      <Th>
+                        {selectedSim[0]?.renamedMappedData?.RegionMapp?.region3}
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    <Tr>
+                      <Td className="p-3 font-medium text-gray-900">
+                        Service Outsourcing
                       </Td>
-                    ))}
-                  </Tr>
-                </Tbody>
-              </Table>
-            </Box>
-               {/* Submit Button */}
-          <div className="flex justify-end mt-4">
-            <button
-              onClick={submitService}
-              className={`${selectedQuarter === currentQuarter
+                      {regions.map((region) => (
+                        <Td key={region}>
+                          <Select
+                            placeholder="Select"
+                            fontSize={15}
+                            width="100%"
+                            border="1px solid black"
+                            onChange={(e) => handleChange(region, e.target.value)}
+                            value={serviceValue[region]}
+                            className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                          >
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                          </Select>
+                        </Td>
+                      ))}
+                    </Tr>
+                  </Tbody>
+                </Table>
+              </Box>
+            )}
+
+            <div className="flex justify-between mt-4">
+              <div
+                onClick={loadPreviousQuarter}
+                className="font-bold py-2 px-4 text-red-400 cursor-pointer"
+                disabled={isLoadingLastQuarter || currentQuarter <= 1}
+              >
+                <span className="text-black">To load inputs from the previous quarter, </span>{isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
+              </div>
+              <button
+                onClick={submitService}
+                className={`${selectedQuarter === currentQuarter && !loading
                   ? "bg-red-500 hover:bg-black-700 text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
-              disabled={selectedQuarter !== currentQuarter}
-            >
-              Submit Service
-            </button>
-          </div>
+                disabled={selectedQuarter !== currentQuarter || loading}
+              >
+                {loading ? <Spinner size="sm" /> : "Submit Service"}
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  
   );
 };
 

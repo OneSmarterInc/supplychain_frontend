@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ProtectedRoute from "./ProtectedRoute";  // Import the ProtectedRoute component
+import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute component
 // Import your components
 import Demand_generation from "../decisions/Demand_generation";
 import Distribution_Decision from "../decisions/Distribution_Decision";
@@ -83,13 +83,7 @@ const MainRoutes = () => {
           </div>
         }
       />
-      <Route
-        exact
-        path="/forgot-password"
-        element={
-          <ForgotPassword />
-        }
-        />
+      <Route exact path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Protected Routes */}
       <Route
@@ -119,7 +113,6 @@ const MainRoutes = () => {
           </div>
         }
       />
-
 
       <Route
         exact
@@ -278,17 +271,18 @@ const MainRoutes = () => {
         exact
         path="/usersidelive"
         element={
-          <div className="signup h-screen">
-            <PrivateRoute>
-              <CNavbar />
+          <PrivateRoute>
+            <div className="" style={{minHeight:'96vh'}}>
+              <FlexeeDashboardNavbar />
+
               <UserSideLive />
-              <BackOfficeFooter />
-            </PrivateRoute>
-          </div>
+            </div>
+            <BackOfficeFooter />
+          </PrivateRoute>
         }
       />
 
-<Route
+      <Route
         exact
         path="/manual"
         element={
@@ -336,7 +330,10 @@ const MainRoutes = () => {
                 <AdminNavBar />
               </PrivateRoute>
             </div>
-            <Steps setNoOfQuarters={setNoOfQuarters} noOfQuarters={noOfQuarters} />
+            <Steps
+              setNoOfQuarters={setNoOfQuarters}
+              noOfQuarters={noOfQuarters}
+            />
           </div>
         }
       />
@@ -351,12 +348,13 @@ const MainRoutes = () => {
                 <AdminSideLive />
               </PrivateRoute>
             </div>
-            <Steps setNoOfQuarters={setNoOfQuarters} noOfQuarters={noOfQuarters} />
+            <Steps
+              setNoOfQuarters={setNoOfQuarters}
+              noOfQuarters={noOfQuarters}
+            />
           </div>
         }
       />
-
-
 
       {/* FlexeeSim Protected Routes */}
       <Route
@@ -426,12 +424,12 @@ const MainRoutes = () => {
         path="/flexeesim/dashboard"
         element={
           <ProtectedRoute>
-            <div className="bg-white" style={{marginTop:'6rem', paddingTop:"1rem"}}>
+            <div className="bg-white" style={{minHeight:'96vh'}}>
               <FlexeeDashboardNavbar />
               <FlexeeDashboard />
               {/* <FlexeeExploreSim /> */}
-              <BackOfficeFooter />
             </div>
+              <BackOfficeFooter />
           </ProtectedRoute>
         }
       />
@@ -455,12 +453,9 @@ const MainRoutes = () => {
           <ProtectedRoute>
             <div className="flex justify-start items-start">
               <div className={`w-full`}>
-                <div className="pb-0">
-                  <FlexeeBackOfficeNavbar
-                  />
-                  <FlexeeBackOfficeSidebar />
-                </div>
-                <div className="">
+                <div className="pb-0" style={{minHeight:'96vh'}}>
+                  <FlexeeBackOfficeNavbar />
+                  <FlexeeBackOfficeSidebar />   
                   <FlexeeBackOfficeUser />
                 </div>
               </div>
@@ -491,9 +486,8 @@ const MainRoutes = () => {
                 </div>
               </div>
             </div>
-            
-              <FlexeeBackOfficeFooter />
-           
+
+            <FlexeeBackOfficeFooter />
           </ProtectedRoute>
         }
       />
@@ -503,7 +497,7 @@ const MainRoutes = () => {
         path="/flexeesim/backoffice/reports"
         element={
           <ProtectedRoute>
-            <div className="flex justify-start items-start">
+            <div className="flex justify-start items-start" style={{minHeight:'96vh'}}>
               {isSideBarOpen && <FlexeeBackOfficeSidebar />}
               <div className={`w-full`}>
                 <div className="">
@@ -518,13 +512,11 @@ const MainRoutes = () => {
                 </div>
               </div>
             </div>
-            
-              <FlexeeBackOfficeFooter />
-            
+
+            <FlexeeBackOfficeFooter />
           </ProtectedRoute>
         }
       />
-
 
       <Route
         exact
@@ -546,27 +538,23 @@ const MainRoutes = () => {
                 </div>
               </div>
             </div>
-           
-              <BackOfficeFooter />
-           
+
+            <BackOfficeFooter />
           </ProtectedRoute>
         }
       />
-      
-
-
 
       <Route
         exact
         path="/flexeesim/dashboard/courses"
         element={
           <ProtectedRoute>
-            <div className="" style={{marginTop:'7.5rem'}}>
+            <div className="min-h-screen">
               <FlexeeDashboardNavbar />
               <FlexeeCourseComponent />
               <FlexeeGroupsTeamsComponent />
-              <BackOfficeFooter />
             </div>
+            <BackOfficeFooter />
           </ProtectedRoute>
         }
       />

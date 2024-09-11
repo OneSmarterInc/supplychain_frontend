@@ -12,7 +12,7 @@ const DashboardNavbar = () => {
   const user = JSON.parse(localStorage.getItem("user")) || {};
 
   return (
-    <div className="w-full fixed top-0 z-40 bg-white shadow-md">
+    <div className="w-full top-0  bg-white shadow-md">
       <div className="flex w-full items-center justify-start border-b border-gray-200 max-w-screen-full mx-auto">
         <div className="flex items-center">
           <div className="text-red-600 text-3xl font-bold" onClick={() => navigate("/")}>

@@ -29,7 +29,7 @@ const ProfileDropdown = () => {
     course: user?.course,
     university: user?.university,
     userType: user?.isadmin ? "Admin" : "User",
-    image: user?.image
+    image_url: user?.image_url
   });
 
   const openEditModal = () => {
@@ -73,6 +73,7 @@ const ProfileDropdown = () => {
       }
       );
       const data = response.data;
+      
       localStorage.setItem("user", JSON.stringify(data));
       setProfile(data);
     } catch (error) {
@@ -94,7 +95,7 @@ const ProfileDropdown = () => {
           <div className="cursor-pointer flex items-center">
             <div className="flex items-center justify-center text-xl text-red font-bold px-2 mr-3">
               <img
-                src={profile?.image ? `${api1}${profile.image}` : 'https://cdn-icons-png.flaticon.com/512/1077/1077012.png'}
+                src={profile?.image_url ? `${api1}${profile.image_url}` : 'https://cdn-icons-png.flaticon.com/512/1077/1077012.png'}
                 alt={profile?.first_name || 'Default User'}
                 className="h-7 w-7 rounded-full"
               />
@@ -106,7 +107,7 @@ const ProfileDropdown = () => {
             <div className="flex items-center">
               <div className="w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center text-2xl text-white font-bold">
                 <img
-                  src={profile?.image ? `${api1}${profile.image}` : 'https://cdn-icons-png.flaticon.com/512/1077/1077012.png'}
+                  src={profile?.image_url ? `${api1}${profile.image_url}` : 'https://cdn-icons-png.flaticon.com/512/1077/1077012.png'}
 
                   alt={profile.first_name}
                   className="h-12 w-12 rounded-full"
@@ -235,7 +236,7 @@ const ProfileDropdown = () => {
               </label>
               <div className="flex items-center">
                 <img
-                  src={`${api1}${profile?.image}` || "default-image.png"}
+                  src={`${api1}${user?.image_url}` || "default-image.png"}
                   alt={profile.first_name}
                   className="h-16 w-16 rounded-full mr-4"
                 />

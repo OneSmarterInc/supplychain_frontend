@@ -5,15 +5,12 @@ import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import {
   Box,
-  Radio,
-  RadioGroup,
-  Stack,
   Text,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import InfoImg from "../Components/InfoImg";
-import { FiArrowRight } from "react-icons/fi";
 import InfoButton from "../Components/InfoButton";
 
 const Forecast = () => {
@@ -24,27 +21,29 @@ const Forecast = () => {
   const [ForecastHyperware, setForecastHyperware] = useState({});
   const [ForecastMetaware, setForecastMetaware] = useState({});
   const [ForecastData, setForecastData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false); // State for last quarter loading
 
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
-  const currentQuarter = selectedSimData[0]?.current_quarter || 1; // Assuming the current quarter is provided in the sim data
-  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter); // Set the default to the current quarter
+  const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
-  const selectedSim = selectedSimData;
-  const firm_data = selectedSim[0]?.firm_data ? Object.keys(selectedSim[0].firm_data)[0] : null;
-  
+  const firm_data = selectedSimData[0]?.firm_data ? Object.keys(selectedSimData[0].firm_data)[0] : null;
+
   let firm_key_new = "";
-  if (selectedSim[0]?.firm_data && Array.isArray(selectedSim[0].firm_data)) {
-    let firm_obj = selectedSim[0].firm_data.filter((item) => {
+  if (selectedSimData[0]?.firm_data && Array.isArray(selectedSimData[0].firm_data)) {
+    let firm_obj = selectedSimData[0].firm_data.filter((item) => {
       return item.emails && item.emails.includes(user.email);
     });
     if (firm_obj.length) {
-      firm_key_new = firm_obj[0].firmName; // Only one user in one firm, so using firm_obj[0]
+      firm_key_new = firm_obj[0].firmName;
     }
   }
 
   useEffect(() => {
-    getForecast();
+    setLoading(true);
+    getForecast().finally(() => setLoading(false));
   }, [selectedQuarter]);
 
   const getForecast = async () => {
@@ -56,37 +55,96 @@ const Forecast = () => {
           admin_id: selectedSimData[0]?.admin_id || "",
           current_decision: "Forecast",
           current_quarter: selectedQuarter,
-          firm_key: 'Team 01',
+          firm_key: firm_key_new,
         },
       });
       const data = response.data;
-      console.log("Fetched Forecast Data:", data);
-
       setForecastData(data);
       localStorage.setItem("ForecastData", JSON.stringify(data));
     } catch (error) {
-      console.error("Error making GET request:", error);
+      console.error("Error fetching Forecast data:", error);
       setForecastData({});
+    }
+  };
 
+  const loadPreviousQuarter = async () => {
+    if (currentQuarter <= 1) return;
+
+    const previousQuarter = currentQuarter - 1;
+    setIsLoadingLastQuarter(true);
+    try {
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSimData[0]?.simulation_id || "",
+          admin_id: selectedSimData[0]?.admin_id || "",
+          current_decision: "Forecast",
+          current_quarter: previousQuarter,
+          firm_key: firm_key_new,
+        },
+      });
+
+      const previousData = response.data;
+      setForecastData(previousData); // Set the previous quarter's data to the current state
+      toast({
+        title: `Loaded data from Quarter ${previousQuarter}`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    } catch (error) {
+      console.error("Error loading previous quarter data:", error);
+      toast({
+        title: "Failed to load previous quarter data",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    } finally {
+      setIsLoadingLastQuarter(false);
     }
   };
 
   const submitForecast = async () => {
+    // Helper function to check if all regions have values
+    const areRegionsFilled = (channel) => {
+      return Object.values(channel).every(region => region !== "");
+    };
+  
+    // Validation: check if all regions in both channels are filled
+    if (
+      !areRegionsFilled(ForecastHyperware.channel1) ||
+      !areRegionsFilled(ForecastHyperware.channel2) ||
+      !areRegionsFilled(ForecastMetaware.channel1) ||
+      !areRegionsFilled(ForecastMetaware.channel2)
+    ) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all the required regions before submitting.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      return; // Stop the submission if validation fails
+    }
+  
+    setLoading(true);
     try {
       const response = await axios.post(`${api}/decision/forecast/`, {
-        simulation_id: selectedSim[0]?.simulation_id || "",
-        admin_id: selectedSim[0]?.admin_id || "",
+        simulation_id: selectedSimData[0]?.simulation_id || "",
+        admin_id: selectedSimData[0]?.admin_id || "",
         user_id: user.userid,
         firm_key: firm_key_new,
-        quarter: selectedSim[0]?.current_quarter || 1,
+        quarter: selectedSimData[0]?.current_quarter || 1,
         hyperware_channel_one: ForecastHyperware.channel1,
         hyperware_channel_two: ForecastHyperware.channel2,
         metaware_channel_one: ForecastMetaware.channel1,
         metaware_channel_two: ForecastMetaware.channel2,
       });
       console.log("POST request successful", response.data);
-      // alert( "Forecast Submitted Successfully")
-      // await getForecast();
       toast({
         title: "Forecast Submitted Successfully",
         status: "success",
@@ -94,7 +152,6 @@ const Forecast = () => {
         isClosable: true,
         position: "top",
       });
-      addUserLogger();
       navigate("/Procurement");
     } catch (error) {
       console.error("Error making POST request: Forecast", error);
@@ -106,42 +163,20 @@ const Forecast = () => {
         isClosable: true,
         position: "top",
       });
+    } finally {
+      setLoading(false);
     }
   };
-  const addUserLogger = async () => {
-    try {
-      // Fetch user's IP address using a third-party service like ipify
-      const ipResponse = await axios.get('https://api.ipify.org?format=json');
-      const userIp = ipResponse.data.ip; // Get the IP address from the response
-  
-      const response = await axios.post(`${api}/adduserlogs/`, {
-        email: user.email,
-        user_id: user.userid,
-        simulation_id: selectedSim[0].simulation_id,
-        admin_id: selectedSim[0].admin_id,
-        decision: "Forecast",
-        action: "created",
-        ip_address: userIp,  // Use the actual IP address
-        username: `${user.first_name} ${user.last_name}`,
-        firm_key: firm_key_new,
-        current_quarter: selectedSim[0].current_quarter,
-      });
-      
-      const data = response.data;
-      console.log("addUserLoggerData", data);
-    } catch (error) {
-      console.error("Error making request:", error);
-    }
-  };
+
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
       <div className="sm:grid grid-cols-1 gap-3 m-1 ">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
           <InfoImg decision={"Forecast"} />
           <div className="flex items-center justify-between w-full">
-          <div className="flex items-center pl-5 pt-2 pb-2">
+            <div className="flex items-center pl-5 pt-2 pb-2">
               <Text>Load data Quarterly</Text>
-              <div className=" pl-4 flex space-x-4">
+              <div className="pl-4 flex space-x-4">
                 {Array.from(
                   { length: selectedSimData[0]?.current_quarter || 0 },
                   (_, i) => (
@@ -157,34 +192,46 @@ const Forecast = () => {
                 )}
               </div>
             </div>
-            <InfoButton decision="Forecast"/>
+            <InfoButton decision="Forecast" />
           </div>
-          <Forecasting_sales
-            key={`hyperware-${selectedQuarter}`} // Add a key prop to force re-render
-            setForecastHyperwaretopass={setForecastHyperware}
-            forecastData={ForecastData || {}}
-          />
+          {loading ? (
+            <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
+              <Spinner size="xl" />
+            </Box>
+          ) : (
+            <>
+              <Forecasting_sales
+                key={`hyperware-${selectedQuarter}`}
+                setForecastHyperwaretopass={setForecastHyperware}
+                forecastData={ForecastData || {}}
+              />
+              <div className="py-2">
+                <Forecasting_sales2
+                  key={`metaware-${selectedQuarter}`}
+                  setForecastMetawaretopass={setForecastMetaware}
+                  forecastData={ForecastData || {}}
+                />
+              </div>
+            </>
+          )}
 
-          <div className="py-2">
-            <Forecasting_sales2
-              key={`metaware-${selectedQuarter}`} // Add a key prop to force re-render
-              setForecastMetawaretopass={setForecastMetaware}
-              forecastData={ForecastData || {}}
-            />
-          </div>
-
-          {/* Submit Button */}
-          <div className="flex justify-end mt-4">
-            
+          <div className="flex justify-between mt-4">
+            <div
+              onClick={loadPreviousQuarter}
+              className="font-bold py-2 px-4 text-red-400 cursor-pointer"
+              disabled={isLoadingLastQuarter || currentQuarter <= 1}
+            >
+              <span className="text-black">To load inputs from the previous quarter, </span>{isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
+            </div>
             <button
               onClick={submitForecast}
-              className={`${selectedQuarter === currentQuarter
+              className={`${selectedQuarter === currentQuarter && !loading
                   ? "bg-red-500 hover:bg-black-700 text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
-              disabled={selectedQuarter !== currentQuarter}
+              disabled={selectedQuarter !== currentQuarter || loading}
             >
-              Submit Forecast
+              {loading ? <Spinner size="sm" /> : "Submit Forecast"}
             </button>
           </div>
         </div>

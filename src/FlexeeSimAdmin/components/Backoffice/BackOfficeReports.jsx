@@ -42,7 +42,7 @@ const BackOfficeUser = () => {
         if (transformedCourses.length > 0) {
           setSelectedCourse(transformedCourses[0]);
         }
-        toast.success("Courses fetched successfully!");
+      
       } catch (error) {
         toast.error("Error fetching courses.");
         console.error("Error fetching the courses:", error);
@@ -73,11 +73,8 @@ const BackOfficeUser = () => {
           users: firm.users,
         }));
         setTeams(flattenedTeams);
-        console.log(flattenedTeams);
-        console.log(teams);
+       
         
-        
-        toast.success("Teams fetched successfully!");
       } catch (error) {
         toast.error("Error fetching teams.");
         console.error("Error fetching teams:", error);
@@ -142,7 +139,7 @@ const BackOfficeUser = () => {
   }
 
   return (
-    <div className="bg-gray-100 m-0 h-screen">
+    <div className="bg-gray-100 m-0">
       <div className="flex h-10">
         <div className="w-full text-start">
           <div className="text-xl flex text-start items-start justify-between font-bold bg-white">

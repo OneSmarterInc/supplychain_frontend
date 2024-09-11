@@ -4,7 +4,7 @@ import SupplyChainTable from "../Components/SupplyChainTable";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
-import { Text, useToast } from "@chakra-ui/react";
+import { Text, useToast, Spinner, Box } from "@chakra-ui/react"; // Import Spinner from Chakra UI
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
 
@@ -13,11 +13,13 @@ const Procurement_Decisions = () => {
   const [updatedDCData, setUpdatedDCData] = useState([]);
   const [alpha_quantity, setAlpha_quantity] = useState("");
   const [beta_quantity, setBeta_quantity] = useState("");
+  const [loading, setLoading] = useState(false); // Add loading state
+  const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false); // State for loading previous quarter data
 
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || [];
   const sel = JSON.parse(localStorage.getItem("selectedSim")) || [];
-  const currentQuarter = selectedSimData[0]?.current_quarter || 1; // Assuming the current quarter is provided in the sim data
-  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter); // Set the default to the current quarter
+  const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const selectedSim = selectedSimData;
@@ -29,18 +31,18 @@ const Procurement_Decisions = () => {
       return item.emails.includes(user.email);
     });
     if (firm_obj.length) {
-      firm_key_new = firm_obj[0].firmName; // Only one user in one firm, so using firm_obj[0]
+      firm_key_new = firm_obj[0].firmName;
     }
   }
   
   const toast = useToast();
   const navigate = useNavigate();
-
   const [data, setData] = useState({});
 
   useEffect(() => {
-    getProcurement();
-  }, [selectedQuarter]); // Fetch data whenever the selectedQuarter changes
+    setLoading(true); // Start loading before fetching procurement data
+    getProcurement().finally(() => setLoading(false)); // Stop loading after data is fetched
+  }, [selectedQuarter]);
 
   const getProcurement = async () => {
     try {
@@ -50,44 +52,85 @@ const Procurement_Decisions = () => {
           sim_id: selectedSim[0]?.simulation_id || "",
           admin_id: selectedSim[0]?.admin_id || "",
           current_decision: "Procurement",
-          current_quarter: selectedQuarter, // Use selectedQuarter
+          current_quarter: selectedQuarter,
           firm_key: firm_key_new,
         },
       });
 
-      console.log("API Response:", response.data); // Logging the response
-
+      console.log("API Response:", response.data);
       localStorage.setItem("procurementData", JSON.stringify(response.data));
       setData(response.data);
     } catch (error) {
-      console.error("Error making GET request:", error.response ? error.response.data : error.message); // More detailed error logging
+      console.error("Error making GET request:", error.response ? error.response.data : error.message);
+    }
+  };
+
+  // Function to load the previous quarter's data
+  const loadPreviousQuarter = async () => {
+    if (currentQuarter <= 1) return;
+
+    const previousQuarter = currentQuarter - 1;
+    setIsLoadingLastQuarter(true);
+    try {
+      const response = await axios.get(`${api}/previous/`, {
+        params: {
+          user_id: user.userid,
+          sim_id: selectedSim[0]?.simulation_id || "",
+          admin_id: selectedSim[0]?.admin_id || "",
+          current_decision: "Procurement",
+          current_quarter: previousQuarter,
+          firm_key: firm_key_new,
+        },
+      });
+
+      const previousData = response.data;
+      setData(previousData); // Set the previous quarter's data to the current state
+      toast({
+        title: `Loaded data from Quarter ${previousQuarter}`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    } catch (error) {
+      console.error("Error loading previous quarter data:", error);
+      toast({
+        title: "Failed to load previous quarter data",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    } finally {
+      setIsLoadingLastQuarter(false);
     }
   };
 
   const submitProcurement = async () => {
-    try {
-      if (!alpha_quantity) {
-        alert("Units for Alpha cannot be empty");
-        return;
-      }
-      if (!beta_quantity) {
-        alert("Units for Beta cannot be empty");
-        return;
-      }
+    if (!alpha_quantity) {
+      alert("Units for Alpha cannot be empty");
+      return;
+    }
+    if (!beta_quantity) {
+      alert("Units for Beta cannot be empty");
+      return;
+    }
 
+    setLoading(true); // Start loading on submit
+    try {
       const response = await axios.post(`${api}/decision/procurement/`, {
         simulation_id: selectedSim[0]?.simulation_id || "",
         admin_id: selectedSim[0]?.admin_id || "",
         user_id: user.userid,
         firm_key: firm_key_new,
-        quarter: selectedQuarter, // Use selectedQuarter here
+        quarter: selectedQuarter,
         alpha_quantity: Number(alpha_quantity),
         beta_quantity: Number(beta_quantity),
         sac_units: updatedDCData,
       });
 
       console.log("POST request successful", response.data);
-      getProcurement(); // Fetch the updated data
+      getProcurement();
       addUserLogger();
       toast({
         title: "Procurement Submitted Successfully",
@@ -98,7 +141,9 @@ const Procurement_Decisions = () => {
       });
       navigate("/Manufacture");
     } catch (error) {
-      console.error("Error making POST request:", error.response ? error.response.data : error.message); // More detailed error logging
+      console.error("Error making POST request:", error.response ? error.response.data : error.message);
+    } finally {
+      setLoading(false); // Stop loading after submission
     }
   };
 
@@ -118,7 +163,7 @@ const Procurement_Decisions = () => {
       });
       console.log("addUserLoggerData", response.data);
     } catch (error) {
-      console.error("Error making POST request:", error.response ? error.response.data : error.message); // More detailed error logging
+      console.error("Error making POST request:", error.response ? error.response.data : error.message);
     }
   };
 
@@ -150,26 +195,43 @@ const Procurement_Decisions = () => {
             </div>
             <InfoButton decision="Procurement" />
           </div>
-          <RawMaterial
-            procurementData1={JSON.stringify(data)}
-            setAlpha_quantity={setAlpha_quantity}
-            setBeta_quantity={setBeta_quantity}
-          />
-          <div className="rounded-lg -2xl h-100vh  flex flex-col justify-center">
-            <SupplyChainTable setUpdatedDCData={setUpdatedDCData} />
-          </div>
+
+          {/* Show Spinner while loading */}
+          {loading || isLoadingLastQuarter ? (
+            <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
+              <Spinner size="xl" />
+            </Box>
+          ) : (
+            <>
+              <RawMaterial
+                procurementData1={JSON.stringify(data)}
+                setAlpha_quantity={setAlpha_quantity}
+                setBeta_quantity={setBeta_quantity}
+              />
+              <div className="rounded-lg -2xl h-100vh flex flex-col justify-center">
+                <SupplyChainTable setUpdatedDCData={setUpdatedDCData} />
+              </div>
+            </>
+          )}
 
           {/* Submit Button */}
-          <div className="flex justify-end mt-4">
+          <div className="flex justify-between mt-4">
+            <div
+              onClick={loadPreviousQuarter}
+              className="font-bold py-2 px-4 text-red-400 cursor-pointer"
+              disabled={isLoadingLastQuarter || currentQuarter <= 1}
+            >
+              <span className="text-black">To load inputs from the previous quarter, </span>{isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
+            </div>
             <button
               onClick={submitProcurement}
-              className={`${selectedQuarter === currentQuarter
+              className={`${selectedQuarter === currentQuarter && !loading
                 ? "bg-red-500 hover:bg-black-700 text-white"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
-              disabled={selectedQuarter !== currentQuarter}
+              disabled={selectedQuarter !== currentQuarter || loading}
             >
-              Submit Procurement
+              {loading ? <Spinner size="sm" /> : "Submit Procurement"} {/* Show Spinner on button */}
             </button>
           </div>
         </div>

@@ -4,6 +4,6 @@
 
 .custom-shadow {
   @apply shadow-lg;
-  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.55); /* Adjust the offsets as needed */
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25); /* Adjust the offsets as needed */
 }
 

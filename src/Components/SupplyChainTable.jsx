@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Table, Thead, Tbody, Tr, Th, Td, Input, Select, Box, Button } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Input, Select, Box } from "@chakra-ui/react";
 
 const SupplyChainTable = ({ setUpdatedDCData }) => {
   const tableRef = useRef(null);
@@ -38,7 +38,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
     }
   }, [procurementData?.sac_units]);
 
-  const handleDCButtonClick = (dc) => {
+  const handleDCClick = (dc) => {
     setActiveDC(dc);
   };
 
@@ -65,31 +65,52 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
   };
 
   setUpdatedDCData(dcData);
-
+  console.log(dcData);
+  
   return (
     <Box className="overflow-x-auto p-4">
-     
-        <Box ref={tableRef} className="h-30 overflow-y-auto ml-4 border-2 border-opacity-50 border-gray-300 rounded-lg">
-          {activeDC === "DC1" && dcData?.DC1 !== "closed" && (
-            <Table className="min-w-full bg-white rounded-md shadow-md">
+      <Box
+        ref={tableRef}
+        className="h-30 overflow-y-auto ml-4 border-2 border-opacity-50 border-gray-300 rounded-lg"
+      >
+        {["DC1", "DC2", "DC3"].map((dc) => (
+          activeDC === dc && dcData[dc] !== "closed" && (
+            <Table key={dc} className="min-w-full bg-white rounded-md shadow-md">
               <Thead className="bg-gray-100 text-gray-700 font-semibold">
                 <Tr>
-                  <Th className="p-3" color={'red'}>SAC</Th>
-                  <Th className="p-3" textAlign="center">Supplier</Th>
-                  <Th className="p-3" textAlign="center">Medium</Th>
-                  <Th className="p-3" textAlign="center">Units</Th>
+                  <Th className="p-3" color={"red"}>
+                    SAC
+                  </Th>
+                  <Th className="p-3" textAlign="center">
+                    Supplier
+                  </Th>
+                  <Th className="p-3" textAlign="center">
+                    Medium
+                  </Th>
+                  <Th className="p-3" textAlign="center">
+                    Units
+                  </Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {dcData[activeDC]?.map((entry, index) => (
+                {dcData[dc]?.map((entry, index) => (
                   <Tr key={index} className="border-t">
                     <Td className="p-3" textAlign="left">
                       <Input
                         type="text"
-                        value={selectedSim[0]?.renamedMappedData?.componentMapp[entry.name]}
+                        value={
+                          selectedSim[0]?.renamedMappedData?.componentMapp[
+                            entry.name
+                          ]
+                        }
                         placeholder="Enter Name"
                         onChange={(e) =>
-                          handleInputChange(activeDC, index, "name", e.target.value)
+                          handleInputChange(
+                            dc,
+                            index,
+                            "name",
+                            e.target.value
+                          )
                         }
                         className={`bg-white border text-left text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none w-full ${
                           !entry.name
@@ -103,7 +124,12 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                         name="supplier"
                         value={entry.supplier}
                         onChange={(e) =>
-                          handleInputChange(activeDC, index, "supplier", e.target.value)
+                          handleInputChange(
+                            dc,
+                            index,
+                            "supplier",
+                            e.target.value
+                          )
                         }
                         className={`bg-white border text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none w-full ${
                           entry.supplier.trim() === "Select"
@@ -123,7 +149,12 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                         name="medium"
                         value={entry.medium}
                         onChange={(e) =>
-                          handleInputChange(activeDC, index, "medium", e.target.value)
+                          handleInputChange(
+                            dc,
+                            index,
+                            "medium",
+                            e.target.value
+                          )
                         }
                         className={`bg-white border text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none w-full ${
                           entry.medium.trim() === "Select"
@@ -143,7 +174,12 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                         type="text"
                         value={entry.units}
                         onChange={(e) =>
-                          handleInputChange(activeDC, index, "units", e.target.value)
+                          handleInputChange(
+                            dc,
+                            index,
+                            "units",
+                            e.target.value
+                          )
                         }
                         className={`bg-white border text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none w-full ${
                           !entry.units
@@ -156,48 +192,35 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                 ))}
               </Tbody>
             </Table>
-          )}
-          {/* Repeat for DC2 and DC3 as in the original code */}
-        </Box>
-      
+          )
+        ))}
+      </Box>
 
       <Box className="h-16 flex justify-between items-center px-4 mt-4">
         <Box className="flex space-x-4">
-          <Button
-            onClick={() => handleDCButtonClick("DC1")}
-            className={`h-10 px-4 bg-blue-600 text-white hover:bg-blue-800 text-lg rounded-lg ${
-              activeDC === "DC1" && "bg-green-700"
-            } disabled:bg-gray-400 disabled:cursor-default`}
-            disabled={dcData?.DC1 === "closed"}
-          >
-            DC 1
-          </Button>
-          <Button
-            onClick={() => handleDCButtonClick("DC2")}
-            className={`h-10 px-4 bg-blue-600 text-white hover:bg-blue-800 text-lg rounded-lg ${
-              activeDC === "DC2" && "bg-green-700"
-            } disabled:bg-gray-400 disabled:cursor-default`}
-            disabled={dcData?.DC2 === "closed"}
-          >
-            DC 2
-          </Button>
-          <Button
-            onClick={() => handleDCButtonClick("DC3")}
-            className={`h-10 px-4 bg-blue-600 text-white hover:bg-blue-800 text-lg rounded-lg ${
-              activeDC === "DC3" && "bg-green-700"
-            } disabled:bg-gray-400 disabled:cursor-default`}
-            disabled={dcData?.DC3 === "closed"}
-          >
-            DC 3
-          </Button>
+          {["DC1", "DC2", "DC3"].map((dc) => (
+            <Box
+              key={dc}
+              onClick={() => handleDCClick(dc)}
+              className={`h-10 px-4 text-lg rounded-lg flex justify-center items-center cursor-pointer ${
+                activeDC === dc
+                  ? dc === "DC2"
+                    ? "bg-red-600 text-white"
+                    : "bg-red-700 text-white"
+                  : "bg-gray-400 text-black"
+              }`}
+            >
+              {dc}
+            </Box>
+          ))}
         </Box>
         <Box className="flex">
-          <Button
+          <Box
             onClick={() => onAddEntry(activeDC)}
-            className="h-10 px-6 bg-green-600 text-white hover:bg-green-800 text-lg rounded-lg"
+            className="h-10 px-3 bg-gray-600 text-white hover:bg-green-800 text-lg rounded-lg cursor-pointer flex justify-center items-center"
           >
-            Add New
-          </Button>
+            Add Row
+          </Box>
         </Box>
       </Box>
     </Box>

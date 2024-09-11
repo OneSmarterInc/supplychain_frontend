@@ -13,7 +13,6 @@ import {
   InputRightElement,
   Text,
   useToast,
-
   Heading,
 } from "@chakra-ui/react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
@@ -30,12 +29,14 @@ const ForgotPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const toast = useToast();
   const { api } = useContext(MyContext);
   const navigate = useNavigate();
 
-  const handleShowClick = () => setShowPassword(!showPassword);
+  const handleShowNewPasswordClick = () => setShowNewPassword(!showNewPassword);
+  const handleShowConfirmPasswordClick = () => setShowConfirmPassword(!showConfirmPassword);
 
   const sendOtpHandler = async () => {
     try {
@@ -66,8 +67,7 @@ const ForgotPassword = () => {
 
   const resetPasswordHandler = async (e) => {
     e.preventDefault();
-  
-    // Password validation
+
     const passwordValidationRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
     if (!passwordValidationRegex.test(newPassword)) {
       toast({
@@ -81,7 +81,7 @@ const ForgotPassword = () => {
       });
       return;
     }
-  
+
     if (newPassword !== confirmPassword) {
       toast({
         title: "Passwords do not match",
@@ -93,7 +93,7 @@ const ForgotPassword = () => {
       });
       return;
     }
-  
+
     try {
       const response = await axios.post(`${api}/reset-password/`, {
         email,
@@ -123,12 +123,13 @@ const ForgotPassword = () => {
       });
     }
   };
+
   return (
     <Flex direction="column" alignItems="center" w="100%" h="100vh" pt={'12rem'} backgroundImage={`url(${graphics})`}
       backgroundPosition="center"
       backgroundSize="cover"
       backgroundRepeat="no-repeat">
-        <Heading>Forgot password</Heading>
+      <Heading>Forgot password</Heading>
       <Box w={{ base: "90%", md: "30%" }} mt="5%">
         <Box bg="white" p={6} rounded="md" shadow="md">
           <form onSubmit={resetPasswordHandler}>
@@ -171,14 +172,14 @@ const ForgotPassword = () => {
                         children={<CFaLock color="gray.300" />}
                       />
                       <Input
-                        type={showPassword ? "text" : "password"}
+                        type={showNewPassword ? "text" : "password"}
                         placeholder="New Password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                       />
                       <InputRightElement width="4.5rem">
-                        <Button h="1.75rem" size="sm" onClick={handleShowClick}>
-                          {showPassword ? "Hide" : "Show"}
+                        <Button h="1.75rem" size="sm" onClick={handleShowNewPasswordClick}>
+                          {showNewPassword ? "Hide" : "Show"}
                         </Button>
                       </InputRightElement>
                     </InputGroup>
@@ -190,14 +191,14 @@ const ForgotPassword = () => {
                         children={<CFaLock color="gray.300" />}
                       />
                       <Input
-                        type={showPassword ? "text" : "password"}
+                        type={showConfirmPassword ? "text" : "password"}
                         placeholder="Confirm New Password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                       />
                       <InputRightElement width="4.5rem">
-                        <Button h="1.75rem" size="sm" onClick={handleShowClick}>
-                          {showPassword ? "Hide" : "Show"}
+                        <Button h="1.75rem" size="sm" onClick={handleShowConfirmPasswordClick}>
+                          {showConfirmPassword ? "Hide" : "Show"}
                         </Button>
                       </InputRightElement>
                     </InputGroup>

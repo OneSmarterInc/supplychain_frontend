@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, VStack } from "@chakra-ui/react";
+import { Box, Text, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 
@@ -39,15 +39,15 @@ const UserLoggerApi = ({ simulation_id, firm_key, current_quarter }) => {
     filteredLogger.slice().reverse().map((logs) => {
       return (
         <Box key={logs.id} mb={2}>
+          
           {logs.username ? (
             <h2 className="text-xl">
-              <span className="text-red-300">{logs.username}</span> submitted{" "}
-              {logs.decision ? logs.decision : "Unknown decision"}
+              <span className="text-red-300">{logs.username}</span> submitted{" "}<span className="text-red-300">{logs.decision ? logs.decision : "Unknown decision"}  </span> at {logs.date ? new Date(logs.date).toLocaleString('en-US') : "Unknown decision"}
             </h2>
           ) : (
             <h2 className="text-xl">
               <span className="text-red-300">{logs.email}</span> submitted{" "}
-              {logs.decision ? logs.decision : "Unknown decision"}
+              {logs.decision ? logs.decision : "Unknown decision"} at  {logs.date ? logs.date : "Unknown decision"} 
             </h2>
           )}
         </Box>

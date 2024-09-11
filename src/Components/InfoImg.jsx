@@ -87,7 +87,7 @@ const InfoImg = ({ decision }) => {
               </h1>
               <h1 className="text-xl text-start px-1 py-2 text-red-500">|</h1>
               <h1 className="text-xl text-start px-3 py-2 text-white ">
-                {user.first_name || "User"}
+                {user.first_name+" "+user.last_name  || "User"}
               </h1>
             </div>
           </div>

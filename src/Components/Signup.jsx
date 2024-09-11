@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import {
   Flex,
   Heading,
@@ -17,11 +17,11 @@ import {
   useToast,
   HStack,
 } from "@chakra-ui/react";
-import { FaUserAlt, FaLock} from "react-icons/fa";
+import { FaUserAlt, FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import MyContext from "./ContextApi/MyContext";
-import graphics from '../assets/graphic.png'
+import graphics from '../assets/graphic.png';
 
 import maleProfile from "../assets/male.jpeg";  // Replace with actual path
 import femaleProfile from "../assets/female.webp";  // Replace with actual path
@@ -39,34 +39,38 @@ const Signup = () => {
   const [department, setDepartment] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [selectedDefaultImage, setSelectedDefaultImage] = useState(null);
-
   const [showPassword, setShowPassword] = useState(false);
+
   const { api } = useContext(MyContext);
   const navigate = useNavigate();
   const toast = useToast();
 
-  const handleShowClick = () => setShowPassword(!showPassword);
+  // Fetch email from localStorage on component mount
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("NewUserEmail");
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+  }, []);
 
-  // const handleImageUpload = (e) => {
-  //   const file = e.target.files[0];
-  //   setProfileImage(file);
-  //   setSelectedDefaultImage(null);
-  // };
+  const handleShowClick = () => setShowPassword(!showPassword);
 
   const handleDefaultImageSelect = (image) => {
     setSelectedDefaultImage(image);
     setProfileImage(null);
   };
-
   const signupHandler = async (e) => {
     e.preventDefault();
-
+  
     // Basic email validation regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+  
     // Password validation regex (at least 6 characters, 1 uppercase, 1 symbol, 1 number)
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-
+  
+    // Regex to check for numeric values in first and last name
+    const nameRegex = /^[A-Za-z]+$/;
+  
     // First and last name validation
     if (firstName.trim() === lastName.trim()) {
       toast({
@@ -79,7 +83,32 @@ const Signup = () => {
       });
       return;
     }
-
+  
+    // First name and last name should not contain numeric values
+    if (!nameRegex.test(firstName)) {
+      toast({
+        title: "Invalid First Name",
+        description: "First name should not contain numeric values or special characters.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+  
+    if (!nameRegex.test(lastName)) {
+      toast({
+        title: "Invalid Last Name",
+        description: "Last name should not contain numeric values or special characters.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+  
     // Email validation
     if (!emailRegex.test(email)) {
       toast({
@@ -92,7 +121,7 @@ const Signup = () => {
       });
       return;
     }
-
+  
     // Password validation
     if (!passwordRegex.test(password)) {
       toast({
@@ -105,7 +134,7 @@ const Signup = () => {
       });
       return;
     }
-
+  
     if (!email || !password || !firstName || !lastName || !university || !course || !department) {
       toast({
         title: "Field is empty",
@@ -117,9 +146,9 @@ const Signup = () => {
       });
       return;
     }
-
+  
     const formData = new FormData();
-
+  
     // Append other form fields
     formData.append("email", email);
     formData.append("password", password);
@@ -128,7 +157,7 @@ const Signup = () => {
     formData.append("university", university);
     formData.append("course", course);
     formData.append("department", department);
-
+  
     // Append the profile image (either the selected file or default image)
     if (profileImage) {
       formData.append("image", profileImage);
@@ -137,14 +166,14 @@ const Signup = () => {
       const blob = await response.blob();
       formData.append("image", blob, selectedDefaultImage.split('/').pop());
     }
-
+  
     try {
       const response = await axios.post(`${api}/users/createuser/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
+  
       if (response.status === 201) {
         toast({
           title: "Account Created Successfully",

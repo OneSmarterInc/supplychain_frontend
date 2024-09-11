@@ -126,7 +126,7 @@ const CourseComponent = () => {
         <div
           className="absolute text-gray-500"
           style={{
-            top: '155px',    // Adjust the top position
+            top: '252px',    // Adjust the top position
             right: '25px',  // Adjust the right position
             transform: 'translate(0px, 0px)'  // Adjust the translate values for finer control
           }}

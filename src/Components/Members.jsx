@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import MyContext from '../Components/ContextApi/MyContext';
 import { Puff } from 'react-loader-spinner';
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Image, Heading, Center, Spinner } from '@chakra-ui/react';
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Image, Heading, Center, Spinner, Text } from '@chakra-ui/react';
+import UserLoggerApi from '../LoggerApis/UserLoggerApi';
 
 const Members = () => {
   const [users, setUsers] = useState([]);
@@ -94,6 +95,15 @@ const Members = () => {
           </Tbody>
         </Table>
       )}
+      
+      {/* <Text textAlign={'center'}>Decision Logs</Text> */}
+       <div className='pt-4'>
+       <UserLoggerApi
+              simulation_id={selectedCourse[0].simulation_id}
+              firm_key={firm_key_new}
+              current_quarter={selectedCourse[0].current_quarter}
+            />
+      </div>
     </Box>
   );
 };
