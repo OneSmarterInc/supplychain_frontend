@@ -31,9 +31,9 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
 
         // Map students to their respective teams
         const transformedData = filteredData.map(item => {
-          // Check if the user belongs to any team
+          // Find if the user belongs to any team
           const assignedTeam = teamData.find(team =>
-            team.users.some(user => user.user_id === item.user_detail.userid)
+            Object.values(team.users).some(user => user.user_id === item.user_detail.userid)
           );
 
           return {
@@ -44,7 +44,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
             contact: item.user_detail.email,
             status: item.user_detail.is_online ? "Online" : "Offline",
             enrollDate: new Date(item.subscribed_at).toLocaleDateString(),
-            team: assignedTeam ? assignedTeam.firm_key : "", // Assign the team if found or empty if not
+            team: assignedTeam ? assignedTeam.firm_key : "", // Assign the team if found, or show "Not Assigned"
             simulationId: item.simulation_id // Add simulationId for unsubscribe
           };
         });
