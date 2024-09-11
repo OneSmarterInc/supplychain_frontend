@@ -61,6 +61,8 @@ const Procurement_Decisions = () => {
       localStorage.setItem("procurementData", JSON.stringify(response.data));
       setData(response.data);
     } catch (error) {
+      localStorage.setItem("procurementData", JSON.stringify(data));
+
       console.error("Error making GET request:", error.response ? error.response.data : error.message);
     }
   };

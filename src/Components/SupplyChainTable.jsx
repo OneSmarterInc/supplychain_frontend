@@ -35,6 +35,14 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
   useEffect(() => {
     if (procurementData?.sac_units) {
       setDcData(procurementData?.sac_units);
+    } else {
+      // If data is null or undefined, set 3 blank rows for each DC
+      const defaultData = {
+        DC1: Array(3).fill({ name: "", supplier: "", medium: "", units: "" }),
+        DC2: Array(3).fill({ name: "", supplier: "", medium: "", units: "" }),
+        DC3: Array(3).fill({ name: "", supplier: "", medium: "", units: "" }),
+      };
+      setDcData(defaultData);
     }
   }, [procurementData?.sac_units]);
 
@@ -65,7 +73,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
   };
 
   setUpdatedDCData(dcData);
-  console.log(dcData);
   
   return (
     <Box className="overflow-x-auto p-4">
@@ -101,7 +108,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                         value={
                           selectedSim[0]?.renamedMappedData?.componentMapp[
                             entry.name
-                          ]
+                          ] || entry.name
                         }
                         placeholder="Enter Name"
                         onChange={(e) =>
