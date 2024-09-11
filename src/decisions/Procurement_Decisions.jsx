@@ -4,7 +4,7 @@ import SupplyChainTable from "../Components/SupplyChainTable";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
-import { Text, useToast, Spinner, Box } from "@chakra-ui/react"; // Import Spinner from Chakra UI
+import { Text, useToast, Spinner, Box } from "@chakra-ui/react"; 
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
 
@@ -13,9 +13,8 @@ const Procurement_Decisions = () => {
   const [updatedDCData, setUpdatedDCData] = useState([]);
   const [alpha_quantity, setAlpha_quantity] = useState("");
   const [beta_quantity, setBeta_quantity] = useState("");
-  const [loading, setLoading] = useState(false); // Add loading state
-  const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false); // State for loading previous quarter data
-
+  const [loading, setLoading] = useState(false); 
+  const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false);
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || [];
   const sel = JSON.parse(localStorage.getItem("selectedSim")) || [];
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
