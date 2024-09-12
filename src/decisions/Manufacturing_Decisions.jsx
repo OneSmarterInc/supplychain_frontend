@@ -133,7 +133,7 @@ const Manufacturing_Decisions = () => {
     }
   };
 
-  
+
   // Load previous quarter data
   const loadPreviousQuarter = async () => {
     if (currentQuarter <= 1) return;
@@ -297,6 +297,14 @@ const Manufacturing_Decisions = () => {
               </div>
               <InfoButton decision="Manufacture" />
             </div>
+            <div
+                onClick={loadPreviousQuarter}
+                className="font-bold py-2 px-4 text-red-400 cursor-pointer"
+                disabled={isLoadingLastQuarter || currentQuarter <= 1}
+              >
+                <span className="text-black">To load inputs from the previous quarter, </span>
+                {isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
+              </div>
             {loading ? (
               <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
                 <Spinner size="xl" /> {/* Show Spinner while loading */}
@@ -354,15 +362,8 @@ const Manufacturing_Decisions = () => {
               </>
             )}
             {/* Submit Button */}
-            <div className="flex justify-between mt-4">
-              <div
-                onClick={loadPreviousQuarter}
-                className="font-bold py-2 px-4 text-red-400 cursor-pointer"
-                disabled={isLoadingLastQuarter || currentQuarter <= 1}
-              >
-                <span className="text-black">To load inputs from the previous quarter, </span>
-                {isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
-              </div>
+            <div className="flex justify-end mt-4">
+             
               <button
                 onClick={submitManufacturing}
                 className={`${

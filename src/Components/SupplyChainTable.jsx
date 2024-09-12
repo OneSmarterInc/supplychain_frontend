@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, Input, Select, Box } from "@chakra-ui/react";
-
 const SupplyChainTable = ({ setUpdatedDCData }) => {
   const tableRef = useRef(null);
   const [activeDC, setActiveDC] = useState("DC1");
@@ -17,18 +16,18 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
     setSelectedSim(data || []);
   }, []);
 
-  const supplierOptions = [
-    "Select",
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.A || "Supplier A",
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.B || "Supplier B",
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.C || "Supplier C",
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.D || "Supplier D",
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.E || "Supplier E",
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.F || "Supplier F",
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.G || "Supplier G",
-  ];
+  // Default supplier options as fallback
+  const defaultSuppliers = ["supplierA", "supplierB", "supplierC", "supplierD", "supplierE", "supplierF", "supplierG"];
 
-  const mediumOptions = ["Select", "Air", "Surface"];
+  // Check if the selectedSim contains suppliers, otherwise fallback to default
+  // const supplierOptions = [
+  //   "Select",
+  //   ...(selectedSim[0]?.renamedMappedData?.suppliarMapp
+  //     ? Object.values(selectedSim[0]?.renamedMappedData?.suppliarMapp)
+  //     : defaultSuppliers),
+  // ];
+
+  const mediumOptions = ["Air", "Surface"];
 
   const [dcData, setDcData] = useState({});
 
@@ -36,7 +35,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
     if (procurementData?.sac_units) {
       setDcData(procurementData?.sac_units);
     } else {
-      // If data is null or undefined, set 3 blank rows for each DC
       const defaultData = {
         DC1: Array(3).fill({ name: "", supplier: "", medium: "", units: "" }),
         DC2: Array(3).fill({ name: "", supplier: "", medium: "", units: "" }),
@@ -73,12 +71,12 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
   };
 
   setUpdatedDCData(dcData);
-  
+
   return (
     <Box className="overflow-x-auto p-4">
       <Box
         ref={tableRef}
-        className="h-30 overflow-y-auto ml-4 border-2 border-opacity-50 border-gray-300 rounded-lg"
+        className="h-30 overflow-y-auto border-2 border-opacity-50 border-gray-300 rounded-lg"
       >
         {["DC1", "DC2", "DC3"].map((dc) => (
           activeDC === dc && dcData[dc] !== "closed" && (
@@ -144,9 +142,9 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                             : "border-green-500 outline-green-500"
                         }`}
                       >
-                        {supplierOptions.map((option, i) => (
+                        {defaultSuppliers.map((option, i) => (
                           <option key={i} value={option}>
-                            {option}
+                            {selectedSim[0]?.renamedMappedData?.suppliarMapp?.[option]}
                           </option>
                         ))}
                       </Select>

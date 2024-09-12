@@ -51,15 +51,12 @@ const IT = () => {
       setItData(response.data);
       localStorage.setItem("ItData", JSON.stringify(response.data));
     } catch (error) {
-      console.error("Error making GET request:", error);
-      // toast({
-      //   title: "Error fetching IT data",
-      //   description: error.message || "Something went wrong while fetching IT data.",
-      //   status: "error",
-      //   duration: 9000,
-      //   isClosable: true,
-      //   position: "top",
-      // });
+      // Clear state and local storage on error
+      localStorage.removeItem("ItData");
+      setItData({});
+      setSuppliers({});
+
+      console.error("Error making GET request:", error.response ? error.response.data : error.message);
     }
   };
 
@@ -92,13 +89,6 @@ const IT = () => {
       });
     } catch (error) {
       console.error("Error loading previous quarter data:", error);
-      // toast({
-      //   title: "Failed to load previous quarter data",
-      //   status: "error",
-      //   duration: 3000,
-      //   isClosable: true,
-      //   position: "top",
-      // });
     } finally {
       setIsLoadingLastQuarter(false);
     }
@@ -216,7 +206,14 @@ const IT = () => {
             </div>
             <InfoButton decision="IT" />
           </div>
-
+          <div
+              onClick={loadPreviousQuarter}
+              className="font-bold py-2 px-4 text-red-400 cursor-pointer"
+              disabled={isLoadingLastQuarter || currentQuarter <= 1}
+            >
+              <span className="text-black">To load inputs from the previous quarter, </span>
+              {isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
+            </div>
           {loading ? (
             <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
               <Spinner size="xl" />
@@ -227,15 +224,8 @@ const IT = () => {
             </>
           )}
 
-          <div className="flex justify-between mt-4">
-            <div
-              onClick={loadPreviousQuarter}
-              className="font-bold py-2 px-4 text-red-400 cursor-pointer"
-              disabled={isLoadingLastQuarter || currentQuarter <= 1}
-            >
-              <span className="text-black">To load inputs from the previous quarter, </span>
-              {isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
-            </div>
+          <div className="flex justify-end mt-4">
+            
             <button
               onClick={submitIt}
               className={`${

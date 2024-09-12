@@ -54,13 +54,13 @@ const GDP = () => {
 
   // Renames Mapp
   const [suppliarMapp, setSuppliarMapp] = useState({
-    A: "A",
-    B: "B",
-    C: "C",
-    D: "D",
-    E: "E",
-    F: "F",
-    G: "G",
+    supplierA: "A",
+    supplierB: "B",
+    supplierC: "C",
+    supplierD: "D",
+    supplierE: "E",
+    supplierF: "F",
+    supplierG: "G",
   });
   const [distributerMapp, setDistributerMapp] = useState({
     I: "I",

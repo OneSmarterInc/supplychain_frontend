@@ -60,6 +60,16 @@ const Demand_generation = () => {
       localStorage.setItem("demandData", JSON.stringify(response.data));
     } catch (error) {
       console.error("Error making GET request:", error);
+
+      // Clear state and local storage on error
+      setDemandData(null);
+      localStorage.removeItem("demandData");
+
+      // Reset input values
+      setMetaCh1Value({});
+      setMetaCh2Value({});
+      setHypeCh1Value({});
+      setHypeCh2Value({});
     }
   };
 

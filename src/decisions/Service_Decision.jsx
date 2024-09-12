@@ -225,7 +225,13 @@ const Service_Decision = () => {
               </div>
               <InfoButton decision="Service" />
             </div>
-
+            <div
+                onClick={loadPreviousQuarter}
+                className=" py-2 px-4 text-red-400 cursor-pointer"
+                disabled={isLoadingLastQuarter || currentQuarter <= 1}
+              >
+                <span className="text-black">To load inputs from the previous quarter, </span>{isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
+              </div>
             {/* Show Spinner while loading */}
             {loading ? (
               <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
@@ -278,14 +284,8 @@ const Service_Decision = () => {
               </Box>
             )}
 
-            <div className="flex justify-between mt-4">
-              <div
-                onClick={loadPreviousQuarter}
-                className="font-bold py-2 px-4 text-red-400 cursor-pointer"
-                disabled={isLoadingLastQuarter || currentQuarter <= 1}
-              >
-                <span className="text-black">To load inputs from the previous quarter, </span>{isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
-              </div>
+            <div className="flex justify-end mt-4">
+              
               <button
                 onClick={submitService}
                 className={`${selectedQuarter === currentQuarter && !loading

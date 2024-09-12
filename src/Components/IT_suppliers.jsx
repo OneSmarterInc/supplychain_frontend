@@ -50,9 +50,9 @@ const IT_suppliers = ({ setSuppliersFromDecision, ItData }) => {
   }, [suppliers, setSuppliersFromDecision]);
 
   return (
-    <Box>
+    <Box className="border boder-gray rounded-lg">
       <Text className="p-5 py-1 text-xl">
-        <strong>IT Synchronization with Suppliers?</strong>
+        <strong>IT Synchronization with Suppliers</strong>
       </Text>
       <br />
       <div className="grid grid-cols-3 gap-3 pb-3">

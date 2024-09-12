@@ -38,10 +38,16 @@ const Procurement_Decisions = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({});
 
+  
   useEffect(() => {
-    setLoading(true); // Start loading before fetching procurement data
-    getProcurement().finally(() => setLoading(false)); // Stop loading after data is fetched
-  }, [selectedQuarter]);
+    const loadData = async () => {
+      setLoading(true); // Start loading before fetching procurement data
+      await getProcurement(); // Fetch the data
+      setLoading(false); // Stop loading after data is fetched
+    };
+  
+    loadData();
+  }, [selectedQuarter]); // Only re-run when `selectedQuarter` changes
 
   const getProcurement = async () => {
     try {
@@ -60,18 +66,26 @@ const Procurement_Decisions = () => {
       localStorage.setItem("procurementData", JSON.stringify(response.data));
       setData(response.data);
     } catch (error) {
-      localStorage.setItem("procurementData", JSON.stringify(data));
+      // Clear state and local storage on error
+      localStorage.removeItem("procurementData");
+      setData({});
+      
+      // Reset input fields
+      setAlpha_quantity("");
+      setBeta_quantity("");
+      setUpdatedDCData([]);
 
       console.error("Error making GET request:", error.response ? error.response.data : error.message);
     }
   };
+  
 
-  // Function to load the previous quarter's data
   const loadPreviousQuarter = async () => {
-    if (currentQuarter <= 1) return;
-
+    if (currentQuarter <= 1) return; // Prevent loading if it's the first quarter
+  
     const previousQuarter = currentQuarter - 1;
     setIsLoadingLastQuarter(true);
+  
     try {
       const response = await axios.get(`${api}/previous/`, {
         params: {
@@ -79,20 +93,26 @@ const Procurement_Decisions = () => {
           sim_id: selectedSim[0]?.simulation_id || "",
           admin_id: selectedSim[0]?.admin_id || "",
           current_decision: "Procurement",
-          current_quarter: previousQuarter,
+          current_quarter: previousQuarter, // Fetch second-last quarter's data
           firm_key: firm_key_new,
         },
       });
+  
+      if (response?.data) {
+        // Set data from the second-last quarter to the current quarter
+        setSelectedQuarter(currentQuarter); // Set the current quarter
+        setData(response.data); // Update the current quarter's data with the second-last quarter's data
+        localStorage.setItem("procurementData", JSON.stringify(response.data));
 
-      const previousData = response.data;
-      setData(previousData); // Set the previous quarter's data to the current state
-      toast({
-        title: `Loaded data from Quarter ${previousQuarter}`,
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-        position: "top",
-      });
+  
+        toast({
+          title: `Loaded data from Quarter ${previousQuarter} into Quarter ${currentQuarter}`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+      }
     } catch (error) {
       console.error("Error loading previous quarter data:", error);
       toast({
@@ -103,9 +123,11 @@ const Procurement_Decisions = () => {
         position: "top",
       });
     } finally {
-      setIsLoadingLastQuarter(false);
+      setIsLoadingLastQuarter(false); // Always set loading to false when done
     }
   };
+
+
 
   const submitProcurement = async () => {
     if (!alpha_quantity) {
@@ -196,7 +218,13 @@ const Procurement_Decisions = () => {
             </div>
             <InfoButton decision="Procurement" />
           </div>
-
+          <div
+              onClick={loadPreviousQuarter}
+              className="font-bold py-2 px-4 text-red-400 cursor-pointer"
+              disabled={isLoadingLastQuarter || currentQuarter <= 1}
+            >
+              <span className="text-black">To load inputs from the previous quarter, </span>{isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
+            </div>
           {/* Show Spinner while loading */}
           {loading || isLoadingLastQuarter ? (
             <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
@@ -216,14 +244,7 @@ const Procurement_Decisions = () => {
           )}
 
           {/* Submit Button */}
-          <div className="flex justify-between mt-4">
-            <div
-              onClick={loadPreviousQuarter}
-              className="font-bold py-2 px-4 text-red-400 cursor-pointer"
-              disabled={isLoadingLastQuarter || currentQuarter <= 1}
-            >
-              <span className="text-black">To load inputs from the previous quarter, </span>{isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
-            </div>
+          <div className="flex justify-end mt-4">
             <button
               onClick={submitProcurement}
               className={`${selectedQuarter === currentQuarter && !loading
