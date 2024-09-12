@@ -153,7 +153,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
       </p>
 
       {isLoading ? (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center p-10">
           <Spinner size="xl" />
         </div>
       ) : (

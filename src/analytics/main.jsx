@@ -51,12 +51,12 @@ function Analytics() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="text-gray-800 text-3xl font-bold text-center py-6">
+      <div className="text-gray-800 text-3xl font-bold text-center py-4">
         Analytics Dashboard
       </div>
-      <div className="analytics-container grid grid-cols-1 lg:grid-cols-3 gap-8 p-6">
+      <div className="analytics-container grid grid-cols-1 lg:grid-cols-2 gap-3 p-6">
         
-        <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6">
+        <div className="lg:col-span-1 bg-white rounded-lg shadow-lg p-3">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">
             Firm Performance Overview
           </h2>
@@ -66,7 +66,7 @@ function Analytics() {
           </p> */}
         </div>
 
-        <div className="lg:col-span-1 bg-white rounded-lg shadow-lg p-6">
+        <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-4">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">
             Net Income to Expenses
           </h2>
