@@ -16,6 +16,7 @@ import {
   Text,
   useToast,
   Image,
+  Spinner,
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -28,6 +29,7 @@ const CFaLock = chakra(FaLock);
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // To handle loading state
   const toast = useToast();
   const { api } = useContext(MyContext);
   const navigate = useNavigate();
@@ -46,7 +48,7 @@ const Signin = () => {
 
   const loginHandler = async (e) => {
     e.preventDefault();
-
+    setLoading(true); // Start loader
     let data = {
       email,
       password,
@@ -54,6 +56,7 @@ const Signin = () => {
 
     try {
       if (!email || !password) {
+        setLoading(false); // Stop loader on error
         toast({
           title: "Field is empty",
           description:
@@ -126,6 +129,7 @@ const Signin = () => {
         });
       }
     }
+    setLoading(false); // Stop loader once response is received
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -182,8 +186,10 @@ const Signin = () => {
                 w="full"
                 mt={4}
                 mb={2}
+                isLoading={loading} // Display loader
+                isDisabled={loading} // Disable button during loading
               >
-                Login
+                {loading ? <Spinner /> : "Login"}
               </Button>
             </Stack>
           </form>

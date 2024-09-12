@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
+import MyContext from "../../Components/ContextApi/MyContext";
 
 const TeamTableComponent = ({ selectedTeam }) => {
+  const {api1} = useContext(MyContext)
   return (
     <div className="bg-white w-full mx-auto pt-4">
       <div className="px-4 rounded-lg">
@@ -30,7 +32,7 @@ const TeamTableComponent = ({ selectedTeam }) => {
                   >
                     <td className="py-4 px-4 flex items-center">
                       <img
-                        src={`http://127.0.0.1:8000${member?.image}` || "default-image.png"} // Fallback image if none provided
+                        src={`${api1}${member?.image}` || "default-image.png"} // Fallback image if none provided
                         alt={member?.email}
                         className="w-12 h-12 rounded-full mr-4"
                       />

@@ -102,7 +102,7 @@ const PlayComponent = ({
         </div>
           </div>
           {!isUserAssigned && (
-            <p className="text-red-600 mt-2">
+            <p className="text-red-600 mt-2 p-4">
               You will be assigned to a team by faculty soon. Once assigned, you
               will receive an email.
             </p>
