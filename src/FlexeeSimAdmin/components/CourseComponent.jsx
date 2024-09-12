@@ -3,12 +3,14 @@ import videoimg from "../Assets/introvideo.png";
 import deploytosim from "../Assets/deploytosimimg.png";
 import graphic from "../../assets/graphic.png";
 import MyContext from "../../Components/ContextApi/MyContext";
+import { useToast } from "@chakra-ui/react";
 
 const CourseComponent = () => {
   const SelectedCourse = JSON.parse(localStorage.getItem("SelectedCourse"));
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const [trainers, setTrainers] = useState([]);
   const {api} = useContext(MyContext)
+  const toast = useToast()
 
   useEffect(() => {
     const fetchTrainers = async () => {
@@ -45,7 +47,13 @@ const CourseComponent = () => {
     : 0;
 
   const handleimg = () => {
-    alert('Simulation Deployed Successfully');
+    toast({
+      title: `Simulation Deployed Successfully`,
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+      position: "top",
+    });
   };
 
   const handleCopyToClipboard = () => {

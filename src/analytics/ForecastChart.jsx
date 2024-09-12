@@ -14,7 +14,7 @@ import data from "./data.json";
 // Example data transformation for creative representation
 const chart3 = data["Chart3"];
 
-const ForecastBarChart = () => {
+const ForecastBarChart = (simulation_id, firm_key, previous_quarter) => {
   return (
     <div className="w-full">
       <ResponsiveContainer width="100%" height={400}>

@@ -70,7 +70,7 @@ function Analytics() {
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">
             Net Income to Expenses
           </h2>
-          <RevenueDashboard />
+          <RevenueDashboard simulation_id={simulation_id} firm_key={firm_key} previous_quarter={currentQuarter - 1} />
           {/* <p className="text-gray-600 mt-4">
             Insight: The net income has shown a steady increase over the past quarters, indicating strong financial health. However, a slight dip in the last quarter requires attention.
           </p> */}
@@ -80,7 +80,7 @@ function Analytics() {
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">
             Forecast differnce from last Quarter
           </h2>
-          <ForecastChart />
+          <ForecastChart simulation_id={simulation_id} firm_key={firm_key} previous_quarter={currentQuarter - 1} />
           {/* <p className="text-gray-600 mt-4">
             Insight: Revenue is projected to grow by 10% in the next quarter, driven by new product launches and market expansion. Keep an eye on emerging market trends to adjust forecasts accordingly.
           </p> */}

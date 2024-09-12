@@ -3,7 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line, LineChart, ResponsiveContainer, ComposedChart
 } from 'recharts';
 import data from './data.json';
-const RevenueDashboard = () => {
+const RevenueDashboard = (simulation_id, firm_key, previous_quarter) => {
   const chart1 = data["chart1"]
   return (
     <ResponsiveContainer width="100%" height={350}>

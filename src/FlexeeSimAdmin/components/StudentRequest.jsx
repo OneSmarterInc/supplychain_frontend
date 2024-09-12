@@ -301,8 +301,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
               Delete Student
             </AlertDialogHeader>
             <AlertDialogBody>
-              Are you sure you want to delete this student? This action cannot
-              be undone.
+              Are you sure you want to delete this student?
             </AlertDialogBody>
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={() => setIsDialogOpen(false)}>
