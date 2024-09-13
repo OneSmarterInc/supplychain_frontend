@@ -101,7 +101,7 @@ const InfoImg = ({ decision }) => {
                 {selectedSim[0]?.quarter_specific_decisions?.[`quarter${selectedSim[0]?.current_quarter}`]?.['quarter_end_time'] || "Time"} EST {formatDate(selectedSim[0]?.quarter_specific_decisions?.[`quarter${selectedSim[0]?.current_quarter}`]?.['quarter_end_date'] || "")}
               </h2>
               <hr />
-              <Text color="red" pl="6" fontSize="1.1rem">Quarter Deadline</Text>
+              <Text color="white" pl="6" fontSize="1.1rem" fontWeight={'bold'} gap={'2'}>Quarter Deadline</Text>
             </div>
             <button
               title="Click to open Inventory"

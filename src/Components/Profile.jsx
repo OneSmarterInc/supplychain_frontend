@@ -18,6 +18,7 @@ import MyContext from "./ContextApi/MyContext";
 const ProfileDropdown = () => {
   const navigate = useNavigate();
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [loading, setLoading] = useState(false); // Loader state
 
   let user = JSON.parse(localStorage.getItem("user"));
   const { api, api1 } = useContext(MyContext);
@@ -52,6 +53,7 @@ const ProfileDropdown = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loader
     try {
       const formData = new FormData();
       formData.append("email", profile.email);
@@ -79,6 +81,7 @@ const ProfileDropdown = () => {
     } catch (error) {
       console.error("Error updating profile:", error);
     }
+    setLoading(false); // Stop loader
     setIsEditOpen(false);
   };
 
@@ -262,9 +265,10 @@ const ProfileDropdown = () => {
           <button
             type="submit"
             onClick={handleSave}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className={`px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={loading} // Disable button when loading
           >
-            Save
+            {loading ? "Saving..." : "Save"}
           </button>
         </DialogFooter>
       </Dialog>

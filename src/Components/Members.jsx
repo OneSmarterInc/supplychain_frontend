@@ -104,6 +104,8 @@ const Members = () => {
               current_quarter={selectedCourse[0].current_quarter}
             />
       </div>
+
+      {/* <SlantedSection /> */}
     </Box>
   );
 };

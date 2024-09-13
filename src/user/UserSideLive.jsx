@@ -3,6 +3,7 @@ import UserNavBar from "../Components/UserNavBar";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useToast, Spinner } from "@chakra-ui/react";
+import { Puff } from "react-loader-spinner";
 import PlayComponent from "./live_simulation_function";
 import JoinNow from "../Components/JoinNow";
 
@@ -138,7 +139,8 @@ const UserSideLive = () => {
 
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <Spinner size="xl" />
+                      <Puff color="red" height={100} width={100} /> {/* Loader */}
+
         </div>
       ) : simData.length > 0 ? (
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8 my-2">
