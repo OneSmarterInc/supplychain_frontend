@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Table, Thead, Tbody, Tr, Th, Td, Input, Select, Box } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Select, Input, Box } from "@chakra-ui/react";
+
 const SupplyChainTable = ({ setUpdatedDCData }) => {
   const tableRef = useRef(null);
   const [activeDC, setActiveDC] = useState("DC1");
@@ -16,18 +17,9 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
     setSelectedSim(data || []);
   }, []);
 
-  // Default supplier options as fallback
   const defaultSuppliers = ["supplierA", "supplierB", "supplierC", "supplierD", "supplierE", "supplierF", "supplierG"];
-
-  // Check if the selectedSim contains suppliers, otherwise fallback to default
-  // const supplierOptions = [
-  //   "Select",
-  //   ...(selectedSim[0]?.renamedMappedData?.suppliarMapp
-  //     ? Object.values(selectedSim[0]?.renamedMappedData?.suppliarMapp)
-  //     : defaultSuppliers),
-  // ];
-
   const mediumOptions = ["Air", "Surface"];
+  const nameOptions = ["Audio Module", "Control Interface", "Motherboard"];
 
   const [dcData, setDcData] = useState({});
 
@@ -45,11 +37,13 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
   }, [procurementData?.sac_units]);
 
   const handleDCClick = (dc) => {
-    setActiveDC(dc);
+    if (dcData[dc] !== "closed") {
+      setActiveDC(dc);
+    }
   };
 
   const handleInputChange = (dc, index, key, value) => {
-    const updatedData = { ...dcData };
+    const updatedData = JSON.parse(JSON.stringify(dcData)); // Deep copy to avoid mutating state directly
     updatedData[dc][index][key] = value;
     setDcData(updatedData);
   };
@@ -83,58 +77,41 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
             <Table key={dc} className="min-w-full bg-white rounded-md shadow-md">
               <Thead className="bg-gray-100 text-gray-700 font-semibold">
                 <Tr>
-                  <Th className="p-3" color={"red"}>
-                    SAC
-                  </Th>
-                  <Th className="p-3" textAlign="center">
-                    Supplier
-                  </Th>
-                  <Th className="p-3" textAlign="center">
-                    Medium
-                  </Th>
-                  <Th className="p-3" textAlign="center">
-                    Units
-                  </Th>
+                  <Th className="p-3" color={"red"}>SAC</Th>
+                  <Th className="p-3" textAlign="center">Supplier</Th>
+                  <Th className="p-3" textAlign="center">Medium</Th>
+                  <Th className="p-3" textAlign="center">Units</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {dcData[dc]?.map((entry, index) => (
                   <Tr key={index} className="border-t">
                     <Td className="p-3" textAlign="left">
-                      <Input
-                        type="text"
-                        value={
-                          selectedSim[0]?.renamedMappedData?.componentMapp[
-                            entry.name
-                          ] || entry.name
-                        }
-                        placeholder="Enter Name"
+                      <Select
+                        value={entry.name} // Show the default value or empty if none
+                        placeholder={selectedSim[0]?.renamedMappedData?.componentMapp[entry.name] || ""} // Show the default value or empty if none
                         onChange={(e) =>
-                          handleInputChange(
-                            dc,
-                            index,
-                            "name",
-                            e.target.value
-                          )
+                          handleInputChange(dc, index, "name", e.target.value)
                         }
                         className={`bg-white border text-left text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none w-full ${
                           !entry.name
                             ? "border-red-500 outline-red-500"
                             : "border-green-500 outline-green-500"
                         }`}
-                      />
+                      >
+                        {nameOptions.map((option, i) => (
+                          <option key={i} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </Select>
                     </Td>
                     <Td className="p-3">
                       <Select
                         name="supplier"
                         value={entry.supplier}
                         onChange={(e) =>
-                          handleInputChange(
-                            dc,
-                            index,
-                            "supplier",
-                            e.target.value
-                          )
+                          handleInputChange(dc, index, "supplier", e.target.value)
                         }
                         className={`bg-white border text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none w-full ${
                           entry.supplier.trim() === "Select"
@@ -144,7 +121,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                       >
                         {defaultSuppliers.map((option, i) => (
                           <option key={i} value={option}>
-                            {selectedSim[0]?.renamedMappedData?.suppliarMapp?.[option]}
+                            {selectedSim[0]?.renamedMappedData?.suppliarMapp?.[option] || option}
                           </option>
                         ))}
                       </Select>
@@ -154,12 +131,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                         name="medium"
                         value={entry.medium}
                         onChange={(e) =>
-                          handleInputChange(
-                            dc,
-                            index,
-                            "medium",
-                            e.target.value
-                          )
+                          handleInputChange(dc, index, "medium", e.target.value)
                         }
                         className={`bg-white border text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none w-full ${
                           entry.medium.trim() === "Select"
@@ -179,12 +151,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                         type="text"
                         value={entry.units}
                         onChange={(e) =>
-                          handleInputChange(
-                            dc,
-                            index,
-                            "units",
-                            e.target.value
-                          )
+                          handleInputChange(dc, index, "units", e.target.value)
                         }
                         className={`bg-white border text-center text-gray-900 text-sm rounded-lg focus:ring-none focus:border-none w-full ${
                           !entry.units
@@ -208,12 +175,13 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
               key={dc}
               onClick={() => handleDCClick(dc)}
               className={`h-10 px-4 text-lg rounded-lg flex justify-center items-center cursor-pointer ${
-                activeDC === dc
-                  ? dc === "DC2"
-                    ? "bg-red-600 text-white"
-                    : "bg-red-700 text-white"
+                dcData[dc] === "closed"
+                  ? "bg-gray-400 text-black cursor-not-allowed"
+                  : activeDC === dc
+                  ? "bg-red-600 text-white"
                   : "bg-gray-400 text-black"
               }`}
+              disabled={dcData[dc] === "closed"}
             >
               {dc}
             </Box>
@@ -222,7 +190,10 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
         <Box className="flex">
           <Box
             onClick={() => onAddEntry(activeDC)}
-            className="h-10 px-3 bg-gray-600 text-white hover:bg-green-800 text-lg rounded-lg cursor-pointer flex justify-center items-center"
+            className={`h-10 px-3 bg-gray-600 text-white hover:bg-green-800 text-lg rounded-lg cursor-pointer flex justify-center items-center ${
+              dcData[activeDC] === "closed" ? "cursor-not-allowed opacity-50" : ""
+            }`}
+            disabled={dcData[activeDC] === "closed"}
           >
             Add Row
           </Box>

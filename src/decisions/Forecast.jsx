@@ -230,7 +230,7 @@ const Forecast = () => {
                   ? "bg-red-500 hover:bg-black-700 text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
-              disabled={selectedQuarter !== currentQuarter || loading}
+              // disabled={selectedQuarter !== currentQuarter || loading}
             >
               {loading ? <Spinner size="sm" /> : "Submit Forecast"}
             </button>

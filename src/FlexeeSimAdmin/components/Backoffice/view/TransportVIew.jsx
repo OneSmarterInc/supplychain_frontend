@@ -25,8 +25,8 @@ const TransportView = ({ repo }) => {
   const renderTable = (data, title) => {
     const productMapping = {
       product0: "Product 0",
-      product1: "Product 1 (Hyperware)",
-      product2: "Product 2 (Metaware)",
+      product1: "Smart Home Assistance",
+      product2: "Smart Thermostat",
     };
 
     if (Object.keys(data).length === 0) {
@@ -66,7 +66,7 @@ const TransportView = ({ repo }) => {
                   </Td>
                   {Object.keys(carriers).map((carrier) => (
                     <Td key={carrier} className="py-0 px-0">
-                      {carriers[carrier] || "N/A"}
+                      {carriers[carrier] || "-"}
                     </Td>
                   ))}
                 </Tr>
@@ -81,22 +81,23 @@ const TransportView = ({ repo }) => {
   return (
     <Box className="overflow-x-auto p-4">
       {/* DC Buttons */}
-      
       <Box className="h-16 flex justify-end items-center px-4 mt-4">
         <Box className="flex space-x-4">
           <Button
             onClick={() => handleDCButtonClick("DC2")}
-            className={`h-10 px-4 bg-blue-600 text-white hover:bg-blue-800 text-lg rounded-lg ${
-              activeDC === "DC2" && "bg-green-700"
-            }`}
+            bg={activeDC === "DC2" ? "red.500" : "gray.500"}
+            color="white"
+            _hover={{ bg: activeDC === "DC2" ? "red.600" : "gray.600" }}
+            className="h-10 px-4 text-lg rounded-lg"
           >
             DC 2
           </Button>
           <Button
             onClick={() => handleDCButtonClick("DC3")}
-            className={`h-10 px-4 bg-blue-600 text-white hover:bg-blue-800 text-lg rounded-lg ${
-              activeDC === "DC3" && "bg-green-700"
-            }`}
+            bg={activeDC === "DC3" ? "red.500" : "gray.500"}
+            color="white"
+            _hover={{ bg: activeDC === "DC3" ? "red.600" : "gray.600" }}
+            className="h-10 px-4 text-lg rounded-lg"
           >
             DC 3
           </Button>
@@ -107,17 +108,13 @@ const TransportView = ({ repo }) => {
       {activeDC === "DC2" && flagDc2 ? (
         renderTable(dc2Data, "DC 2")
       ) : (
-        <Box className="p-4 bg-red-100 text-red-500 rounded-md mt-4">
-          No transportation data available for DC 2.
-        </Box>
+        <Box></Box>
       )}
 
       {activeDC === "DC3" && flagDc3 ? (
         renderTable(dc3Data, "DC 3")
       ) : (
-        <Box className="p-4 bg-red-100 text-red-500 rounded-md mt-4">
-          No transportation data available for DC 3.
-        </Box>
+        <Box>3</Box>
       )}
     </Box>
   );

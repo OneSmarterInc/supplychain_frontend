@@ -7,6 +7,7 @@ import FGInventoryModal from "../../../report/FinishedGoodsInventoryReport/FGInv
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import Toast styles
 import { Puff } from "react-loader-spinner";
+import CashFlowContainer from "../../../report/CashFlowReport/CashFlowContainer";
 
 const BackOfficeUser = () => {
   const [users, setUsers] = useState([]);
@@ -235,6 +236,13 @@ const BackOfficeUser = () => {
               >
                 Finished Goods Inventory
               </button>
+
+              <button
+                onClick={() => handleReportChange("cash")}
+                className="w-full lg:w-auto py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none"
+              >
+                Cash Flow 
+              </button>
             </div>
           // </div>
         )}
@@ -243,6 +251,7 @@ const BackOfficeUser = () => {
         {activeReport === "cpl" && reportData && <ReportModal reportData={reportData} />}
         {activeReport === "bls" && reportData && <BalanceSheetModel reportData={reportData} />}
         {activeReport === "inventory" && reportData && <FGInventoryModal reportData={reportData} />}
+        {activeReport === "cash" && reportData && <CashFlowContainer reportData={reportData} />}
       </div>
     </div>
   );

@@ -23,27 +23,60 @@ import InfoButton from "../Components/InfoButton";
 const Distribution_Decision = () => {
   const { api } = useContext(MyContext);
   const user = JSON.parse(localStorage.getItem("user"));
-  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData"));
+  const selectedSimData =
+    JSON.parse(localStorage.getItem("selectedSimData")) || [];
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
-  const firm_data = Object.keys(selectedSimData[0]?.firm_data)[0];
+  const firm_data = Object.keys(selectedSimData[0]?.firm_data || {})[0] || "";
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
-  const [loading, setLoading] = useState(false);
   const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false);
   const [DistributionData, setDistributionData] = useState({});
+  const [loading, setLoading] = useState(false);
+
   const [values, setValues] = useState({
-    distribution_center: {},
-    rfid: {},
-    emergency_carrier: {},
-    cross_docking: [],
-    fgi_surface_shipping: {},
-    sac_surface_shipping: {},
+    distribution_center: { region1: "", region2: "", region3: "" },
+    rfid: { region1: "", region2: "", region3: "" },
+    emergency_carrier: { region1: "", region2: "", region3: "" },
+    cross_docking: {
+      carrier_k: { region1: "", region2: "", region3: "" },
+      carrier_l: { region1: "", region2: "", region3: "" },
+      carrier_m: { region1: "", region2: "", region3: "" },
+      carrier_n: { region1: "", region2: "", region3: "" },
+    },
+    fgi_surface_shipping: { region1: "", region2: "", region3: "" },
+    sac_surface_shipping: { region1: "", region2: "", region3: "" },
   });
+
+  const handleInputChange = (category, region, value, carrier = null) => {
+    setValues((prevValues) => {
+      if (carrier) {
+        return {
+          ...prevValues,
+          [category]: {
+            ...prevValues[category],
+            [carrier]: {
+              ...prevValues[category][carrier],
+              [region]: value,
+            },
+          },
+        };
+      } else {
+        return {
+          ...prevValues,
+          [category]: {
+            ...prevValues[category],
+            [region]: value,
+          },
+        };
+      }
+    });
+  };
+
   const toast = useToast();
   const navigate = useNavigate();
   let firm_key_new = "";
 
-  if (selectedSimData[0]?.firm_data.length) {
-    let firm_obj = selectedSimData[0]?.firm_data.filter((item) =>
+  if (selectedSimData.length && selectedSimData[0]?.firm_data?.length) {
+    const firm_obj = selectedSimData[0].firm_data.filter((item) =>
       item.emails.includes(user.email)
     );
     if (firm_obj.length) {
@@ -51,27 +84,20 @@ const Distribution_Decision = () => {
     }
   }
 
-  const availableCarriers = [
-    selectedSimData[0]?.renamedMappedData?.distributerMapp["I"],
-    selectedSimData[0]?.renamedMappedData?.distributerMapp["J"],
-    selectedSimData[0]?.renamedMappedData?.distributerMapp["K"],
-    selectedSimData[0]?.renamedMappedData?.distributerMapp["L"],
-    selectedSimData[0]?.renamedMappedData?.distributerMapp["M"],
-    selectedSimData[0]?.renamedMappedData?.distributerMapp["N"],
-  ];
-
   useEffect(() => {
-    setLoading(true);
-    getDistribution().finally(() => setLoading(false));
+    if (selectedQuarter) {
+      setLoading(true);
+      getDistribution().finally(() => setLoading(false));
+    }
   }, [selectedQuarter]);
 
   useEffect(() => {
-    if (DistributionData) {
+    if (DistributionData && Object.keys(DistributionData).length) {
       setValues({
         distribution_center: DistributionData.distribution_center || {},
         rfid: DistributionData.rfid || {},
         emergency_carrier: DistributionData.emergency_carrier || {},
-        cross_docking: DistributionData.cross_docking || [],
+        cross_docking: DistributionData.cross_docking || {},
         fgi_surface_shipping: DistributionData.fgi_surface_shipping || {},
         sac_surface_shipping: DistributionData.sac_surface_shipping || {},
       });
@@ -90,7 +116,7 @@ const Distribution_Decision = () => {
           firm_key: firm_key_new,
         },
       });
-      setDistributionData(response.data);
+      setDistributionData(response.data || {});
       localStorage.setItem("DistributionData", JSON.stringify(response.data));
     } catch (error) {
       console.error("Error making GET request:", error);
@@ -116,7 +142,7 @@ const Distribution_Decision = () => {
       });
 
       const previousData = response.data;
-      setDistributionData(previousData); // Set previous quarter's data to current state
+      setDistributionData(previousData);
       toast({
         title: `Loaded data from Quarter ${previousQuarter}`,
         status: "success",
@@ -139,7 +165,13 @@ const Distribution_Decision = () => {
   };
 
   const validateInputs = () => {
-    const requiredFields = ["distribution_center", "rfid", "emergency_carrier", "fgi_surface_shipping", "sac_surface_shipping"];
+    const requiredFields = [
+      "distribution_center",
+      "rfid",
+      "emergency_carrier",
+      "fgi_surface_shipping",
+      "sac_surface_shipping",
+    ];
     for (const field of requiredFields) {
       if (!values[field] || Object.keys(values[field]).length === 0) {
         toast({
@@ -199,42 +231,6 @@ const Distribution_Decision = () => {
     }
   };
 
-  const handleChange = (channel, region, newValue) => {
-    setValues((prevValues) => ({
-      ...prevValues,
-      [channel]: {
-        ...prevValues[channel],
-        [region]: newValue,
-      },
-    }));
-  };
-
-  const handleCrossDockingChange = (index, region, newValue) => {
-    setValues((prevValues) => {
-      const newCrossDocking = [...prevValues.cross_docking];
-      newCrossDocking[index] = {
-        ...newCrossDocking[index],
-        [region]: newValue,
-      };
-      return {
-        ...prevValues,
-        cross_docking: newCrossDocking,
-      };
-    });
-  };
-
-  const addCrossDockingCarrier = (carrier) => {
-    setValues((prevValues) => ({
-      ...prevValues,
-      cross_docking: [
-        ...prevValues.cross_docking,
-        { carrier, region1: "", region2: "", region3: "" },
-      ],
-    }));
-  };
-
-  const regions = ["region1", "region2", "region3"];
-
   return (
     <div>
       <div style={{ fontFamily: "ABeeZee" }}>
@@ -249,8 +245,11 @@ const Distribution_Decision = () => {
                     <div
                       key={i + 1}
                       onClick={() => setSelectedQuarter(i + 1)}
-                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${selectedQuarter === i + 1 ? "bg-red-500 border-red-500 text-white" : ""
-                        }`}
+                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
+                        selectedQuarter === i + 1
+                          ? "bg-red-500 border-red-500 text-white"
+                          : ""
+                      }`}
                     >
                       {i + 1}
                     </div>
@@ -265,100 +264,219 @@ const Distribution_Decision = () => {
               className="font-bold py-2 px-4 text-red-400 cursor-pointer"
               disabled={isLoadingLastQuarter || currentQuarter <= 1}
             >
-              <span className="text-black">To load inputs from the previous quarter, </span>
+              <span className="text-black">
+                To load inputs from the previous quarter,{" "}
+              </span>
               {isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
             </div>
 
             {loading ? (
-              <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                mt={4}
+              >
                 <Spinner size="xl" />
               </Box>
             ) : (
               <Box className="ml-4 mr-4">
-                <Table variant="simple" bg="white" mt="4" className="rounded-md">
+                <Table
+                  variant="simple"
+                  bg="white"
+                  mt="4"
+                  className="rounded-md"
+                >
                   <Thead className="bg-gray-100 text-gray-700 font-semibold">
                     <Tr>
                       <Th style={{ color: "#D10000" }}> Distribution </Th>
-                      {regions.map((region, idx) => (
-                        <Th key={idx}>{selectedSimData[0]?.renamedMappedData?.RegionMapp?.[region]}</Th>
+                      {["region1", "region2", "region3"].map((region, idx) => (
+                        <Th key={idx}>
+                          {
+                            selectedSimData[0]?.renamedMappedData?.RegionMapp?.[
+                              region
+                            ]
+                          }
+                        </Th>
                       ))}
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {Object.keys(values).map((channel) =>
-                      channel !== "cross_docking" ? (
-                        <Tr key={channel} className="border-t">
-                          <Td className="p-3 font-medium text-gray-900">
-                            {channel.replace(/_/g, " ").toUpperCase()}
-                          </Td>
-                          {regions.map((region) => (
+                    {/* Distribution Center Row */}
+                    <Tr>
+                      <Th>
+                        Distribution Center{" "}
+                        {`{0=none | 1=outsourced | 2=owned}`}
+                      </Th>
+                      {["region1", "region2", "region3"].map((region) => (
+                        <Td key={region}>
+                          {region === "region1" ? (
+                            // Render a blank space for region1
+                            <span>&nbsp;</span>
+                          ) : (
+                            <Select
+                              value={values.distribution_center?.[region] || ""}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  "distribution_center",
+                                  region,
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <option value="0">None (0)</option>
+                              <option value="1">Outsourced (1)</option>
+                              <option value="2">Owned (2)</option>
+                            </Select>
+                          )}
+                        </Td>
+                      ))}
+                    </Tr>
+
+                    {/* RFID Application Row */}
+                    <Tr>
+                      <Th>RFID Application {`{0=outsourced | 1=insourced}`}</Th>
+                      {["region1", "region2", "region3"].map((region) => (
+                        <Td key={region}>
+                          <Select
+                            value={values.rfid?.[region] || ""}
+                            onChange={(e) =>
+                              handleInputChange("rfid", region, e.target.value)
+                            }
+                          >
+                            <option value="0">Outsourced (0)</option>
+                            <option value="1">Insourced (1)</option>
+                          </Select>
+                        </Td>
+                      ))}
+                    </Tr>
+
+                    {/* Emergency Carrier Row */}
+                    <Tr>
+                      <Th>Emergency Carrier {`{I|J|K|L|M|N}`}</Th>
+                      {["region1", "region2", "region3"].map((region) => (
+                        <Td key={region}>
+                          {region === "region1" ? (
+                            // Render a blank space for region1
+                            <span>&nbsp;</span>
+                          ) : (
+                            <Select
+                              value={values.emergency_carrier?.[region] || ""}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  "emergency_carrier",
+                                  region,
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <option value="I">Carrier I</option>
+                              <option value="J">Carrier J</option>
+                              <option value="K">Carrier K</option>
+                              <option value="L">Carrier L</option>
+                              <option value="M">Carrier M</option>
+                              <option value="N">Carrier N</option>
+                            </Select>
+                          )}
+                        </Td>
+                      ))}
+                    </Tr>
+                    {/* Cross-Docking Rows */}
+                    {["carrier_k", "carrier_l", "carrier_m", "carrier_n"].map(
+                      (carrier, idx) => (
+                        <Tr key={carrier}>
+                          <Th>
+                            Cross-Docking,{" "}
+                            {carrier.toUpperCase().replace("_", " ")}{" "}
+                           
+                          </Th>
+                          {["region1", "region2", "region3"].map((region) => (
                             <Td key={region}>
-                              <Select
-                                placeholder="Select"
-                                value={values[channel][region] || ""}
-                                onChange={(e) => handleChange(channel, region, e.target.value)}
-                                className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-                                fontSize={15}
-                                width="100px"
-                              >
-                                {[0, 1, 2].map((option) => (
-                                  <option key={option} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                              </Select>
+                              {region === "region1" ? (
+                              
+                                <span>&nbsp;</span>
+                              ) : (
+                                <Select
+                                  value={
+                                    values.cross_docking?.[carrier]?.[region] ||
+                                    ""
+                                  }
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      "cross_docking",
+                                      region,
+                                      e.target.value,
+                                      carrier
+                                    )
+                                  }
+                                >
+                                  <option value="0">No (0)</option>
+                                  <option value="1">Yes (1)</option>
+                                </Select>
+                              )}
                             </Td>
                           ))}
                         </Tr>
-                      ) : (
-                        <React.Fragment key={channel}>
-                          <Tr>
-                            <Td colSpan={regions.length + 1}>
-                              <strong>CROSS DOCKING</strong>
-                            </Td>
-                          </Tr>
-                          {values.cross_docking.map((row, rowIndex) => (
-                            <Tr key={rowIndex}>
-                              <Td>Carrier {row.carrier}</Td>
-                              {regions.map((region) => (
-                                <Td key={region}>
-                                  <Select
-                                    placeholder="Select"
-                                    value={row[region] || ""}
-                                    onChange={(e) => handleCrossDockingChange(rowIndex, region, e.target.value)}
-                                    className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-                                    fontSize={15}
-                                    width="100px"
-                                  >
-                                    {[0, 1].map((option) => (
-                                      <option key={option} value={option}>
-                                        {option}
-                                      </option>
-                                    ))}
-                                  </Select>
-                                </Td>
-                              ))}
-                            </Tr>
-                          ))}
-                          <Tr>
-                            <Td colSpan={regions.length + 1}>
-                              <Select
-                                placeholder="Add Carrier"
-                                onChange={(e) => addCrossDockingCarrier(e.target.value)}
-                                width="150px"
-                                className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-                              >
-                                {availableCarriers.map((carrier) => (
-                                  <option key={carrier} value={carrier}>
-                                    Carrier {carrier}
-                                  </option>
-                                ))}
-                              </Select>
-                            </Td>
-                          </Tr>
-                        </React.Fragment>
                       )
                     )}
+                    {/* FGI Surface Shipping Row */}
+                    <Tr>
+                      <Th>
+                        FGI Surface Shipping{" "}
+                        {`{1=Economy | 2=Standard | 3=Expedited}`}
+                      </Th>
+                      {["region1", "region2", "region3"].map((region) => (
+                        <Td key={region}>
+                          {region === "region1" ? (
+                            // Render a blank space for region1
+                            <span>&nbsp;</span>
+                          ) : (
+                            <Select
+                              value={
+                                values.fgi_surface_shipping?.[region] || ""
+                              }
+                              onChange={(e) =>
+                                handleInputChange(
+                                  "fgi_surface_shipping",
+                                  region,
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <option value="1">Economy (1)</option>
+                              <option value="2">Standard (2)</option>
+                              <option value="3">Expedited (3)</option>
+                            </Select>
+                          )}
+                        </Td>
+                      ))}
+                    </Tr>
+
+                    {/* SAC Surface Shipping Row */}
+                    <Tr>
+                      <Th>
+                        SAC Surface Shipping{" "}
+                        {`{1=Economy | 2=Standard | 3=Expedited}`}
+                      </Th>
+                      {["region1", "region2", "region3"].map((region) => (
+                        <Td key={region}>
+                          <Select
+                            value={values.sac_surface_shipping?.[region] || ""}
+                            onChange={(e) =>
+                              handleInputChange(
+                                "sac_surface_shipping",
+                                region,
+                                e.target.value
+                              )
+                            }
+                          >
+                            <option value="1">Economy (1)</option>
+                            <option value="2">Standard (2)</option>
+                            <option value="3">Expedited (3)</option>
+                          </Select>
+                        </Td>
+                      ))}
+                    </Tr>
                   </Tbody>
                 </Table>
               </Box>

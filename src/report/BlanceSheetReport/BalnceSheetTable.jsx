@@ -40,8 +40,21 @@ const BalanceSheetTable = () => {
           </tr>
           {/* Repeat similarly for DC2 and DC3 */}
           <tr className="bg-gray-200">
+            <td colSpan={4} className="font-bold">Raw Inventory</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Plastics</td>
+            <td colSpan={3} className="border px-4 py-2">3453 units @ 3.00/unit: {3453*3}</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Casing</td>
+            <td colSpan={3} className="border px-4 py-2">3453 units @ 4.00/unit: {3453*3}</td>
+          </tr>
+
+          <tr className="bg-gray-200">
             <td colSpan={4} className="font-bold">Procurement Inventory</td>
           </tr>
+         
           <tr>
             <td className="border px-4 py-2">Audio Control (Plant & DC1)</td>
             <td colSpan={3} className="border px-4 py-2">{reportData.procurement_inventory.plant_dc1_gamma?.units || 0} units @ {reportData.procurement_inventory.plant_dc1_gamma?.unit_price || 0}/unit: {reportData.procurement_inventory.plant_dc1_gamma?.total || 0}</td>
@@ -90,6 +103,10 @@ const BalanceSheetTable = () => {
           <tr>
             <td className="border px-4 py-2">Retained Earnings, Current Month</td>
             <td className="border px-4 py-2">{reportData.liabilities_equities.retained_earnings_current_month}</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Plant and SMT</td>
+            <td className="border px-4 py-2">45,000,000</td>
           </tr>
           <tr>
             <td className="border px-4 py-2">Total</td>
