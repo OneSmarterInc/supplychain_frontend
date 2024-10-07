@@ -327,7 +327,9 @@ const MainRoutes = () => {
           <div className="createsim h-screen">
             <div className="navbar pb-4">
               <PrivateRoute>
+                 <ProtectedRoute>
                 <AdminNavBar />
+                 </ProtectedRoute>
               </PrivateRoute>
             </div>
             <Steps
