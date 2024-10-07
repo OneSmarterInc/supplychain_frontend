@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
+const SuperRoute = ({ children }) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   if (!user || !user.is_super_admin) {
@@ -13,4 +13,4 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-export default ProtectedRoute;
+export default SuperRoute;
