@@ -5,6 +5,7 @@ import Create_sim from "./Create_sim";
 import QuarterDetails from "./QuarterDetails";
 import { Box, Text, Flex, useToast } from "@chakra-ui/react";
 import GDP from "./GDP";
+import AdminManagement from "./ListFaculty";
 
 
 export default function Steps({ setNoOfQuarters }) {
@@ -106,6 +107,23 @@ export default function Steps({ setNoOfQuarters }) {
               </Typography>
             </div>
           </Step>
+
+          <Step
+            activeClassName=" !bg-blue-300 "
+            completedClassName="!bg-green-400 text-white"
+            onClick={() => setSteps(4)}
+            className="font-semibold cursor-pointer"
+          >
+            <p>4</p>
+            <div className="absolute -bottom-[2rem] mx-1 w-max-24 text-center">
+              <Typography
+                color={activeStep === 3 ? "blue-gray" : "gray"}
+                className="font-normal w-24"
+              >
+                Step 4
+              </Typography>
+            </div>
+          </Step>
         </Stepper>
         <div className="mt-20 flex justify-between">
           {/* <Button onClick={handlePrev} disabled={isFirstStep}>
@@ -117,6 +135,7 @@ export default function Steps({ setNoOfQuarters }) {
         </div>
       </div>
       <div className="component">
+        
         {steps === 1 && (
           <Create_sim
             setNoOfQuarters={setNoOfQuarters}
@@ -137,6 +156,11 @@ export default function Steps({ setNoOfQuarters }) {
                 <GDP />
               </Box>
             </Flex>
+          </>
+        )}
+        {steps == 4 && (
+          <>
+          <AdminManagement />
           </>
         )}
       </div>

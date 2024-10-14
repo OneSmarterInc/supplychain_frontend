@@ -33,13 +33,23 @@ const Navbar = () => {
               Dashboard
             </span>
           ) : (
+            <>
             <Link
-              to="/signin/"
+              to="/student/signin/"
+              className="text-sm md:text-base text-Red-500 hover:text-red-500 hover: underline-offset-4 decoration-red-600 cursor-pointer font-bold pr-4"
+            >
+              Student Signin 
+              
+            </Link>
+            |
+            <Link
+              to="/faculty/signin/"
               className="text-sm md:text-base text-Red-500 hover:text-red-500 hover: underline-offset-4 decoration-red-600 cursor-pointer font-bold"
             >
-              Sign In
-              <i className="fa fa-user pl-3"></i>
+               Faculty Signin
+             
             </Link>
+            </>
           )}
         </div>
       </div>

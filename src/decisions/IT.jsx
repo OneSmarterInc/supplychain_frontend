@@ -6,17 +6,20 @@ import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
+import { submitDecisionStatus } from "./DecisionSubmit";
+import StatusBar from "./StatusBar";
 
 const IT = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData"));
-  const [reportValues, setReportValues] = useState();
   const [suppliers, setSuppliers] = useState({});
   const [ItData, setItData] = useState({});
   const [loading, setLoading] = useState(false);
   const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false); // New state for previous quarter loading
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const simulation_id = selectedSimData[0]?.simulation_id;
+
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
   const { api } = useContext(MyContext);
   const toast = useToast();
@@ -132,6 +135,14 @@ const IT = () => {
         sync_f: suppliers.F,
         sync_g: suppliers.G,
       });
+      
+      await submitDecisionStatus(
+        api,
+        "it",
+        selectedSimData,
+        firm_key_new,
+        currentQuarter,
+      );
       getIt();
       addUserLogger();
       toast({
@@ -179,6 +190,8 @@ const IT = () => {
 
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
+     <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"IT"}/>
+
       <div className="sm:grid grid-cols-1 gap-3 m-1">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
           <InfoImg decision={"IT"} />

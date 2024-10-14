@@ -14,9 +14,10 @@ const UserSideLive = () => {
   const [simData, setSimData] = useState([]);
   const [loading, setLoading] = useState(true); // Loader state
   const [code, setCode] = useState("");
-  
+  const [flag, setFlag] = useState(false)
+
   const toast = useToast(); // Initialize Chakra UI's toast
-  
+
   const user = JSON.parse(localStorage.getItem("user"));
 
   const handleSubmit = async (e) => {
@@ -29,7 +30,10 @@ const UserSideLive = () => {
         user_id: user.userid,
         passcode: code,
       });
-
+      setFlag(true)
+      console.log(response.data.data);
+      user.sim_data = response.data.data;
+      localStorage.setItem("user", JSON.stringify(user));
       if (response.status === 200) {
         toast({
           title: "Already subscribed.",
@@ -73,28 +77,22 @@ const UserSideLive = () => {
 
   useEffect(() => {
     getAllData();
-  }, []);
+  }, [flag]);
 
   const getAllData = async () => {
     try {
-      const response = await axios.get(`${api}/user/${userId}/subscriptions/`);
+      const response = await axios.get(
+        `${api}/getsim/${user.sim_data}`
+      );
       if (response.status === 200) {
-        const simulations = response.data.map(sub => ({
-          ...sub.simulation,
-          subscribed_at: sub.subscribed_at,
-          is_active: new Date(sub.simulation.end_date) >= new Date() // Active simulations
-        }));
-        setSimData(simulations);
-        localStorage.setItem("simData", JSON.stringify(simulations));
+        setSimData(response.data);
+        localStorage.setItem("simData", JSON.stringify(response.data));
+        localStorage.setItem("selectedSimulation", JSON.stringify(response.data.simulation_id));
+        localStorage.setItem("selectedSimData", JSON.stringify(response.data));
+        localStorage.setItem("selectedSim", JSON.stringify(response.data));
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to load simulations.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      
     } finally {
       setLoading(false); // Stop loading once done
     }
@@ -115,7 +113,6 @@ const UserSideLive = () => {
       <section className="grid grid-cols-1 md:grid-cols-2 items-center relative gap-6">
         <div className="text-start">
           <h2 className="text-2xl font-bold mb-3">FLEXEE SIMULATION</h2>
-          <h3 className="text-xl mb-4 font-semibold">{simData.length} ACTIVE COURSES</h3>
         </div>
         <div className="p-2 rounded">
           <h2 className="text-2xl font-bold mb-4 text-start">CODE ENTRY</h2>
@@ -124,14 +121,16 @@ const UserSideLive = () => {
               type="text"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="flex-1 border border-gray-300 rounded p-2 py-3"
+              className="flex-1 border border-gray-300 rounded p-2 py-3 z-100"
               placeholder="Enter code"
+              disabled={simData.length > 0} // Disable input if simData has values
             />
             <button
               type="submit"
               className="bg-red-500 w-28 text-white p-2 rounded"
+              disabled={simData.length > 0} // Disable button if simData has values
             >
-              {simData.length === 0 ? "Connect Now" : "SUBMIT"}
+              {simData.length === 0 ? "Join" : ""}
             </button>
           </form>
         </div>
@@ -139,8 +138,7 @@ const UserSideLive = () => {
 
       {loading ? (
         <div className="flex justify-center items-center h-64">
-                      <Puff color="red" height={100} width={100} /> {/* Loader */}
-
+          <Puff color="red" height={100} width={100} /> {/* Loader */}
         </div>
       ) : simData.length > 0 ? (
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8 my-2">
@@ -167,7 +165,11 @@ const UserSideLive = () => {
         </section>
       ) : (
         <div className="p-4 pl-10">
-          <p className="text-lg">You have not enrolled for any simulation yet. If you have a passcode, click on Join Now:</p>
+          <p className="text-lg">
+          
+            If you have a
+            passcode,Enter it in the input box and click on Join.
+          </p>
         </div>
       )}
     </div>

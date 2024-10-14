@@ -58,6 +58,11 @@ import Members from "../Components/Members";
 import ForgotPassword from "../Components/ForgotPassword";
 import BackOfficeDecision from "../FlexeeSimAdmin/components/Backoffice/BackOfficeDecision";
 import Manual from "../Components/Manual";
+import Financial from "../analytics/Financial";
+import Operational from "../analytics/Operational";
+import Customer from "../analytics/Customer";
+import Footer from "../FlexeeSimAdmin/components/Footer";
+import SimRoute from "./SimRoute";
 
 const MainRoutes = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
@@ -104,11 +109,54 @@ const MainRoutes = () => {
         exact
         path="/dashboard"
         element={
-          <div className="procurement h-screen">
+          <div className="procurement h-full">
             <PrivateRoute>
               <BackOfficeNavbar />
               <Sidebar />
               <Analytics />
+              <BackOfficeFooter />
+            </PrivateRoute>
+          </div>
+        }
+      />
+
+      <Route
+        exact
+        path="/financial"
+        element={
+          <div className="procurement h-full">
+            <PrivateRoute>
+              <BackOfficeNavbar />
+              <Sidebar />
+              <Financial />
+            </PrivateRoute>
+          </div>
+        }
+      />
+
+      <Route
+        exact
+        path="/operational"
+        element={
+          <div className="procurement h-screen">
+            <PrivateRoute>
+              <BackOfficeNavbar />
+              <Sidebar />
+              <Operational />
+            </PrivateRoute>
+          </div>
+        }
+      />
+
+      <Route
+        exact
+        path="/customer"
+        element={
+          <div className="procurement h-screen">
+            <PrivateRoute>
+              <BackOfficeNavbar />
+              <Sidebar />
+              <Customer />
             </PrivateRoute>
           </div>
         }
@@ -249,6 +297,15 @@ const MainRoutes = () => {
 
       <Route
         exact
+        path="/student/signin"
+        element={
+          <div className="signin h-screen">
+            <Signin />
+          </div>
+        }
+      />
+      <Route
+        exact
         path="/signin"
         element={
           <div className="signin h-screen">
@@ -256,7 +313,15 @@ const MainRoutes = () => {
           </div>
         }
       />
-
+      <Route
+        exact
+        path="/faculty/signin"
+        element={
+          <div className="signin h-screen">
+            <Signin />
+          </div>
+        }
+      />
       <Route
         exact
         path="/signup"
@@ -272,12 +337,13 @@ const MainRoutes = () => {
         path="/usersidelive"
         element={
           <PrivateRoute>
-            <div className="" style={{minHeight:'100vh'}}>
-              <FlexeeDashboardNavbar />
-
-              <UserSideLive />
-            </div>
-            <BackOfficeFooter />
+            <SimRoute>
+              <div className="" style={{ minHeight: "100vh" }}>
+                <FlexeeDashboardNavbar />
+                <UserSideLive />
+              </div>
+              <BackOfficeFooter />
+            </SimRoute>
           </PrivateRoute>
         }
       />
@@ -327,7 +393,9 @@ const MainRoutes = () => {
           <div className="createsim h-screen">
             <div className="navbar pb-4">
               <PrivateRoute>
-                <AdminNavBar />
+                <ProtectedRoute>
+                 <BackOfficeNavbar />
+                </ProtectedRoute>
               </PrivateRoute>
             </div>
             <Steps
@@ -424,12 +492,12 @@ const MainRoutes = () => {
         path="/flexeesim/dashboard"
         element={
           <ProtectedRoute>
-            <div className="bg-white" style={{minHeight:'100vh'}}>
+            <div className="bg-white" style={{ minHeight: "140vh" }}>
               <FlexeeDashboardNavbar />
               <FlexeeDashboard />
               {/* <FlexeeExploreSim /> */}
             </div>
-              <BackOfficeFooter />
+            <BackOfficeFooter />
           </ProtectedRoute>
         }
       />
@@ -453,9 +521,9 @@ const MainRoutes = () => {
           <ProtectedRoute>
             <div className="flex justify-start items-start">
               <div className={`w-full`}>
-                <div className="pb-0" style={{minHeight:'96vh'}}>
+                <div className="pb-0" style={{ minHeight: "96vh" }}>
                   <FlexeeBackOfficeNavbar />
-                  <FlexeeBackOfficeSidebar />   
+                  <FlexeeBackOfficeSidebar />
                   <FlexeeBackOfficeUser />
                 </div>
               </div>
@@ -497,7 +565,10 @@ const MainRoutes = () => {
         path="/flexeesim/backoffice/reports"
         element={
           <ProtectedRoute>
-            <div className="flex justify-start items-start" style={{minHeight:'96vh'}}>
+            <div
+              className="flex justify-start items-start"
+              style={{ minHeight: "96vh" }}
+            >
               {isSideBarOpen && <FlexeeBackOfficeSidebar />}
               <div className={`w-full`}>
                 <div className="">

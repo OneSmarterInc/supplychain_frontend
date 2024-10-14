@@ -3,14 +3,15 @@ import videoimg from "../Assets/introvideo.png";
 import deploytosim from "../Assets/deploytosimimg.png";
 import graphic from "../../assets/graphic.png";
 import MyContext from "../../Components/ContextApi/MyContext";
-import { useToast } from "@chakra-ui/react";
+import { useToast, Spinner } from "@chakra-ui/react";
 
 const CourseComponent = () => {
   const SelectedCourse = JSON.parse(localStorage.getItem("SelectedCourse"));
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const [trainers, setTrainers] = useState([]);
-  const {api} = useContext(MyContext)
-  const toast = useToast()
+  const { api } = useContext(MyContext);
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   useEffect(() => {
     const fetchTrainers = async () => {
@@ -33,27 +34,53 @@ const CourseComponent = () => {
     }
   }, [SelectedCourse?.passcode]);
 
-  // Calculate remaining days
   const calculateRemainingDays = (endDate) => {
     const currentDate = new Date();
     const end = new Date(endDate);
     const timeDiff = end - currentDate;
     const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-    return daysRemaining >= 0 ? daysRemaining : 0; // Ensure it doesn't go negative
+    return daysRemaining >= 0 ? daysRemaining : 0;
   };
 
   const remainingDays = SelectedCourse?.endDate
     ? calculateRemainingDays(SelectedCourse.endDate)
     : 0;
 
-  const handleimg = () => {
-    toast({
-      title: `Simulation Deployed Successfully`,
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-      position: "top",
-    });
+  const handleimg = async () => {
+    setIsLoading(true); // Start loading
+    try {
+      const response = await fetch(`${api}/deploy/${SelectedCourse?.simulation_id}`, {
+        method: "GET",
+      });
+      if (response.ok) {
+        toast({
+          title: `Simulation Deployed Successfully`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+      } else {
+        toast({
+          title: `Failed to Deploy Simulation`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+      }
+    } catch (error) {
+      console.error("Error deploying simulation:", error);
+      toast({
+        title: `Error occurred during deployment`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
   };
 
   const handleCopyToClipboard = () => {
@@ -68,6 +95,11 @@ const CourseComponent = () => {
 
   return (
     <div className="bg-white pt-8 w-full max-w-screen-full mx-auto px-10">
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <Spinner size="xl" color="red.500" />
+        </div>
+      )}
       <header className="flex flex-col md:flex-row justify-between pb-6">
         <div>
           <div className="flex items-center space-x-4 mb-4 px-5">
@@ -117,7 +149,7 @@ const CourseComponent = () => {
             <p className="text-xl md:text-2xl px-2">PAYMENT / PRICING</p>
             <p className="text-3xl md:text-3xl font-semibold px-2">USD 00.00</p>
           </div>
-          <div >
+          <div>
             <p className="text-xl md:text-2xl px-2">DUE DATE</p>
             <p className="text-2xl md:text-3xl font-semibold px-2">
               {new Date(SelectedCourse?.endDate).toLocaleString('en-US', {
@@ -146,8 +178,9 @@ const CourseComponent = () => {
           <img
             src={deploytosim}
             alt="Deploy to Simulation"
-            className="w-75 max-w-xs cursor-pointer mb-8"
-            onClick={handleimg}
+            className={`w-75 max-w-xs cursor-pointer mb-8 ${isLoading ? "opacity-50" : ""}`}
+            onClick={!isLoading ? handleimg : null} // Disable click when loading
+            style={{ pointerEvents: isLoading ? "none" : "auto" }} // Disable pointer events when loading
           />
         </div>
       </div>

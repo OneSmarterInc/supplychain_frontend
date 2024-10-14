@@ -3,6 +3,7 @@ import Forecasting_sales from "../Components/Forecasting_sales";
 import Forecasting_sales2 from "../Components/Forecasting_sales2";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
+
 import {
   Box,
   Text,
@@ -12,6 +13,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import InfoImg from "../Components/InfoImg";
 import InfoButton from "../Components/InfoButton";
+import { submitDecisionStatus } from "./DecisionSubmit";
+import StatusBar from "./StatusBar";
 
 const Forecast = () => {
   const { api } = useContext(MyContext);
@@ -26,6 +29,7 @@ const Forecast = () => {
 
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const simulation_id = selectedSimData[0]?.simulation_id;
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -144,6 +148,14 @@ const Forecast = () => {
         metaware_channel_one: ForecastMetaware.channel1,
         metaware_channel_two: ForecastMetaware.channel2,
       });
+
+      await submitDecisionStatus(
+        api,
+        "forecast",
+        selectedSimData,
+        firm_key_new,
+        currentQuarter,
+      );
       console.log("POST request successful", response.data);
       toast({
         title: "Forecast Submitted Successfully",
@@ -170,6 +182,7 @@ const Forecast = () => {
 
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
+      <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={'Forecast'}/>
       <div className="sm:grid grid-cols-1 gap-3 m-1 ">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
           <InfoImg decision={"Forecast"} />

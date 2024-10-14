@@ -7,6 +7,9 @@ import MyContext from "../Components/ContextApi/MyContext";
 import { Text, useToast, Spinner, Box } from "@chakra-ui/react"; 
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
+import StatusBar from "./StatusBar";
+import { submitDecisionStatus } from "./DecisionSubmit";
+
 
 const Procurement_Decisions = () => {
   const { api } = useContext(MyContext);
@@ -18,12 +21,14 @@ const Procurement_Decisions = () => {
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || [];
   const sel = JSON.parse(localStorage.getItem("selectedSim")) || [];
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const simulation_id = selectedSimData[0]?.simulation_id;
+
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const selectedSim = selectedSimData;
   const firm_data = selectedSim[0]?.firm_data ? Object.keys(selectedSim[0].firm_data)[0] : null;
-
+  
   let firm_key_new = "";
   if (Array.isArray(selectedSim[0]?.firm_data)) {
     let firm_obj = selectedSim[0]?.firm_data.filter((item) => {
@@ -151,7 +156,14 @@ const Procurement_Decisions = () => {
         beta_quantity: Number(beta_quantity),
         sac_units: updatedDCData,
       });
-
+      
+      await submitDecisionStatus(
+        api,
+        "procurement",
+        selectedSimData,
+        firm_key_new,
+        currentQuarter,
+      );
       console.log("POST request successful", response.data);
       getProcurement();
       addUserLogger();
@@ -193,7 +205,8 @@ const Procurement_Decisions = () => {
   document.body.style.backgroundColor = "#e0e2e4";
 
   return (
-    <div style={{ fontFamily: "ABeeZee", height: '100vh' }}>
+    <div style={{ fontFamily: "ABeeZee" }} className="bg-gray-200 h-full">
+      <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Procurement"}/>
       <div className="sm:grid grid-cols-1 gap-3 m-1 ">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
           <InfoImg decision={"Procurement"} />

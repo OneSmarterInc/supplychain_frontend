@@ -3,13 +3,13 @@ import React from "react";
 
 const ITView = ({ data, repo }) => {
   const options = [
-    data.renamedMappedData?.suppliarMapp?.A,
-    data.renamedMappedData?.suppliarMapp?.B,
-    data.renamedMappedData?.suppliarMapp?.C,
-    data.renamedMappedData?.suppliarMapp?.D,
-    data.renamedMappedData?.suppliarMapp?.E,
-    data.renamedMappedData?.suppliarMapp?.F,
-    data.renamedMappedData?.suppliarMapp?.G,
+    data.renamedMappedData?.suppliarMapp?.supplierA,
+    data.renamedMappedData?.suppliarMapp?.supplierB,
+    data.renamedMappedData?.suppliarMapp?.supplierC,
+    data.renamedMappedData?.suppliarMapp?.supplierD,
+    data.renamedMappedData?.suppliarMapp?.supplierE,
+    data.renamedMappedData?.suppliarMapp?.supplierF,
+    data.renamedMappedData?.suppliarMapp?.supplierG,
   ];
 
   const suppliers = {

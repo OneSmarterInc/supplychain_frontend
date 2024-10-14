@@ -85,13 +85,13 @@ const GDP = () => {
     region3: "region3",
   });
   const [ChannelMapp, setChannelMapp] = useState({
-    channel1: "channel1",
-    channel2: "channel2",
+    channel1: "Retail",
+    channel2: "Direct",
   });
 
   const [renameDataVariable, setRenameDataVariable] = useState({
     hyperware: "Smart Home Assistance",
-    metaware: "Smart Thermo Assistance",
+    metaware: "Smart Thermostat",
   });
 
   const renamedMappedData = {
@@ -659,7 +659,13 @@ const GDP = () => {
           isClosable: true,
           position: "top",
         });
-        // navigate("/adminsidelive");
+        
+        localStorage.setItem("passcode", JSON.stringify(response.data.passcode));
+        
+
+        navigate("/flexee/admin-center/super/createsim?step=4");
+
+
       } catch (error) {
         console.error("Error submitting form:", error);
       }

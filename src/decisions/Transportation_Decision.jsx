@@ -17,6 +17,8 @@ import axios from "axios";
 import InfoImg from "../Components/InfoImg";
 import InfoButton from "../Components/InfoButton";
 import MyContext from "../Components/ContextApi/MyContext";
+import { submitDecisionStatus } from "./DecisionSubmit";
+import StatusBar from "./StatusBar";
 
 const defaultDc2Data = {
   product0: {
@@ -59,6 +61,8 @@ const Transportation_Decision = () => {
 
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const simulation_id = selectedSimData[0]?.simulation_id;
+
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
 
   useEffect(() => {
@@ -134,6 +138,14 @@ const Transportation_Decision = () => {
         dc_two: Dc2Data,
         dc_three: Dc3Data,
       });
+      
+      await submitDecisionStatus(
+        api,
+        "transport",
+        selectedSimData,
+        firm_key_new,
+        currentQuarter,
+      );
       getTransportation();
       addUserLogger();
       toast({
@@ -229,6 +241,9 @@ const Transportation_Decision = () => {
 
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
+      
+     <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Transport"}/>
+      
       <div className="sm:grid grid-cols-1 gap-3 m-1">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
           <InfoImg decision={"Transport"} />

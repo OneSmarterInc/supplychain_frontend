@@ -29,7 +29,10 @@ const PlayComponent = ({
       if (firm_obj) {
         setFirm(firm_obj.firmName);
         firm_key_map = firm_obj.firmName;
-        setIsUserAssigned(true);
+        if(selectedSimData[0].is_deployed){
+
+          setIsUserAssigned(true);
+        }
       } else {
         setIsUserAssigned(false);
       }
@@ -68,8 +71,7 @@ const PlayComponent = ({
           <div className="info text-center">
             <h2 className="text-3xl p-2">
 
-              <span className="text-3xl p-2 text-red-500">{batch}</span> |{" "}
-              <span className="text-3xl p-2">Quarter {currentQuarter}</span>
+              <span className="text-3xl p-2 text-red-500">{batch}</span> 
             </h2>
             <p className="text-base p-2">
               Start Date :{" "}
@@ -101,7 +103,7 @@ const PlayComponent = ({
           </span>
         </div>
           </div>
-          {!isUserAssigned && (
+          {!isUserAssigned &&  (
             <p className="text-red-600 mt-2 p-4">
               You will be assigned to a team by faculty soon. Once assigned, you
               will receive an email.

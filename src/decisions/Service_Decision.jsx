@@ -17,6 +17,8 @@ import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton"; // Added InfoButton for consistency
+import StatusBar from "./StatusBar";
+import { submitDecisionStatus } from "./DecisionSubmit";
 
 const Service_Decision = () => {
   const { api } = useContext(MyContext);
@@ -26,6 +28,8 @@ const Service_Decision = () => {
 
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const simulation_id = selectedSimData[0]?.simulation_id;
+
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter); // Set the default to the current quarter
 
   const toast = useToast();
@@ -156,6 +160,14 @@ const Service_Decision = () => {
         service_region_two: serviceValue.region2,
         service_region_three: serviceValue.region3,
       });
+
+      await submitDecisionStatus(
+        api,
+        "service",
+        selectedSimData,
+        firm_key_new,
+        currentQuarter,
+      );
       console.log("POST request successful", response.data);
       addUserLogger();
       getService();
@@ -198,6 +210,9 @@ const Service_Decision = () => {
   return (
     <div>
       <div style={{ fontFamily: "ABeeZee" }}>
+
+     <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Service"}/>
+    
         <div className="sm:grid grid-cols-1 gap-3 m-1">
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
             <InfoImg decision={"Service"} />

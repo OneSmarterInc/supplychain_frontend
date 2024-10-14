@@ -99,7 +99,7 @@ const Dashboard = () => {
           <h3 className="text-xl mb-4 font-semibold">{courses.length} ACTIVE COURSES</h3>
         </div>
         <div className="p-2 rounded">
-          <h2 className="text-2xl font-bold mb-4 text-start">CODE ENTRY</h2>
+          {/* <h2 className="text-2xl font-bold mb-4 text-start">CODE ENTRY</h2>
           <form onSubmit={handleSubmit} className="flex space-x-4">
             <input
               type="text"
@@ -114,7 +114,7 @@ const Dashboard = () => {
             >
               {courses.length === 0 ? "Connect Now" : "SUBMIT"}
             </button>
-          </form>
+          </form> */}
         </div>
       </section>
 
@@ -125,7 +125,7 @@ const Dashboard = () => {
           </div>
         ) : courses.length === 0 ? (
           <div className="text-left text-gray-700 font-semibold">
-            No courses have been created yet. Please subscribe to a simulation to get started.
+            No courses have been created yet.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

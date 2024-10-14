@@ -47,7 +47,7 @@ const GroupsTeamsComponent = () => {
             </div>
           </header>
           <div className="flex justify-between items-center">
-            <img src={graph} alt="Group Graph" className="h-[110px] w-[412px]" />
+            {/* <img src={graph} alt="Group Graph" className="h-[110px] w-[412px]" /> */}
           </div>
 
           <div className=" p-4">

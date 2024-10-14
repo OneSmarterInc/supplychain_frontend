@@ -17,6 +17,8 @@ import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
+import StatusBar from "./StatusBar";
+import { submitDecisionStatus } from "./DecisionSubmit";
 
 const Manufacturing_Decisions = () => {
   const { api } = useContext(MyContext);
@@ -44,6 +46,8 @@ const Manufacturing_Decisions = () => {
 
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const simulation_id = selectedSimData[0]?.simulation_id;
+
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter); // Dynamic quarter selection
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -221,6 +225,14 @@ const Manufacturing_Decisions = () => {
         volume_flexibility_hyperware: Number(values.VolumeFlexibility.hyperware),
         volume_flexibility_metaware: Number(values.VolumeFlexibility.metaware),
       });
+
+      await submitDecisionStatus(
+        api,
+        "manufacture",
+        selectedSimData,
+        firm_key_new,
+        currentQuarter,
+      );
       getManufacturing();
       addUserLogger();
       toast({
@@ -271,7 +283,8 @@ const Manufacturing_Decisions = () => {
 
   return (
     <div>
-      <div style={{ fontFamily: "ABeeZee" }} className=" ">
+     <div style={{ fontFamily: "ABeeZee" }} className="bg-gray-200 h-screen">
+     <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Manufacture"}/>
         <div className="sm:grid grid-cols-1 gap-3 m-1 ">
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
             <InfoImg decision={"Manufacture"} />

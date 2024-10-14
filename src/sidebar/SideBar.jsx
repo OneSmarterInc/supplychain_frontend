@@ -35,19 +35,19 @@ const Sidebar = () => {
   const parentOptions = [
     { name: "Home", redirect: "/usersidelive" },
     { name: "Dashboard", redirect: "/dashboard" },
-    {
-      name: "Decisions",
-      children: [
-        { name: "Forecast", redirect: "/forecast" },
-        { name: "Procurement", redirect: "/procurement" },
-        { name: "Manufacture", redirect: "/manufacture" },
-        { name: "Distribution", redirect: "/distribution" },
-        { name: "Transport", redirect: "/transport" },
-        { name: "Service", redirect: "/service" },
-        { name: "Demand", redirect: "/demand" },
-        { name: "IT", redirect: "/it" },
-      ],
-    },
+    // {
+    //   name: "Decisions",
+    //   children: [
+    //     { name: "Forecast", redirect: "/forecast" },
+    //     { name: "Procurement", redirect: "/procurement" },
+    //     { name: "Manufacture", redirect: "/manufacture" },
+    //     { name: "Distribution", redirect: "/distribution" },
+    //     { name: "Transport", redirect: "/transport" },
+    //     { name: "Service", redirect: "/service" },
+    //     { name: "Demand", redirect: "/demand" },
+    //     { name: "IT", redirect: "/it" },
+    //   ],
+    // },
     {
       name: "Reports",
       children: Array.from({ length: totalQuarters }, (_, i) => ({

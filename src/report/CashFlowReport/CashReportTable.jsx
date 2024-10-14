@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
+import html2pdf from "html2pdf.js";
 
 // Table component that receives `data` via props
 const CashFlowTable = () => {
-  // Helper function to render table rows dynamically
+  const reportRef = useRef();
   const data = JSON.parse(localStorage.getItem("reportData"));
 
   if (!data || data.length === 0) {
@@ -16,7 +17,6 @@ const CashFlowTable = () => {
   // Render a single report (assuming one report is being displayed at a time)
   const renderReport = (report) => (
     <div key={report.id} className="border p-4 mb-4">
-
       {/* Starting Cash Balance */}
       <div className="mb-4">
         <h3 className="font-semibold">Starting "Cash" Balance:</h3>
@@ -32,8 +32,8 @@ const CashFlowTable = () => {
       {/* Finished Goods Inventory Changes */}
       <div className="mb-4">
         <h3 className="font-semibold">Finished Goods Inventory Changes:</h3>
-        <p>Product 1 (From: {report.finished_goods_product_1_from.toLocaleString()} To: {report.finished_goods_product_1_to.toLocaleString()})</p>
-        <p>Product 2 (From: {report.finished_goods_product_2_from.toLocaleString()} To: {report.finished_goods_product_2_to.toLocaleString()})</p>
+        <p>Smart Home Asistant ---(From: {report.finished_goods_product_1_from.toLocaleString()} To: {report.finished_goods_product_1_to.toLocaleString()})</p>
+        <p>Smart Tharmostat ---(From: {report.finished_goods_product_2_from.toLocaleString()} To: {report.finished_goods_product_2_to.toLocaleString()})</p>
       </div>
 
       {/* Net Income */}
@@ -58,9 +58,24 @@ const CashFlowTable = () => {
     </div>
   );
 
+  // Function to download the current view as PDF
+  const downloadPDF = () => {
+    const element = reportRef.current;
+    html2pdf().from(element).save("cash_flow_report.pdf");
+  };
+
   return (
-    <div className="p-4">
-      {data.map((report) => renderReport(report))}
+    <div>
+      <div className="flex justify-between mb-4">
+        <h2 className="text-2xl font-bold">Cash Flow Report</h2>
+        <button onClick={downloadPDF} className="bg-red-500 text-white px-4 py-2 rounded">
+          Download as PDF
+        </button>
+      </div>
+
+      <div ref={reportRef} className="p-4">
+        {data.map((report) => renderReport(report))}
+      </div>
     </div>
   );
 };

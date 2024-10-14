@@ -4,13 +4,13 @@ import React, { useState, useEffect } from "react";
 const IT_suppliers = ({ setSuppliersFromDecision, ItData }) => {
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const options = [
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.A,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.B,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.C,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.D,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.E,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.F,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.G,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierA,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierB,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierC,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierD,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierE,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierF,
+    selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierG,
   ];
 
   const initialSuppliers = {
