@@ -22,7 +22,7 @@ function BackOfficeConnecting() {
     }, 1500);
 
     // Redirect to the user page after 2 seconds
-    const redirectTimer = setTimeout(() => navigate("/flexeesim/backoffice/user"), 2000);
+    const redirectTimer = setTimeout(() => navigate("/flexeesim/backoffice/user"), 100);
 
     // Clean up timers on component unmount
     return () => {

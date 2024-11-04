@@ -9,6 +9,8 @@ import MyContext from "../Components/ContextApi/MyContext";
 import { useNavigate } from "react-router-dom";
 import { Text, useToast, Box, Spinner } from "@chakra-ui/react"; 
 import InfoButton from "../Components/InfoButton";
+import StatusBar from "./StatusBar";
+import { submitDecisionStatus } from "./DecisionSubmit";
 
 const Demand_generation = () => {
   const [metaCh1Value, setMetaCh1Value] = useState({});
@@ -27,6 +29,8 @@ const Demand_generation = () => {
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const simulation_id = selectedSimData[0]?.simulation_id;
+
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
 
   let firm_key_new = "";
@@ -161,6 +165,14 @@ const Demand_generation = () => {
         metaware_channel_two_price: metaCh2Value.Price,
         metaware_channel_two_market: metaCh2Value.MarketSpending,
       });
+
+      await submitDecisionStatus(
+        api,
+        "demand",
+        selectedSimData,
+        firm_key_new,
+        currentQuarter,
+      );
       getDemand();
       toast({
         title: "Demand Decision Submitted Successfully!",
@@ -169,7 +181,7 @@ const Demand_generation = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/IT");
+     
     } catch (error) {
       console.error("Error making POST request:", error);
     } finally {
@@ -179,6 +191,8 @@ const Demand_generation = () => {
 
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
+     <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Demand"}/>
+      
       <div className="sm:grid grid-cols-1 gap-3 m-1">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
           <InfoImg decision={"Demand"} />

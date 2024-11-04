@@ -3,36 +3,30 @@ import {
   Box,
   Button,
   Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Text,
 } from "@chakra-ui/react";
 import MyContext from "../Components/ContextApi/MyContext";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
-const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
+const CreateSim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
   const [selectedFirmIndex, setSelectedFirmIndex] = useState(null);
 
   let user = JSON.parse(localStorage.getItem("user"));
 
+  // Initial state for simulation data
   const [simulationData, setSimulationData] = useState({
     course: "Test Simulation",
-    orgnization: "Wright state",
+    organization: "Wright State",
     total_quarters: 0,
     firms: 0,
     admin_id: user?.userid,
     firm_data: [],
     start_date: getCurrentDate(),
-    end_date: "", // Do not initialize as current date
-    decision_open: "01:59:00",
-    decision_close: "01:59:00",
+    end_date: "", 
+    decision_open: "01:59:00", // You can modify default time if needed
+    decision_close: getCurrentTime(), // Set current time as default
   });
 
   useEffect(() => {
@@ -44,6 +38,7 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     }
   }, [simulationData.start_date, simulationData.total_quarters]);
 
+  // Utility to get the current date in YYYY-MM-DD format
   function getCurrentDate() {
     const today = new Date();
     const year = today.getFullYear();
@@ -52,12 +47,20 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     return `${year}-${month}-${day}`;
   }
 
+  // Utility to get the current time in HH:MM:SS format
+  function getCurrentTime() {
+    const now = new Date();
+    return now.toTimeString().split(" ")[0]; // HH:MM:SS format
+  }
+
+  // Calculate end date based on the start date and total number of quarters
   function calculateEndDate(startDate, quarters) {
     const startDateObj = new Date(startDate);
     startDateObj.setDate(startDateObj.getDate() + quarters * 4);
     return startDateObj.toISOString().split("T")[0];
   }
 
+  // Handle changes in input fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -76,28 +79,31 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
 
     if (name === "firms") {
       const numberOfFirms = Math.max(0, parseInt(value, 10) || 0);
-      const newfirm_data = new Array(numberOfFirms).fill().map(() => ({
-        firmName: "",
+      const newFirmData = new Array(numberOfFirms).fill().map((_, index) => ({
+        firmName: `Team ${String(index + 1).padStart(2, "0")}`,
         emails: [],
         users: [],
       }));
-      setSimulationData((prev) => ({ ...prev, firm_data: newfirm_data }));
+      setSimulationData((prev) => ({ ...prev, firm_data: newFirmData }));
     }
   };
 
-  const handlefirm_dataChange = (index, field, value) => {
-    const updatedfirm_data = [...simulationData.firm_data];
-    updatedfirm_data[index][field] = value;
-    setSimulationData((prev) => ({ ...prev, firm_data: updatedfirm_data }));
+  // Set updated firm data
+  const handleFirmDataChange = (index, field, value) => {
+    const updatedFirmData = [...simulationData.firm_data];
+    updatedFirmData[index][field] = value;
+    setSimulationData((prev) => ({ ...prev, firm_data: updatedFirmData }));
   };
 
+  // Add email to the firm's data
   const handleAddEmail = (index) => {
-    const updatedfirm_data = [...simulationData.firm_data];
-    updatedfirm_data[index].emails.push(updatedfirm_data[index].email);
-    updatedfirm_data[index].email = ""; // Clear the email input
-    setSimulationData((prev) => ({ ...prev, firm_data: updatedfirm_data }));
+    const updatedFirmData = [...simulationData.firm_data];
+    updatedFirmData[index].emails.push(updatedFirmData[index].email);
+    updatedFirmData[index].email = ""; // Clear the email input
+    setSimulationData((prev) => ({ ...prev, firm_data: updatedFirmData }));
   };
 
+  // Remove email from the firm's data
   const handleRemoveEmail = (firmIndex, emailIndex) => {
     setSimulationData((prev) => {
       const newFirmData = [...prev.firm_data];
@@ -106,28 +112,30 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     });
   };
 
-  setSimulationDataFromSteps(simulationData);
+  // Pass simulation data to the parent component
+  useEffect(() => {
+    setSimulationDataFromSteps(simulationData);
+  }, [simulationData, setSimulationDataFromSteps]);
 
+  // Handle the next step
   const handleNext = async () => {
     setNoOfQuarters(simulationData.total_quarters);
-    localStorage.setItem("noOfQuarters", [simulationData.total_quarters]);
+    localStorage.setItem("noOfQuarters", simulationData.total_quarters);
     localStorage.setItem("createSimData", JSON.stringify(simulationData));
     if (simulationData.total_quarters) {
       navigate("/flexee/admin-center/super/createsim?step=2");
     }
   };
 
+  // Generate simulation name based on the user data
   const generateSimulationName = (user) => {
     const university = user?.university?.split(" ")[0];
-    const firstNameInitial = user.first_name ? user.first_name.charAt(0) : "";
-    const lastNameInitial = user.last_name ? user.last_name.charAt(0) : "";
+    const firstNameInitial = user?.first_name?.charAt(0) || "";
+    const lastNameInitial = user?.last_name?.charAt(0) || "";
     const course = user?.course;
 
-    const simulationName = `${university}-${firstNameInitial}${lastNameInitial}-${course}`;
-    return simulationName;
+    return `${university}-${firstNameInitial}${lastNameInitial}-${course}`;
   };
-
-  const simulationName = generateSimulationName(user);
 
   return (
     <>
@@ -136,14 +144,13 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
       </Text>
       <Box
         width="50%"
-        h="auto"
         border="1px solid black"
         m="auto"
         p={5}
         bgColor="gray.200"
         mt={5}
       >
-        <label htmlFor="">
+        <label>
           <strong>Please specify the Name for Simulation</strong>
         </label>
         <Input
@@ -155,25 +162,22 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
           value={simulationData.course}
           onChange={handleInputChange}
         />
-        
 
-        <label htmlFor="">
+        <label>
           <strong>Please specify the Name for the organization</strong>
         </label>
         <Input
-          name="orgnization"
+          name="organization"
           bgColor="white"
           mt={5}
           mb={10}
           placeholder="Organization"
-          value={simulationData.orgnization}
+          value={simulationData.organization}
           onChange={handleInputChange}
         />
 
-        <label htmlFor="">
-          <strong>
-            Please specify the number of quarters you would like to include in the simulation.
-          </strong>
+        <label>
+          <strong>Specify the number of quarters</strong>
         </label>
         <Input
           name="total_quarters"
@@ -182,12 +186,11 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
           mb={10}
           placeholder="Number of Quarters"
           onChange={handleInputChange}
-          required={true}
+          required
         />
-        <label htmlFor="">
-          <strong>
-            Please specify the number of firms you would like to include in the simulation.
-          </strong>
+
+        <label>
+          <strong>Specify the number of firms</strong>
         </label>
         <Input
           name="firms"
@@ -198,106 +201,18 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
           type="number"
           onChange={handleInputChange}
         />
+
         <Box border="1px solid black" p={5} mb={10} borderRadius={5}>
           {simulationData.firm_data.map((firm, index) => (
             <Box key={index} display="flex" gap={3} mb={10}>
-              <Box>
-                <label htmlFor="">
-                  <strong>Enter firm name</strong>
-                </label>
-                <Input
-                  name={`firmName-${index}`}
-                  bgColor="white"
-                  placeholder={`Firm ${index + 1} Name`}
-                  value={firm.firmName}
-                  onChange={(e) =>
-                    handlefirm_dataChange(index, "firmName", e.target.value)
-                  }
-                />
-              </Box>
-              <Box>
-                <label htmlFor="">
-                  <strong>Enter email of participant</strong>
-                </label>
-                <Box display="flex" gap={3}>
-                  <Input
-                    name={`email-${index}`}
-                    bgColor="white"
-                    placeholder={`Firm ${index + 1} Email`}
-                    value={firm.email}
-                    onChange={(e) =>
-                      handlefirm_dataChange(index, "email", e.target.value)
-                    }
-                  />
-                  <Button
-                    onClick={() => handleAddEmail(index)}
-                    bgColor="#72EB6F "
-                  >
-                    Add
-                  </Button>
-                </Box>
-              </Box>
+              <Text>{firm.firmName}</Text>
             </Box>
           ))}
-          {simulationData.firm_data.map((firm, index) => (
-            <Button key={index} onClick={() => setSelectedFirmIndex(index)}>
-              View Emails for {firm.firmName || `Firm ${index + 1}`}
-            </Button>
-          ))}
-
-          {selectedFirmIndex !== null && (
-            <Modal
-              isOpen={selectedFirmIndex !== null}
-              onClose={() => setSelectedFirmIndex(null)}
-            >
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>
-                  Emails for{" "}
-                  {simulationData.firm_data[selectedFirmIndex].firmName ||
-                    `Firm ${selectedFirmIndex + 1}`}
-                </ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  {simulationData.firm_data[selectedFirmIndex].emails.map(
-                    (email, emailIndex) => (
-                      <Box
-                        key={emailIndex}
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        {email}
-                        <Button
-                          onClick={() =>
-                            handleRemoveEmail(selectedFirmIndex, emailIndex)
-                          }
-                        >
-                          X
-                        </Button>
-                      </Box>
-                    )
-                  )}
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    colorScheme="blue"
-                    mr={3}
-                    onClick={() => setSelectedFirmIndex(null)}
-                  >
-                    Close
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-          )}
         </Box>
 
         <Box mb={10}>
-          <label htmlFor="">
-            <strong>
-              Please specify the Start Date - Time and End Date - Time for simulation.
-            </strong>
+          <label>
+            <strong>Specify the Start Date and End Date</strong>
           </label>
           <Box display="flex" gap={3}>
             <Input
@@ -305,7 +220,6 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
               type="date"
               bgColor="white"
               mt={5}
-              placeholder="Start Date - Time"
               value={simulationData.start_date}
               onChange={handleInputChange}
               min={getCurrentDate()}
@@ -316,7 +230,6 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
               type="date"
               bgColor="white"
               mt={5}
-              placeholder="End Date - Time"
               value={simulationData.end_date}
               min={simulationData.start_date}
               onChange={handleInputChange}
@@ -324,54 +237,37 @@ const Create_sim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
           </Box>
         </Box>
 
-        <label htmlFor="">
-          <strong>
-            Specify the start and end times for decisions in the simulation. Decisions will be active during this timeframe each day and inaccessible outside these hours. For example, if the start time is 1 PM and the end time is 5 PM, decisions will be accessible between 1 PM and 5 PM daily.
-          </strong>
+        <label>
+          <strong>Specify the start and end times for decisions</strong>
         </label>
         <Box display="flex" gap={3}>
           <Input
             name="decision_open"
             type="time"
-            placeholder="HH:MM:SS"
-            title="Time format should be HH:MM:SS"
             bgColor="white"
             mt={5}
+            value={simulationData.decision_open}
             onChange={handleInputChange}
             required
           />
           <Input
-            type="time"
-            placeholder="HH:MM:SS"
-            title="Time format should be HH:MM:SS"
             name="decision_close"
+            type="time"
             bgColor="white"
             mt={5}
+            value={simulationData.decision_close}
             onChange={handleInputChange}
           />
         </Box>
 
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          mt={10}
-        >
-          <Text fontWeight="bold">
-            After clicking Create, all assigned members will receive an email
-            with an access link, so they can start working on the assigned
-            simulation.
-          </Text>
-          <button
-            onClick={handleNext}
-            className="w-28 h-10 py-2 px-4 mx-2 rounded-lg text-center text-xl bg-green-500 hover:bg-green-700 text-white "
-          >
+        <Box display="flex" justifyContent="space-between" alignItems="center" mt={10}>
+          <Button onClick={handleNext} colorScheme="green">
             Next
-          </button>
+          </Button>
         </Box>
       </Box>
     </>
   );
 };
 
-export default Create_sim;
+export default CreateSim;

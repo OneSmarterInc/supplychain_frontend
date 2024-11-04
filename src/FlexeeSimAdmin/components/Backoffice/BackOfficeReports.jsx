@@ -197,7 +197,7 @@ const BackOfficeUser = () => {
         <div className="flex flex-col lg:flex-row items-center lg:space-x-4 mb-6 pt-4">
           <p className="text-base font-medium">Select Quarter </p>
           <div className="mt-2 lg:mt-0 flex space-x-2 lg:space-x-4">
-            {Array.from({ length: selectedCourse?.currentQuarter || 0 }, (_, i) => (
+            {Array.from({ length: selectedCourse?.currentQuarter-1 || 0 }, (_, i) => (
               <div
                 key={i + 1}
                 onClick={() => handleQuarterClick(i + 1)}

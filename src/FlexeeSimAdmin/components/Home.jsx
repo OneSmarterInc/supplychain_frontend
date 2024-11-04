@@ -29,7 +29,7 @@ function Home() {
         </p>
       </div>
       <div className="mt-8 md:mt-16 flex justify-center">
-        <form className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6 w-full max-w-xl" onSubmit={handleSubmit}>
+        {/* <form className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6 w-full max-w-xl" onSubmit={handleSubmit}>
           <input
             type="email"
             className="flex-1 border border-gray-300 rounded p-3 py-2 w-full md:w-full"
@@ -43,7 +43,7 @@ function Home() {
           >
             GET STARTED
           </button>
-        </form>
+        </form> */}
       </div>
     </div>
   );

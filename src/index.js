@@ -6,18 +6,19 @@ import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import MyProvider from "./Components/ContextApi/MyProvider";
 import { BrowserRouter as Router } from "react-router-dom";
+import theme from "./theme"; 
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
   <Router>
-  <MyProvider>
-    <ChakraProvider>
-      <App />
-    </ChakraProvider>
-  </MyProvider>
+    <MyProvider>
+    
+      <ChakraProvider theme={theme}>
+        <App />
+      </ChakraProvider>
+    </MyProvider>
   </Router>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

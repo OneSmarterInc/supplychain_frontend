@@ -166,9 +166,9 @@ const InfoButton = ({ decision }) => {
     <div className="relative inline-block">
       <button
         onClick={handleButtonClick}
-        className="bg-gray-200 text-black rounded-lg w-12 h-8 flex items-center justify-center text-lg cursor-pointer"
+        className=" text-red-600 rounded-lg w-12 h-8 flex items-center justify-center text-2xl cursor-pointer"
       >
-        info
+        <i className='fa fa-info-circle'></i>
       </button>
 
       {isModalOpen && (

@@ -6,7 +6,9 @@ import { useToast, Spinner } from "@chakra-ui/react";
 import { Puff } from "react-loader-spinner";
 import PlayComponent from "./live_simulation_function";
 import JoinNow from "../Components/JoinNow";
-
+import bg from "../FlexeeSimAdmin/Assets/bg.png";
+import wheel from "../assets/wheel.png";
+import ProfileDropdown from "../Components/Profile";
 const UserSideLive = () => {
   const { api } = useContext(MyContext);
   document.body.style.backgroundColor = "#e0e2e4"; // Background color update
@@ -14,9 +16,10 @@ const UserSideLive = () => {
   const [simData, setSimData] = useState([]);
   const [loading, setLoading] = useState(true); // Loader state
   const [code, setCode] = useState("");
-  
+  const [flag, setFlag] = useState(false);
+
   const toast = useToast(); // Initialize Chakra UI's toast
-  
+
   const user = JSON.parse(localStorage.getItem("user"));
 
   const handleSubmit = async (e) => {
@@ -29,7 +32,10 @@ const UserSideLive = () => {
         user_id: user.userid,
         passcode: code,
       });
-
+      setFlag(true);
+      console.log(response.data.data);
+      user.sim_data = response.data.data;
+      localStorage.setItem("user", JSON.stringify(user));
       if (response.status === 200) {
         toast({
           title: "Already subscribed.",
@@ -73,78 +79,100 @@ const UserSideLive = () => {
 
   useEffect(() => {
     getAllData();
-  }, []);
+  }, [flag]);
 
   const getAllData = async () => {
     try {
-      const response = await axios.get(`${api}/user/${userId}/subscriptions/`);
+      const response = await axios.get(`${api}/getsim/${user.sim_data}`);
       if (response.status === 200) {
-        const simulations = response.data.map(sub => ({
-          ...sub.simulation,
-          subscribed_at: sub.subscribed_at,
-          is_active: new Date(sub.simulation.end_date) >= new Date() // Active simulations
-        }));
-        setSimData(simulations);
-        localStorage.setItem("simData", JSON.stringify(simulations));
+        setSimData(response.data);
+        localStorage.setItem("simData", JSON.stringify(response.data));
+        localStorage.setItem(
+          "selectedSimulation",
+          JSON.stringify(response.data.simulation_id)
+        );
+        localStorage.setItem("selectedSimData", JSON.stringify(response.data));
+        localStorage.setItem("selectedSim", JSON.stringify(response.data));
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to load simulations.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
     } finally {
       setLoading(false); // Stop loading once done
     }
   };
 
   return (
-    <div className="pb-12 bg-white-full p-0 px-6 relative pt-1.5 max-w-screen-full mx-auto">
-      {/* Your HTML structure */}
-      <div className="absolute left-1/2 transform top-10 min-h-full w-[2px] bg-red-500"></div>
-      <div className="absolute left-1/2 transform -translate-x-full top-10 w-40 h-[2px] bg-red-500"></div>
-      <div className="absolute left-1/2 transform -translate-x-40 top-7 text-red-500">
-        <i className="fa-solid fa-caret-left text-lg"></i>
+    <div
+      className="pb-12 p-0 px-6  h-screen relative pt-1.5 w-[95%] mx-auto"
+      // style={{
+      //   backgroundImage: `url(${bg})`,
+      //   backgroundSize: "cover",
+      //   backgroundPosition: "center",
+      //   backgroundRepeat: "no-repeat",
+      // }}
+    >
+      <div>
+        {/* <h1 className="text-3xl font-bold">FLEXEE</h1>
+          <h3 className="text-2xl">Supplychain Management</h3> */}
       </div>
-      <div className="absolute left-1/2 transform -translate-x-1/2 top-full w-2 h-2 rounded-full border-2 border-red-500 mt-12"></div>
-      <div className="absolute left-1/2 transform -translate-x-1/2 top-full w-3 h-3 rounded-full border-2 border-red-500 mt-16"></div>
-      <div className="absolute left-1/2 transform -translate-x-1/2 top-full w-4 h-4 rounded-full border-2 border-red-500 mt-20"></div>
-
       <section className="grid grid-cols-1 md:grid-cols-2 items-center relative gap-6">
-        <div className="text-start">
-          <h2 className="text-2xl font-bold mb-3">FLEXEE SIMULATION</h2>
-          <h3 className="text-xl mb-4 font-semibold">{simData.length} ACTIVE COURSES</h3>
+        <div className=" mt-0 h-[55%] space-y-4">
+          <h1 className="text-2xl font-semibold text-gray-600">
+            ENTER THE CODE TO JOIN SIMULATION{" "}
+          </h1>
+          <h3 className="text-xl text-gray-600">
+            Enter the code that has been sent to you by the faculty to join the
+            simulation.
+          </h3>
+
+          <div className="p-2 rounded margin-auto w-[90%]">
+            <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+              <input
+                type="text"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                className="border-2 border-gray-300 rounded p-2 py-3"
+                placeholder="Ex:rf42d9"
+                disabled={simData.length > 0} // Disable input if simData has values
+              />
+              <button
+                type="submit"
+                className="bg-red-600 w-full text-white p-2 rounded font-semibold text-2xl font-robot"
+                disabled={simData.length > 0} // Disable button if simData has values
+              >
+                {simData.length === 0 ? "JOIN SIMULATION" : "JOIN SIMULATION"}
+              </button>
+            </form>
+            <div className="space-y-4 mt-8">
+            <div>
+            <h1 className="text-2xl font-semibold text-gray-600">
+              After joining the simulation
+            </h1>
+            <h3 className="text-xl text-red-600">
+              What are the next step to explore ?
+            </h3>
+            </div>
+            <h3 className="text-xl text-gray-600">
+              Forecast, Procurement, Manufacture, Distribution, Transport,
+              Service, Demand, Inventory Management , Order Management:Supplier
+              Management, Reports and Analytics etc
+            </h3>
+            </div>
+          </div>
         </div>
-        <div className="p-2 rounded">
-          <h2 className="text-2xl font-bold mb-4 text-start">CODE ENTRY</h2>
-          <form onSubmit={handleSubmit} className="flex space-x-4">
-            <input
-              type="text"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              className="flex-1 border border-gray-300 rounded p-2 py-3"
-              placeholder="Enter code"
-            />
-            <button
-              type="submit"
-              className="bg-red-500 w-28 text-white p-2 rounded"
-            >
-              {simData.length === 0 ? "Connect Now" : "SUBMIT"}
-            </button>
-          </form>
+        <div className=" ml-24">
+          {/* <div className="mt-10 ml-[35px]"><ProfileDropdown /> </div> */}
+
+          <img src={wheel} className="mt-36 h-[530px] w-[530px]"></img>
         </div>
       </section>
 
       {loading ? (
         <div className="flex justify-center items-center h-64">
-                      <Puff color="red" height={100} width={100} /> {/* Loader */}
-
+          <Puff color="red" height={100} width={100} /> {/* Loader */}
         </div>
       ) : simData.length > 0 ? (
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8 my-2">
-          {simData
+          {/* {simData
             .filter((item) => item.is_active === true)
             .reverse()
             .map((item, index) => (
@@ -163,11 +191,11 @@ const UserSideLive = () => {
                   selectedSimData={simData}
                 />
               </div>
-            ))}
+            ))} */}
         </section>
       ) : (
         <div className="p-4 pl-10">
-          <p className="text-lg">You have not enrolled for any simulation yet. If you have a passcode, click on Join Now:</p>
+          <p className="text-lg"></p>
         </div>
       )}
     </div>

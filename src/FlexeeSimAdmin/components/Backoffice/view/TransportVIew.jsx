@@ -114,7 +114,7 @@ const TransportView = ({ repo }) => {
       {activeDC === "DC3" && flagDc3 ? (
         renderTable(dc3Data, "DC 3")
       ) : (
-        <Box>3</Box>
+        <Box></Box>
       )}
     </Box>
   );

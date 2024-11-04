@@ -7,6 +7,9 @@ import MyContext from "../Components/ContextApi/MyContext";
 import { Text, useToast, Spinner, Box } from "@chakra-ui/react"; 
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
+import StatusBar from "./StatusBar";
+import { submitDecisionStatus } from "./DecisionSubmit";
+
 
 const Procurement_Decisions = () => {
   const { api } = useContext(MyContext);
@@ -18,12 +21,14 @@ const Procurement_Decisions = () => {
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || [];
   const sel = JSON.parse(localStorage.getItem("selectedSim")) || [];
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const simulation_id = selectedSimData[0]?.simulation_id;
+
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const selectedSim = selectedSimData;
   const firm_data = selectedSim[0]?.firm_data ? Object.keys(selectedSim[0].firm_data)[0] : null;
-
+  
   let firm_key_new = "";
   if (Array.isArray(selectedSim[0]?.firm_data)) {
     let firm_obj = selectedSim[0]?.firm_data.filter((item) => {
@@ -151,7 +156,14 @@ const Procurement_Decisions = () => {
         beta_quantity: Number(beta_quantity),
         sac_units: updatedDCData,
       });
-
+      
+      await submitDecisionStatus(
+        api,
+        "procurement",
+        selectedSimData,
+        firm_key_new,
+        currentQuarter,
+      );
       console.log("POST request successful", response.data);
       getProcurement();
       addUserLogger();
@@ -162,7 +174,7 @@ const Procurement_Decisions = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/Manufacture");
+      
     } catch (error) {
       console.error("Error making POST request:", error.response ? error.response.data : error.message);
     } finally {
@@ -193,22 +205,26 @@ const Procurement_Decisions = () => {
   document.body.style.backgroundColor = "#e0e2e4";
 
   return (
-    <div style={{ fontFamily: "ABeeZee", height: '100vh' }}>
+    <div style={{ fontFamily: "ABeeZee" }} className="h-full">
+      <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Procurement"}/>
       <div className="sm:grid grid-cols-1 gap-3 m-1 ">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
           <InfoImg decision={"Procurement"} />
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center pl-5 pt-2 pb-2">
+          <div className="flex items-center justify-between w-full ">
+            <div className="flex items-center pl-5 pt-2 pb-2 ">
               <Text>Load data Quarterly</Text>
-              <div className=" pl-4 flex space-x-4">
+              <div className="pl-4 flex space-x-4 ">
                 {Array.from(
                   { length: selectedSimData[0]?.current_quarter || 0 },
                   (_, i) => (
                     <div
                       key={i + 1}
                       onClick={() => setSelectedQuarter(i + 1)}
-                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${selectedQuarter === i + 1 ? "bg-red-500 border-red-500 text-white" : ""
-                        }`}
+                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
+                        selectedQuarter === i + 1
+                          ? "bg-red-500 border-red-500 text-white"
+                          : ""
+                      }`}
                     >
                       {i + 1}
                     </div>
@@ -216,15 +232,20 @@ const Procurement_Decisions = () => {
                 )}
               </div>
             </div>
-            <InfoButton decision="Procurement" />
-          </div>
-          <div
-              onClick={loadPreviousQuarter}
-              className="font-bold py-2 px-4 text-red-400 cursor-pointer"
+
+            <div
+              
+              className="font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl"
               disabled={isLoadingLastQuarter || currentQuarter <= 1}
+              title="To load inputs from the previous quarter"
             >
-              <span className="text-black">To load inputs from the previous quarter, </span>{isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
+        
+              {isLoadingLastQuarter ? <Spinner size="sm" /> : <i class="fa fa-stack-overflow mr-2 " onClick={loadPreviousQuarter} aria-hidden="true"></i>}
+              <InfoButton decision="Procurement" />
             </div>
+          </div>
+          
+       
           {/* Show Spinner while loading */}
           {loading || isLoadingLastQuarter ? (
             <Box display="flex" justifyContent="center" alignItems="center" mt={4}>

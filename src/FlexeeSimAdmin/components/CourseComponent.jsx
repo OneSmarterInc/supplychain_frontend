@@ -3,14 +3,15 @@ import videoimg from "../Assets/introvideo.png";
 import deploytosim from "../Assets/deploytosimimg.png";
 import graphic from "../../assets/graphic.png";
 import MyContext from "../../Components/ContextApi/MyContext";
-import { useToast } from "@chakra-ui/react";
+import { useToast, Spinner } from "@chakra-ui/react";
 
 const CourseComponent = () => {
   const SelectedCourse = JSON.parse(localStorage.getItem("SelectedCourse"));
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const [trainers, setTrainers] = useState([]);
-  const {api} = useContext(MyContext)
-  const toast = useToast()
+  const { api } = useContext(MyContext);
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   useEffect(() => {
     const fetchTrainers = async () => {
@@ -33,27 +34,53 @@ const CourseComponent = () => {
     }
   }, [SelectedCourse?.passcode]);
 
-  // Calculate remaining days
   const calculateRemainingDays = (endDate) => {
     const currentDate = new Date();
     const end = new Date(endDate);
     const timeDiff = end - currentDate;
     const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-    return daysRemaining >= 0 ? daysRemaining : 0; // Ensure it doesn't go negative
+    return daysRemaining >= 0 ? daysRemaining : 0;
   };
 
   const remainingDays = SelectedCourse?.endDate
     ? calculateRemainingDays(SelectedCourse.endDate)
     : 0;
 
-  const handleimg = () => {
-    toast({
-      title: `Simulation Deployed Successfully`,
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-      position: "top",
-    });
+  const handleimg = async () => {
+    setIsLoading(true); // Start loading
+    try {
+      const response = await fetch(`${api}/deploy/${SelectedCourse?.simulation_id}`, {
+        method: "GET",
+      });
+      if (response.ok) {
+        toast({
+          title: `Simulation Deployed Successfully`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+      } else {
+        toast({
+          title: `Failed to Deploy Simulation`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+      }
+    } catch (error) {
+      console.error("Error deploying simulation:", error);
+      toast({
+        title: `Error occurred during deployment`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
   };
 
   const handleCopyToClipboard = () => {
@@ -68,6 +95,11 @@ const CourseComponent = () => {
 
   return (
     <div className="bg-white pt-8 w-full max-w-screen-full mx-auto px-10">
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <Spinner size="xl" color="red.500" />
+        </div>
+      )}
       <header className="flex flex-col md:flex-row justify-between pb-6">
         <div>
           <div className="flex items-center space-x-4 mb-4 px-5">
@@ -111,63 +143,24 @@ const CourseComponent = () => {
         <div className="h-0.5 w-full ml-4 bg-gray-300"></div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-7 gap-1 px-4">
-        <div className="space-y-6 col-span-4 text-start">
-          <div>
-            <p className="text-xl md:text-2xl px-2">PAYMENT / PRICING</p>
-            <p className="text-3xl md:text-3xl font-semibold px-2">USD 00.00</p>
-          </div>
-          <div >
-            <p className="text-xl md:text-2xl px-2">DUE DATE</p>
-            <p className="text-2xl md:text-3xl font-semibold px-2">
-              {new Date(SelectedCourse?.endDate).toLocaleString('en-US', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
-              }).replace(',', '').replace(/ /g, '-')}
-            </p>
-            <p className="text-gray-500 opacity-60 text-xl md:text-1xl px-2 mb-3">
-              {remainingDays} DAYS REMAINING
-            </p>
-          </div>
-        </div>
-        <div
-          className="absolute text-gray-500"
-          style={{
-            top: '252px',    // Adjust the top position
-            right: '25px',  // Adjust the right position
-            transform: 'translate(0px, 0px)'  // Adjust the translate values for finer control
-          }}
-        >
-          <i className="fa-solid fa-arrow-right text-lg opacity-30"></i>
-        </div>
-
-        <div className="col-span-3 flex justify-center items-center px-10 border-l-2 border-gray-400 border-opacity-70">
-          <img
-            src={deploytosim}
-            alt="Deploy to Simulation"
-            className="w-75 max-w-xs cursor-pointer mb-8"
-            onClick={handleimg}
-          />
-        </div>
-      </div>
+      
 
       {/* Trainer section */}
-      <div className="grid grid-cols-1 md:grid-cols-7 gap-0 bg-cover bg-center" style={{ backgroundImage: `url(${graphic})` }}>
-        <div className="col-span-4 flex flex-col items-start border-l-2 border-t-2 rounded-tl-lg border-gray-400 border-opacity-50  px-8 pt-4 h-full">
-          <p className="font-semibold text-2xl md:text-2xl pb-2">TRAINER / TEACHER(S)</p>
-          <div className="bg-red-500 h-0.5 w-24 mb-2"></div>
+      <div className="grid grid-cols-1 md:grid-cols-7 gap-0 bg-cover bg-center mb-4" style={{ backgroundImage: `url(${graphic})` }}>
+        <div className="col-span-4 flex flex-col items-start border-2 rounded-tl-lg  rounded-bl-lg border-gray-400 border-opacity-50  px-8 pt-4 h-full">
+          <p className="font-semibold text-sm md:text-sm pb-2">Faculties</p>
+        
           <div className="space-y-2 text-gray-700">
             {trainers.map((trainer) => (
               <div
-                className="flex items-center"
-                key={trainer.user_detail.userid}
-                style={{
-                  color:
-                    trainer.user_detail.email === user.email
-                      ? "#ED1C24"
-                      : "inherit",
-                }}
+              className="flex items-center"
+              key={trainer.user_detail.userid}
+              style={{
+                color:
+                trainer.user_detail.email === user.email
+                ? "#ED1C24"
+                : "inherit",
+              }}
               >
                 <input
                   type="radio"
@@ -177,12 +170,12 @@ const CourseComponent = () => {
                   checked={trainer.user_detail.email === user.email}
                 />
                 <label
-                  className="text-lg md:text-xl font-semibold"
+                  className="text-lg md:text-sm font-semibold"
                   style={{
                     color:
-                      trainer.user_detail.email === user.email
-                        ? "#ED1C24"
-                        : "inherit",
+                    trainer.user_detail.email === user.email
+                    ? "#ED1C24"
+                    : "inherit",
                   }}
                 >
                   {trainer.user_detail.first_name} {trainer.user_detail.last_name}{" "}
@@ -192,12 +185,15 @@ const CourseComponent = () => {
             ))}
           </div>
         </div>
-        <div className="col-span-3  border-l-2 border-t-2 border-r-2 border-gray-400 border-opacity-50 rounded-tr-lg h-full">
-          <img
-            src={videoimg}
-            alt="Introduction Video"
-            className="h-full w-full object-cover"
-          />
+        <div className="col-span-3  border-b-2 border-t-2 border-r-2  border-gray-400 border-opacity-50 rounded-tr-lg rounded-br-lg h-full">
+          <div 
+            
+            alt="Deploy to Simulation"
+            className={`margin-auto align-center border border-red-600 m-4 h-10 text-center text-white rounded-lg bg-red-700 cursor-pointer mb-8 ${isLoading ? "opacity-50" : ""}`}
+            onClick={!isLoading ? handleimg : null} // Disable click when loading
+            style={{ pointerEvents: isLoading ? "none" : "auto" }} // Disable pointer events when loading
+          > <p className="mt-2">Deploy Simulation </p></div>
+    
         </div>
       </div>
     </div>
@@ -205,3 +201,6 @@ const CourseComponent = () => {
 };
 
 export default CourseComponent;
+
+
+

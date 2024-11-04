@@ -50,7 +50,7 @@ const Members = () => {
   }, [api, firm_key_new]);
 
   return (
-    <Box p={4} maxW="100%" overflowX="auto">
+    <Box p={4} maxW="100%" overflowX="auto" h={"100%"}>
       <Heading as="h2" size="lg" mb={6} textAlign="center">
         Members in Your Team
       </Heading>

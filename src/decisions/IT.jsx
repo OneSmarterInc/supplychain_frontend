@@ -6,17 +6,20 @@ import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
+import { submitDecisionStatus } from "./DecisionSubmit";
+import StatusBar from "./StatusBar";
 
 const IT = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData"));
-  const [reportValues, setReportValues] = useState();
   const [suppliers, setSuppliers] = useState({});
   const [ItData, setItData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false); // New state for previous quarter loading
+  const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false);
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const simulation_id = selectedSimData[0]?.simulation_id;
+
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
   const { api } = useContext(MyContext);
   const toast = useToast();
@@ -51,16 +54,13 @@ const IT = () => {
       setItData(response.data);
       localStorage.setItem("ItData", JSON.stringify(response.data));
     } catch (error) {
-      // Clear state and local storage on error
       localStorage.removeItem("ItData");
       setItData({});
       setSuppliers({});
-
       console.error("Error making GET request:", error.response ? error.response.data : error.message);
     }
   };
 
-  // Load previous quarter data
   const loadPreviousQuarter = async () => {
     if (currentQuarter <= 1) return;
 
@@ -79,7 +79,7 @@ const IT = () => {
       });
 
       const previousData = response.data;
-      setItData(previousData); // Set previous quarter's data
+      setItData(previousData);
       toast({
         title: `Loaded data from Quarter ${previousQuarter}`,
         status: "success",
@@ -94,7 +94,6 @@ const IT = () => {
     }
   };
 
-  // Validate suppliers input before submission
   const validateSuppliers = () => {
     const requiredFields = ["A", "B", "C", "D", "E", "F", "G"];
     for (let field of requiredFields) {
@@ -114,7 +113,7 @@ const IT = () => {
   };
 
   const submitIt = async () => {
-    if (!validateSuppliers()) return;
+    // if (!validateSuppliers()) return;
 
     setLoading(true);
     try {
@@ -132,6 +131,14 @@ const IT = () => {
         sync_f: suppliers.F,
         sync_g: suppliers.G,
       });
+
+      await submitDecisionStatus(
+        api,
+        "it",
+        selectedSimData,
+        firm_key_new,
+        currentQuarter,
+      );
       getIt();
       addUserLogger();
       toast({
@@ -141,7 +148,7 @@ const IT = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/usersidelive");
+     
     } catch (error) {
       console.error("Error making POST request: IT", error);
       toast({
@@ -179,6 +186,8 @@ const IT = () => {
 
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
+      <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"IT"}/>
+
       <div className="sm:grid grid-cols-1 gap-3 m-1">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
           <InfoImg decision={"IT"} />
@@ -207,13 +216,13 @@ const IT = () => {
             <InfoButton decision="IT" />
           </div>
           <div
-              onClick={loadPreviousQuarter}
-              className="font-bold py-2 px-4 text-red-400 cursor-pointer"
-              disabled={isLoadingLastQuarter || currentQuarter <= 1}
-            >
-              <span className="text-black">To load inputs from the previous quarter, </span>
-              {isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
-            </div>
+            onClick={loadPreviousQuarter}
+            className="font-bold py-2 px-4 text-red-400 cursor-pointer"
+            disabled={isLoadingLastQuarter || currentQuarter <= 1}
+          >
+            <span className="text-black">To load inputs from the previous quarter, </span>
+            {isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
+          </div>
           {loading ? (
             <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
               <Spinner size="xl" />
@@ -225,7 +234,6 @@ const IT = () => {
           )}
 
           <div className="flex justify-end mt-4">
-            
             <button
               onClick={submitIt}
               className={`${

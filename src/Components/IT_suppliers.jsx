@@ -4,13 +4,13 @@ import React, { useState, useEffect } from "react";
 const IT_suppliers = ({ setSuppliersFromDecision, ItData }) => {
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const options = [
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.A,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.B,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.C,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.D,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.E,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.F,
-    selectedSim[0]?.renamedMappedData?.suppliarMapp?.G,
+    { name: selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierA, key: "A" },
+    { name: selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierB, key: "B" },
+    { name: selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierC, key: "C" },
+    { name: selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierD, key: "D" },
+    { name: selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierE, key: "E" },
+    { name: selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierF, key: "F" },
+    { name: selectedSim[0]?.renamedMappedData?.suppliarMapp?.supplierG, key: "G" },
   ];
 
   const initialSuppliers = {
@@ -22,6 +22,9 @@ const IT_suppliers = ({ setSuppliersFromDecision, ItData }) => {
     F: false,
     G: false,
   };
+  
+  const [suppliers, setSuppliers] = useState(initialSuppliers);
+
   useEffect(() => {
     if (ItData) {
       setSuppliers({
@@ -36,12 +39,10 @@ const IT_suppliers = ({ setSuppliersFromDecision, ItData }) => {
     }
   }, [ItData]);
 
-  const [suppliers, setSuppliers] = useState(initialSuppliers);
-
-  const handleChange = (event, option) => {
+  const handleChange = (event, key) => {
     setSuppliers({
       ...suppliers,
-      [option]: event.target.value === "true",
+      [key]: event.target.value === "true",
     });
   };
 
@@ -57,16 +58,16 @@ const IT_suppliers = ({ setSuppliersFromDecision, ItData }) => {
       <br />
       <div className="grid grid-cols-3 gap-3 pb-3">
         {options.map((option) => (
-          <Box key={option} className="flex">
-            <Text className="pl-6 py-2 text-lg">{option}</Text>
+          <Box key={option.key} className="flex">
+            <Text className="pl-6 py-2 text-lg">{option.name}</Text>
             <Select
               placeholder="Select"
               fontSize={15}
               width="73%"
               border="1px solid black"
               className="ml-5"
-              value={suppliers[option] ? "true" : "false"}
-              onChange={(e) => handleChange(e, option)}
+              value={suppliers[option.key] ? "true" : "false"}
+              onChange={(e) => handleChange(e, option.key)}
             >
               <option value="true">Yes</option>
               <option value="false">No</option>
