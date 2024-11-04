@@ -88,7 +88,7 @@ const Operational = () => {
   };
 
   return (
-    <div style={{ padding: "20px", background: "#F4F4F4", height:'100vh' }}>
+    <div style={{ padding: "20px",  height:'100vh' }}>
       <div
         className="grid grid-cols-2 gap-6 mb-6 p-4 rounded-lg"
         style={{ background: "white" }}

@@ -2,7 +2,7 @@ import MainRoutes from "./Routes/MainRoutes"
 
 function App() {
   return (
-    <div className="bg-white">
+    <div className="bg-white h-full ">
       <MainRoutes />
     </div>
   );

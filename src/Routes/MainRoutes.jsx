@@ -63,6 +63,10 @@ import Operational from "../analytics/Operational";
 import Customer from "../analytics/Customer";
 import Footer from "../FlexeeSimAdmin/components/Footer";
 import SimRoute from "./SimRoute";
+import LayoutWithSidebar from "../FlexeeSimAdmin/components/DashBoardSideBar";
+import CourseSideBar from "../FlexeeSimAdmin/components/CourseSideBar";
+import GroupsLogsSidebar from "../FlexeeSimAdmin/components/GroupsSideBar";
+import UserSideView from "../user/UserSIdeView";
 
 const MainRoutes = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
@@ -75,7 +79,7 @@ const MainRoutes = () => {
         exact
         path="/"
         element={
-          <div className="home h-screen bg-white">
+          <div className="home h-full bg-white">
             <FlexeeNavbar />
             <FlexeeHome />
             <FlexeeOverview />
@@ -91,30 +95,22 @@ const MainRoutes = () => {
       <Route exact path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Protected Routes */}
-      <Route
-        exact
-        path="/procurement"
-        element={
-          <div className="procurement h-screen">
-            <PrivateRoute>
-              <BackOfficeNavbar />
-              <Sidebar />
-              <Procurement_Decisions />
-            </PrivateRoute>
-          </div>
-        }
-      />
 
       <Route
         exact
         path="/dashboard"
         element={
-          <div className="procurement h-full">
+          <div className="dashboard h-full grid grid-cols-6">
             <PrivateRoute>
-              <BackOfficeNavbar />
-              <Sidebar />
-              <Analytics />
-              <BackOfficeFooter />
+              <div className="col-span-1">
+                <Sidebar />
+              </div>
+              <div className="col-span-5 flex flex-col">
+                <FlexeeDashboardNavbar />
+
+                <Analytics />
+                <BackOfficeFooter />
+              </div>
             </PrivateRoute>
           </div>
         }
@@ -124,11 +120,17 @@ const MainRoutes = () => {
         exact
         path="/financial"
         element={
-          <div className="procurement h-full">
+          <div className="dashboard h-full grid grid-cols-6">
             <PrivateRoute>
-              <BackOfficeNavbar />
-              <Sidebar />
-              <Financial />
+              <div className="col-span-1">
+                <Sidebar />
+              </div>
+              <div className="col-span-5 flex flex-col">
+                <FlexeeDashboardNavbar />
+
+                <Financial />
+                <BackOfficeFooter />
+              </div>
             </PrivateRoute>
           </div>
         }
@@ -138,13 +140,19 @@ const MainRoutes = () => {
         exact
         path="/operational"
         element={
-          <div className="procurement h-screen">
-            <PrivateRoute>
-              <BackOfficeNavbar />
+          <div className="dashboard h-full grid grid-cols-6">
+          <PrivateRoute>
+            <div className="col-span-1">
               <Sidebar />
+            </div>
+            <div className="col-span-5 flex flex-col">
+              <FlexeeDashboardNavbar />
+
               <Operational />
-            </PrivateRoute>
-          </div>
+              <BackOfficeFooter />
+            </div>
+          </PrivateRoute>
+        </div>
         }
       />
 
@@ -152,13 +160,19 @@ const MainRoutes = () => {
         exact
         path="/customer"
         element={
-          <div className="procurement h-screen">
-            <PrivateRoute>
-              <BackOfficeNavbar />
+          <div className="dashboard h-full grid grid-cols-6">
+          <PrivateRoute>
+            <div className="col-span-1">
               <Sidebar />
+            </div>
+            <div className="col-span-5 flex flex-col">
+              <FlexeeDashboardNavbar />
+
               <Customer />
-            </PrivateRoute>
-          </div>
+              <BackOfficeFooter />
+            </div>
+          </PrivateRoute>
+        </div>
         }
       />
 
@@ -166,11 +180,16 @@ const MainRoutes = () => {
         exact
         path="/members"
         element={
-          <div className="procurement h-screen">
+          <div className="dashboard h-full grid grid-cols-6">
             <PrivateRoute>
-              <BackOfficeNavbar />
-              <Sidebar />
-              <Members />
+              <div className="col-span-1">
+                <Sidebar />
+              </div>
+              <div className="col-span-5 flex flex-col h-[100vh]">
+                <FlexeeDashboardNavbar />
+                <Members />
+                <BackOfficeFooter />
+              </div>
             </PrivateRoute>
           </div>
         }
@@ -180,9 +199,27 @@ const MainRoutes = () => {
         exact
         path="/joinnow"
         element={
-          <div className="procurement h-screen">
+          <div className="procurement h-full">
             <PrivateRoute>
               <JoinNow />
+            </PrivateRoute>
+          </div>
+        }
+      />
+      <Route
+        exact
+        path="/procurement"
+        element={
+          <div className="procurement h-full grid grid-cols-6">
+            <PrivateRoute>
+              <div className="col-span-1">
+                <Sidebar />
+              </div>
+              <div className="col-span-5 flex flex-col">
+                <FlexeeDashboardNavbar />
+
+                <Procurement_Decisions />
+              </div>
             </PrivateRoute>
           </div>
         }
@@ -192,24 +229,35 @@ const MainRoutes = () => {
         exact
         path="/manufacture"
         element={
-          <div className="manufacturing h-screen">
+          <div className="manufacturing h-full grid grid-cols-6">
             <PrivateRoute>
-              <BackOfficeNavbar />
-              <Sidebar />
-              <Manufacturing_Decisions />
+              <div className="col-span-1">
+                <Sidebar />
+              </div>
+              <div className="col-span-5 flex flex-col">
+                <FlexeeDashboardNavbar />
+
+                <Manufacturing_Decisions />
+              </div>
             </PrivateRoute>
           </div>
         }
       />
+
       <Route
         exact
         path="/distribution"
         element={
-          <div className="distribution h-screen">
+          <div className="distribution h-full grid grid-cols-6">
             <PrivateRoute>
-              <BackOfficeNavbar />
-              <Sidebar />
-              <Distribution_Decision />
+              <div className="col-span-1">
+                <Sidebar />
+              </div>
+              <div className="col-span-5 flex flex-col">
+                <FlexeeDashboardNavbar />
+
+                <Distribution_Decision />
+              </div>
             </PrivateRoute>
           </div>
         }
@@ -219,11 +267,16 @@ const MainRoutes = () => {
         exact
         path="/transport"
         element={
-          <div className="transportation h-screen">
+          <div className="transport h-full grid grid-cols-6">
             <PrivateRoute>
-              <BackOfficeNavbar />
-              <Sidebar />
-              <Transportation_Decision />
+              <div className="col-span-1">
+                <Sidebar />
+              </div>
+              <div className="col-span-5 flex flex-col">
+                <FlexeeDashboardNavbar />
+
+                <Transportation_Decision />
+              </div>
             </PrivateRoute>
           </div>
         }
@@ -233,11 +286,16 @@ const MainRoutes = () => {
         exact
         path="/service"
         element={
-          <div className="service h-screen">
+          <div className="service h-full grid grid-cols-6">
             <PrivateRoute>
-              <BackOfficeNavbar />
-              <Sidebar />
-              <Service_Decision />
+              <div className="col-span-1">
+                <Sidebar />
+              </div>
+              <div className="col-span-5 flex flex-col">
+                <FlexeeDashboardNavbar />
+
+                <Service_Decision />
+              </div>
             </PrivateRoute>
           </div>
         }
@@ -247,11 +305,16 @@ const MainRoutes = () => {
         exact
         path="/demand"
         element={
-          <div className="demand h-screen">
+          <div className="demand h-full grid grid-cols-6">
             <PrivateRoute>
-              <BackOfficeNavbar />
-              <Sidebar />
-              <Demand_generation />
+              <div className="col-span-1">
+                <Sidebar />
+              </div>
+              <div className="col-span-5 flex flex-col">
+                <FlexeeDashboardNavbar />
+
+                <Demand_generation />
+              </div>
             </PrivateRoute>
           </div>
         }
@@ -261,11 +324,17 @@ const MainRoutes = () => {
         exact
         path="/forecast"
         element={
-          <div className="forecast h-screen">
+          <div className="forecast h-full grid grid-cols-1 md:grid-cols-6">
             <PrivateRoute>
-              <BackOfficeNavbar />
-              <Sidebar />
-              <Forecast />
+              {/* Sidebar: Hidden on smaller screens, spans 1 column on medium+ screens */}
+              <div className="hidden md:block md:col-span-1">
+                <Sidebar />
+              </div>
+              {/* Main Content: Takes full width on small screens, spans 5 columns on medium+ screens */}
+              <div className="col-span-1 md:col-span-5 flex flex-col">
+                <FlexeeDashboardNavbar />
+                <Forecast />
+              </div>
             </PrivateRoute>
           </div>
         }
@@ -275,21 +344,25 @@ const MainRoutes = () => {
         exact
         path="/it"
         element={
-          <div className="it h-screen">
+          <div className="it h-full grid grid-cols-6">
             <PrivateRoute>
-              <BackOfficeNavbar />
-              <Sidebar />
-              <IT />
+              <div className="col-span-1">
+                <Sidebar />
+              </div>
+              <div className="col-span-5 flex flex-col">
+                <FlexeeDashboardNavbar />
+
+                <IT />
+              </div>
             </PrivateRoute>
           </div>
         }
       />
-
       <Route
         exact
         path="/admin"
         element={
-          <div className="admin h-screen">
+          <div className="admin h-full">
             <Admin />
           </div>
         }
@@ -299,7 +372,7 @@ const MainRoutes = () => {
         exact
         path="/student/signin"
         element={
-          <div className="signin h-screen">
+          <div className="signin h-full">
             <Signin />
           </div>
         }
@@ -308,7 +381,7 @@ const MainRoutes = () => {
         exact
         path="/signin"
         element={
-          <div className="signin h-screen">
+          <div className="signin h-full">
             <Signin />
           </div>
         }
@@ -317,7 +390,7 @@ const MainRoutes = () => {
         exact
         path="/faculty/signin"
         element={
-          <div className="signin h-screen">
+          <div className="signin h-full">
             <Signin />
           </div>
         }
@@ -326,7 +399,7 @@ const MainRoutes = () => {
         exact
         path="/signup"
         element={
-          <div className="signup h-screen">
+          <div className="signup h-full">
             <Signup />
           </div>
         }
@@ -350,9 +423,25 @@ const MainRoutes = () => {
 
       <Route
         exact
+        path="/usersidelive/joined"
+        element={
+          <PrivateRoute>
+            <SimRoute>
+              <div className="h-[96vh]">
+                <FlexeeDashboardNavbar />
+                <UserSideView />
+              </div>
+              <BackOfficeFooter />
+            </SimRoute>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        exact
         path="/manual"
         element={
-          <div className="signup h-screen">
+          <div className="signup h-full">
             <PrivateRoute>
               <CNavbar />
               <Manual />
@@ -366,7 +455,7 @@ const MainRoutes = () => {
         exact
         path="/usersideended"
         element={
-          <div className="signup h-screen">
+          <div className="signup h-full">
             <PrivateRoute>
               <UserSideEnded />
             </PrivateRoute>
@@ -378,7 +467,7 @@ const MainRoutes = () => {
         exact
         path="/inventory"
         element={
-          <div className="signup h-screen">
+          <div className="signup h-full">
             <PrivateRoute>
               <Inventory />
             </PrivateRoute>
@@ -388,13 +477,13 @@ const MainRoutes = () => {
 
       <Route
         exact
-        path="/flexee/admin-center/super/createsim"
+        path="/createsim"
         element={
-          <div className="createsim h-screen">
+          <div className="createsim h-full">
             <div className="navbar pb-4">
               <PrivateRoute>
                 <ProtectedRoute>
-                 <BackOfficeNavbar />
+                  <BackOfficeNavbar />
                 </ProtectedRoute>
               </PrivateRoute>
             </div>
@@ -410,7 +499,7 @@ const MainRoutes = () => {
         exact
         path="/flexee/admin-center/super/admin-list"
         element={
-          <div className="createsim h-screen">
+          <div className="createsim h-full">
             <div className="navbar pb-4">
               <PrivateRoute>
                 <AdminSideLive />
@@ -492,12 +581,17 @@ const MainRoutes = () => {
         path="/flexeesim/dashboard"
         element={
           <ProtectedRoute>
-            <div className="bg-white" style={{ minHeight: "140vh" }}>
-              <FlexeeDashboardNavbar />
-              <FlexeeDashboard />
-              {/* <FlexeeExploreSim /> */}
-            </div>
-            <BackOfficeFooter />
+            <LayoutWithSidebar />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        exact
+        path="/flexeesim/grouplogs"
+        element={
+          <ProtectedRoute>
+            <GroupsLogsSidebar />
           </ProtectedRoute>
         }
       />
@@ -620,12 +714,9 @@ const MainRoutes = () => {
         path="/flexeesim/dashboard/courses"
         element={
           <ProtectedRoute>
-            <div className="min-h-screen">
-              <FlexeeDashboardNavbar />
-              <FlexeeCourseComponent />
-              <FlexeeGroupsTeamsComponent />
+            <div className="min-h-full">
+              <CourseSideBar />
             </div>
-            <BackOfficeFooter />
           </ProtectedRoute>
         }
       />

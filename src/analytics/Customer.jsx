@@ -85,7 +85,7 @@ const Customer = () => {
   };
 
   return (
-    <div style={{ padding: "20px", background:'#F4F4F4' }}>
+    <div style={{ padding: "20px" }}>
       <div className="grid grid-cols-2 gap-6 mb-6 p-4 rounded-lg" style={{background:'white'}}>
         <div>
           <h2 className="text-red-600">Quarterly Market Penetration Rate</h2>

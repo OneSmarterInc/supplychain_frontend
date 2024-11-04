@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
-import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useNavigate } from "react-router-dom";
@@ -7,24 +6,17 @@ import ReportModal from "../report/CplReport/ReportModal";
 import BalanceSheetModel from "../report/BlanceSheetReport/BalanceSheetModel";
 import FGInventoryModal from "../report/FinishedGoodsInventoryReport/FGInventoryModal";
 import CashFlowContainer from "../report/CashFlowReport/CashFlowContainer";
+import sidebaricon from '../FlexeeSimAdmin/Assets/sidebaricon.png';
 
 const Sidebar = () => {
   const { api } = useContext(MyContext);
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeParent, setActiveParent] = useState(null);
-  const [activeChild, setActiveChild] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(null);
   const [activeReport, setActiveReport] = useState(null);
   const [reportData, setReportData] = useState(null);
-  const [type, setType] = useState(null);
   const navigate = useNavigate();
 
-  const sidebarRef = useRef(null);
-
-  let simData = localStorage.getItem("selectedSim");
-  simData = JSON.parse(simData);
-
+  let simData = JSON.parse(localStorage.getItem("selectedSim"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSimData")) || {};
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const firm_obj = selectedSim[0]?.firm_data?.filter(item => item.emails.includes(user.email)) || [];
@@ -33,21 +25,7 @@ const Sidebar = () => {
   let totalQuarters = parseInt(simData?.[0]?.current_quarter) - 1 || 1;
 
   const parentOptions = [
-    { name: "Home", redirect: "/usersidelive" },
     { name: "Dashboard", redirect: "/dashboard" },
-    // {
-    //   name: "Decisions",
-    //   children: [
-    //     { name: "Forecast", redirect: "/forecast" },
-    //     { name: "Procurement", redirect: "/procurement" },
-    //     { name: "Manufacture", redirect: "/manufacture" },
-    //     { name: "Distribution", redirect: "/distribution" },
-    //     { name: "Transport", redirect: "/transport" },
-    //     { name: "Service", redirect: "/service" },
-    //     { name: "Demand", redirect: "/demand" },
-    //     { name: "IT", redirect: "/it" },
-    //   ],
-    // },
     {
       name: "Reports",
       children: Array.from({ length: totalQuarters }, (_, i) => ({
@@ -56,84 +34,51 @@ const Sidebar = () => {
       })),
     },
     { name: "Members and Logs", redirect: "/members" },
-    // Update the Manual option to trigger a download
-    { 
-      name: "Download Manual", 
-      download: true,
-      fileUrl: "/manual.docx"  // Assuming the file is stored in the public directory
-    },
-    { name: "FAQ's", redirect: "/faqs" },
+    { name: "Download Manual", download: true, fileUrl: "/manual.docx" },
+    // { name: "FAQ's", redirect: "/faqs" },
   ];
 
   const handleParentClick = (option) => {
     if (option.redirect) {
       navigate(option.redirect);
       clearReportState();
-      // Close the sidebar only when navigating to a new route
-      setIsSidebarOpen(false);
     } else if (option.download) {
-      // If it's a download option, trigger file download
       const link = document.createElement('a');
       link.href = option.fileUrl;
-      link.download = 'manual.docx';  // Set the name for the downloaded file
+      link.download = 'manual.docx';
       link.click();
     } else {
-      // Open the sidebar and set the active parent when there are children
-      setIsSidebarOpen(true);
-      setActiveParent(option.name);
-      setType(option.name);
-      setActiveChild(null);
+      setActiveParent(activeParent === option.name ? null : option.name);  // Toggle the display of children
       setSelectedQuarter(null);
       clearReportState();
     }
   };
 
   const handleQuarterClick = (quarter) => {
-    setActiveChild(quarter.name);
-
-    if (!quarter.name.includes("Quarter")) {
-      navigate(`/${quarter.name}`);
-      clearReportState();
-      setIsSidebarOpen(false); // Close the sidebar when navigating to a new route
-    } else {
-      setSelectedQuarter(quarter.name);
-      setIsSidebarOpen(true); // Keep the sidebar open if it's a quarter selection
-    }
+    setSelectedQuarter(selectedQuarter === quarter.name ? null : quarter.name);  // Toggle quarter selection
+    clearReportState();
   };
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-    if (!isSidebarOpen) {
-      setActiveParent(null);
-      setActiveChild(null);
-      setType(null);
-      setSelectedQuarter(null);
-      clearReportState();
-    }
-  };
-
 
   const handleReportChange = async (reportType) => {
-    if (type === "Reports") {
+    const queryParams = new URLSearchParams({
+      simulation_id: simData[0]?.simulation_id,
+      quarter: selectedQuarter.slice(-1),
+      firm: firm_key,
+    }).toString();
+
+    const url = `${api}/reports/${reportType}/?${queryParams}`;
+
+    try {
+      const response = await axios.get(url);
+      localStorage.setItem("reportData", JSON.stringify(response.data));
+      setReportData(response.data);
+
+      // Reset sidebar to its original state (normal view with no children displayed)
+      setActiveParent(null);
+      setSelectedQuarter(null);
       setActiveReport(reportType);
-
-      const queryParams = new URLSearchParams({
-        simulation_id: simData[0]?.simulation_id,
-        quarter: selectedQuarter.slice(-1),
-        firm: firm_key,
-      }).toString();
-
-      const url = `${api}/reports/${reportType}/?${queryParams}`;
-
-      try {
-        const response = await axios.get(url);
-        console.log("GET request successful", response.data);
-        localStorage.setItem("reportData", JSON.stringify(response.data));
-        setReportData(response.data);
-      } catch (error) {
-        console.error("Error making GET request:", error);
-        setIsSidebarOpen(false);
-      }
+    } catch (error) {
+      console.error("Error making GET request:", error);
     }
   };
 
@@ -142,165 +87,78 @@ const Sidebar = () => {
     setReportData(null);
   };
 
-  const handleClickOutside = (event) => {
-    if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-      setIsSidebarOpen(false);
-      setActiveParent(null);
-      setActiveChild(null);
-      setType(null);
-      setSelectedQuarter(null);
-      clearReportState();
-    }
-  };
-
-  useEffect(() => {
-    if (isSidebarOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isSidebarOpen]);
   return (
-    <div className="relative z-50 flex">
-      {!isSidebarOpen && (
-        <div className="absolute left-0 mt-0 top-1 transform -translate-y-11 bg-black text-gray-300 pl-3 rounded-r cursor-pointer">
-          <i class="fa-solid fa-bars text-2xl text-red-500" onClick={toggleSidebar}></i>
-        </div>
-      )}
+    <div className="fixed left-0 top-0 bg-white text-gray-800 w-60 pt-4 h-screen border-r-2 border-red-500">
+      <div className="flex flex-col items-center justify-center space-y-2">
+        <img src={sidebaricon} className="cursor-pointer" onClick={() => { navigate('/usersidelive') }} />
+        <span className="text-gray-800 font-bold">DECISIONS</span>
+        <div className="border-b border-red-500 w-[40px]"></div>
+      </div>
 
-      {isSidebarOpen && (
-        <div
-          ref={sidebarRef}
-          className="fixed left-0 top-0 bg-[#0E406A] text-gray-300 w-60 h-screen"
-        >
-          <div className="flex bg-gray-900 w-full h-12 p-2 justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold pl-4 text-white cursor-pointer" onClick={() => { navigate('/usersidelive') }}>FLEXEE</h1>
-            <FiArrowLeft
-              onClick={toggleSidebar}
-              className="cursor-pointer text-red-500"
-              size={28}
-            />
-          </div>
-          <ul className="p-4">
-            <li className="mb-4">
-              <button
-                onClick={() => handleParentClick(parentOptions[0])}
-                className={`w-full text-left p-2 rounded ${activeParent === parentOptions[0].name ? "bg-gray-700" : ""
-                  }`}
-              >
-                {parentOptions[0].name}
-              </button>
-            </li>
-            <div>
-              <h2 className="text-lg font-semibold text-white mb-2">Activity</h2>
-              <hr className="border-gray-600 mb-2" />
-              {parentOptions.slice(1, 5).map((option, index) => (
-                <li key={index} className="mb-4">
-                  <button
-                    onClick={() => handleParentClick(option)}
-                    className={`w-full text-left p-2 rounded ${activeParent === option.name ? "bg-gray-700" : ""
-                      }`}
-                  >
-                    {option.name}
-                  </button>
-                </li>
-              ))}
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold text-white mb-2">Resources</h2>
-              <hr className="border-gray-600 mb-2" />
-              {parentOptions.slice(5, 7).map((option, index) => (
-                <li key={index} className="mb-4">
-                  <button
-                    onClick={() => handleParentClick(option)}
-                    className={`w-full text-left p-2 rounded ${activeParent === option.name ? "bg-gray-700" : ""
-                      }`}
-                  >
-                    {option.name}
-                  </button>
-                </li>
-              ))}
-            </div>
-          </ul>
-        </div>
-      )}
+      {/* Main Parent Options */}
+      <ul className="p-4">
+        {parentOptions.map((option, index) => (
+          <li key={index} className="mb-4">
+            <button
+              onClick={() => handleParentClick(option)}
+              className={`w-full text-left p-2 rounded ${activeParent === option.name ? "bg-white" : ""}`}
+            >
+              {option.name}
+            </button>
 
-      {isSidebarOpen &&
-        activeParent &&
-        parentOptions.find((option) => option.name === activeParent)
-          ?.children && (
-          <div
-            ref={sidebarRef}
-            className="fixed left-60 top-0 w-48 bg-gray-800 text-white h-screen p-4"
-          >
-            <ul>
-              {parentOptions
-                .find((option) => option.name === activeParent)
-                .children.map((quarter, index) => (
-                  <li key={index} className="mb-4">
+            {/* Show Quarters Below "Reports" */}
+            {activeParent === option.name && option.name === "Reports" && (
+              <ul className="pl-4">
+                {option.children.map((quarter, index) => (
+                  <li key={index} className="mb-2">
                     <button
                       onClick={() => handleQuarterClick(quarter)}
-                      className={`w-full text-left p-2 rounded ${activeChild === quarter.name ? "bg-gray-600" : ""
-                        }`}
+                      className={`w-full text-left p-2 rounded ${selectedQuarter === quarter.name ? "bg-gray-200" : ""}`}
                     >
                       {quarter.name}
                     </button>
+
+                    {/* Show Reports Below Selected Quarter */}
+                    {selectedQuarter === quarter.name && (
+                      <ul className="pl-4">
+                        <li className="mb-2">
+                          <button onClick={() => handleReportChange("cpl")} className="w-full text-left p-2">
+                            Corporate P&L Statement
+                          </button>
+                        </li>
+                        <li className="mb-2">
+                          <button onClick={() => handleReportChange("bls")} className="w-full text-left p-2">
+                            Balance Sheet
+                          </button>
+                        </li>
+                        <li className="mb-2">
+                          <button onClick={() => handleReportChange("cash")} className="w-full text-left p-2">
+                            Cash Flow
+                          </button>
+                        </li>
+                        <li className="mb-2">
+                          <button onClick={() => handleReportChange("inventory")} className="w-full text-left p-2">
+                            Finished Goods Inventory Report
+                          </button>
+                        </li>
+                      </ul>
+                    )}
                   </li>
                 ))}
-            </ul>
-          </div>
-        )}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
 
-      {isSidebarOpen && activeChild && type === "Reports" && (
-        <div
-          ref={sidebarRef}
-          className="fixed left-[15rem] top-0 w-48 bg-gray-700 text-white h-screen p-4"
-        >
-          <button
-            onClick={() => handleReportChange("cpl")}
-            className="w-full text-left p-2"
-          >
-            Corporate P&L Statement
-          </button>
-          <button
-            onClick={() => handleReportChange("bls")}
-            className="w-full text-left p-2"
-          >
-            Balance Sheet
-          </button>
-
-          <button
-            onClick={() => handleReportChange("cash")}
-            className="w-full text-left p-2"
-          >
-            Cash Flow
-          </button>
-
-          <button
-            onClick={() => handleReportChange("inventory")}
-            className="w-full text-left p-2"
-          >
-            Finished Goods Inventory Report
-          </button>
-
-          {activeReport === "cpl" && reportData && (
-            <ReportModal reportData={reportData} />
-          )}
-          {activeReport === "bls" && reportData && (
-            <BalanceSheetModel reportData={reportData} />
-          )}
-          {activeReport === "inventory" && reportData && (
-            <FGInventoryModal reportData={reportData} />
-          )}
-          
-          {activeReport === "cash" && reportData && (
-            <CashFlowContainer reportData={reportData} />
-          )}
-        </div>
+      {/* Display the selected report */}
+      {activeReport && reportData && (
+        <>
+          {activeReport === "cpl" && <ReportModal reportData={reportData} />}
+          {activeReport === "bls" && <BalanceSheetModel reportData={reportData} />}
+          {activeReport === "inventory" && <FGInventoryModal reportData={reportData} />}
+          {activeReport === "cash" && <CashFlowContainer reportData={reportData} />}
+        </>
       )}
     </div>
   );

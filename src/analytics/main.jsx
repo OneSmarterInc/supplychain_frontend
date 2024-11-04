@@ -86,7 +86,7 @@ const Analytics = () => {
   };
 
   return (
-    <div className="w-3/5 mx-auto font-sans h-screen mb-4" >
+    <div className="w-3/5 mx-auto font-sans h-[100%] mb-4 " >
       <Text className="text-center text-lg text-gray-700 font-semibold mt-0.5">
         Course : <span className="text-red-600"> {selectedSimData[0].course} </span> | Your Team
         : <span className="text-red-600">{firm_key_new}</span>
@@ -135,7 +135,7 @@ const Analytics = () => {
           <thead className="bg-gradient-to-r from-gray-200 to-gray-300 ">
             <tr className="font-normal">
               <th className="pl-4 align-left text-left">Measures</th>
-              <th className="p-2 align-middle">Team 01 </th>
+              <th className="p-2 align-middle">{firm_key_new} </th>
               <th className="p-2 align-middle">Worst</th>
               <th className="p-2 align-middle">Average</th>
               <th className="p-2 align-middle">Best</th>

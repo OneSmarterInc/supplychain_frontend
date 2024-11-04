@@ -227,7 +227,7 @@ const Distribution_Decision = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/Transport");
+      
     } catch (error) {
       console.error("Error making POST request: Distribution", error);
       toast({
@@ -251,11 +251,13 @@ const Distribution_Decision = () => {
         <div className="sm:grid grid-cols-1 gap-3 m-1">
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
             <InfoImg decision={"Distribution"} />
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center pl-5 pt-2 pb-2">
-                <Text>Load data Quarterly</Text>
-                <div className="pl-4 flex space-x-4">
-                  {Array.from({ length: currentQuarter }, (_, i) => (
+            <div className="flex items-center justify-between w-full ">
+            <div className="flex items-center pl-5 pt-2 pb-2 ">
+              <Text>Load data Quarterly</Text>
+              <div className="pl-4 flex space-x-4 ">
+                {Array.from(
+                  { length: selectedSimData[0]?.current_quarter || 0 },
+                  (_, i) => (
                     <div
                       key={i + 1}
                       onClick={() => setSelectedQuarter(i + 1)}
@@ -267,22 +269,23 @@ const Distribution_Decision = () => {
                     >
                       {i + 1}
                     </div>
-                  ))}
-                </div>
+                  )
+                )}
               </div>
-              <InfoButton decision="Distribution" />
             </div>
 
             <div
-              onClick={loadPreviousQuarter}
-              className="font-bold py-2 px-4 text-red-400 cursor-pointer"
+              
+              className="font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl"
               disabled={isLoadingLastQuarter || currentQuarter <= 1}
+              title="To load inputs from the previous quarter"
             >
-              <span className="text-black">
-                To load inputs from the previous quarter,{" "}
-              </span>
-              {isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
+        
+              {isLoadingLastQuarter ? <Spinner size="sm" /> : <i class="fa fa-stack-overflow mr-2 " onClick={loadPreviousQuarter} aria-hidden="true"></i>}
+              <InfoButton decision="Distribution" />
             </div>
+          </div>
+
 
             {loading ? (
               <Box

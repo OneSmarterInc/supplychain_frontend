@@ -1,17 +1,9 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Modal from "react-modal";
-import demand from "../assets/demand.png";
-import distribution from "../assets/distribution.png";
-import forecasting from "../assets/forecasting.png";
-import it from "../assets/it.png";
-import service from "../assets/service.png";
-import transport from "../assets/transport.png";
-import manufacturing from "../assets/manufacturing.png";
-import procurement from "../assets/procurement.png";
 import Inventory from "./Inventory";
 import { Box, Button, Text } from "@chakra-ui/react";
-
+import quater from "../FlexeeSimAdmin/Assets/quarter.png";
 const InfoImg = ({ decision }) => {
   const location = useLocation();
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -33,8 +25,6 @@ const InfoImg = ({ decision }) => {
     setModalIsOpen(false);
   };
 
-  const pathname = location.pathname;
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
@@ -43,82 +33,42 @@ const InfoImg = ({ decision }) => {
     return `${day}-${month}-${year}`;
   };
 
-  const backgroundImage = () => {
-    switch (pathname) {
-      case "/Procurement":
-        return procurement;
-      case "/Demand":
-        return demand;
-      case "/IT":
-        return it;
-      case "/Service":
-        return service;
-      case "/Transport":
-        return transport;
-      case "/Transportation":
-        return transport;
-      case "/Manufacture":
-        return manufacturing;
-      case "/Distribution":
-        return distribution;
-      case "/Forecast":
-        return forecasting;
-      default:
-        return "";
-    }
-  };
-
   return (
-    <div className="relative">
-      <div
-        className="h-28 bg-cover bg-no-repeat overflow-hidden rounded-lg"
-        style={{
-          backgroundImage: `url(${backgroundImage()})`,
-          width: "auto",
-        }}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-60 rounded-lg flex flex-col justify-end p-4">
-          <div className="flex justify-between">
-            <h1 className="text-2xl text-start py-2 text-white">{decision} Decision</h1>
+    <div className="">
+      <div className="h-auto p-4 bg-white  border-gray-200 rounded-lg">
+        {/* FLEXEE Title Section */}
+        <div className="flex items-center justify-between">
+         
+        
 
-            <div className="flex">
-              <h1 className="text-xl text-start px-3 py-2 text-white">
-                {selectedSim[0]?.course || "Simulation"}
-              </h1>
-              <h1 className="text-xl text-start px-1 py-2 text-red-500">|</h1>
-              <h1 className="text-xl text-start px-3 py-2 text-white ">
-                {user.first_name+" "+user.last_name  || "User"}
-              </h1>
-            </div>
-          </div>
+      
+        <div className="">
+          <h2 className="text-xl font-bold text-red-600">{decision.toUpperCase()}</h2>
+          <p className="text-lg text-gray-700">
+            COURSE: {selectedSim[0]?.course || "MBA-2024-JUN"}
+          </p>
+        </div>
 
-          <div className="text-white flex flex-row justify-between w-full">
-            <h2 className="text-base">
-              {firm_key_new} | Q-{selectedSim[0]?.current_quarter || "N/A"}
-            </h2>
-            <div>
-              <h2 className="text-base">
-                {selectedSim[0]?.quarter_specific_decisions?.[`quarter${selectedSim[0]?.current_quarter}`]?.['quarter_end_time'] || "Time"} EST {formatDate(selectedSim[0]?.quarter_specific_decisions?.[`quarter${selectedSim[0]?.current_quarter}`]?.['quarter_end_date'] || "")}
-              </h2>
-              <hr />
-              <Text color="white" pl="6" fontSize="1.1rem" fontWeight={'bold'} gap={'2'}>Quarter Deadline</Text>
-            </div>
-            <button
-              title="Click to open Inventory"
-              onClick={handleInventory}
-              className="bg-[#D10000] rounded-md text-white h-10 px-2  hover:bg-red-700 shadow-md hover:shadow-lg hover:shadow-grey-500/50"
-            >
-              Inventory
-            </button>
+        {/* Quarter and Deadline Details */}
+        <div className=" flex justify-between items-center">
+          <div className="text-right">
+            <p className=" text-sm text-gray-700">
+              <span className="flex font-bold text-red-500">
+              <img src={quater} className="mr-2 h-5 w-5"></img>
+                {selectedSim[0]?.current_quarter}th Quarter Deadline</span> 
+            </p>
+              {formatDate(selectedSim[0]?.quarter_specific_decisions?.[`quarter${selectedSim[0]?.current_quarter}`]?.['quarter_end_date'] || "")} 
+              {selectedSim[0]?.quarter_specific_decisions?.[`quarter${selectedSim[0]?.current_quarter}`]?.['quarter_end_time'] || ""}
           </div>
+        </div>
         </div>
       </div>
 
+      {/* Inventory Modal */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Inventory Modal"
-
       >
         <Box display="flex" justifyContent="flex-end" w="100%">
           <Button onClick={closeModal} bg="#D10000" color="white">Close</Button>

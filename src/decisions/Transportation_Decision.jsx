@@ -155,7 +155,7 @@ const Transportation_Decision = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/Service");
+    
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
     } finally {

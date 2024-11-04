@@ -28,9 +28,9 @@ const StatusBar = ({ simulation_id, firm_key, quarter, api, current }) => {
     return <div>Loading...</div>;
   }
 
-  if (!statusData || statusData.length === 0) {
-    return <div>No data available</div>;
-  }
+  // if (!statusData || statusData.length === 0) {
+  //   return <div>No data available</div>;
+  // }
 
   // Decision labels
   const decisionLabels = [
@@ -45,13 +45,14 @@ const StatusBar = ({ simulation_id, firm_key, quarter, api, current }) => {
   ];
 
   return (
-    <div className="flex justify-center gap-0 items-center pt-3 ">
+    <div className="flex justify-center gap-0 items-center ">
+      
       {decisionLabels.map(({ key, label }) => (
         <div
           key={key}
           className={`w-36 h-8 flex sm:text-sm md:text-base justify-center items-center font-bold shadow-md transition-colors duration-300 cursor-pointer 
-            ${statusData[0][key] ? 'bg-green-300 text-white' : 'bg-gray-400 text-white'}
-            ${label === current ? ' bg-red-600' : ''}`}
+            ${statusData[0][key] ? 'bg-white border-b-4 border-green-500 text-green-500' : 'bg-white border-b-2 border-gray-500 text-gray-500'}
+            ${label === current ? ' bg-white border-b-4 border-red-600 text-red-500' : ''}`}
           onClick={() => navigate(`/${label}`)}
         >
           {label}

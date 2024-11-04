@@ -181,7 +181,7 @@ const Demand_generation = () => {
         isClosable: true,
         position: "top",
       });
-      navigate("/IT");
+     
     } catch (error) {
       console.error("Error making POST request:", error);
     } finally {

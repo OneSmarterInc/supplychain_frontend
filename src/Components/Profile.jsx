@@ -96,12 +96,13 @@ const ProfileDropdown = () => {
       <Popover placement="bottom-end">
         <PopoverHandler>
           <div className="cursor-pointer flex items-center">
-            <div className="flex items-center justify-center text-xl text-red font-bold px-2 mr-3">
+            <div className="flex items-center justify-center text-xl text-red font-bold px-4">
               <img
                 src={profile?.image_url ? `${api1}${profile.image_url}` : 'https://cdn-icons-png.flaticon.com/512/1077/1077012.png'}
                 alt={profile?.first_name || 'Default User'}
-                className="h-7 w-7 rounded-full"
+                className="h-14 w-14 rounded-full border-b border-red-500 mx-2"
               />
+              <i className="fa fa-sign-out fa-light text-2xl text-red-600 mx-2" onClick={handleLogOut} aria-hidden="true"></i>
             </div>
           </div>
         </PopoverHandler>

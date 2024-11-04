@@ -38,8 +38,8 @@ const ForecastingSales2 = ({ setForecastMetawaretopass, forecastData }) => {
       <Table className="min-w-full bg-white rounded-md shadow-md">
         <Thead className="bg-gray-100 text-gray-700 font-semibold">
           <Tr>
-            <Th className="p-3 text-left" style={{ color: "#D10000" }}>
-              {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware || " Smart Thermostat"}
+            <Th className="p-3 text-left " style={{ color: "#D10000" }}>
+              {selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware || " Smart Thermostat"} &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; 
             </Th>
             <Th className="p-3 text-center" textAlign="center">
               {selectedSim[0]?.renamedMappedData?.RegionMapp?.region1 || "Region 1"}

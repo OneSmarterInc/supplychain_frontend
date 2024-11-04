@@ -142,7 +142,7 @@ const Financial = () => {
   
 
   return (
-    <div style={{ padding: "20px", background:'#F4F4F4' }}>
+    <div style={{ padding: "20px" }}>
       <div className="grid grid-cols-2 gap-6 mb-6 p-4 rounded-lg" style={{background:'white'}}>
         {/* Revenue Overview */}
         <div >

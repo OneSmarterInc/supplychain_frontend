@@ -17,9 +17,12 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
   const [students, setStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All Students");
+  const [assignedCount, setAssignedCount] = useState(0); // New state for assigned count
+  const [notAssignedCount, setNotAssignedCount] = useState(0); // New state for not assigned count
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [studentToDelete, setStudentToDelete] = useState(null);
+
   const { api } = useContext(MyContext);
   const { api1 } = useContext(MyContext);
   const toast = useToast();
@@ -31,20 +34,14 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
     const fetchSubscribersAndTeams = async () => {
       setIsLoading(true);
       try {
-        // Fetch subscribers
         const response = await fetch(
           `${api}/simulation/${passcode}/subscribers/?format=json`
         );
         const data = await response.json();
-
-        // Filter out admin users
         const filteredData = data.filter((item) => !item.user_detail.is_admin);
-
-        // Fetch teams
         const teamResponse = await axios.get(`${api}/get-firms/${passcode}/`);
         const teamData = teamResponse.data;
 
-        // Map students to their respective teams
         const transformedData = filteredData.map((item) => {
           const assignedTeam = teamData.find((team) =>
             Object.values(team.users).some(
@@ -66,6 +63,14 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
         });
 
         setStudents(transformedData);
+
+        // Update counts for assigned and not assigned students
+        const assigned = transformedData.filter((student) => student.team !== "").length;
+        const notAssigned = transformedData.filter((student) => student.team === "").length;
+
+        setAssignedCount(assigned);
+        setNotAssignedCount(notAssigned);
+
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching the students or teams:", error);
@@ -112,12 +117,12 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
 
   const filteredStudents = students
     .filter((student) => {
-      if (selectedFilter === "All Students") {
-        return true;
-      } else if (selectedFilter === "Students") {
-        return student.team !== "";
+      if (selectedFilter === "Students") {
+        return student.team !== ""; // Only students with teams
+      } else if (selectedFilter === "StudentsNotTeam") {
+        return student.team === ""; // Only students without teams
       } else {
-        return student.team === "";
+        return true; // Default case, show all students
       }
     })
     .filter((student) => {
@@ -131,27 +136,29 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
     fetchTeams();
     setSelectedOption(team + user_id);
     try {
-      const response = await axios.get(
+      await axios.get(
         `${api}/post-firms/${user_id}/${user_email}/${passcode}/${team}/`
       );
-      const data = response.data;
 
       setStudents((prevStudents) =>
         prevStudents.map((student) =>
           student.id === user_id ? { ...student, team } : student
         )
       );
+
+      // Update counts after assignment
+      const updatedAssigned = students.filter((student) => student.team !== "").length;
+      const updatedNotAssigned = students.filter((student) => student.team === "").length;
+      setAssignedCount(updatedAssigned);
+      setNotAssignedCount(updatedNotAssigned);
+
     } catch (error) {
       console.log("Error", error);
     }
   };
 
   return (
-    <div className="bg-white w-full mx-auto pt-4 border-2 border-t-2 rounded-md border-gray-400 border-opacity-50 px-4 mb-12 h-full">
-      <p className="font-semibold text-2xl md:text-2xl ">
-        STUDENTS / MEMBER REQUEST
-      </p>
-
+    <div className="bg-white w-full mx-auto pt-0 rounded-md px-4 mb-1 h-full">
       {isLoading ? (
         <div className="flex justify-center items-center p-10">
           <Spinner size="xl" />
@@ -159,23 +166,23 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
       ) : (
         <>
           <div className="flex flex-col md:flex-row items-center mb-4 p-5">
-            <div className="flex items-center mb-4 md:mb-0 md:mr-4">
+            <div className="flex text-sm items-center mb-4 md:mb-0 md:mr-2 border-r border-red-500">
               <input
                 type="radio"
-                id="allStudents"
+                id="studentsTeam"
                 value="All Students"
                 checked={selectedFilter === "All Students"}
                 onChange={handleFilterChange}
                 className="mr-2"
               />
               <label
-                htmlFor="allStudents"
-                className="text-gray-700 text-lg md:text-xl mx-2"
+                htmlFor="studentsTeam"
+                className="text-gray-700 text-sm md:text-sm mr-2"
               >
-                All Students
+                All ({students.length})
               </label>
             </div>
-            <div className="flex items-center mb-4 md:mb-0 md:mr-4">
+            <div className="flex text-sm items-center mb-4 md:mb-0 md:mr-2 border-r border-red-500">
               <input
                 type="radio"
                 id="studentsTeam"
@@ -186,9 +193,9 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
               />
               <label
                 htmlFor="studentsTeam"
-                className="text-gray-700 text-lg md:text-xl mx-2"
+                className="text-gray-700 text-sm md:text-sm mr-2"
               >
-                Team Assigned
+               Assigned ({assignedCount}) {/* Show count here */}
               </label>
             </div>
             <div className="flex items-center mb-4 md:mb-0">
@@ -202,29 +209,29 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
               />
               <label
                 htmlFor="studentsNotTeam"
-                className="text-gray-700 text-lg md:text-xl mx-2"
+                className="text-red-600 text-sm md:text-sm mr-2"
               >
-                No Team Assigned
+                Not Assigned ({notAssignedCount}) {/* Show count here */}
               </label>
             </div>
-            <div className="ml-auto mt-4 md:mt-0">
+            <div className="relative ml-auto mt-4 md:mt-0">
               <input
                 type="text"
                 placeholder="Search Student"
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className="px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-10 py-2 text-sm rounded-full border border-red-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              <i className="fa fa-search absolute right-3 top-3 text-gray-400"></i>
             </div>
           </div>
 
-          <table className="w-full table-auto mb-4 border-collapse">
+          <table className="w-full table-auto mb-4">
             <thead>
               <tr>
-                <th className="px-4 py-2 text-left">NAME / STUDENT ID</th>
-                <th className="px-4 py-2 text-center">CONTACT</th>
-                <th className="px-4 py-2 text-center">TEAM / GROUP</th>
-                <th className="px-3 py-2 text-center">ENROLL DATE</th>
+                <th className="px-4 py-2 text-left"></th>
+                <th className="px-4 py-2 text-center"></th>
+                <th className="px-4 py-2 text-center"></th>
                 <th className="px-0 py-0"></th>
               </tr>
             </thead>
@@ -246,12 +253,13 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
                           {student.name}
                         </p>
                         <p className="text-sm text-red-600">
-                          #{student.studentId}
+                          {student.contact}
                         </p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-2 text-center">{student.contact}</td>
+                  
+                
 
                   <td className="px-4 py-2 text-center">
                     <select
@@ -274,9 +282,6 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
                       ))}
                     </select>
                   </td>
-                  <td className="px-8 py-2 text-center">
-                    {student.enrollDate}
-                  </td>
                   <td className="px-4 py-2 text-center">
                     <i
                       className="fa-solid fa-trash text-red-500 cursor-pointer hover:scale-110"
@@ -285,6 +290,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
                   </td>
                 </tr>
               ))}
+              {filteredStudents.length <= 0 && <div className="flex items-center text-gray-400 "> <p>Empty / All Assigned</p> </div>}
             </tbody>
           </table>
         </>
