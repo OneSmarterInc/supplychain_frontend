@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute component
+import SuperRoute from "./SuperRoute";
 // Import your components
 import Demand_generation from "../decisions/Demand_generation";
 import Distribution_Decision from "../decisions/Distribution_Decision";
@@ -485,6 +486,7 @@ const MainRoutes = () => {
                 <ProtectedRoute>
                   <BackOfficeNavbar />
                 </ProtectedRoute>
+
               </PrivateRoute>
             </div>
             <Steps
