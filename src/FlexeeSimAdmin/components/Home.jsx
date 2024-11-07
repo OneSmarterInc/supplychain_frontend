@@ -19,13 +19,15 @@ function Home() {
     <div className="bg-white text-center p-4 md:p-8">
       <div className="mt-8 md:mt-16">
         <h2 className="text-2xl md:text-4xl font-bold text-gray-700">
-          FLEXEE SIMULATION is designed to provide
+        Flexee is the ultimate simulation for real-world supply chain mastery
+
         </h2>
         <h2 className="text-xl md:text-3xl font-bold text-red-500 py-2">
-          COMPREHENSIVE LEARNING EXPERIENCE
+        Experience supply chain management in action. 
         </h2>
         <p className="text-gray-500 mt-4 text-lg md:text-2xl">
-          in supply chain management and production strategy.
+        Flexee pushes you to develop strategies that meet today’s industry challenges.
+          {/* in supply chain management and production strategy. */}
         </p>
       </div>
       <div className="mt-8 md:mt-16 flex justify-center">

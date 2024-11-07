@@ -663,7 +663,7 @@ const GDP = () => {
         localStorage.setItem("passcode", JSON.stringify(response.data.passcode));
         
 
-        navigate("/flexee/admin-center/super/createsim?step=4");
+        navigate("/createsim?step=4");
 
 
       } catch (error) {

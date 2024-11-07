@@ -17,9 +17,9 @@ const FlexeeOverview = () => {
       <div className="w-full max-w-7xl mx-4 px-4 md:px-8">
         <div className="flex flex-col md:flex-row space-y-8 md:space-x-4 items-start">
           <div className="w-full md:w-1/2">
-            <h1 className="text-3xl md:text-4xl font-bold text-start mb-4">
+            {/* <h1 className="text-3xl md:text-4xl font-bold text-start mb-4">
               FLEXEE OVERVIEW
-            </h1>
+            </h1> */}
             <p className="text-base md:text-lg text-gray-600 text-start mb-6">
               <span className="text-red-500 font-semibold">FLEXEE </span> is a comprehensive supply chain management simulation that encompasses all major elements of the supply chain, including suppliers, manufacturers, distributors, retailers, and end-users. Firms participating in FLEXEE are responsible for managing a wide range of activities, including:
             </p>
