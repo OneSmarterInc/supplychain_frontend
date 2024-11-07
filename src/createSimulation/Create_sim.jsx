@@ -123,7 +123,7 @@ const CreateSim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     localStorage.setItem("noOfQuarters", simulationData.total_quarters);
     localStorage.setItem("createSimData", JSON.stringify(simulationData));
     if (simulationData.total_quarters) {
-      navigate("/flexee/admin-center/super/createsim?step=2");
+      navigate("/createsim?step=2");
     }
   };
 

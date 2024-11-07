@@ -4,10 +4,10 @@ const Values = () => {
   return (
     <div className="bg-white py-12">
       <div className="max-w-screen-xl mx-auto px-4 md:px-8 mb-8">
-        <h3 className="text-sm text-start uppercase tracking-wide text-gray-500 mb-4 flex items-center">
+        {/* <h3 className="text-sm text-start uppercase tracking-wide text-gray-500 mb-4 flex items-center">
           <i className="fa-regular fa-circle text-xs mr-2"></i> Our Values
-        </h3>
-        <h2 className="text-2xl md:text-3xl text-start font-light mb-8">Creating long-term value.</h2>
+        </h3> */}
+        <h2 className="text-2xl md:text-3xl text-start font-light mb-8">Flexee teaches you how to create long long supply chain value.</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <ValueCard
             title="Supply Chain Blueprinting"

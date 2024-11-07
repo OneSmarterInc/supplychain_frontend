@@ -9,10 +9,11 @@ import JoinNow from "../Components/JoinNow";
 import bg from "../FlexeeSimAdmin/Assets/bg.png";
 import wheel from "../assets/wheel.png";
 import ProfileDropdown from "../Components/Profile";
+import { useNavigate } from "react-router-dom";
 const UserSideLive = () => {
   const { api } = useContext(MyContext);
   document.body.style.backgroundColor = "#e0e2e4"; // Background color update
-
+  const navigate = useNavigate();
   const [simData, setSimData] = useState([]);
   const [loading, setLoading] = useState(true); // Loader state
   const [code, setCode] = useState("");
@@ -21,6 +22,9 @@ const UserSideLive = () => {
   const toast = useToast(); // Initialize Chakra UI's toast
 
   const user = JSON.parse(localStorage.getItem("user"));
+  if(user.is_enrolled){
+    navigate('/usersidelive/joined')
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
