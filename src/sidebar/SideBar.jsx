@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ const Sidebar = () => {
   const [activeReport, setActiveReport] = useState(null);
   const [reportData, setReportData] = useState(null);
   const navigate = useNavigate();
+  const scrollContainerRef = useRef(null);
 
   let simData = JSON.parse(localStorage.getItem("selectedSim"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSimData")) || {};
@@ -29,13 +30,12 @@ const Sidebar = () => {
     {
       name: "Reports",
       children: Array.from({ length: totalQuarters }, (_, i) => ({
-        name: `Quarter ${i + 1}`,
+        name: `${i + 1}`,
         redirect: null,
       })),
     },
     { name: "Members and Logs", redirect: "/members" },
     { name: "Download Manual", download: true, fileUrl: "/manual.docx" },
-    // { name: "FAQ's", redirect: "/faqs" },
   ];
 
   const handleParentClick = (option) => {
@@ -48,14 +48,12 @@ const Sidebar = () => {
       link.download = 'manual.docx';
       link.click();
     } else {
-      setActiveParent(activeParent === option.name ? null : option.name);  // Toggle the display of children
-      setSelectedQuarter(null);
-      clearReportState();
+      setActiveParent(activeParent === option.name ? null : option.name);
     }
   };
 
   const handleQuarterClick = (quarter) => {
-    setSelectedQuarter(selectedQuarter === quarter.name ? null : quarter.name);  // Toggle quarter selection
+    setSelectedQuarter(selectedQuarter === quarter.name ? null : quarter.name);
     clearReportState();
   };
 
@@ -72,10 +70,6 @@ const Sidebar = () => {
       const response = await axios.get(url);
       localStorage.setItem("reportData", JSON.stringify(response.data));
       setReportData(response.data);
-
-      // Reset sidebar to its original state (normal view with no children displayed)
-      setActiveParent(null);
-      setSelectedQuarter(null);
       setActiveReport(reportType);
     } catch (error) {
       console.error("Error making GET request:", error);
@@ -87,6 +81,18 @@ const Sidebar = () => {
     setReportData(null);
   };
 
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -100, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 100, behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="fixed left-0 top-0 bg-white text-gray-800 w-60 pt-4 h-screen border-r-2 border-red-500">
       <div className="flex flex-col items-center justify-center space-y-2">
@@ -95,7 +101,6 @@ const Sidebar = () => {
         <div className="border-b border-red-500 w-[40px]"></div>
       </div>
 
-      {/* Main Parent Options */}
       <ul className="p-4">
         {parentOptions.map((option, index) => (
           <li key={index} className="mb-4">
@@ -106,52 +111,56 @@ const Sidebar = () => {
               {option.name}
             </button>
 
-            {/* Show Quarters Below "Reports" */}
             {activeParent === option.name && option.name === "Reports" && (
-              <ul className="pl-4">
-                {option.children.map((quarter, index) => (
-                  <li key={index} className="mb-2">
+              <div className="relative">
+                <button className="absolute left-0 top-0 h-full bg-gray-200" onClick={scrollLeft}>&lt;</button>
+                <div
+                  ref={scrollContainerRef}
+                  className="overflow-x-auto flex space-x-2 scrollbar-hide"
+                  style={{ maxWidth: '200px' }}
+                >
+                  {option.children.map((quarter, index) => (
                     <button
+                      key={index}
                       onClick={() => handleQuarterClick(quarter)}
-                      className={`w-full text-left p-2 rounded ${selectedQuarter === quarter.name ? "bg-gray-200" : ""}`}
+                      className={`w-8 h-8 flex ml-2 items-center justify-center rounded-full border border-gray-300 ${selectedQuarter === quarter.name ? "bg-red-500 text-white" : ""}`}
                     >
                       {quarter.name}
                     </button>
+                  ))}
+                </div>
+                <button className="absolute right-0 top-0 h-full bg-gray-200" onClick={scrollRight}>&gt;</button>
+              </div>
+            )}
 
-                    {/* Show Reports Below Selected Quarter */}
-                    {selectedQuarter === quarter.name && (
-                      <ul className="pl-4">
-                        <li className="mb-2">
-                          <button onClick={() => handleReportChange("cpl")} className="w-full text-left p-2">
-                            Corporate P&L Statement
-                          </button>
-                        </li>
-                        <li className="mb-2">
-                          <button onClick={() => handleReportChange("bls")} className="w-full text-left p-2">
-                            Balance Sheet
-                          </button>
-                        </li>
-                        <li className="mb-2">
-                          <button onClick={() => handleReportChange("cash")} className="w-full text-left p-2">
-                            Cash Flow
-                          </button>
-                        </li>
-                        <li className="mb-2">
-                          <button onClick={() => handleReportChange("inventory")} className="w-full text-left p-2">
-                            Finished Goods Inventory Report
-                          </button>
-                        </li>
-                      </ul>
-                    )}
-                  </li>
-                ))}
+            {selectedQuarter && activeParent === option.name && option.name === "Reports" && (
+              <ul className="pl-4 mt-2">
+                <li>
+                  <button onClick={() => handleReportChange("cpl")} className="w-full text-left p-2">
+                    Corporate P&L Statement
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleReportChange("bls")} className="w-full text-left p-2">
+                    Balance Sheet
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleReportChange("cash")} className="w-full text-left p-2">
+                    Cash Flow
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleReportChange("inventory")} className="w-full text-left p-2">
+                    Finished Goods Inventory Report
+                  </button>
+                </li>
               </ul>
             )}
           </li>
         ))}
       </ul>
 
-      {/* Display the selected report */}
       {activeReport && reportData && (
         <>
           {activeReport === "cpl" && <ReportModal reportData={reportData} />}
