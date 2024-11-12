@@ -8,6 +8,7 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 
 // Component to render content in a new window
 function NewPageRenderer({ children }) {
@@ -26,34 +27,59 @@ function NewPageRenderer({ children }) {
   }, []);
 
   // Render the children to the new window's document body
-  return newWindow ? ReactDOM.createPortal(children, newWindow.document.body) : null;
+  return newWindow
+    ? ReactDOM.createPortal(children, newWindow.document.body)
+    : null;
 }
 
 // Destructure `reportData` from props
-const CashFlowContainer = ({ reportData }) => {
-  const [open, setOpen] = useState(false); // State for dialog
-  const [openNewPage, setOpenNewPage] = useState(false); // State for new page
+const CashFlowContainer = ({ reportData, setActiveReport }) => {
+  const [open, setOpen] = useState(true);
+  const [openNewPage, setOpenNewPage] = useState(false);
 
-  const handleOpen = () => setOpen(!open); // Toggle dialog open/close
-  const handleExplode = () => setOpenNewPage(true); // Open new page
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setActiveReport("");
+  };
+  const handleExplode = () => setOpenNewPage(true);
 
   return (
     <>
-      <Button onClick={handleOpen}>View Report</Button> {/* Button to trigger the dialog */}
+      {/* <Button onClick={handleOpen}>View Report</Button>  */}
       <Dialog size="lg" open={open} handler={handleOpen}>
         <DialogHeader>
-          <Button
-            variant="gradient"
-            color="blue"
-            onClick={handleExplode}
-            className="ml-4"
-          >
-            Explode
-          </Button>
+          <Flex width={"100%"} justifyContent={"space-between"}>
+            <Text>Report : Cash Flow Report</Text>
+            <Box>
+              <Button
+                variant="gradient"
+                color="blue"
+                onClick={handleExplode}
+                className="ml-4"
+              >
+                Explode
+              </Button>
+              <Button
+                variant="text"
+                color="red"
+                onClick={handleClose}
+                className="mr-1"
+              >
+                <span>Close</span>
+              </Button>
+            </Box>
+          </Flex>
         </DialogHeader>
-        <DialogBody style={{ height: "600px", overflowY: "auto" }} className="text-lg overflow-scroll">
+        <DialogBody
+          style={{ height: "600px", overflowY: "auto" }}
+          className="text-lg overflow-scroll"
+        >
           <h1 className="text-xl font-bold mb-4">Cash Flow Analysis Reports</h1>
-          <CashFlowTable data={reportData} /> {/* Pass `reportData` as prop to the table */}
+          <CashFlowTable data={reportData} />{" "}
+          {/* Pass `reportData` as prop to the table */}
         </DialogBody>
         <DialogFooter>
           <Button onClick={handleOpen} variant="gradient" color="red">
@@ -64,8 +90,11 @@ const CashFlowContainer = ({ reportData }) => {
       {openNewPage && (
         <NewPageRenderer>
           <div>
-            <h1 className="text-2xl font-bold mb-4">Cash Flow Analysis Reports</h1>
-            <CashFlowTable data={reportData} /> {/* Render report in new page */}
+            <h1 className="text-2xl font-bold mb-4">
+              Cash Flow Analysis Reports
+            </h1>
+            <CashFlowTable data={reportData} />{" "}
+            {/* Render report in new page */}
           </div>
         </NewPageRenderer>
       )}

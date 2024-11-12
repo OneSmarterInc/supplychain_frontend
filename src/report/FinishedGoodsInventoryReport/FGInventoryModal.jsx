@@ -8,6 +8,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import FGInventoryTable from "./FGInventoryTable";
+import { Box, Flex, Text } from "@chakra-ui/react";
 
 function NewPageRenderer({ children }) {
   const [newWindow, setNewWindow] = useState(null);
@@ -25,40 +26,52 @@ function NewPageRenderer({ children }) {
   }, []);
 
   // Render the children to the new window's document body
-  return newWindow ? ReactDOM.createPortal(children, newWindow.document.body) : null;
+  return newWindow
+    ? ReactDOM.createPortal(children, newWindow.document.body)
+    : null;
 }
 
-export default function FGInventoryModal() {
-  const [open, setOpen] = useState(false);
+export default function FGInventoryModal({setActiveReport}) {
+  const [open, setOpen] = useState(true);
   const [openNewPage, setOpenNewPage] = useState(false);
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setActiveReport("");
+  };
   const handleExplode = () => setOpenNewPage(true);
 
   return (
     <>
-      <Button onClick={handleOpen} variant="gradient">
+      {/* <Button onClick={handleOpen} variant="gradient">
         Open Goods Inventory Report
-      </Button>
+      </Button> */}
       <Dialog size="lg" open={open} handler={handleOpen}>
         <DialogHeader>
-          Report
-          <Button
-            variant="gradient"
-            color="blue"
-            onClick={handleExplode}
-            className="ml-4"
-          >
-            Explode
-          </Button>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleOpen}
-            className="mr-1"
-          >
-            <span>Close</span>
-          </Button>
+          <Flex width={"100%"} justifyContent={"space-between"}>
+            <Text>Report : Cash Flow Report</Text>
+            <Box>
+              <Button
+                variant="gradient"
+                color="blue"
+                onClick={handleExplode}
+                className="ml-4"
+              >
+                Explode
+              </Button>
+              <Button
+                variant="text"
+                color="red"
+                onClick={handleClose}
+                className="mr-1"
+              >
+                <span>Close</span>
+              </Button>
+            </Box>
+          </Flex>
         </DialogHeader>
         <DialogBody
           style={{ height: "600px", overflowY: "auto" }}
@@ -66,13 +79,14 @@ export default function FGInventoryModal() {
         >
           <FGInventoryTable />
         </DialogBody>
-        <DialogFooter>
-        </DialogFooter>
+        <DialogFooter></DialogFooter>
       </Dialog>
       {openNewPage && (
         <NewPageRenderer>
           <div>
-            <h1 className="text-2xl font-bold mb-4">Finished Goods Inventory Report</h1>
+            <h1 className="text-2xl font-bold mb-4">
+              Finished Goods Inventory Report
+            </h1>
             <FGInventoryTable />
           </div>
         </NewPageRenderer>

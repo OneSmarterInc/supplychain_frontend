@@ -11,11 +11,13 @@ const BackOfficeUser = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [courses, setCourses] = useState([]);
   const { api, api1 } = useContext(MyContext);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
         const user = JSON.parse(localStorage.getItem("user"));
         const response = await axios.get(
           `${api}/user/${user.userid}/subscriptions/`
@@ -30,8 +32,7 @@ const BackOfficeUser = () => {
         }));
 
         setCourses(transformedCourses);
-        setLoading(false)
-        
+        setLoading(false);
 
         // Set the first course as selected by default
         if (transformedCourses.length > 0) {
@@ -39,8 +40,7 @@ const BackOfficeUser = () => {
         }
       } catch (error) {
         console.error("Error fetching the courses:", error);
-        setLoading(false)
-
+        setLoading(false);
       }
     };
 
@@ -53,9 +53,10 @@ const BackOfficeUser = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`${api}/get-firms/${selectedCourse.passcode}/`);
+        const response = await axios.get(
+          `${api}/get-firms/${selectedCourse.passcode}/?page=${page}`
+        );
         const flattenedUsers = response.data.flatMap((firm) => {
-          // Ensure users is an array before mapping
           const firmUsers = Array.isArray(firm.users) ? firm.users : [];
           return firmUsers.map((user) => ({
             name: `${user.first_name} ${user.last_name}`,
@@ -68,7 +69,9 @@ const BackOfficeUser = () => {
             image: user.image,
           }));
         });
-        setUsers(flattenedUsers);
+
+        setUsers((prevUsers) => [...prevUsers, ...flattenedUsers]);
+        setHasMore(flattenedUsers.length > 0);
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
@@ -77,18 +80,27 @@ const BackOfficeUser = () => {
     };
 
     fetchUsers();
-  }, [api, selectedCourse]);
+  }, [api, selectedCourse, page]);
 
   const handleSelectedCourse = (course) => {
     setSelectedCourse(JSON.parse(course));
+    setUsers([]);
+    setPage(1);
+    setHasMore(true);
   };
-  if (loading) {
+
+  const loadMoreUsers = () => {
+    if (hasMore) setPage((prevPage) => prevPage + 1);
+  };
+
+  if (loading && users.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <Puff color="red" height={100} width={100} /> {/* Loader */}
       </div>
     );
   }
+
   if (!selectedCourse) {
     return (
       <p className="text-gray-500">
@@ -115,7 +127,6 @@ const BackOfficeUser = () => {
                 {courses.map((course, index) => (
                   <option key={index} value={JSON.stringify(course)}>
                     {course.course}
-                    {/*  | {course.organization} */}
                   </option>
                 ))}
               </select>
@@ -133,7 +144,7 @@ const BackOfficeUser = () => {
         <h3 className="text-2xl px-2 text-start font-semibold mb-2 border-0 border-b pb-3 border-b-gray-500 border-opacity-20">
           USERS
         </h3>
-        {loading ? (
+        {loading && users.length === 0 ? (
           <div className="flex justify-center items-center">
             <Puff color="red" height={100} width={100} /> {/* Loader */}
           </div>
@@ -156,7 +167,13 @@ const BackOfficeUser = () => {
                     <td className="py-2 px-4 border-b">
                       <div className="flex items-center">
                         <img
-                          src={`${api1}${user.image}`}
+                          src={`${api1 + "/simulation"}${
+                            user.image.includes("/media")
+                              ? user.image.substring(
+                                  user.image.indexOf("/media")
+                                )
+                              : user.image
+                          }`}
                           alt="User Profile"
                           className="w-10 h-10 rounded-full mr-2"
                         />
@@ -190,19 +207,22 @@ const BackOfficeUser = () => {
                 ))}
               </tbody>
             </table>
-            <div className="flex justify-between items-center mt-4">
-              <div className="flex items-center">
-                <p className="text-gray-800">
-                  Showing 1 to {Math.min(10, users.length)} of {users.length}
-                </p>
+            {hasMore && (
+              <div className="flex justify-between items-center mt-4">
+                <p className="text-gray-800">Showing {users.length} </p>
+                <button
+                  onClick={loadMoreUsers}
+                  className="w-40 text-sm px-4 py-2 bg-red-500 rounded-full text-white mt-4 mb-4 hover:bg-gray-700"
+                >
+                  <i className="fa-solid fa-arrows-rotate"></i> LOAD MORE
+                </button>
               </div>
-              <button className="w-40 text-sm px-4 py-2 bg-red-500 rounded-full text-white mt-4 mb-4 hover:bg-gray-700">
-                <i className="fa-solid fa-arrows-rotate"></i> LOAD MORE
-              </button>
-            </div>
+            )}
           </>
         ) : (
-          <p className="text-gray-500">No users found for the selected course.</p>
+          <p className="text-gray-500">
+            No users found for the selected course.
+          </p>
         )}
       </div>
     </div>
@@ -210,4 +230,3 @@ const BackOfficeUser = () => {
 };
 
 export default BackOfficeUser;
-
