@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   Button,
@@ -13,11 +13,17 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 function NewPageRenderer({ children }) {
   const [newWindow, setNewWindow] = useState(null);
 
-  React.useEffect(() => {
-    // Open a new window when the component mounts
+  useEffect(() => {
     const newWin = window.open("", "_blank", "width=800,height=600");
-    newWin.document.title = "Balance Sheet Report";
+    newWin.document.title = "Report Page";
     setNewWindow(newWin);
+
+    // Copy all style tags from the main document to the new window
+    Array.from(document.querySelectorAll("style")).forEach((styleEl) => {
+      const newStyleEl = newWin.document.createElement("style");
+      newStyleEl.innerHTML = styleEl.innerHTML;
+      newWin.document.head.appendChild(newStyleEl);
+    });
 
     // Close the new window when the component unmounts
     return () => {
@@ -25,7 +31,6 @@ function NewPageRenderer({ children }) {
     };
   }, []);
 
-  // Render the children to the new window's document body
   return newWindow
     ? ReactDOM.createPortal(children, newWindow.document.body)
     : null;

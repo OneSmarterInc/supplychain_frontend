@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   Button,
@@ -13,19 +13,22 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 function NewPageRenderer({ children }) {
   const [newWindow, setNewWindow] = useState(null);
 
-  React.useEffect(() => {
-    // Open a new window when the component mounts
+  useEffect(() => {
     const newWin = window.open("", "_blank", "width=800,height=600");
-    newWin.document.title = "Finished Goods Inventory Report";
+    newWin.document.title = "Report Page";
     setNewWindow(newWin);
 
-    // Close the new window when the component unmounts
+    Array.from(document.querySelectorAll("style")).forEach((styleEl) => {
+      const newStyleEl = newWin.document.createElement("style");
+      newStyleEl.innerHTML = styleEl.innerHTML;
+      newWin.document.head.appendChild(newStyleEl);
+    });
+
     return () => {
       newWin.close();
     };
   }, []);
 
-  // Render the children to the new window's document body
   return newWindow
     ? ReactDOM.createPortal(children, newWindow.document.body)
     : null;
@@ -52,7 +55,7 @@ export default function FGInventoryModal({setActiveReport}) {
       <Dialog size="lg" open={open} handler={handleOpen}>
         <DialogHeader>
           <Flex width={"100%"} justifyContent={"space-between"}>
-            <Text>Report : Cash Flow Report</Text>
+            <Text>Report : Finished Goods Inventory Report</Text>
             <Box>
               <Button
                 variant="gradient"

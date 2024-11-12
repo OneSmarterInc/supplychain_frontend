@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   Button,
@@ -11,13 +11,19 @@ import ReportTable1 from "./ReportTable1";
 import { Box, Flex, Text } from "@chakra-ui/react";
 
 function NewPageRenderer({ children }) {
-  const [newWindow, setNewWindow] = React.useState(null);
+  const [newWindow, setNewWindow] = useState(null);
 
-  React.useEffect(() => {
-    // Open a new window when the component mounts
+  useEffect(() => {
     const newWin = window.open("", "_blank", "width=800,height=600");
     newWin.document.title = "Report Page";
     setNewWindow(newWin);
+
+    // Copy all style tags from the main document to the new window
+    Array.from(document.querySelectorAll("style")).forEach((styleEl) => {
+      const newStyleEl = newWin.document.createElement("style");
+      newStyleEl.innerHTML = styleEl.innerHTML;
+      newWin.document.head.appendChild(newStyleEl);
+    });
 
     // Close the new window when the component unmounts
     return () => {
@@ -25,13 +31,12 @@ function NewPageRenderer({ children }) {
     };
   }, []);
 
-  // Render the children to the new window's document body
   return newWindow
     ? ReactDOM.createPortal(children, newWindow.document.body)
     : null;
 }
 
-export default function ReportModal({setActiveReport}) {
+export default function ReportModal({ setActiveReport }) {
   const [open, setOpen] = useState(true);
   const [openNewPage, setOpenNewPage] = useState(false);
 

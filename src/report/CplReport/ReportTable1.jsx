@@ -307,14 +307,14 @@ const ReportTable1 = () => {
       </div>
 
       <table className="min-w-full bg-white text-gray-800 shadow-md rounded-lg overflow-hidden">
-        <thead className="bg-blue-600 text-white">
+        <thead className="bg-gray-800 text-white">
           <tr>
             <th className="px-6 py-3 text-left font-medium">Metric</th>
-            <th className="px-6 py-3 text-center font-medium">All Products</th>
-            <th className="px-6 py-3 text-center font-medium">
+            <th className="px-6 py-3 text-start font-medium">All Products</th>
+            <th className="px-6 py-3 text-start font-medium">
               Smart Home Assistant
             </th>
-            <th className="px-6 py-3 text-center font-medium">
+            <th className="px-6 py-3 text-start font-medium">
               Smart Thermo Assistant
             </th>
           </tr>
@@ -325,7 +325,7 @@ const ReportTable1 = () => {
               <td className="border-b px-6 py-4 font-semibold text-gray-700">
                 {key}
               </td>
-              <td className="border-b px-6 py-4 text-center">
+              <td className="border-b px-6 py-4 text-start">
                 {typeof salesData[key] === "object"
                   ? key === "Sales Volume" || key === "Unfilled Orders"
                     ? Object.values(salesData[key])[0]
@@ -334,7 +334,7 @@ const ReportTable1 = () => {
                   ? salesData[key]
                   : formatCurrency(salesData[key])}
               </td>
-              <td className="border-b px-6 py-4 text-center">
+              <td className="border-b px-6 py-4 text-start">
                 {typeof salesData[key] === "object"
                   ? key === "Sales Volume" || key === "Unfilled Orders"
                     ? Object.values(salesData[key])[1]
@@ -343,7 +343,7 @@ const ReportTable1 = () => {
                   ? salesData[key]
                   : formatCurrency(salesData[key])}
               </td>
-              <td className="border-b px-6 py-4 text-center">
+              <td className="border-b px-6 py-4 text-start">
                 {typeof salesData[key] === "object"
                   ? key === "Sales Volume" || key === "Unfilled Orders"
                     ? Object.values(salesData[key])[2]
@@ -357,13 +357,13 @@ const ReportTable1 = () => {
 
           <tr className="bg-gray-100">
             <td className="font-semibold border-t px-6 py-3">Revenue</td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(Revenues["All Products"])}
             </td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(Revenues["Product 7-1"])}
             </td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(Revenues["Product 7-2"])}
             </td>
           </tr>
@@ -371,13 +371,13 @@ const ReportTable1 = () => {
           {Object.keys(Revenues.details).map((detailKey, index) => (
             <tr key={index} className="hover:bg-gray-50">
               <td className="border-b px-6 py-3 pl-8">- {detailKey}</td>
-              <td className="border-b px-6 py-3 text-center">
+              <td className="border-b px-6 py-3 text-start">
                 {formatCurrency(Revenues.details[detailKey]["All Products"])}
               </td>
-              <td className="border-b px-6 py-3 text-center">
+              <td className="border-b px-6 py-3 text-start">
                 {formatCurrency(Revenues.details[detailKey]["Product 7-1"])}
               </td>
-              <td className="border-b px-6 py-3 text-center">
+              <td className="border-b px-6 py-3 text-start">
                 {formatCurrency(Revenues.details[detailKey]["Product 7-2"])}
               </td>
             </tr>
@@ -385,13 +385,13 @@ const ReportTable1 = () => {
 
           <tr className="bg-gray-100">
             <td className="font-semibold border-t px-6 py-3">Gross Margin</td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(GrossMargin["All Products"])}
             </td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(GrossMargin["Product 7-1"])}
             </td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(GrossMargin["Product 7-2"])}
             </td>
           </tr>
@@ -400,25 +400,25 @@ const ReportTable1 = () => {
             <td className="font-semibold border-b px-6 py-3">
               Fixed Other Costs
             </td>
-            <td className="border-b px-6 py-3 text-center"></td>
-            <td className="border-b px-6 py-3 text-center"></td>
-            <td className="border-b px-6 py-3 text-center"></td>
+            <td className="border-b px-6 py-3 text-start"></td>
+            <td className="border-b px-6 py-3 text-start"></td>
+            <td className="border-b px-6 py-3 text-start"></td>
           </tr>
 
           {Object.keys(Fixed_Other_Costs.details).map((detailKey, index) => (
             <tr key={index} className="hover:bg-gray-50">
               <td className="border-b px-6 py-3 pl-8">- {detailKey}</td>
-              <td className="border-b px-6 py-3 text-center">
+              <td className="border-b px-6 py-3 text-start">
                 {formatCurrency(
                   Fixed_Other_Costs.details[detailKey]["All Products"]
                 )}
               </td>
-              <td className="border-b px-6 py-3 text-center">
+              <td className="border-b px-6 py-3 text-start">
                 {formatCurrency(
                   Fixed_Other_Costs.details[detailKey]["Product 7-1"]
                 )}
               </td>
-              <td className="border-b px-6 py-3 text-center">
+              <td className="border-b px-6 py-3 text-start">
                 {formatCurrency(
                   Fixed_Other_Costs.details[detailKey]["Product 7-2"]
                 )}
@@ -430,13 +430,13 @@ const ReportTable1 = () => {
             <td className="font-semibold border-t px-6 py-3">
               Operating Income
             </td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(OperatingIncome["All Products"])}
             </td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(OperatingIncome["Product 7-1"])}
             </td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(OperatingIncome["Product 7-2"])}
             </td>
           </tr>
@@ -445,39 +445,39 @@ const ReportTable1 = () => {
             <td className="font-semibold border-b px-6 py-3">
               Non-Operating Income
             </td>
-            <td className="border-b px-6 py-3 text-center">
+            <td className="border-b px-6 py-3 text-start">
               {formatCurrency(NonOperatingIncome["All Products"])}
             </td>
-            <td className="border-b px-6 py-3 text-center">
+            <td className="border-b px-6 py-3 text-start">
               {formatCurrency(NonOperatingIncome["Product 7-1"])}
             </td>
-            <td className="border-b px-6 py-3 text-center">
+            <td className="border-b px-6 py-3 text-start">
               {formatCurrency(NonOperatingIncome["Product 7-2"])}
             </td>
           </tr>
 
           <tr className="bg-gray-100">
             <td className="font-semibold border-t px-6 py-3">Taxes</td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(Taxes["All Products"])}
             </td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(Taxes["Product 7-1"])}
             </td>
-            <td className="border-t px-6 py-3 text-center">
+            <td className="border-t px-6 py-3 text-start">
               {formatCurrency(Taxes["Product 7-2"])}
             </td>
           </tr>
 
           <tr>
             <td className="font-semibold border-b px-6 py-3">Net Income</td>
-            <td className="border-b px-6 py-3 text-center">
+            <td className="border-b px-6 py-3 text-start">
               {formatCurrency(NetIncome["All Products"])}
             </td>
-            <td className="border-b px-6 py-3 text-center">
+            <td className="border-b px-6 py-3 text-start">
               {formatCurrency(NetIncome["Product 7-1"])}
             </td>
-            <td className="border-b px-6 py-3 text-center">
+            <td className="border-b px-6 py-3 text-start">
               {formatCurrency(NetIncome["Product 7-2"])}
             </td>
           </tr>

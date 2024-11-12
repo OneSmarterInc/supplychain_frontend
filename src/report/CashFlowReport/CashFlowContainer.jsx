@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import CashFlowTable from "./CashReportTable"; // Assuming it's in the same directory
 import {
@@ -14,11 +14,17 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 function NewPageRenderer({ children }) {
   const [newWindow, setNewWindow] = useState(null);
 
-  React.useEffect(() => {
-    // Open a new window when the component mounts
+  useEffect(() => {
     const newWin = window.open("", "_blank", "width=800,height=600");
-    newWin.document.title = "Cash Flow Report";
+    newWin.document.title = "Report Page";
     setNewWindow(newWin);
+
+    // Copy all style tags from the main document to the new window
+    Array.from(document.querySelectorAll("style")).forEach((styleEl) => {
+      const newStyleEl = newWin.document.createElement("style");
+      newStyleEl.innerHTML = styleEl.innerHTML;
+      newWin.document.head.appendChild(newStyleEl);
+    });
 
     // Close the new window when the component unmounts
     return () => {
@@ -26,7 +32,6 @@ function NewPageRenderer({ children }) {
     };
   }, []);
 
-  // Render the children to the new window's document body
   return newWindow
     ? ReactDOM.createPortal(children, newWindow.document.body)
     : null;
@@ -77,7 +82,6 @@ const CashFlowContainer = ({ reportData, setActiveReport }) => {
           style={{ height: "600px", overflowY: "auto" }}
           className="text-lg overflow-scroll"
         >
-          <h1 className="text-xl font-bold mb-4">Cash Flow Analysis Reports</h1>
           <CashFlowTable data={reportData} />{" "}
           {/* Pass `reportData` as prop to the table */}
         </DialogBody>
