@@ -176,7 +176,7 @@ const Sidebar = () => {
                 <ul className="pl-4 mt-2">
                   <li>
                     {loading.cpl ? (
-                      <button className="flex space-x-2 justify-start">
+                      <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
                         <p>Corporate P&L Statement</p> <Loader />
                       </button>
                     ) : (
@@ -195,7 +195,7 @@ const Sidebar = () => {
 
                   <li>
                     {loading.bls ? (
-                      <button className="flex space-x-2 justify-start">
+                      <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
                         <p> Balance Sheet</p> <Loader />
                       </button>
                     ) : (
@@ -214,7 +214,7 @@ const Sidebar = () => {
 
                   <li>
                     {loading.cash ? (
-                      <button className="flex space-x-2 justify-start">
+                      <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
                         <p> Cash Flow</p> <Loader />
                       </button>
                     ) : (
@@ -233,7 +233,7 @@ const Sidebar = () => {
 
                   <li>
                     {loading.inventory ? (
-                      <button className="flex space-x-2 justify-start">
+                      <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
                         <p> Finished Goods Inventory Report</p> <Loader />
                       </button>
                     ) : (
