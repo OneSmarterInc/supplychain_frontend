@@ -12,7 +12,7 @@ import Loader from "./Loader";
 const Sidebar = () => {
   const { api } = useContext(MyContext);
   const [activeParent, setActiveParent] = useState(null);
-  const [selectedQuarter, setSelectedQuarter] = useState(null);
+  const [selectedQuarter, setSelectedQuarter] = useState("1");
   const [activeReport, setActiveReport] = useState(null);
   const [reportData, setReportData] = useState(null);
   const navigate = useNavigate();
@@ -170,87 +170,85 @@ const Sidebar = () => {
               </div>
             )}
 
-            {selectedQuarter &&
-              activeParent === option.name &&
-              option.name === "Reports" && (
-                <ul className="pl-4 mt-2">
-                  <li>
-                    {loading.cpl ? (
-                      <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
-                        <p>Corporate P&L Statement</p> <Loader />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleReportChange("cpl")}
-                        className={`w-full text-left p-2 ${
-                          activeReport === "cpl"
-                            ? " bg-blue-gray-800 text-white"
-                            : ""
-                        }`}
-                      >
-                        Corporate P&L Statement
-                      </button>
-                    )}
-                  </li>
+            {activeParent === option.name && option.name === "Reports" && (
+              <ul className="pl-4 mt-2">
+                <li>
+                  {loading.cpl ? (
+                    <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
+                      <p>Corporate P&L Statement</p> <Loader />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleReportChange("cpl")}
+                      className={`w-full text-left p-2 ${
+                        activeReport === "cpl"
+                          ? " bg-blue-gray-800 text-white"
+                          : ""
+                      }`}
+                    >
+                      Corporate P&L Statement
+                    </button>
+                  )}
+                </li>
 
-                  <li>
-                    {loading.bls ? (
-                      <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
-                        <p> Balance Sheet</p> <Loader />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleReportChange("bls")}
-                        className={`w-full text-left p-2 ${
-                          activeReport === "bls"
-                            ? " bg-blue-gray-800 text-white"
-                            : ""
-                        }`}
-                      >
-                        Balance Sheet
-                      </button>
-                    )}
-                  </li>
+                <li>
+                  {loading.bls ? (
+                    <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
+                      <p> Balance Sheet</p> <Loader />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleReportChange("bls")}
+                      className={`w-full text-left p-2 ${
+                        activeReport === "bls"
+                          ? " bg-blue-gray-800 text-white"
+                          : ""
+                      }`}
+                    >
+                      Balance Sheet
+                    </button>
+                  )}
+                </li>
 
-                  <li>
-                    {loading.cash ? (
-                      <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
-                        <p> Cash Flow</p> <Loader />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleReportChange("cash")}
-                        className={`w-full text-left p-2 ${
-                          activeReport === "cash"
-                            ? " bg-blue-gray-800 text-white"
-                            : ""
-                        }`}
-                      >
-                        Cash Flow
-                      </button>
-                    )}
-                  </li>
+                <li>
+                  {loading.cash ? (
+                    <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
+                      <p> Cash Flow</p> <Loader />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleReportChange("cash")}
+                      className={`w-full text-left p-2 ${
+                        activeReport === "cash"
+                          ? " bg-blue-gray-800 text-white"
+                          : ""
+                      }`}
+                    >
+                      Cash Flow
+                    </button>
+                  )}
+                </li>
 
-                  <li>
-                    {loading.inventory ? (
-                      <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
-                        <p> Finished Goods Inventory Report</p> <Loader />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleReportChange("inventory")}
-                        className={`w-full text-left p-2 ${
-                          activeReport === "inventory"
-                            ? " bg-blue-gray-800 text-white"
-                            : ""
-                        }`}
-                      >
-                        Finished Goods Inventory Report
-                      </button>
-                    )}
-                  </li>
-                </ul>
-              )}
+                <li>
+                  {loading.inventory ? (
+                    <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
+                      <p> Finished Goods Inventory Report</p> <Loader />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleReportChange("inventory")}
+                      className={`w-full text-left p-2 ${
+                        activeReport === "inventory"
+                          ? " bg-blue-gray-800 text-white"
+                          : ""
+                      }`}
+                    >
+                      Finished Goods Inventory Report
+                    </button>
+                  )}
+                </li>
+              </ul>
+            )}
           </li>
         ))}
       </ul>

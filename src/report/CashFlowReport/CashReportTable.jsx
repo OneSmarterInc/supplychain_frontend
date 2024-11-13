@@ -16,7 +16,7 @@ const CashFlowTable = () => {
       key={report.id}
       className="border p-6 mb-6 bg-white rounded-lg shadow-md"
     >
-      <h2 className="text-2xl font-bold mb-4 text-gray-700">
+      <h2 className="text-base p-1 bg-gray-300  font-semibold  mb-2 text-red-700">
         Monthly Financial Report
       </h2>
 
@@ -25,30 +25,30 @@ const CashFlowTable = () => {
         <tbody>
           {/* Starting Cash Balance */}
           <tr className="border-b">
-            <td className="py-3 px-4 font-semibold text-gray-600">
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
               Starting "Cash" Balance
             </td>
-            <td className="py-3 px-4 text-gray-800">
+            <td className="py-1 text-sm px-4 text-gray-800">
               {report.starting_cash_balance.toLocaleString()}
             </td>
           </tr>
 
           {/* Loans Liquidated */}
           <tr className="border-b">
-            <td className="py-3 px-4 font-semibold text-gray-600">
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
               Loans (Liquidated During Month)
             </td>
-            <td className="py-3 px-4 text-gray-800">
+            <td className="py-1 text-sm px-4 text-gray-800">
               {report.loans_liquidated.toLocaleString()}
             </td>
           </tr>
 
           {/* Finished Goods Inventory Changes */}
           <tr className="border-b">
-            <td className="py-3 px-4 font-semibold text-gray-600">
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
               Finished Goods Inventory Changes
             </td>
-            <td className="py-3 px-4">
+            <td className="py-1 text-sm px-4">
               <div className="text-gray-800">
                 <p>
                   Smart Home Assistant: From{" "}
@@ -66,30 +66,30 @@ const CashFlowTable = () => {
 
           {/* Net Income */}
           <tr className="border-b">
-            <td className="py-3 px-4 font-semibold text-gray-600">
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
               Net Income
             </td>
-            <td className="py-3 px-4 text-gray-800">
+            <td className="py-1 text-sm px-4 text-gray-800">
               {report.net_income.toLocaleString()}
             </td>
           </tr>
 
           {/* Operating Cash Deficit */}
           <tr className="border-b">
-            <td className="py-3 px-4 font-semibold text-gray-600">
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
               Operating "Cash" Deficit (From Loans)
             </td>
-            <td className="py-3 px-4 text-gray-800">
+            <td className="py-1 text-sm px-4 text-gray-800">
               {report.operating_cash_deficit.toLocaleString()}
             </td>
           </tr>
 
           {/* Final Cash Balance */}
           <tr>
-            <td className="py-3 px-4 font-semibold text-gray-600">
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
               Final "Cash" Balance (End of Month)
             </td>
-            <td className="py-3 px-4 text-gray-800">
+            <td className="py-1 text-sm px-4 text-gray-800">
               {report.final_cash_balance.toLocaleString()}
             </td>
           </tr>
@@ -109,12 +109,12 @@ const CashFlowTable = () => {
   return (
     <div>
       <div className="flex justify-between mb-4">
-        <h1 className="text-xl font-bold mb-4">Cash Flow Analysis Reports</h1>
+        <h1 className="text-xl font-bold ">Cash Flow Analysis Reports</h1>
         <button
           onClick={downloadPDF}
-          className="bg-red-500 text-white px-2 py-1 rounded"
+          className="bg-red-500 text-white text-base px-2 py-1 rounded-md"
         >
-          Download as PDF
+          Download PDF
         </button>
       </div>
 

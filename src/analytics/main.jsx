@@ -131,7 +131,7 @@ const Analytics = () => {
       </p>
 
       <div className="overflow-x-auto  rounded-lg border border-gray-200">
-        <table className="min-w-full text-sm text-left text-gray-800 border-collapse bg-white rounded-lg font-bold text-center align-middle">
+        <table className="min-w-full text-sm  text-gray-800 border-collapse bg-white rounded-lg font-bold text-center align-middle">
           <thead className="bg-gradient-to-r from-gray-200 to-gray-300 ">
             <tr className="font-normal">
               <th className="pl-4 align-left text-left">Measures</th>

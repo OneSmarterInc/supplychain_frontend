@@ -59,21 +59,26 @@ const CashFlowContainer = ({ reportData, setActiveReport }) => {
           <Flex width={"100%"} justifyContent={"space-between"}>
             <Text>Report : Cash Flow Report</Text>
             <Box>
-              <Button
+            <Button
                 variant="gradient"
-                color="blue"
+                color="none"
                 onClick={handleExplode}
-                className="ml-4"
+                className="ml-4 bg-none text-yellow-800"
               >
-                Explode
+                Explode{" "}
+                <span>
+                  <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                </span>
               </Button>
               <Button
                 variant="text"
                 color="red"
                 onClick={handleClose}
-                className="mr-1"
+                className="m-1"
               >
-                <span>Close</span>
+                <span className=" text-red-500 px-1 text-xl">
+                  <i class="fa-solid fa-xmark"></i>
+                </span>
               </Button>
             </Box>
           </Flex>

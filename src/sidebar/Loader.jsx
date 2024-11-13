@@ -2,18 +2,30 @@
 import React from "react";
 
 const Loader = () => (
-  <div className="flex items-center justify-center m-1">
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
     <div className="loader"></div>
     <style jsx>{`
       .loader {
-        border: 4px solid rgba(0, 0, 0, 0.1);
-        width: 30px;
-        height: 30px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
-        border-left-color: #3498db;
-        animation: spin 1s ease infinite;
+        background: conic-gradient(
+          from 0deg,
+          #ff6b6b,
+          #f7c34f,
+          #4fd1c5,
+          #3498db,
+          #ff6b6b
+        );
+        mask-image: radial-gradient(
+          farthest-side,
+          #0000 calc(100% - 7px),
+          #000 0
+        );
+        animation: rotate 1s linear infinite;
       }
-      @keyframes spin {
+
+      @keyframes rotate {
         0% {
           transform: rotate(0deg);
         }
