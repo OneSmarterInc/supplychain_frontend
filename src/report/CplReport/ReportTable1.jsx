@@ -207,7 +207,9 @@ const ReportTable1 = () => {
           columnWidth: "55%",
         },
       },
-      colors: ["#FFB38E", "#FFCF9D", "#FFB26F"],
+      // colors: ["#FFB38E", "#FFCF9D", "#FFB26F"],
+      colors: ["#fa1e1e", "#FFB38E", "#FFB26F"],
+      // colors: ["#A9A9A9", "#C0C0C0", "#808080"],
       dataLabels: {
         enabled: false,
       },

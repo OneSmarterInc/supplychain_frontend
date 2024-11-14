@@ -1,9 +1,11 @@
 // Loader.js
 import React from "react";
 
+import { Puff } from "react-loader-spinner"; // Import
+
 const Loader = () => (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
-    <div className="loader"></div>
+  <div className="fixed inset-0 flex items-center justify-center  bg-opacity-20 z-50">
+    {/* <div className="loader"></div>
     <style jsx>{`
       .loader {
         width: 60px;
@@ -33,7 +35,10 @@ const Loader = () => (
           transform: rotate(360deg);
         }
       }
-    `}</style>
+    `}</style> */}
+    <div className="flex justify-center items-center">
+      <Puff color="red" height={100} width={100} /> {/* Loader */}
+    </div>
   </div>
 );
 
