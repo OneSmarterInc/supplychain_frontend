@@ -207,6 +207,7 @@ const ReportTable1 = () => {
           columnWidth: "55%",
         },
       },
+      colors: ["#FFB38E", "#FFCF9D", "#FFB26F"],
       dataLabels: {
         enabled: false,
       },
@@ -291,7 +292,11 @@ const ReportTable1 = () => {
             fileName="sales_report.pdf"
           >
             {({ loading }) =>
-              loading ? "Loading document..." : <Button className=" bg-red-500">Download Report</Button>
+              loading ? (
+                "Loading document..."
+              ) : (
+                <Button className=" bg-red-500">Download Report</Button>
+              )
             }
           </PDFDownloadLink>
         </div>
