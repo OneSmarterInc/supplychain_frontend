@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
 
 const BalanceSheetTable = () => {
@@ -29,9 +29,18 @@ const BalanceSheetTable = () => {
     },
   };
 
-  const downloadPDF = () => {
-    const element = reportRef.current;
-    html2pdf().from(element).save("balance_sheet_report.pdf");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const downloadPDF = async () => {
+    setIsLoading(true);
+    try {
+      const element = reportRef.current;
+      await html2pdf().from(element).save("balance_sheet_report.pdf");
+    } catch (error) {
+      console.error("Error while downloading PDF:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -39,10 +48,21 @@ const BalanceSheetTable = () => {
       <div className="flex justify-between mb-4">
         <h2 className="text-2xl font-bold">Balance Sheet</h2>
         <button
+          className={`p-1 rounded-sm text-base hover:bg-red-700 text-white ${
+            isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-red-400"
+          }`}
           onClick={downloadPDF}
-          className="bg-red-500 text-white text-base px-2 py-1 rounded-md"
+          disabled={isLoading}
         >
-          Download PDF
+          {isLoading ? (
+            <div className="flex items-center">
+              <span className="loader" />
+              <span className="ml-2">Generating PDF...</span>
+            </div>
+          ) : (
+            "Download PDF"
+          )}
+          <i class="fa-solid fa-download"></i>
         </button>
       </div>
 
@@ -137,7 +157,9 @@ const BalanceSheetTable = () => {
             </tr>
 
             <tr>
-              <td className="border px-6 text-sm py-1">Audio Control (Plant & DC1)</td>
+              <td className="border px-6 text-sm py-1">
+                Audio Control (Plant & DC1)
+              </td>
               <td colSpan={3} className="border px-6 text-sm py-1">
                 {reportData.procurement_inventory.plant_dc1_gamma?.units || 0}{" "}
                 units @{" "}
@@ -161,7 +183,9 @@ const BalanceSheetTable = () => {
               </td>
             </tr>
             <tr>
-              <td className="border px-6 text-sm py-1">Motherboard (Plant & DC1)</td>
+              <td className="border px-6 text-sm py-1">
+                Motherboard (Plant & DC1)
+              </td>
               <td colSpan={3} className="border px-6 text-sm py-1">
                 {reportData.procurement_inventory.plant_dc1_epsilon?.units || 0}{" "}
                 units @{" "}
@@ -196,19 +220,25 @@ const BalanceSheetTable = () => {
           </thead>
           <tbody className="text-gray-700">
             <tr>
-              <td className="border px-6 text-sm py-1">Corporate Capitalization</td>
+              <td className="border px-6 text-sm py-1">
+                Corporate Capitalization
+              </td>
               <td className="border px-6 text-sm py-1">
                 {reportData.liabilities_equities.corporate_capitalization}
               </td>
             </tr>
             <tr>
-              <td className="border px-6 text-sm py-1">Dividends, Current Month</td>
+              <td className="border px-6 text-sm py-1">
+                Dividends, Current Month
+              </td>
               <td className="border px-6 text-sm py-1">
                 {reportData.liabilities_equities.dividends_current_month}
               </td>
             </tr>
             <tr>
-              <td className="border px-6 text-sm py-1">Dividends, Cumulative</td>
+              <td className="border px-6 text-sm py-1">
+                Dividends, Cumulative
+              </td>
               <td className="border px-6 text-sm py-1">
                 {reportData.liabilities_equities.dividends_cumulative}
               </td>

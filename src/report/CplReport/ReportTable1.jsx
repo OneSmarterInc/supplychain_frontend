@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Button } from "@material-tailwind/react";
 import { SalesPDFDocument } from "./SalesPDFDocument";
 import Chart from "react-apexcharts";
+import html2pdf from "html2pdf.js";
 
 const ReportTable1 = () => {
+  const reportRef = useRef();
   const reportData = JSON.parse(localStorage.getItem("reportData")) || [
     {
       "Sales Volume": {
@@ -270,7 +272,19 @@ const ReportTable1 = () => {
     }
     return value;
   };
+  const [isLoading, setIsLoading] = useState(false);
 
+  const downloadPDF = async () => {
+    setIsLoading(true); 
+    try {
+      const element = reportRef.current;
+      await html2pdf().from(element).save("c-p&l_report.pdf");
+    } catch (error) {
+      console.error("Error while downloading PDF:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div>
       <div className="heading flex justify-between font-bold mb-4">
@@ -278,7 +292,7 @@ const ReportTable1 = () => {
           <p></p>
         </div>
         <div>
-          <PDFDownloadLink
+          {/* <PDFDownloadLink
             document={
               <SalesPDFDocument
                 salesData={salesData}
@@ -300,7 +314,24 @@ const ReportTable1 = () => {
                 <Button className=" bg-red-500">Download Report</Button>
               )
             }
-          </PDFDownloadLink>
+          </PDFDownloadLink> */}
+
+          <button
+            className={`p-1 rounded-sm text-base text-white hover:bg-red-700 ${
+              isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-red-400"
+            }`}
+            onClick={downloadPDF}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="flex items-center">
+                <span className="loader" /> 
+                <span className="ml-2">Generating PDF...</span>
+              </div>
+            ) : (
+              "Download PDF"
+            )}<i class="fa-solid fa-download"></i>
+          </button>
         </div>
       </div>
 
@@ -313,10 +344,13 @@ const ReportTable1 = () => {
         />
       </div>
 
-      <table className="min-w-full bg-white text-gray-800 shadow-md  overflow-hidden">
+      <table
+        ref={reportRef}
+        className="min-w-full bg-white text-gray-800 shadow-md  overflow-hidden"
+      >
         <thead className="bg-gray-300 text-white">
-          <tr>
-            <th className="px-6 text-sm py-1 text-red-700   text-left ">
+          <tr className="py-1">
+            <th className="px-6 text-sm py-1 text-red-700 my-auto   text-left ">
               Metric
             </th>
             <th className="px-6 text-sm py-1 text-red-700    text-right ">

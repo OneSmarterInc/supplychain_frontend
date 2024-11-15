@@ -1,29 +1,80 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Button } from "@material-tailwind/react";
 import FGInventorySalesPDF from "./FGInventorySalesPDF";
-
+import html2pdf from "html2pdf.js";
 const FGInventoryTable = () => {
+  const reportRef = useRef();
   const Data = JSON.parse(localStorage.getItem("reportData"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const reportData = Data[0];
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const downloadPDF = async () => {
+    setIsLoading(true);
+    try {
+      const element = reportRef.current;
+
+      // Add temporary class for styling during PDF generation
+      element.classList.add("pdf-export");
+
+      await html2pdf()
+        .set({
+          margin: 0.5,
+          filename: "fgi_report.pdf",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
+        })
+        .from(element)
+        .save();
+
+      // Remove the temporary class after PDF is generated
+      element.classList.remove("pdf-export");
+    } catch (error) {
+      console.error("Error while downloading PDF:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div>
       <div className="heading flex justify-between font-bold">
         <div className="flex justify-end w-full my-2">
-          <PDFDownloadLink
+          {/* <PDFDownloadLink
             document={<FGInventorySalesPDF reportData={reportData} />}
             fileName="Product_report_sales.pdf"
           >
             <Button className="bg-red-500">Download PDF</Button>
-          </PDFDownloadLink>
+          </PDFDownloadLink> */}
+
+          <button
+            className={`p-1 rounded-sm text-base text-white hover:bg-red-700 ${
+              isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-red-400"
+            }`}
+            onClick={downloadPDF}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="flex items-center">
+                <span className="loader" />
+                <span className="ml-2">Generating PDF...</span>
+              </div>
+            ) : (
+              "Download PDF"
+            )}{" "}
+            <i class="fa-solid fa-download"></i>
+          </button>
         </div>
       </div>
-      <table className="w-full text-start text-sm whitespace-nowrap font-sans">
+      <table
+        ref={reportRef}
+        className="w-full text-start text-sm whitespace-nowrap font-sans"
+      >
         <thead>
           <tr className=" bg-gray-300 text-red-700 font-semibold">
-            <th className="px-6 py-1 text-sm pl-8   text-left">Metric</th>
+            <th className="px-6 py-1 text-sm pl-8   text-left"></th>
             <th className="px-6 py-1 text-sm pl-8   text-left">Product Zero</th>
             <th className="px-6 py-1 text-sm pl-8   text-left">
               Smart Home Assistant

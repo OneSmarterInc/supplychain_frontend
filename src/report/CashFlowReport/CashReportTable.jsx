@@ -1,9 +1,12 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
 
 // Table component that receives `data` via props
 const CashFlowTable = () => {
   const reportRef = useRef();
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const data = JSON.parse(localStorage.getItem("reportData"));
 
   if (!data || data.length === 0) {
@@ -14,6 +17,7 @@ const CashFlowTable = () => {
   const renderReport = (report) => (
     <div
       key={report.id}
+      ref={reportRef}
       className="border p-6 mb-6 bg-white rounded-lg shadow-md"
     >
       <h2 className="text-base p-1 bg-gray-300  font-semibold  mb-2 text-red-700">
@@ -100,10 +104,16 @@ const CashFlowTable = () => {
     </div>
   );
 
-  // Function to download the current view as PDF
-  const downloadPDF = () => {
-    const element = reportRef.current;
-    html2pdf().from(element).save("cash_flow_report.pdf");
+  const downloadPDF = async () => {
+    setIsLoading(true);
+    try {
+      const element = reportRef.current;
+      await html2pdf().from(element).save("cash_flow_report.pdf");
+    } catch (error) {
+      console.error("Error while downloading PDF:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -111,16 +121,24 @@ const CashFlowTable = () => {
       <div className="flex justify-between mb-4">
         <h1 className="text-xl font-bold ">Cash Flow Analysis Reports</h1>
         <button
+          className={`p-1 rounded-sm text-base hover:bg-red-700 text-white ${
+            isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-red-400"
+          }`}
           onClick={downloadPDF}
-          className="bg-red-500 text-white text-base px-2 py-1 rounded-md"
+          disabled={isLoading}
         >
-          Download PDF
+          {isLoading ? (
+            <div className="flex items-center">
+              <span className="loader" /> 
+              <span className="ml-2">Generating PDF...</span>
+            </div>
+          ) : (
+            "Download PDF"
+          )}<i class="fa-solid fa-download"></i>
         </button>
       </div>
 
-      <div ref={reportRef} className="p-4">
-        {data.map((report) => renderReport(report))}
-      </div>
+      <div className="p-4">{data.map((report) => renderReport(report))}</div>
     </div>
   );
 };
