@@ -266,16 +266,10 @@ const ReportTable1 = () => {
     currency: "USD",
   });
 
-  const formatCurrency = (value) => {
-    if (typeof value === "number") {
-      return currencyFormatter.format(value);
-    }
-    return value;
-  };
   const [isLoading, setIsLoading] = useState(false);
 
   const downloadPDF = async () => {
-    setIsLoading(true); 
+    setIsLoading(true);
     try {
       const element = reportRef.current;
       await html2pdf().from(element).save("c-p&l_report.pdf");
@@ -285,6 +279,34 @@ const ReportTable1 = () => {
       setIsLoading(false);
     }
   };
+
+  // const formatCurrency = (value) => {
+  //   if (typeof value === "number") {
+  //     return currencyFormatter.format(value);
+  //   }
+  //   return value;
+  // };
+
+  
+
+  const formatCurrency = (value, showFull) => {
+    if (showFull) return `$${value.toLocaleString()}`;
+
+    if (value >= 1_000_000) {
+      return `$${(value / 1_000_000).toFixed(2).replace(/\.00$/, "")} M`;
+    } else if (value >= 1_000) {
+      return `$${(value / 1000).toFixed(2).replace(/\.00$/, "")} K`;
+    } else {
+      return `$${value?.toLocaleString()}`;
+    }
+  };
+
+  const [showFullValues, setShowFullValues] = useState(false);
+
+  const toggleValues = () => {
+    setShowFullValues((prev) => !prev);
+  };
+
   return (
     <div>
       <div className="heading flex justify-between font-bold mb-4">
@@ -325,12 +347,13 @@ const ReportTable1 = () => {
           >
             {isLoading ? (
               <div className="flex items-center">
-                <span className="loader" /> 
+                <span className="loader" />
                 <span className="ml-2">Generating PDF...</span>
               </div>
             ) : (
               "Download PDF"
-            )}<i class="fa-solid fa-download"></i>
+            )}
+            <i class="fa-solid fa-download"></i>
           </button>
         </div>
       </div>
@@ -343,6 +366,13 @@ const ReportTable1 = () => {
           height={350}
         />
       </div>
+
+      <button
+        onClick={toggleValues}
+        className="mb-4 bg-blue-500 text-sm text-white py-1 px-2 rounded"
+      >
+        {showFullValues ? "Show Abbreviated Values (M/K) " : "Show Complete Values (M/K)"}
+      </button>
 
       <table
         ref={reportRef}
@@ -370,33 +400,13 @@ const ReportTable1 = () => {
               <td className="border-b px-6 text-sm py-1 font-semibold text-gray-700">
                 {key}
               </td>
-              <td className="border-b px-6 text-sm py-1  text-right">
-                {typeof salesData[key] === "object"
-                  ? key === "Sales Volume" || key === "Unfilled Orders"
-                    ? Object.values(salesData[key])[0]
-                    : formatCurrency(Object.values(salesData[key])[0])
-                  : key === "Sales Volume" || key === "Unfilled Orders"
-                  ? salesData[key]
-                  : formatCurrency(salesData[key])}
-              </td>
-              <td className="border-b px-6 text-sm py-1  text-right">
-                {typeof salesData[key] === "object"
-                  ? key === "Sales Volume" || key === "Unfilled Orders"
-                    ? Object.values(salesData[key])[1]
-                    : formatCurrency(Object.values(salesData[key])[1])
-                  : key === "Sales Volume" || key === "Unfilled Orders"
-                  ? salesData[key]
-                  : formatCurrency(salesData[key])}
-              </td>
-              <td className="border-b px-6 text-sm py-1  text-right">
-                {typeof salesData[key] === "object"
-                  ? key === "Sales Volume" || key === "Unfilled Orders"
-                    ? Object.values(salesData[key])[2]
-                    : formatCurrency(Object.values(salesData[key])[2])
-                  : key === "Sales Volume" || key === "Unfilled Orders"
-                  ? salesData[key]
-                  : formatCurrency(salesData[key])}
-              </td>
+              {Object.values(salesData[key]).map((value, i) => (
+                <td key={i} className="border-b px-6 text-sm py-1 text-right">
+                  {typeof value === "number"
+                    ? formatCurrency(value, showFullValues)
+                    : value}
+                </td>
+              ))}
             </tr>
           ))}
 
@@ -404,29 +414,30 @@ const ReportTable1 = () => {
             <td className="font-semibold border-t px-6 text-sm py-1">
               Revenue
             </td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(Revenues["All Products"])}
+            {/* {Object.values(Revenues).map((value, i) => (
+              <td key={i} className="border-t px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))} */}
+            <td className="border-t px-6 text-sm py-1 text-right">
+              {formatCurrency(Revenues["All Products"], showFullValues)}
             </td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(Revenues["Product 7-1"])}
+            <td className="border-t px-6 text-sm py-1 text-right">
+              {formatCurrency(Revenues["Product 7-1"], showFullValues)}
             </td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(Revenues["Product 7-2"])}
+            <td className="border-t px-6 text-sm py-1 text-right">
+              {formatCurrency(Revenues["Product 7-2"], showFullValues)}
             </td>
           </tr>
 
           {Object.keys(Revenues.details).map((detailKey, index) => (
             <tr key={index} className="hover:bg-gray-50">
               <td className="border-b px-6 text-sm py-1 pl-8">- {detailKey}</td>
-              <td className="border-b px-6 text-sm py-1  text-right">
-                {formatCurrency(Revenues.details[detailKey]["All Products"])}
-              </td>
-              <td className="border-b px-6 text-sm py-1  text-right">
-                {formatCurrency(Revenues.details[detailKey]["Product 7-1"])}
-              </td>
-              <td className="border-b px-6 text-sm py-1  text-right">
-                {formatCurrency(Revenues.details[detailKey]["Product 7-2"])}
-              </td>
+              {Object.values(Revenues.details[detailKey]).map((value, i) => (
+                <td key={i} className="border-b px-6 text-sm py-1 text-right">
+                  {formatCurrency(value, showFullValues)}
+                </td>
+              ))}
             </tr>
           ))}
 
@@ -434,44 +445,35 @@ const ReportTable1 = () => {
             <td className="font-semibold border-t px-6 text-sm py-1">
               Gross Margin
             </td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(GrossMargin["All Products"])}
-            </td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(GrossMargin["Product 7-1"])}
-            </td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(GrossMargin["Product 7-2"])}
-            </td>
+            {Object.values(GrossMargin).map((value, i) => (
+              <td key={i} className="border-t px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))}
           </tr>
 
           <tr>
             <td className="font-semibold border-b px-6 text-sm py-1">
               Fixed Other Costs
             </td>
-            <td className="border-b px-6 text-sm py-1  text-right"></td>
-            <td className="border-b px-6 text-sm py-1  text-right"></td>
-            <td className="border-b px-6 text-sm py-1  text-right"></td>
+            {["All Products", "Product 7-1", "Product 7-2"].map((_, i) => (
+              <td
+                key={i}
+                className="border-b px-6 text-sm py-1 text-right"
+              ></td>
+            ))}
           </tr>
 
           {Object.keys(Fixed_Other_Costs.details).map((detailKey, index) => (
             <tr key={index} className="hover:bg-gray-50">
               <td className="border-b px-6 text-sm py-1 pl-8">- {detailKey}</td>
-              <td className="border-b px-6 text-sm py-1  text-right">
-                {formatCurrency(
-                  Fixed_Other_Costs.details[detailKey]["All Products"]
-                )}
-              </td>
-              <td className="border-b px-6 text-sm py-1  text-right">
-                {formatCurrency(
-                  Fixed_Other_Costs.details[detailKey]["Product 7-1"]
-                )}
-              </td>
-              <td className="border-b px-6 text-sm py-1  text-right">
-                {formatCurrency(
-                  Fixed_Other_Costs.details[detailKey]["Product 7-2"]
-                )}
-              </td>
+              {Object.values(Fixed_Other_Costs.details[detailKey]).map(
+                (value, i) => (
+                  <td key={i} className="border-b px-6 text-sm py-1 text-right">
+                    {formatCurrency(value, showFullValues)}
+                  </td>
+                )
+              )}
             </tr>
           ))}
 
@@ -479,58 +481,42 @@ const ReportTable1 = () => {
             <td className="font-semibold border-t px-6 text-sm py-1">
               Operating Income
             </td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(OperatingIncome["All Products"])}
-            </td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(OperatingIncome["Product 7-1"])}
-            </td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(OperatingIncome["Product 7-2"])}
-            </td>
+            {Object.values(OperatingIncome).map((value, i) => (
+              <td key={i} className="border-t px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))}
           </tr>
 
           <tr>
             <td className="font-semibold border-b px-6 text-sm py-1">
               Non-Operating Income
             </td>
-            <td className="border-b px-6 text-sm py-1  text-right">
-              {formatCurrency(NonOperatingIncome["All Products"])}
-            </td>
-            <td className="border-b px-6 text-sm py-1  text-right">
-              {formatCurrency(NonOperatingIncome["Product 7-1"])}
-            </td>
-            <td className="border-b px-6 text-sm py-1  text-right">
-              {formatCurrency(NonOperatingIncome["Product 7-2"])}
-            </td>
+            {Object.values(NonOperatingIncome).map((value, i) => (
+              <td key={i} className="border-b px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))}
           </tr>
 
           <tr className="bg-gray-100">
             <td className="font-semibold border-t px-6 text-sm py-1">Taxes</td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(Taxes["All Products"])}
-            </td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(Taxes["Product 7-1"])}
-            </td>
-            <td className="border-t px-6 text-sm py-1  text-right">
-              {formatCurrency(Taxes["Product 7-2"])}
-            </td>
+            {Object.values(Taxes).map((value, i) => (
+              <td key={i} className="border-t px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))}
           </tr>
 
           <tr>
             <td className="font-semibold border-b px-6 text-sm py-1">
               Net Income
             </td>
-            <td className="border-b px-6 text-sm py-1  text-right">
-              {formatCurrency(NetIncome["All Products"])}
-            </td>
-            <td className="border-b px-6 text-sm py-1  text-right">
-              {formatCurrency(NetIncome["Product 7-1"])}
-            </td>
-            <td className="border-b px-6 text-sm py-1  text-right">
-              {formatCurrency(NetIncome["Product 7-2"])}
-            </td>
+            {Object.values(NetIncome).map((value, i) => (
+              <td key={i} className="border-b px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))}
           </tr>
         </tbody>
       </table>
