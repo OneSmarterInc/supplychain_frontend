@@ -287,8 +287,6 @@ const ReportTable1 = () => {
   //   return value;
   // };
 
-  
-
   const formatCurrency = (value, showFull) => {
     if (showFull) return `$${value.toLocaleString()}`;
 
@@ -371,7 +369,9 @@ const ReportTable1 = () => {
         onClick={toggleValues}
         className="mb-4 bg-blue-500 text-sm text-white py-1 px-2 rounded"
       >
-        {showFullValues ? "Show Abbreviated Values (M/K) " : "Show Complete Values (M/K)"}
+        {showFullValues
+          ? "Show Abbreviated Values (M/K) "
+          : "Show Complete Values (M/K)"}
       </button>
 
       <table
@@ -402,8 +402,8 @@ const ReportTable1 = () => {
               </td>
               {Object.values(salesData[key]).map((value, i) => (
                 <td key={i} className="border-b px-6 text-sm py-1 text-right">
-                  {typeof value === "number"
-                    ? formatCurrency(value, showFullValues)
+                  {key === "Price"
+                    ?  formatCurrency(value, showFullValues)
                     : value}
                 </td>
               ))}
