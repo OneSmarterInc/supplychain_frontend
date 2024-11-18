@@ -106,7 +106,7 @@ const MainRoutes = () => {
               <div className="col-span-1">
                 <Sidebar />
               </div>
-              <div className="col-span-5 flex flex-col">
+              <div className="col-span-5 overflow-x-hidden flex flex-col">
                 <FlexeeDashboardNavbar />
 
                 <Analytics />

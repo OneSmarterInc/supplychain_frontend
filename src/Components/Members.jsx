@@ -1,20 +1,37 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import MyContext from '../Components/ContextApi/MyContext';
-import { Puff } from 'react-loader-spinner';
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Image, Heading, Center, Spinner, Text } from '@chakra-ui/react';
-import UserLoggerApi from '../LoggerApis/UserLoggerApi';
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import MyContext from "../Components/ContextApi/MyContext";
+import { Puff } from "react-loader-spinner";
+import {
+  Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Image,
+  Heading,
+  Center,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
+import UserLoggerApi from "../LoggerApis/UserLoggerApi";
 
 const Members = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const { api, api1 } = useContext(MyContext);
-  
-  const selectedCourse = JSON.parse(localStorage.getItem('selectedSimData')) || {};
-  const user = JSON.parse(localStorage.getItem('user')) || {};
-  
-  const firm_obj = selectedCourse[0]?.firm_data?.filter(item => item.emails.includes(user.email)) || [];
-  const firm_key_new = firm_obj.length ? firm_obj[0].firmName : '';
+
+  const selectedCourse =
+    JSON.parse(localStorage.getItem("selectedSimData")) || {};
+  const user = JSON.parse(localStorage.getItem("user")) || {};
+
+  const firm_obj =
+    selectedCourse[0]?.firm_data?.filter((item) =>
+      item.emails.includes(user.email)
+    ) || [];
+  const firm_key_new = firm_obj.length ? firm_obj[0].firmName : "";
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -22,7 +39,9 @@ const Members = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`${api}/get-firms/${selectedCourse[0].passcode}/`);
+        const response = await axios.get(
+          `${api}/get-firms/${selectedCourse[0].passcode}/`
+        );
         const flattenedUsers = response.data.flatMap((firm) => {
           const firmUsers = Array.isArray(firm.users) ? firm.users : [];
           return firmUsers
@@ -40,7 +59,7 @@ const Members = () => {
         });
         setUsers(flattenedUsers);
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error("Error fetching users:", error);
       } finally {
         setLoading(false);
       }
@@ -56,13 +75,18 @@ const Members = () => {
       </Heading>
       {loading ? (
         <Center>
-          <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
         </Center>
       ) : (
         <Table variant="striped" colorScheme="white" size="sm" overflowX="auto">
           <Thead>
             <Tr>
-             
               <Th></Th>
               <Th>Name</Th>
               <Th>Email</Th>
@@ -75,12 +99,15 @@ const Members = () => {
           <Tbody>
             {users.map((user, index) => (
               <Tr key={index}>
-            
                 <Td>
                   <Image
                     borderRadius="full"
                     boxSize="50px"
-                    src={`${api1}${user.image}`}
+                    src={`${api1 + "/simulation"}${
+                      user.image.includes("/media")
+                        ? user.image.substring(user.image.indexOf("/media"))
+                        : user.image
+                    }`}
                     alt={`${user.name}'s avatar`}
                   />
                 </Td>
@@ -95,14 +122,14 @@ const Members = () => {
           </Tbody>
         </Table>
       )}
-      
+
       {/* <Text textAlign={'center'}>Decision Logs</Text> */}
-       <div className='pt-4'>
-       <UserLoggerApi
-              simulation_id={selectedCourse[0].simulation_id}
-              firm_key={firm_key_new}
-              current_quarter={selectedCourse[0].current_quarter}
-            />
+      <div className="pt-4">
+        <UserLoggerApi
+          simulation_id={selectedCourse[0].simulation_id}
+          firm_key={firm_key_new}
+          current_quarter={selectedCourse[0].current_quarter}
+        />
       </div>
 
       {/* <SlantedSection /> */}

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Button } from "@material-tailwind/react";
 import { SalesPDFDocument } from "./SalesPDFDocument";
 import Chart from "react-apexcharts";
+import html2pdf from "html2pdf.js";
 
 const ReportTable1 = () => {
+  const reportRef = useRef();
   const reportData = JSON.parse(localStorage.getItem("reportData")) || [
     {
       "Sales Volume": {
@@ -59,7 +61,7 @@ const ReportTable1 = () => {
         "Duties and Tariffs": {
           "All Products": 0,
           "Product 7-1": 0,
-          "Product 7-2":0,
+          "Product 7-2": 0,
         },
       },
       "All Products": 0,
@@ -151,7 +153,6 @@ const ReportTable1 = () => {
     },
   ];
 
-
   const salesData = reportData[0];
   const Revenues = reportData[1];
   const GrossMargin = reportData[2];
@@ -208,6 +209,9 @@ const ReportTable1 = () => {
           columnWidth: "55%",
         },
       },
+      // colors: ["#FFB38E", "#FFCF9D", "#FFB26F"],
+      colors: ["#fa1e1e", "#FFB38E", "#FFB26F"],
+      // colors: ["#A9A9A9", "#C0C0C0", "#808080"],
       dataLabels: {
         enabled: false,
       },
@@ -262,11 +266,43 @@ const ReportTable1 = () => {
     currency: "USD",
   });
 
-  const formatCurrency = (value) => {
-    if (typeof value === "number") {
-      return currencyFormatter.format(value);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const downloadPDF = async () => {
+    setIsLoading(true);
+    try {
+      const element = reportRef.current;
+      await html2pdf().from(element).save("c-p&l_report.pdf");
+    } catch (error) {
+      console.error("Error while downloading PDF:", error);
+    } finally {
+      setIsLoading(false);
     }
-    return value;
+  };
+
+  // const formatCurrency = (value) => {
+  //   if (typeof value === "number") {
+  //     return currencyFormatter.format(value);
+  //   }
+  //   return value;
+  // };
+
+  const formatCurrency = (value, showFull) => {
+    if (showFull) return `$${value.toLocaleString()}`;
+
+    if (value >= 1_000_000) {
+      return `$${(value / 1_000_000).toFixed(2).replace(/\.00$/, "")} M`;
+    } else if (value >= 1_000) {
+      return `$${(value / 1000).toFixed(2).replace(/\.00$/, "")} K`;
+    } else {
+      return `$${value?.toLocaleString()}`;
+    }
+  };
+
+  const [showFullValues, setShowFullValues] = useState(false);
+
+  const toggleValues = () => {
+    setShowFullValues((prev) => !prev);
   };
 
   return (
@@ -276,7 +312,7 @@ const ReportTable1 = () => {
           <p></p>
         </div>
         <div>
-          <PDFDownloadLink
+          {/* <PDFDownloadLink
             document={
               <SalesPDFDocument
                 salesData={salesData}
@@ -292,9 +328,31 @@ const ReportTable1 = () => {
             fileName="sales_report.pdf"
           >
             {({ loading }) =>
-              loading ? "Loading document..." : <Button>Download Report</Button>
+              loading ? (
+                "Loading document..."
+              ) : (
+                <Button className=" bg-red-500">Download Report</Button>
+              )
             }
-          </PDFDownloadLink>
+          </PDFDownloadLink> */}
+
+          <button
+            className={`p-1 rounded-sm text-base text-white hover:bg-red-700 ${
+              isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-red-400"
+            }`}
+            onClick={downloadPDF}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="flex items-center">
+                <span className="loader" />
+                <span className="ml-2">Generating PDF...</span>
+              </div>
+            ) : (
+              "Download PDF"
+            )}
+            <i class="fa-solid fa-download"></i>
+          </button>
         </div>
       </div>
 
@@ -307,160 +365,158 @@ const ReportTable1 = () => {
         />
       </div>
 
-      <table className="w-full text-start whitespace-nowrap mb-4">
-        <thead>
-          <tr className="bg-gray-400 text-white">
-            <th className="px-4 py-2">Metric</th>
-            <th className="px-4 py-2">All Products</th>
-            <th className="px-4 py-2">Smart Home Asistant</th>
-            <th className="px-4 py-2">Smart Tharmo Asistant</th>
+      <button
+        onClick={toggleValues}
+        className="mb-4 bg-blue-500 text-sm text-white py-1 px-2 rounded"
+      >
+        {showFullValues
+          ? "Show Abbreviated Values (M/K) "
+          : "Show Complete Values (M/K)"}
+      </button>
+
+      <table
+        ref={reportRef}
+        className="min-w-full bg-white text-gray-800 shadow-md  overflow-hidden"
+      >
+        <thead className="bg-gray-300 text-white">
+          <tr className="py-1">
+            <th className="px-6 text-sm py-1 text-red-700 my-auto   text-left ">
+              Metric
+            </th>
+            <th className="px-6 text-sm py-1 text-red-700    text-right ">
+              All Products
+            </th>
+            <th className="px-6 text-sm py-1 text-red-700    text-right ">
+              Smart Home Assistant
+            </th>
+            <th className="px-6 text-sm py-1 text-red-700    text-right ">
+              Smart Thermo Assistant
+            </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-gray-200">
           {Object.keys(salesData).map((key, index) => (
-            <tr key={index}>
-              <td className="border font-bold px-4 py-2">{key}</td>
-              <td className="border px-4 py-2 text-center">
-                {typeof salesData[key] === "object"
-                  ? key === "Sales Volume" || key === "Unfilled Orders"
-                    ? Object.values(salesData[key])[0]
-                    : formatCurrency(Object.values(salesData[key])[0])
-                  : key === "Sales Volume" || key === "Unfilled Orders"
-                  ? salesData[key]
-                  : formatCurrency(salesData[key])}
+            <tr key={index} className="hover:bg-gray-50">
+              <td className="border-b px-6 text-sm py-1 font-semibold text-gray-700">
+                {key}
               </td>
-              <td className="border px-4 py-2 text-center">
-                {typeof salesData[key] === "object"
-                  ? key === "Sales Volume" || key === "Unfilled Orders"
-                    ? Object.values(salesData[key])[1]
-                    : formatCurrency(Object.values(salesData[key])[1])
-                  : key === "Sales Volume" || key === "Unfilled Orders"
-                  ? salesData[key]
-                  : formatCurrency(salesData[key])}
-              </td>
-              <td className="border px-4 py-2 text-center">
-                {typeof salesData[key] === "object"
-                  ? key === "Sales Volume" || key === "Unfilled Orders"
-                    ? Object.values(salesData[key])[2]
-                    : formatCurrency(Object.values(salesData[key])[2])
-                  : key === "Sales Volume" || key === "Unfilled Orders"
-                  ? salesData[key]
-                  : formatCurrency(salesData[key])}
-              </td>
+              {Object.values(salesData[key]).map((value, i) => (
+                <td key={i} className="border-b px-6 text-sm py-1 text-right">
+                  {key === "Price"
+                    ?  formatCurrency(value, showFullValues)
+                    : value}
+                </td>
+              ))}
             </tr>
           ))}
 
-          <tr>
-            <td className="font-bold border px-4 py-2">Revenue</td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(Revenues["All Products"])}
+          <tr className="bg-gray-100">
+            <td className="font-semibold border-t px-6 text-sm py-1">
+              Revenue
             </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(Revenues["Product 7-1"])}
+            {/* {Object.values(Revenues).map((value, i) => (
+              <td key={i} className="border-t px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))} */}
+            <td className="border-t px-6 text-sm py-1 text-right">
+              {formatCurrency(Revenues["All Products"], showFullValues)}
             </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(Revenues["Product 7-2"])}
+            <td className="border-t px-6 text-sm py-1 text-right">
+              {formatCurrency(Revenues["Product 7-1"], showFullValues)}
+            </td>
+            <td className="border-t px-6 text-sm py-1 text-right">
+              {formatCurrency(Revenues["Product 7-2"], showFullValues)}
             </td>
           </tr>
+
           {Object.keys(Revenues.details).map((detailKey, index) => (
-            <tr key={index}>
-              <td className="border px-4 py-2 pl-8">- {detailKey}</td>
-              <td className="border px-4 py-2 text-center">
-                {formatCurrency(Revenues.details[detailKey]["All Products"])}
-              </td>
-              <td className="border px-4 py-2 text-center">
-                {formatCurrency(Revenues.details[detailKey]["Product 7-1"])}
-              </td>
-              <td className="border px-4 py-2 text-center">
-                {formatCurrency(Revenues.details[detailKey]["Product 7-2"])}
-              </td>
+            <tr key={index} className="hover:bg-gray-50">
+              <td className="border-b px-6 text-sm py-1 pl-8">- {detailKey}</td>
+              {Object.values(Revenues.details[detailKey]).map((value, i) => (
+                <td key={i} className="border-b px-6 text-sm py-1 text-right">
+                  {formatCurrency(value, showFullValues)}
+                </td>
+              ))}
             </tr>
           ))}
-          <tr>
-            <td className="font-bold border px-4 py-2">Gross Margin</td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(GrossMargin["All Products"])}
+
+          <tr className="bg-gray-100">
+            <td className="font-semibold border-t px-6 text-sm py-1">
+              Gross Margin
             </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(GrossMargin["Product 7-1"])}
-            </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(GrossMargin["Product 7-2"])}
-            </td>
+            {Object.values(GrossMargin).map((value, i) => (
+              <td key={i} className="border-t px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))}
           </tr>
+
           <tr>
-            <td className="font-bold border px-4 py-2">Fixed_Other_Costs</td>
-            <td className="border px-4 py-2 text-center"></td>
-            <td className="border px-4 py-2 text-center"></td>
-            <td className="border px-4 py-2 text-center"></td>
+            <td className="font-semibold border-b px-6 text-sm py-1">
+              Fixed Other Costs
+            </td>
+            {["All Products", "Product 7-1", "Product 7-2"].map((_, i) => (
+              <td
+                key={i}
+                className="border-b px-6 text-sm py-1 text-right"
+              ></td>
+            ))}
           </tr>
+
           {Object.keys(Fixed_Other_Costs.details).map((detailKey, index) => (
-            <tr key={index}>
-              <td className="border px-4 py-2 pl-8">- {detailKey}</td>
-              <td className="border px-4 py-2 text-center">
-                {formatCurrency(
-                  Fixed_Other_Costs.details[detailKey]["All Products"]
-                )}
-              </td>
-              <td className="border px-4 py-2 text-center">
-                {formatCurrency(
-                  Fixed_Other_Costs.details[detailKey]["Product 7-1"]
-                )}
-              </td>
-              <td className="border px-4 py-2 text-center">
-                {formatCurrency(
-                  Fixed_Other_Costs.details[detailKey]["Product 7-2"]
-                )}
-              </td>
+            <tr key={index} className="hover:bg-gray-50">
+              <td className="border-b px-6 text-sm py-1 pl-8">- {detailKey}</td>
+              {Object.values(Fixed_Other_Costs.details[detailKey]).map(
+                (value, i) => (
+                  <td key={i} className="border-b px-6 text-sm py-1 text-right">
+                    {formatCurrency(value, showFullValues)}
+                  </td>
+                )
+              )}
             </tr>
           ))}
-          <tr>
-            <td className="font-bold border px-4 py-2">OperatingIncome</td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(OperatingIncome["All Products"])}
+
+          <tr className="bg-gray-100">
+            <td className="font-semibold border-t px-6 text-sm py-1">
+              Operating Income
             </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(OperatingIncome["Product 7-1"])}
-            </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(OperatingIncome["Product 7-2"])}
-            </td>
+            {Object.values(OperatingIncome).map((value, i) => (
+              <td key={i} className="border-t px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))}
           </tr>
+
           <tr>
-            <td className="font-bold border px-4 py-2">NonOperatingIncome</td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(NonOperatingIncome["All Products"])}
+            <td className="font-semibold border-b px-6 text-sm py-1">
+              Non-Operating Income
             </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(NonOperatingIncome["Product 7-1"])}
-            </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(NonOperatingIncome["Product 7-2"])}
-            </td>
+            {Object.values(NonOperatingIncome).map((value, i) => (
+              <td key={i} className="border-b px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))}
           </tr>
-          <tr>
-            <td className="font-bold border px-4 py-2">Taxes</td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(Taxes["All Products"])}
-            </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(Taxes["Product 7-1"])}
-            </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(Taxes["Product 7-2"])}
-            </td>
+
+          <tr className="bg-gray-100">
+            <td className="font-semibold border-t px-6 text-sm py-1">Taxes</td>
+            {Object.values(Taxes).map((value, i) => (
+              <td key={i} className="border-t px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))}
           </tr>
+
           <tr>
-            <td className="font-bold border px-4 py-2">NetIncome</td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(NetIncome["All Products"])}
+            <td className="font-semibold border-b px-6 text-sm py-1">
+              Net Income
             </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(NetIncome["Product 7-1"])}
-            </td>
-            <td className="border px-4 py-2 text-center">
-              {formatCurrency(NetIncome["Product 7-2"])}
-            </td>
+            {Object.values(NetIncome).map((value, i) => (
+              <td key={i} className="border-b px-6 text-sm py-1 text-right">
+                {formatCurrency(value, showFullValues)}
+              </td>
+            ))}
           </tr>
         </tbody>
       </table>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   Button,
@@ -8,57 +8,78 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import FGInventoryTable from "./FGInventoryTable";
+import { Box, Flex, Text } from "@chakra-ui/react";
 
 function NewPageRenderer({ children }) {
   const [newWindow, setNewWindow] = useState(null);
 
-  React.useEffect(() => {
-    // Open a new window when the component mounts
+  useEffect(() => {
     const newWin = window.open("", "_blank", "width=800,height=600");
-    newWin.document.title = "Finished Goods Inventory Report";
+    newWin.document.title = "Report Page";
     setNewWindow(newWin);
 
-    // Close the new window when the component unmounts
+    Array.from(document.querySelectorAll("style")).forEach((styleEl) => {
+      const newStyleEl = newWin.document.createElement("style");
+      newStyleEl.innerHTML = styleEl.innerHTML;
+      newWin.document.head.appendChild(newStyleEl);
+    });
+
     return () => {
       newWin.close();
     };
   }, []);
 
-  // Render the children to the new window's document body
-  return newWindow ? ReactDOM.createPortal(children, newWindow.document.body) : null;
+  return newWindow
+    ? ReactDOM.createPortal(children, newWindow.document.body)
+    : null;
 }
 
-export default function FGInventoryModal() {
-  const [open, setOpen] = useState(false);
+export default function FGInventoryModal({ setActiveReport }) {
+  const [open, setOpen] = useState(true);
   const [openNewPage, setOpenNewPage] = useState(false);
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setActiveReport("");
+  };
   const handleExplode = () => setOpenNewPage(true);
 
   return (
     <>
-      <Button onClick={handleOpen} variant="gradient">
+      {/* <Button onClick={handleOpen} variant="gradient">
         Open Goods Inventory Report
-      </Button>
+      </Button> */}
       <Dialog size="lg" open={open} handler={handleOpen}>
         <DialogHeader>
-          Report
-          <Button
-            variant="gradient"
-            color="blue"
-            onClick={handleExplode}
-            className="ml-4"
-          >
-            Explode
-          </Button>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleOpen}
-            className="mr-1"
-          >
-            <span>Close</span>
-          </Button>
+          <Flex width={"100%"} justifyContent={"space-between"}>
+            <Text>Report : Finished Goods Inventory Report</Text>
+            <Box>
+              <Button
+                variant="gradient"
+                color="none"
+                onClick={handleExplode}
+                className="ml-4 bg-none text-yellow-800"
+              >
+                Explode{" "}
+                <span>
+                  <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                </span>
+              </Button>
+              <Button
+                variant="text"
+                color="red"
+                onClick={handleClose}
+                className="m-1"
+              >
+                <span className=" text-red-500 px-1 text-xl">
+                  <i class="fa-solid fa-xmark"></i>
+                </span>
+              </Button>
+            </Box>
+          </Flex>
         </DialogHeader>
         <DialogBody
           style={{ height: "600px", overflowY: "auto" }}
@@ -66,13 +87,14 @@ export default function FGInventoryModal() {
         >
           <FGInventoryTable />
         </DialogBody>
-        <DialogFooter>
-        </DialogFooter>
+        <DialogFooter></DialogFooter>
       </Dialog>
       {openNewPage && (
         <NewPageRenderer>
           <div>
-            <h1 className="text-2xl font-bold mb-4">Finished Goods Inventory Report</h1>
+            <h1 className="text-2xl font-bold mb-4">
+              Finished Goods Inventory Report
+            </h1>
             <FGInventoryTable />
           </div>
         </NewPageRenderer>

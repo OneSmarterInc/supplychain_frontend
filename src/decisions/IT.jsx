@@ -14,6 +14,8 @@ const IT = () => {
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData"));
   const [suppliers, setSuppliers] = useState({});
+  const [careers, setCareers] = useState({});
+
   const [ItData, setItData] = useState({});
   const [loading, setLoading] = useState(false);
   const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false);
@@ -28,7 +30,9 @@ const IT = () => {
   const firm_data = Object.keys(selectedSim[0]?.firm_data)[0];
   let firm_key_new = "";
   if (selectedSim[0]?.firm_data.length) {
-    let firm_obj = selectedSim[0]?.firm_data.filter((item) => item.emails.includes(user.email));
+    let firm_obj = selectedSim[0]?.firm_data.filter((item) =>
+      item.emails.includes(user.email)
+    );
     if (firm_obj.length) {
       firm_key_new = firm_obj[0].firmName;
     }
@@ -51,13 +55,19 @@ const IT = () => {
           firm_key: firm_key_new,
         },
       });
-      setItData(response.data);
-      localStorage.setItem("ItData", JSON.stringify(response.data));
+      const { careers: careersData, ...itData } = response.data;
+      setItData(itData);
+      setCareers(careersData || {});
+      localStorage.setItem("ItData", JSON.stringify(itData));
     } catch (error) {
+      console.error(
+        "Error making GET request:",
+        error.response ? error.response.data : error.message
+      );
       localStorage.removeItem("ItData");
       setItData({});
       setSuppliers({});
-      console.error("Error making GET request:", error.response ? error.response.data : error.message);
+      setCareers({});
     }
   };
 
@@ -130,6 +140,13 @@ const IT = () => {
         sync_e: suppliers.E,
         sync_f: suppliers.F,
         sync_g: suppliers.G,
+
+        sync_i: careers.I,
+        sync_j: careers.J,
+        sync_k: careers.K,
+        sync_l: careers.L,
+        sync_m: careers.M,
+        sync_n: careers.N,
       });
 
       await submitDecisionStatus(
@@ -137,7 +154,7 @@ const IT = () => {
         "it",
         selectedSimData,
         firm_key_new,
-        currentQuarter,
+        currentQuarter
       );
       getIt();
       addUserLogger();
@@ -148,12 +165,13 @@ const IT = () => {
         isClosable: true,
         position: "top",
       });
-     
     } catch (error) {
       console.error("Error making POST request: IT", error);
       toast({
         title: "Error submitting IT decision",
-        description: error.message || "Something went wrong while submitting the IT decision.",
+        description:
+          error.message ||
+          "Something went wrong while submitting the IT decision.",
         status: "error",
         duration: 9000,
         isClosable: true,
@@ -186,7 +204,13 @@ const IT = () => {
 
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
-      <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"IT"}/>
+      <StatusBar
+        simulation_id={simulation_id}
+        firm_key={firm_key_new}
+        quarter={currentQuarter}
+        api={api}
+        current={"IT"}
+      />
 
       <div className="sm:grid grid-cols-1 gap-3 m-1">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
@@ -220,16 +244,28 @@ const IT = () => {
             className="font-bold py-2 px-4 text-red-400 cursor-pointer"
             disabled={isLoadingLastQuarter || currentQuarter <= 1}
           >
-            <span className="text-black">To load inputs from the previous quarter, </span>
+            <span className="text-black">
+              To load inputs from the previous quarter,{" "}
+            </span>
             {isLoadingLastQuarter ? <Spinner size="sm" /> : "Click here!"}
           </div>
           {loading ? (
-            <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              mt={4}
+            >
               <Spinner size="xl" />
             </Box>
           ) : (
             <>
-              <IT_suppliers ItData={ItData} setSuppliersFromDecision={setSuppliers} />
+              <IT_suppliers
+                ItData={ItData}
+                CareersData={careers}
+                setSuppliersFromDecision={setSuppliers}
+                setCareersFromDecision={setCareers}
+              />
             </>
           )}
 

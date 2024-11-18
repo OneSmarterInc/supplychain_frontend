@@ -1,81 +1,144 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
 
 // Table component that receives `data` via props
 const CashFlowTable = () => {
   const reportRef = useRef();
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const data = JSON.parse(localStorage.getItem("reportData"));
 
   if (!data || data.length === 0) {
-    return (
-      <div className="text-center p-4">
-        No data available
-      </div>
-    );
+    return <div className="text-center p-4">No data available</div>;
   }
 
   // Render a single report (assuming one report is being displayed at a time)
   const renderReport = (report) => (
-    <div key={report.id} className="border p-4 mb-4">
-      {/* Starting Cash Balance */}
-      <div className="mb-4">
-        <h3 className="font-semibold">Starting "Cash" Balance:</h3>
-        <p>{report.starting_cash_balance.toLocaleString()}</p>
-      </div>
+    <div
+      key={report.id}
+      ref={reportRef}
+      className="border p-6 mb-6 bg-white rounded-lg shadow-md"
+    >
+      <h2 className="text-base p-1 bg-gray-300  font-semibold  mb-2 text-red-700">
+        Monthly Financial Report
+      </h2>
 
-      {/* Loans Liquidated */}
-      <div className="mb-4">
-        <h3 className="font-semibold">Loans (Liquidated During Month):</h3>
-        <p>{report.loans_liquidated.toLocaleString()}</p>
-      </div>
+      {/* Table Layout */}
+      <table className="min-w-full bg-white border">
+        <tbody>
+          {/* Starting Cash Balance */}
+          <tr className="border-b">
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
+              Starting "Cash" Balance
+            </td>
+            <td className="py-1 text-sm px-4 text-gray-800">
+              {report.starting_cash_balance.toLocaleString()}
+            </td>
+          </tr>
 
-      {/* Finished Goods Inventory Changes */}
-      <div className="mb-4">
-        <h3 className="font-semibold">Finished Goods Inventory Changes:</h3>
-        <p>Smart Home Asistant ---(From: {report.finished_goods_product_1_from.toLocaleString()} To: {report.finished_goods_product_1_to.toLocaleString()})</p>
-        <p>Smart Tharmostat ---(From: {report.finished_goods_product_2_from.toLocaleString()} To: {report.finished_goods_product_2_to.toLocaleString()})</p>
-      </div>
+          {/* Loans Liquidated */}
+          <tr className="border-b">
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
+              Loans (Liquidated During Month)
+            </td>
+            <td className="py-1 text-sm px-4 text-gray-800">
+              {report.loans_liquidated.toLocaleString()}
+            </td>
+          </tr>
 
-      {/* Net Income */}
-      <div className="mb-4">
-        <h3 className="font-semibold">Net Income:</h3>
-        <p>{report.net_income.toLocaleString()}</p>
-      </div>
+          {/* Finished Goods Inventory Changes */}
+          <tr className="border-b">
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
+              Finished Goods Inventory Changes
+            </td>
+            <td className="py-1 text-sm px-4">
+              <div className="text-gray-800">
+                <p>
+                  Smart Home Assistant: From{" "}
+                  {report.finished_goods_product_1_from.toLocaleString()} to{" "}
+                  {report.finished_goods_product_1_to.toLocaleString()}
+                </p>
+                <p>
+                  Smart Thermostat: From{" "}
+                  {report.finished_goods_product_2_from.toLocaleString()} to{" "}
+                  {report.finished_goods_product_2_to.toLocaleString()}
+                </p>
+              </div>
+            </td>
+          </tr>
 
-      {/* Operating Cash Deficit */}
-      <div className="mb-4">
-        <h3 className="font-semibold">Operating "Cash" Deficit (From Loans):</h3>
-        <p>{report.operating_cash_deficit.toLocaleString()}</p>
-      </div>
+          {/* Net Income */}
+          <tr className="border-b">
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
+              Net Income
+            </td>
+            <td className="py-1 text-sm px-4 text-gray-800">
+              {report.net_income.toLocaleString()}
+            </td>
+          </tr>
 
-      {/* Final Cash Balance */}
-      <div className="mb-4">
-        <h3 className="font-semibold">Final "Cash" Balance (End of Month):</h3>
-        <p>{report.final_cash_balance.toLocaleString()}</p>
-      </div>
+          {/* Operating Cash Deficit */}
+          <tr className="border-b">
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
+              Operating "Cash" Deficit (From Loans)
+            </td>
+            <td className="py-1 text-sm px-4 text-gray-800">
+              {report.operating_cash_deficit.toLocaleString()}
+            </td>
+          </tr>
 
-      <hr className="my-4" />
+          {/* Final Cash Balance */}
+          <tr>
+            <td className="py-1 text-sm px-4 font-semibold text-gray-600">
+              Final "Cash" Balance (End of Month)
+            </td>
+            <td className="py-1 text-sm px-4 text-gray-800">
+              {report.final_cash_balance.toLocaleString()}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <hr className="my-6" />
     </div>
   );
 
-  // Function to download the current view as PDF
-  const downloadPDF = () => {
-    const element = reportRef.current;
-    html2pdf().from(element).save("cash_flow_report.pdf");
+  const downloadPDF = async () => {
+    setIsLoading(true);
+    try {
+      const element = reportRef.current;
+      await html2pdf().from(element).save("cash_flow_report.pdf");
+    } catch (error) {
+      console.error("Error while downloading PDF:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div>
       <div className="flex justify-between mb-4">
-        <h2 className="text-2xl font-bold">Cash Flow Report</h2>
-        <button onClick={downloadPDF} className="bg-red-500 text-white px-4 py-2 rounded">
-          Download as PDF
+        <h1 className="text-xl font-bold ">Cash Flow Analysis Reports</h1>
+        <button
+          className={`p-1 rounded-sm text-base hover:bg-red-700 text-white ${
+            isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-red-400"
+          }`}
+          onClick={downloadPDF}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <div className="flex items-center">
+              <span className="loader" /> 
+              <span className="ml-2">Generating PDF...</span>
+            </div>
+          ) : (
+            "Download PDF"
+          )}<i class="fa-solid fa-download"></i>
         </button>
       </div>
 
-      <div ref={reportRef} className="p-4">
-        {data.map((report) => renderReport(report))}
-      </div>
+      <div className="p-4">{data.map((report) => renderReport(report))}</div>
     </div>
   );
 };

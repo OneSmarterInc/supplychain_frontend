@@ -20,3 +20,25 @@ div{
     font-weight: bold;
    
   }
+
+
+  .pdf-export table {
+    width: 100%;
+    font-size: 10px;
+  }
+  
+  .pdf-export th, .pdf-export td {
+    padding: 4px;
+    text-align: left;
+    word-wrap: break-word;
+  }
+  
+  .pdf-export th {
+    background-color: #f3f4f6;
+    color: #d32f2f;
+  }
+  
+  .pdf-export td {
+    border: 1px solid #e0e0e0;
+  }
+  
