@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Financial from "./Financial";
 import MyContext from "../Components/ContextApi/MyContext";
 import axios from "axios";
+import { Button } from "@material-tailwind/react";
 
 const Analytics = () => {
   const navigate = useNavigate();
@@ -84,9 +85,18 @@ const Analytics = () => {
         break;
     }
   };
+const trigger = async () =>{
+const response = await axios.get(`${api}/trigger/?simulation_id=${selectedSimData[0].simulation_id}`);
+selectedSimData[0].current_quarter = response.data[0];
+localStorage.setItem("selectedSimData", JSON.stringify(selectedSimData));
+alert("updated");
 
+}
   return (
     <div className="w-3/5 mx-auto font-sans h-[100%] mb-4 " >
+      
+      <Button onClick={trigger}>Trigger </Button>
+
       <Text className="text-center text-lg text-gray-700 font-semibold mt-0.5">
         Course : <span className="text-red-600"> {selectedSimData[0].course} </span> | Your Team
         : <span className="text-red-600">{firm_key_new}</span>
@@ -102,7 +112,7 @@ const Analytics = () => {
           <p className="text-center text-lg text-gray-700 font-semibold ">
             Quarter :
           </p>
-          {Array.from({ length: 3 }, (_, i) => (
+          {Array.from({ length: selectedSimData[0].current_quarter -1  }, (_, i) => (
             <div
               key={i + 1}
               onClick={() => setSelectedQuarter(i + 1)}

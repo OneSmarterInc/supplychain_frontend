@@ -27,7 +27,7 @@ const Sidebar = () => {
     ) || [];
   const firm_key = firm_obj.length ? firm_obj[0].firmName : "";
 
-  let totalQuarters = parseInt(simData?.[0]?.current_quarter) - 1 || 1;
+  let totalQuarters = parseInt(selectedSim?.[0]?.current_quarter) - 1 || 1;
 
   const parentOptions = [
     { name: "Dashboard", redirect: "/dashboard" },
