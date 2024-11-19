@@ -16,6 +16,8 @@ const Analytics = () => {
     "externalData": []
 });
 
+
+
   const selectedSimData =
     JSON.parse(localStorage.getItem("selectedSimData")) || {};
   
