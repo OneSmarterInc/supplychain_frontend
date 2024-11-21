@@ -89,13 +89,13 @@ const Analytics = () => {
   };
 const trigger = async () =>{
 const response = await axios.get(`${api}/trigger/?simulation_id=${selectedSimData[0].simulation_id}`);
-selectedSimData[0].current_quarter = response.data[0];
+selectedSimData[0].current_quarter = response.data;
 localStorage.setItem("selectedSimData", JSON.stringify(selectedSimData));
-alert("updated");
+alert(response.data);
 
 }
   return (
-    <div className="w-3/5 mx-auto font-sans h-[100%] mb-4 " >
+    <div className="w-3/5 mx-auto font-sans h-screen mb-4 " >
       
       <Button onClick={trigger}>Trigger </Button>
 

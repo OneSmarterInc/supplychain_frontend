@@ -28,9 +28,9 @@ const StatusBar = ({ simulation_id, firm_key, quarter, api, current }) => {
     return <div>Loading...</div>;
   }
 
-  // if (!statusData || statusData.length === 0) {
-  //   return <div>No data available</div>;
-  // }
+  if (!statusData || statusData.length === 0) {
+    return <div>No data available</div>;
+  }
 
   // Decision labels
   const decisionLabels = [
