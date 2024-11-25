@@ -1,14 +1,15 @@
 .driver-popover.custom-theme {
-  background: #1a202c; /* Dark background */
-  color: #f7fafc; /* Light text */
+  background: #1a202c;
+  color: #f7fafc;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 10px;
 }
 
 .driver-popover-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #63b3ed; /* Accent color for the title */
+  color: #63b3ed;
 }
 
 .driver-popover-description {
@@ -17,7 +18,7 @@
 }
 
 .driver-btn {
-  background-color: #3182ce; /* Blue button */
+  background-color: #3182ce;
   color: #ffffff;
   border-radius: 5px;
   padding: 8px 12px;
@@ -26,5 +27,5 @@
 }
 
 .driver-btn:hover {
-  background-color: #2b6cb0; /* Darker blue on hover */
+  background-color: #2b6cb0;
 }
