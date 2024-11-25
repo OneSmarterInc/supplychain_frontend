@@ -3,18 +3,19 @@ import { useLocation } from "react-router-dom";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import "./walkthrough.css";
+
 const WalkThrough = () => {
   const location = useLocation();
   const [showModal, setShowModal] = useState(false);
-  const [hasWalkthroughStarted, setHasWalkthroughStarted] = useState(false);
+  const [walkthroughStatus, setWalkthroughStatus] = useState("");
 
   useEffect(() => {
-    const walkthroughShown = localStorage.getItem(
-      `walkthroughShown_${location.pathname}`
+    const storedStatus = localStorage.getItem(
+      `walkthroughStatus_${location.pathname}`
     );
+    setWalkthroughStatus(storedStatus);
 
-    // Check if there are steps for the current path
-    if (!walkthroughShown && getSteps().length > 0) {
+    if (!storedStatus && getSteps().length > 0) {
       setShowModal(true);
     }
   }, [location]);
@@ -29,6 +30,7 @@ const WalkThrough = () => {
               title: "Navbar Notifications",
               description: "Check notifications, log in, and sign up here.",
               position: "bottom",
+              closeBtnText: "Skip",
             },
           },
           {
@@ -37,6 +39,7 @@ const WalkThrough = () => {
               title: "Dashboard",
               description: "Access the main dashboard from here.",
               position: "bottom",
+              closeBtnText: "Skip",
             },
           },
         ];
@@ -45,33 +48,10 @@ const WalkThrough = () => {
           {
             element: "#sidebar-button-dashboard",
             popover: {
-              title: "Decision Button",
-              description: "Click to open dashboard.",
+              title: "Dashboard Button",
+              description: "Click to open the dashboard.",
               position: "top",
-            },
-          },
-          {
-            element: "#sidebar-button-reports",
-            popover: {
-              title: "Reports Button",
-              description: "Click to open reports.",
-              position: "top",
-            },
-          },
-          {
-            element: "#sidebar-button-member-logs",
-            popover: {
-              title: "Member Logs Button",
-              description: "Click to view logs.",
-              position: "top",
-            },
-          },
-          {
-            element: "#sidebar-button-download-manual",
-            popover: {
-              title: "Download Manual Button",
-              description: "Click to download user manual.",
-              position: "top",
+              closeBtnText: "Skip",
             },
           },
           {
@@ -80,25 +60,7 @@ const WalkThrough = () => {
               title: "Decision Button",
               description: "Click to make key decisions for the project.",
               position: "top",
-            },
-          },
-          {
-            element: "#quarters-button",
-            popover: {
-              title: "Quarters Selector",
-              description: "Select your working quarters here.",
-              position: "top",
-            },
-          },
-        ];
-      case "/forecast":
-        return [
-          {
-            element: "#forecast-decision",
-            popover: {
-              title: "Forecast Decision",
-              description: "Make your forecast decisions here.",
-              position: "right",
+              closeBtnText: "Skip",
             },
           },
         ];
@@ -115,7 +77,7 @@ const WalkThrough = () => {
       allowClose: true,
       overlayClickNext: true,
       doneBtnText: "Finish",
-      closeBtnText: "Close",
+      closeBtnText: "Skip",
       nextBtnText: "Next",
       prevBtnText: "Previous",
       showProgress: true,
@@ -124,37 +86,41 @@ const WalkThrough = () => {
     });
 
     driverObj.drive();
-    localStorage.setItem(`walkthroughShown_${location.pathname}`, "true");
+
+    const observer = new MutationObserver(() => {
+      const activeElement = document.querySelector(
+        ".driver-highlighted-element"
+      );
+      if (!activeElement) {
+        localStorage.setItem(
+          `walkthroughStatus_${location.pathname}`,
+          "completed"
+        );
+        setWalkthroughStatus("completed");
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
   };
 
   const handleWalkthroughStart = () => {
     setShowModal(false);
-    setHasWalkthroughStarted(true);
     startWalkthrough();
   };
 
   const handleWalkthroughCancel = () => {
     setShowModal(false);
+    localStorage.setItem(`walkthroughStatus_${location.pathname}`, "canceled");
+    setWalkthroughStatus("canceled");
   };
 
-  const handleWalkthroughButtonClick = () => {
-    // Only show modal if steps exist for the current path
-    if (getSteps().length > 0) {
-      setShowModal(true);
-    }
+  const handleWalkthroughRestart = () => {
+    startWalkthrough();
   };
 
   return (
     <div>
-      {/* Walkthrough Trigger Button */}
-      <button
-        className="fixed btn-start-tour z-50 bottom-4 right-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg"
-        onClick={handleWalkthroughButtonClick}
-      >
-        {hasWalkthroughStarted ? "Restart Walkthrough" : "Start Walkthrough"}
-      </button>
-
-      {/* Walkthrough Confirmation Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg p-6 shadow-lg w-1/3">
@@ -178,6 +144,15 @@ const WalkThrough = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {walkthroughStatus === "completed" && (
+        <button
+          className="fixed btn-restart-tour z-50 bottom-4 right-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg"
+          onClick={handleWalkthroughRestart}
+        >
+          Restart Walkthrough
+        </button>
       )}
     </div>
   );
