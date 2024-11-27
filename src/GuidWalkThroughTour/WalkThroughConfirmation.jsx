@@ -22,36 +22,38 @@ const WalkThrough = () => {
 
   const getSteps = () => {
     switch (location.pathname) {
-      case "/":
-        return [
-          {
-            element: "#navbar-notification",
-            popover: {
-              title: "Navbar Notifications",
-              description: "Check notifications, log in, and sign up here.",
-              position: "bottom",
-              closeBtnText: "Skip",
-            },
-          },
-          {
-            element: "#navbar-dashboard",
-            popover: {
-              title: "Dashboard",
-              description: "Access the main dashboard from here.",
-              position: "bottom",
-              closeBtnText: "Skip",
-            },
-          },
-        ];
       case "/dashboard":
         return [
           {
             element: "#sidebar-button-dashboard",
             popover: {
-              title: "Dashboard Button",
-              description: "Click to open the dashboard.",
+              title: "Decision Button",
+              description: "Click to open dashboard.",
               position: "top",
-              closeBtnText: "Skip",
+            },
+          },
+          {
+            element: "#sidebar-button-reports",
+            popover: {
+              title: "Reports Button",
+              description: "Click to open reports.",
+              position: "top",
+            },
+          },
+          {
+            element: "#sidebar-button-member-logs",
+            popover: {
+              title: "Member Logs Button",
+              description: "Click to view logs.",
+              position: "top",
+            },
+          },
+          {
+            element: "#sidebar-button-download-manual",
+            popover: {
+              title: "Download Manual Button",
+              description: "Click to download user manual.",
+              position: "top",
             },
           },
           {
@@ -60,7 +62,14 @@ const WalkThrough = () => {
               title: "Decision Button",
               description: "Click to make key decisions for the project.",
               position: "top",
-              closeBtnText: "Skip",
+            },
+          },
+          {
+            element: "#quarters-button",
+            popover: {
+              title: "Quarters Selector",
+              description: "Select your working quarters here.",
+              position: "top",
             },
           },
         ];
@@ -83,6 +92,7 @@ const WalkThrough = () => {
       showProgress: true,
       theme: "custom-theme",
       steps: getSteps(),
+      popoverClass: "driverjs-theme",
     });
 
     driverObj.drive();
@@ -122,21 +132,23 @@ const WalkThrough = () => {
   return (
     <div>
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 shadow-lg w-1/3">
-            <h2 className="text-lg font-bold mb-4">Start Walkthrough</h2>
-            <p className="mb-6">
-              Would you like to start the walkthrough for this page?
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-gradient-to-br from-yellow-300 to-yellow-400 text-black rounded-xl p-8 shadow-2xl w-full max-w-md animate-scaleIn">
+            <h2 className="text-2xl font-extrabold mb-4 text-center tracking-wide">
+              Start Walkthrough
+            </h2>
+            <p className="mb-6 text-center text-lg">
+              Would you like to begin the walkthrough for this page?
             </p>
-            <div className="flex justify-end">
+            <div className="flex justify-center gap-4">
               <button
-                className="px-4 py-2 mr-4 bg-gray-300 hover:bg-gray-400 rounded-lg"
+                className="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-black font-medium rounded-lg transition-all duration-200 transform hover:scale-105"
                 onClick={handleWalkthroughCancel}
               >
                 Cancel
               </button>
               <button
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+                className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105"
                 onClick={handleWalkthroughStart}
               >
                 Start Walkthrough
@@ -148,7 +160,7 @@ const WalkThrough = () => {
 
       {walkthroughStatus === "completed" && (
         <button
-          className="fixed btn-restart-tour z-50 bottom-4 right-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg"
+          className="fixed btn-restart-tour z-50 bottom-4 left-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg"
           onClick={handleWalkthroughRestart}
         >
           Restart Walkthrough
