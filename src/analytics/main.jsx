@@ -90,8 +90,15 @@ const Analytics = () => {
 const trigger = async () =>{
 const response = await axios.get(`${api}/trigger/?simulation_id=${selectedSimData[0].simulation_id}`);
 selectedSimData[0].current_quarter = response.data;
-localStorage.setItem("selectedSimData", JSON.stringify(selectedSimData));
-alert(response.data);
+if (selectedSimData[0].current_quarter == selectedSimData[0].total_quarter){
+    alert(response.data, "All quarter finished");
+
+}else{
+
+  localStorage.setItem("selectedSimData", JSON.stringify(selectedSimData));
+  alert(response.data,"current quarter");
+  window.location.reload();
+}
 
 }
   return (
