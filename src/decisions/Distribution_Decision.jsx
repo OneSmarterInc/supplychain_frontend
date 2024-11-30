@@ -227,10 +227,6 @@ const Distribution_Decision = () => {
         isClosable: true,
         position: "top",
       });
-<<<<<<< HEAD
-
-=======
->>>>>>> 15397b889ff7a377162c702d2be41b64cdf6576e
     } catch (error) {
       console.error("Error making POST request: Distribution", error);
       toast({
@@ -249,17 +245,7 @@ const Distribution_Decision = () => {
   return (
     <div>
       <div style={{ fontFamily: "ABeeZee" }}>
-<<<<<<< HEAD
         <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Distribution"} />
-=======
-        <StatusBar
-          simulation_id={simulation_id}
-          firm_key={firm_key_new}
-          quarter={currentQuarter}
-          api={api}
-          current={"Distribution"}
-        />
->>>>>>> 15397b889ff7a377162c702d2be41b64cdf6576e
 
         <div className="sm:grid grid-cols-1 gap-3 m-1">
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
@@ -274,18 +260,10 @@ const Distribution_Decision = () => {
                       <div
                         key={i + 1}
                         onClick={() => setSelectedQuarter(i + 1)}
-<<<<<<< HEAD
                         className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${selectedQuarter === i + 1
                             ? "bg-red-500 border-red-500 text-white"
                             : ""
                           }`}
-=======
-                        className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
-                          selectedQuarter === i + 1
-                            ? "bg-red-500 border-red-500 text-white"
-                            : ""
-                        }`}
->>>>>>> 15397b889ff7a377162c702d2be41b64cdf6576e
                       >
                         {i + 1}
                       </div>
@@ -294,7 +272,6 @@ const Distribution_Decision = () => {
                 </div>
               </div>
 
-<<<<<<< HEAD
               <div className="flex items-center font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl">
                 {/* Wrapper for the first icon with the hover title */}
                 <div
@@ -314,31 +291,12 @@ const Distribution_Decision = () => {
                 </div>
 
                 {/* Second icon (InfoButton) without title */}
-=======
-              <div
-                className="font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl"
-                disabled={isLoadingLastQuarter || currentQuarter <= 1}
-                title="To load inputs from the previous quarter"
-              >
-                {isLoadingLastQuarter ? (
-                  <Spinner size="sm" />
-                ) : (
-                  <i
-                    class="fa fa-stack-overflow mr-2 "
-                    onClick={loadPreviousQuarter}
-                    aria-hidden="true"
-                  ></i>
-                )}
->>>>>>> 15397b889ff7a377162c702d2be41b64cdf6576e
                 <InfoButton decision="Distribution" />
               </div>
 
-<<<<<<< HEAD
             </div>
 
 
-=======
->>>>>>> 15397b889ff7a377162c702d2be41b64cdf6576e
             {loading ? (
               <Box
                 display="flex"
@@ -458,18 +416,10 @@ const Distribution_Decision = () => {
                           <Th>
                             Cross-Docking,{" "}
                             {carrier.toUpperCase().replace("_", " ")}{" "}
-<<<<<<< HEAD
-
-=======
->>>>>>> 15397b889ff7a377162c702d2be41b64cdf6576e
                           </Th>
                           {["region1", "region2", "region3"].map((region) => (
                             <Td key={region}>
                               {region === "region1" ? (
-<<<<<<< HEAD
-
-=======
->>>>>>> 15397b889ff7a377162c702d2be41b64cdf6576e
                                 <span>&nbsp;</span>
                               ) : (
                                 <Select
