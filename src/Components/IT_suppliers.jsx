@@ -69,8 +69,7 @@ const IT_suppliers = ({
   const [suppliers, setSuppliers] = useState(initialSuppliers);
   const [careers, setCareers] = useState(initialCareers);
 
-
-  console.log("Career", careers)
+  console.log("Career", careers);
 
   useEffect(() => {
     if (ItData) {
@@ -115,7 +114,10 @@ const IT_suppliers = ({
 
   return (
     <Box>
-      <Box className="border border-gray rounded-lg">
+      <Box
+        id="IT-Synchronization-with-Suppliers"
+        className="border border-gray rounded-lg"
+      >
         <Text className="p-5 py-1 text-xl">
           <strong>IT Synchronization with Suppliers</strong>
         </Text>
@@ -140,7 +142,10 @@ const IT_suppliers = ({
           ))}
         </div>
       </Box>
-      <Box className="border border-gray rounded-lg">
+      <Box
+        id="IT-Synchronization-with-Carreers"
+        className="border border-gray rounded-lg"
+      >
         <Text className="p-5 py-1 text-xl">
           <strong>IT Synchronization with Careers</strong>
         </Text>

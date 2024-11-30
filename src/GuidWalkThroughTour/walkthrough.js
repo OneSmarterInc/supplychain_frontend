@@ -293,6 +293,46 @@ export const getSteps = (pathname) => {
         },
       ];
 
+    case "/IT":
+      return [
+        {
+          element: "#IT-Synchronization-with-Suppliers",
+          popover: {
+            title: "Smart Home Assistance (Retail)",
+            description:
+              "Specify service values for the retail channel of the Smart Home Assistance product.",
+            position: "top",
+          },
+        },
+        {
+          element: "#IT-Synchronization-with-Carreers",
+          popover: {
+            title: "Smart Home Assistance (Direct)",
+            description:
+              "Specify service values for the direct channel of the Smart Home Assistance product.",
+            position: "top",
+          },
+        },
+        {
+          element: "#service-Smart-Thermostat-Retail",
+          popover: {
+            title: "Smart Thermostat (Retail)",
+            description:
+              "Specify service values for the retail channel of the Smart Thermostat product.",
+            position: "top",
+          },
+        },
+        {
+          element: "#service-Smart-Thermostat-Direct",
+          popover: {
+            title: "Smart Thermostat (Direct)",
+            description:
+              "Specify service values for the direct channel of the Smart Thermostat product.",
+            position: "top",
+          },
+        },
+      ];
+
     default:
       return [];
   }
