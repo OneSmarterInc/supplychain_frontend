@@ -26,7 +26,8 @@ const Service_Decision = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
 
-  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
+  const selectedSimData =
+    JSON.parse(localStorage.getItem("selectedSimData")) || {};
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
   const simulation_id = selectedSimData[0]?.simulation_id;
 
@@ -166,7 +167,7 @@ const Service_Decision = () => {
         "service",
         selectedSimData,
         firm_key_new,
-        currentQuarter,
+        currentQuarter
       );
       console.log("POST request successful", response.data);
       addUserLogger();
@@ -178,9 +179,11 @@ const Service_Decision = () => {
         isClosable: true,
         position: "top",
       });
-     
     } catch (error) {
-      console.error("Error making POST request: Service", error.response?.data || error.message);
+      console.error(
+        "Error making POST request: Service",
+        error.response?.data || error.message
+      );
     } finally {
       setLoading(false); // Stop loading after submission
     }
@@ -196,7 +199,7 @@ const Service_Decision = () => {
         decision: "Service",
         action: "created",
         ip_address: "123.345.1",
-        username: user.first_name +" "+ user.last_name,
+        username: user.first_name + " " + user.last_name,
         firm_key: firm_key_new,
         current_quarter: selectedSim[0].current_quarter,
       });
@@ -210,55 +213,81 @@ const Service_Decision = () => {
   return (
     <div>
       <div style={{ fontFamily: "ABeeZee" }}>
+        <StatusBar
+          simulation_id={simulation_id}
+          firm_key={firm_key_new}
+          quarter={currentQuarter}
+          api={api}
+          current={"Service"}
+        />
 
-     <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Service"}/>
-    
         <div className="sm:grid grid-cols-1 gap-3 m-1">
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
-            <InfoImg decision={"Service"} />
-            <div className="flex items-center justify-between w-full ">
-            <div className="flex items-center pl-5 pt-2 pb-2 ">
-              <Text>Load data Quarterly</Text>
-              <div className="pl-4 flex space-x-4 ">
-                {Array.from(
-                  { length: selectedSimData[0]?.current_quarter || 0 },
-                  (_, i) => (
-                    <div
-                      key={i + 1}
-                      onClick={() => setSelectedQuarter(i + 1)}
-                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
-                        selectedQuarter === i + 1
-                          ? "bg-red-500 border-red-500 text-white"
-                          : ""
-                      }`}
-                    >
-                      {i + 1}
-                    </div>
-                  )
+            <div>
+              <InfoImg decision={"Service"} id="quarter-deadline" id2 = "course-details" />
+            </div>
+            <div
+              id="service-button-load-quarters"
+              className="flex items-center justify-between w-full "
+            >
+              <div className="flex items-center pl-5 pt-2 pb-2 ">
+                <Text>Load data Quarterly</Text>
+                <div className="pl-4 flex space-x-4 ">
+                  {Array.from(
+                    { length: selectedSimData[0]?.current_quarter || 0 },
+                    (_, i) => (
+                      <div
+                        key={i + 1}
+                        onClick={() => setSelectedQuarter(i + 1)}
+                        className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
+                          selectedQuarter === i + 1
+                            ? "bg-red-500 border-red-500 text-white"
+                            : ""
+                        }`}
+                      >
+                        {i + 1}
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+
+              <div
+                className="font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl flex"
+                disabled={isLoadingLastQuarter || currentQuarter <= 1}
+                title="To load inputs from the previous quarter"
+              >
+                {isLoadingLastQuarter ? (
+                  <Spinner size="sm" />
+                ) : (
+                  <i
+                    class="fa fa-stack-overflow mr-2 "
+                    onClick={loadPreviousQuarter}
+                    aria-hidden="true"
+                  ></i>
                 )}
+                <div id="info">
+                  <InfoButton decision="Service" />
+                </div>
               </div>
             </div>
 
-            <div
-              
-              className="font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl"
-              disabled={isLoadingLastQuarter || currentQuarter <= 1}
-              title="To load inputs from the previous quarter"
-            >
-        
-              {isLoadingLastQuarter ? <Spinner size="sm" /> : <i class="fa fa-stack-overflow mr-2 " onClick={loadPreviousQuarter} aria-hidden="true"></i>}
-              <InfoButton decision="Service" />
-            </div>
-          </div>
-           
             {/* Show Spinner while loading */}
             {loading ? (
-              <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                mt={4}
+              >
                 <Spinner size="xl" />
               </Box>
             ) : (
               <Box>
-                <Table className="min-w-full bg-white rounded-md shadow-sm">
+                <Table
+                  id="service-outsourcing"
+                  className="min-w-full bg-white rounded-md shadow-sm"
+                >
                   <Thead className="bg-gray-100">
                     <Tr>
                       <Th>Service Outsourcing</Th>
@@ -285,7 +314,9 @@ const Service_Decision = () => {
                             fontSize={15}
                             width="100%"
                             border="1px solid black"
-                            onChange={(e) => handleChange(region, e.target.value)}
+                            onChange={(e) =>
+                              handleChange(region, e.target.value)
+                            }
                             value={serviceValue[region]}
                             className="border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                           >
@@ -304,12 +335,13 @@ const Service_Decision = () => {
             )}
 
             <div className="flex justify-end mt-4">
-              
               <button
+                id="Submit-Service"
                 onClick={submitService}
-                className={`${selectedQuarter === currentQuarter && !loading
-                  ? "bg-red-500 hover:bg-black-700 text-white"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                className={`${
+                  selectedQuarter === currentQuarter && !loading
+                    ? "bg-red-500 hover:bg-black-700 text-white"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
                 disabled={selectedQuarter !== currentQuarter || loading}
               >
