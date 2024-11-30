@@ -339,7 +339,7 @@ const Manufacturing_Decisions = () => {
               </Box>
             ) : (
               <>
-                <Table className="w-30 bg-white rounded-md shadow-sm">
+                <Table id="manufacture-production-table" className="w-30 bg-white rounded-md shadow-sm">
                   <Thead className="bg-gray-100">
                     <Tr>
                       <Th className="text-left"></Th>
@@ -394,7 +394,13 @@ const Manufacturing_Decisions = () => {
 
               <button
                 onClick={submitManufacturing}
+<<<<<<< HEAD
                 className={`${selectedQuarter === currentQuarter && !loading
+=======
+                id="manufacture-submit-button"
+                className={`${
+                  selectedQuarter === currentQuarter && !loading
+>>>>>>> 15397b889ff7a377162c702d2be41b64cdf6576e
                     ? "bg-red-500 hover:bg-black-700 text-white"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}

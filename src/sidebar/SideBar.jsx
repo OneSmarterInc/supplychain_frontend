@@ -30,16 +30,30 @@ const Sidebar = () => {
   let totalQuarters = parseInt(selectedSim?.[0]?.current_quarter) - 1 || 1;
 
   const parentOptions = [
-    { name: "Dashboard", redirect: "/dashboard" },
+    {
+      name: "Dashboard",
+      redirect: "/dashboard",
+      id: "sidebar-button-dashboard",
+    },
     {
       name: "Reports",
+      id: "sidebar-button-reports",
       children: Array.from({ length: totalQuarters }, (_, i) => ({
         name: `${i + 1}`,
         redirect: null,
       })),
     },
-    { name: "Members and Logs", redirect: "/members" },
-    { name: "Download Manual", download: true, fileUrl: "/manual.docx" },
+    {
+      name: "Members and Logs",
+      id: "sidebar-button-member-logs",
+      redirect: "/members",
+    },
+    {
+      name: "Download Manual",
+      id: "sidebar-button-download-manual",
+      download: true,
+      fileUrl: "/manual.docx",
+    },
   ];
 
   const handleParentClick = (option) => {
@@ -127,6 +141,7 @@ const Sidebar = () => {
           <li key={index} className="mb-4">
             <button
               onClick={() => handleParentClick(option)}
+              id={option.id}
               className={`w-full text-left p-2 rounded ${
                 activeParent === option.name ? "bg-white" : ""
               }`}

@@ -195,7 +195,10 @@ const Forecast = () => {
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow ">
           <InfoImg decision={"Forecast"} />
           <div className="flex items-center justify-between w-full ">
-            <div className="flex items-center pl-5 pt-2 pb-2 ">
+            <div
+              id="forecast-button-load-quarters"
+              className="  flex items-center pl-5 pt-2 pb-2 "
+            >
               <Text>Load data Quarterly</Text>
               <div className="pl-4 flex space-x-4 ">
                 {Array.from(
@@ -216,6 +219,7 @@ const Forecast = () => {
               </div>
             </div>
 
+<<<<<<< HEAD
             <div className="flex items-center font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl">
               {/* Wrapper for the first icon with the hover title */}
               <div
@@ -235,6 +239,23 @@ const Forecast = () => {
               </div>
 
               {/* Second icon (InfoButton) without title */}
+=======
+            <div
+              className="font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl"
+              disabled={isLoadingLastQuarter || currentQuarter <= 1}
+              title="To load inputs from the previous quarter"
+            >
+              {isLoadingLastQuarter ? (
+                <Spinner size="sm" />
+              ) : (
+                <i
+                  id="forecast-button-refresh"
+                  class="fa fa-stack-overflow mr-2 "
+                  onClick={loadPreviousQuarter}
+                  aria-hidden="true"
+                ></i>
+              )}
+>>>>>>> 15397b889ff7a377162c702d2be41b64cdf6576e
               <InfoButton decision="Forecast" />
             </div>
 
@@ -269,7 +290,13 @@ const Forecast = () => {
           <div className="flex justify-end mt-4">
             <button
               onClick={submitForecast}
+<<<<<<< HEAD
               className={`${selectedQuarter === currentQuarter && !loading
+=======
+              id="forecast-button-submit"
+              className={`${
+                selectedQuarter === currentQuarter && !loading
+>>>>>>> 15397b889ff7a377162c702d2be41b64cdf6576e
                   ? "bg-red-500 hover:bg-black-700 text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}

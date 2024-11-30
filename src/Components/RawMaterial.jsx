@@ -42,7 +42,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) 
 
   return (
     <Box className="overflow-x-auto p-4" style={{ fontFamily: "ABeeZee" }}>
-      <Table className="min-w-full bg-white rounded-md shadow-md">
+      <Table id="procurement-table-raw-materials" className="min-w-full bg-white rounded-md shadow-md">
         <Thead className="bg-gray-100 text-gray-700 font-semibold">
           <Tr>
             <Th className="text-left" color={'red'}> Raw Materials</Th>

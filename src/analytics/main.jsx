@@ -117,7 +117,7 @@ if (selectedSimData[0].current_quarter == selectedSimData[0].total_quarter){
       <hr />
 
       <div className="flex items-center justify-between mt-1">
-        <div className="flex space-x-2">
+        <div   id="quarters-button" className="flex space-x-2">
           <p className="text-center text-lg text-gray-700 font-semibold ">
             Quarter :
           </p>
@@ -139,6 +139,7 @@ if (selectedSimData[0].current_quarter == selectedSimData[0].total_quarter){
 
         <button
           className="bg-gradient-to-r from-red-500 to-red-600 text-white py-1 m-1 px-2 rounded hover:scale-105 transition-all duration-300 ease-in-out"
+          id="decision-button"
           onClick={() => navigate("/Forecast")}
         >
           Decisions <i className="fas fa-arrow-up-right-from-square ml-2"></i>

@@ -9,7 +9,6 @@ import {
   Td,
   Select,
   Input,
-  
 } from "@chakra-ui/react";
 
 const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {
@@ -40,11 +39,17 @@ const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {
 
   return (
     <Box>
-      <Table variant="simple" bg="white" mt="4" className="shadow-md rounded-md">
+      <Table
+        id="demand-Smart-Home-Assistance-Retail"
+        variant="simple"
+        bg="white"
+        mt="4"
+        className="shadow-md rounded-md"
+      >
         <Thead className="bg-gray-100 text-gray-700 font-semibold">
           <Tr>
             <Th fontWeight="bold" style={{ color: "#D10000" }}>
-            {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel1}
+              {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel1}
             </Th>
             <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}</Th>
             <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}</Th>
@@ -74,18 +79,18 @@ const Demand_hype_ch1 = ({ setHypeCh1ValuetoParent }) => {
                     </Select>
                   ) : (
                     <>
-                    <Input
-                      type="number"
-                      placeholder={`Enter ${channel} in $`}
-                      value={hypeCh1Value[channel][region] || ""}
-                      fontSize="sm"
-                      onChange={(e) =>
-                        handleInputChange(channel, region, e.target.value)
-                      }
-                      borderColor="gray.300"
-                      rounded="md"
-                      focusBorderColor="blue.500"
-                    />
+                      <Input
+                        type="number"
+                        placeholder={`Enter ${channel} in $`}
+                        value={hypeCh1Value[channel][region] || ""}
+                        fontSize="sm"
+                        onChange={(e) =>
+                          handleInputChange(channel, region, e.target.value)
+                        }
+                        borderColor="gray.300"
+                        rounded="md"
+                        focusBorderColor="blue.500"
+                      />
                     </>
                   )}
                 </Td>

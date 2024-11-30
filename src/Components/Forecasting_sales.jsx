@@ -34,7 +34,7 @@ const ForecastingSales = ({ setForecastHyperwaretopass, forecastData }) => {
 
   return (
     <Box className="overflow-x-auto p-4">
-      <Table className="min-w-full bg-white rounded-md shadow-md">
+      <Table id="forecast-table-smart-home-assistance" className="min-w-full bg-white rounded-md shadow-md">
         <Thead className="bg-gray-100 text-gray-700 font-semibold">
           <Tr>
             <Th className="p-3 text-left text-green-500" style={{ color: "#D10000" }}>

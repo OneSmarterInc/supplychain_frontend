@@ -30,7 +30,7 @@ const ProfileDropdown = () => {
     course: user?.course,
     university: user?.university,
     userType: user?.isadmin ? "Admin" : "User",
-    image_url: user?.image_url
+    image_url: user?.image_url,
   });
 
   const openEditModal = () => {
@@ -68,14 +68,15 @@ const ProfileDropdown = () => {
 
       const response = await axios.patch(
         `${api}/user-details/${user?.userid}/`,
-        formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       const data = response.data;
-      
+
       localStorage.setItem("user", JSON.stringify(data));
       setProfile(data);
     } catch (error) {
@@ -95,14 +96,23 @@ const ProfileDropdown = () => {
     <div className="relative">
       <Popover placement="bottom-end">
         <PopoverHandler>
-          <div className="cursor-pointer flex items-center">
+          <div  id="dashboard-navbar" className="cursor-pointer flex items-center">
             <div className="flex items-center justify-center text-xl text-red font-bold px-4">
               <img
-                src={profile?.image_url ? `${api1}${profile.image_url}` : 'https://cdn-icons-png.flaticon.com/512/1077/1077012.png'}
-                alt={profile?.first_name || 'Default User'}
+               
+                src={
+                  profile?.image_url
+                    ? `${api1}${profile.image_url}`
+                    : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png"
+                }
+                alt={profile?.first_name || "Default User"}
                 className="h-14 w-14 rounded-full border-b border-red-500 mx-2"
               />
-              <i className="fa fa-sign-out fa-light text-2xl text-red-600 mx-2" onClick={handleLogOut} aria-hidden="true"></i>
+              <i
+                className="fa fa-sign-out fa-light text-2xl text-red-600 mx-2"
+                onClick={handleLogOut}
+                aria-hidden="true"
+              ></i>
             </div>
           </div>
         </PopoverHandler>
@@ -111,15 +121,19 @@ const ProfileDropdown = () => {
             <div className="flex items-center">
               <div className="w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center text-2xl text-white font-bold">
                 <img
-                  src={profile?.image_url ? `${api1}${profile.image_url}` : 'https://cdn-icons-png.flaticon.com/512/1077/1077012.png'}
-
+                  src={
+                    profile?.image_url
+                      ? `${api1}${profile.image_url}`
+                      : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png"
+                  }
                   alt={profile.first_name}
                   className="h-12 w-12 rounded-full"
                 />
               </div>
               <div className="ml-4">
                 <p className="text-lg font-medium text-gray-900">
-                  {profile?.first_name || "Unknown User"} {profile?.last_name || ""}
+                  {profile?.first_name || "Unknown User"}{" "}
+                  {profile?.last_name || ""}
                 </p>
                 <p className="text-sm text-gray-600">
                   {profile?.email || "No Email"}
@@ -141,7 +155,9 @@ const ProfileDropdown = () => {
               <tbody>
                 <tr>
                   <td className="font-bold">Full Name:</td>
-                  <td>{profile?.first_name || "N/A"} {profile?.last_name || "N/A"}</td>
+                  <td>
+                    {profile?.first_name || "N/A"} {profile?.last_name || "N/A"}
+                  </td>
                 </tr>
                 <tr>
                   <td className="font-bold">Department:</td>
@@ -158,7 +174,10 @@ const ProfileDropdown = () => {
               </tbody>
             </table>
           </div>
-          <div className="border-t border-gray-200 mt-2">
+          <div
+            id="dashboard-navbar-logout"
+            className="border-t border-gray-200 mt-2"
+          >
             <div
               onClick={handleLogOut}
               className="flex items-center justify-center rounded-lg bg-gray-500 hover:bg-red-700 text-white p-2 cursor-pointer mt-2"
@@ -173,7 +192,11 @@ const ProfileDropdown = () => {
       <Dialog open={isEditOpen} handler={closeEditModal}>
         <DialogHeader>Edit Profile</DialogHeader>
         <DialogBody divider>
-          <form className="space-y-4" onSubmit={handleSave} encType="multipart/form-data">
+          <form
+            className="space-y-4"
+            onSubmit={handleSave}
+            encType="multipart/form-data"
+          >
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 First Name
@@ -266,7 +289,9 @@ const ProfileDropdown = () => {
           <button
             type="submit"
             onClick={handleSave}
-            className={`px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             disabled={loading} // Disable button when loading
           >
             {loading ? "Saving..." : "Save"}
