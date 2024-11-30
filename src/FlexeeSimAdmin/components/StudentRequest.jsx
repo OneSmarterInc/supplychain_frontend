@@ -30,6 +30,9 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
   const passcode = selectedSimData?.passcode;
   const cancelRef = React.useRef();
 
+
+  console.log(teams);
+
   useEffect(() => {
     const fetchSubscribersAndTeams = async () => {
       setIsLoading(true);
@@ -195,7 +198,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
                 htmlFor="studentsTeam"
                 className="text-gray-700 text-sm md:text-sm mr-2"
               >
-               Assigned ({assignedCount}) {/* Show count here */}
+                Assigned ({assignedCount}) {/* Show count here */}
               </label>
             </div>
             <div className="flex items-center mb-4 md:mb-0">
@@ -251,6 +254,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
                       <div className="text-start">
                         <p className="font-medium text-gray-900">
                           {student.name}
+                          
                         </p>
                         <p className="text-sm text-red-600">
                           {student.contact}
@@ -258,8 +262,8 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
                       </div>
                     </div>
                   </td>
-                  
-                
+
+
 
                   <td className="px-4 py-2 text-center">
                     <select
@@ -275,12 +279,17 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
                       className="block text-gray-700 py-2 px-3 border border-red-300 bg-white rounded-full w-full text-center shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
                     >
                       <option value="">Not Assigned</option>
-                      {teams.map((team, index) => (
-                        <option key={index} value={team.firm_key}>
-                          {team.firm_key.toUpperCase()}
-                        </option>
-                      ))}
+                      {teams?.length > 0 ? (
+                        teams.map((team, index) => (
+                          <option key={index} value={team.firm_key}>
+                            {team.firm_key.toUpperCase()}
+                          </option>
+                        ))
+                      ) : (
+                        <option disabled>No Teams Available</option>
+                      )}
                     </select>
+
                   </td>
                   <td className="px-4 py-2 text-center">
                     <i
