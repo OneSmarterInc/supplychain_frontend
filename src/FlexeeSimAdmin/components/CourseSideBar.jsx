@@ -10,6 +10,8 @@ import GroupDashboard from "./GroupDetailedView";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../../Components/ContextApi/MyContext";
 import NotesComponent from "./FacultyNotes";
+import StudentRequest from "./StudentRequest";
+import Footer from "./Footer";
 
 
 const CourseSideBar = () => {
@@ -59,8 +61,10 @@ const CourseSideBar = () => {
         <DashboardNavbar />
         <CourseComponent />
         <GroupsTeamsComponent />
-        {/* <GroupDashboard /> */}
-        {/* <NotesComponent /> */}
+       <StudentRequest />
+       <Footer />
+        {/* <GroupDashboard />
+        <NotesComponent /> */}
       </div>
     </div>
   </div>
