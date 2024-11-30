@@ -210,7 +210,7 @@ const Distribution_Decision = () => {
         fgi_surface_shipping: values.fgi_surface_shipping,
         sac_surface_shipping: values.sac_surface_shipping,
       });
-      
+
       await submitDecisionStatus(
         api,
         "distribution",
@@ -227,7 +227,7 @@ const Distribution_Decision = () => {
         isClosable: true,
         position: "top",
       });
-      
+
     } catch (error) {
       console.error("Error making POST request: Distribution", error);
       toast({
@@ -246,45 +246,56 @@ const Distribution_Decision = () => {
   return (
     <div>
       <div style={{ fontFamily: "ABeeZee" }}>
-     <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Distribution"}/>
+        <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Distribution"} />
 
         <div className="sm:grid grid-cols-1 gap-3 m-1">
           <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
             <InfoImg decision={"Distribution"} />
             <div className="flex items-center justify-between w-full ">
-            <div className="flex items-center pl-5 pt-2 pb-2 ">
-              <Text>Load data Quarterly</Text>
-              <div className="pl-4 flex space-x-4 ">
-                {Array.from(
-                  { length: selectedSimData[0]?.current_quarter || 0 },
-                  (_, i) => (
-                    <div
-                      key={i + 1}
-                      onClick={() => setSelectedQuarter(i + 1)}
-                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
-                        selectedQuarter === i + 1
-                          ? "bg-red-500 border-red-500 text-white"
-                          : ""
-                      }`}
-                    >
-                      {i + 1}
-                    </div>
-                  )
-                )}
+              <div className="flex items-center pl-5 pt-2 pb-2 ">
+                <Text>Load data Quarterly</Text>
+                <div className="pl-4 flex space-x-4 ">
+                  {Array.from(
+                    { length: selectedSimData[0]?.current_quarter || 0 },
+                    (_, i) => (
+                      <div
+                        key={i + 1}
+                        onClick={() => setSelectedQuarter(i + 1)}
+                        className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${selectedQuarter === i + 1
+                            ? "bg-red-500 border-red-500 text-white"
+                            : ""
+                          }`}
+                      >
+                        {i + 1}
+                      </div>
+                    )
+                  )}
+                </div>
               </div>
-            </div>
 
-            <div
-              
-              className="font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl"
-              disabled={isLoadingLastQuarter || currentQuarter <= 1}
-              title="To load inputs from the previous quarter"
-            >
-        
-              {isLoadingLastQuarter ? <Spinner size="sm" /> : <i class="fa fa-stack-overflow mr-2 " onClick={loadPreviousQuarter} aria-hidden="true"></i>}
-              <InfoButton decision="Distribution" />
+              <div className="flex items-center font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl">
+                {/* Wrapper for the first icon with the hover title */}
+                <div
+                  className="flex items-center"
+                  title="To load inputs from the previous quarter"
+                  disabled={isLoadingLastQuarter || currentQuarter <= 1}
+                >
+                  {isLoadingLastQuarter ? (
+                    <Spinner size="sm" />
+                  ) : (
+                    <i
+                      className="fa fa-stack-overflow mr-2"
+                      onClick={loadPreviousQuarter}
+                      aria-hidden="true"
+                    ></i>
+                  )}
+                </div>
+
+                {/* Second icon (InfoButton) without title */}
+                <InfoButton decision="Distribution" />
+              </div>
+
             </div>
-          </div>
 
 
             {loading ? (
@@ -311,7 +322,7 @@ const Distribution_Decision = () => {
                         <Th key={idx}>
                           {
                             selectedSimData[0]?.renamedMappedData?.RegionMapp?.[
-                              region
+                            region
                             ]
                           }
                         </Th>
@@ -405,12 +416,12 @@ const Distribution_Decision = () => {
                           <Th>
                             Cross-Docking,{" "}
                             {carrier.toUpperCase().replace("_", " ")}{" "}
-                           
+
                           </Th>
                           {["region1", "region2", "region3"].map((region) => (
                             <Td key={region}>
                               {region === "region1" ? (
-                              
+
                                 <span>&nbsp;</span>
                               ) : (
                                 <Select

@@ -4,7 +4,7 @@ import SupplyChainTable from "../Components/SupplyChainTable";
 import InfoImg from "../Components/InfoImg";
 import axios from "axios";
 import MyContext from "../Components/ContextApi/MyContext";
-import { Text, useToast, Spinner, Box } from "@chakra-ui/react"; 
+import { Text, useToast, Spinner, Box } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import InfoButton from "../Components/InfoButton";
 import StatusBar from "./StatusBar";
@@ -16,7 +16,7 @@ const Procurement_Decisions = () => {
   const [updatedDCData, setUpdatedDCData] = useState([]);
   const [alpha_quantity, setAlpha_quantity] = useState("");
   const [beta_quantity, setBeta_quantity] = useState("");
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false);
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || [];
   const sel = JSON.parse(localStorage.getItem("selectedSim")) || [];
@@ -28,7 +28,7 @@ const Procurement_Decisions = () => {
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const selectedSim = selectedSimData;
   const firm_data = selectedSim[0]?.firm_data ? Object.keys(selectedSim[0].firm_data)[0] : null;
-  
+
   let firm_key_new = "";
   if (Array.isArray(selectedSim[0]?.firm_data)) {
     let firm_obj = selectedSim[0]?.firm_data.filter((item) => {
@@ -38,19 +38,19 @@ const Procurement_Decisions = () => {
       firm_key_new = firm_obj[0].firmName;
     }
   }
-  
+
   const toast = useToast();
   const navigate = useNavigate();
   const [data, setData] = useState({});
 
-  
+
   useEffect(() => {
     const loadData = async () => {
       setLoading(true); // Start loading before fetching procurement data
       await getProcurement(); // Fetch the data
       setLoading(false); // Stop loading after data is fetched
     };
-  
+
     loadData();
   }, [selectedQuarter]); // Only re-run when `selectedQuarter` changes
 
@@ -74,7 +74,7 @@ const Procurement_Decisions = () => {
       // Clear state and local storage on error
       localStorage.removeItem("procurementData");
       setData({});
-      
+
       // Reset input fields
       setAlpha_quantity("");
       setBeta_quantity("");
@@ -83,14 +83,14 @@ const Procurement_Decisions = () => {
       console.error("Error making GET request:", error.response ? error.response.data : error.message);
     }
   };
-  
+
 
   const loadPreviousQuarter = async () => {
     if (currentQuarter <= 1) return; // Prevent loading if it's the first quarter
-  
+
     const previousQuarter = currentQuarter - 1;
     setIsLoadingLastQuarter(true);
-  
+
     try {
       const response = await axios.get(`${api}/previous/`, {
         params: {
@@ -102,14 +102,14 @@ const Procurement_Decisions = () => {
           firm_key: firm_key_new,
         },
       });
-  
+
       if (response?.data) {
         // Set data from the second-last quarter to the current quarter
         setSelectedQuarter(currentQuarter); // Set the current quarter
         setData(response.data); // Update the current quarter's data with the second-last quarter's data
         localStorage.setItem("procurementData", JSON.stringify(response.data));
 
-  
+
         toast({
           title: `Loaded data from Quarter ${previousQuarter} into Quarter ${currentQuarter}`,
           status: "success",
@@ -156,7 +156,7 @@ const Procurement_Decisions = () => {
         beta_quantity: Number(beta_quantity),
         sac_units: updatedDCData,
       });
-      
+
       await submitDecisionStatus(
         api,
         "procurement",
@@ -174,7 +174,7 @@ const Procurement_Decisions = () => {
         isClosable: true,
         position: "top",
       });
-      
+
     } catch (error) {
       console.error("Error making POST request:", error.response ? error.response.data : error.message);
     } finally {
@@ -206,7 +206,7 @@ const Procurement_Decisions = () => {
 
   return (
     <div style={{ fontFamily: "ABeeZee" }} className="h-full">
-      <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Procurement"}/>
+      <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Procurement"} />
       <div className="sm:grid grid-cols-1 gap-3 m-1 ">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow px-2">
           <InfoImg decision={"Procurement"} />
@@ -220,11 +220,10 @@ const Procurement_Decisions = () => {
                     <div
                       key={i + 1}
                       onClick={() => setSelectedQuarter(i + 1)}
-                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
-                        selectedQuarter === i + 1
+                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${selectedQuarter === i + 1
                           ? "bg-red-500 border-red-500 text-white"
                           : ""
-                      }`}
+                        }`}
                     >
                       {i + 1}
                     </div>
@@ -234,18 +233,32 @@ const Procurement_Decisions = () => {
             </div>
 
             <div
-              
-              className="font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl"
+              className="flex items-center font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl"
               disabled={isLoadingLastQuarter || currentQuarter <= 1}
-              title="To load inputs from the previous quarter"
             >
-        
-              {isLoadingLastQuarter ? <Spinner size="sm" /> : <i class="fa fa-stack-overflow mr-2 " onClick={loadPreviousQuarter} aria-hidden="true"></i>}
+              {/* Wrapper for the first icon with the hover title */}
+              <div
+                className="flex items-center"
+                title="To load inputs from the previous quarter"
+              >
+                {isLoadingLastQuarter ? (
+                  <Spinner size="sm" />
+                ) : (
+                  <i
+                    className="fa fa-stack-overflow mr-2"
+                    onClick={loadPreviousQuarter}
+                    aria-hidden="true"
+                  ></i>
+                )}
+              </div>
+
+              {/* Second icon without title */}
               <InfoButton decision="Procurement" />
             </div>
+
           </div>
-          
-       
+
+
           {/* Show Spinner while loading */}
           {loading || isLoadingLastQuarter ? (
             <Box display="flex" justifyContent="center" alignItems="center" mt={4}>

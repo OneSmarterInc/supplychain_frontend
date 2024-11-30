@@ -204,11 +204,10 @@ const Forecast = () => {
                     <div
                       key={i + 1}
                       onClick={() => setSelectedQuarter(i + 1)}
-                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
-                        selectedQuarter === i + 1
+                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${selectedQuarter === i + 1
                           ? "bg-red-500 border-red-500 text-white"
                           : ""
-                      }`}
+                        }`}
                     >
                       {i + 1}
                     </div>
@@ -217,18 +216,30 @@ const Forecast = () => {
               </div>
             </div>
 
-            <div
-              
-              className="font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl"
-              disabled={isLoadingLastQuarter || currentQuarter <= 1}
-              title="To load inputs from the previous quarter"
-            >
-        
-              {isLoadingLastQuarter ? <Spinner size="sm" /> : <i class="fa fa-stack-overflow mr-2 " onClick={loadPreviousQuarter} aria-hidden="true"></i>}
+            <div className="flex items-center font-bold py-0 px-4 text-red-400 cursor-pointer text-3xl">
+              {/* Wrapper for the first icon with the hover title */}
+              <div
+                className="flex items-center"
+                title="To load inputs from the previous quarter"
+                disabled={isLoadingLastQuarter || currentQuarter <= 1}
+              >
+                {isLoadingLastQuarter ? (
+                  <Spinner size="sm" />
+                ) : (
+                  <i
+                    className="fa fa-stack-overflow mr-2"
+                    onClick={loadPreviousQuarter}
+                    aria-hidden="true"
+                  ></i>
+                )}
+              </div>
+
+              {/* Second icon (InfoButton) without title */}
               <InfoButton decision="Forecast" />
             </div>
+
           </div>
-          
+
           {loading ? (
             <Box
               display="flex"
@@ -258,12 +269,11 @@ const Forecast = () => {
           <div className="flex justify-end mt-4">
             <button
               onClick={submitForecast}
-              className={`${
-                selectedQuarter === currentQuarter && !loading
+              className={`${selectedQuarter === currentQuarter && !loading
                   ? "bg-red-500 hover:bg-black-700 text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
-              // disabled={selectedQuarter !== currentQuarter || loading}
+                } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
+            // disabled={selectedQuarter !== currentQuarter || loading}
             >
               {loading ? <Spinner size="sm" /> : "Submit Forecast"}
             </button>
