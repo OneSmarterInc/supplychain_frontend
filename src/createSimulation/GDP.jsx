@@ -76,7 +76,7 @@ const GDP = () => {
     beta: "Casings",
     gamma: "Audio Modal",
     epsilon: "Motherboard",
-    delta: "Controll Interface",
+    delta: "Control Interface",
   });
 
   const [RegionMapp, setRegionMapp] = useState({
@@ -1271,7 +1271,7 @@ const GDP = () => {
                   className={`${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}
                 >
                   <td className="py-2 px-4 w-28 border-b border-r border-gray-300 text-left">
-                    Suppliar-{suppliarMapp[component.supplier]}
+                   {component.supplier}
                   </td>
 
                   <td className="py-2 px-4 border-b border-r border-gray-300 text-center">
@@ -1673,8 +1673,8 @@ const GDP = () => {
                   {/* {shipment.carrier.split("\n").map((line, index) => (
                   <div key={index}>{line}</div>
                 ))} */}
-                  <p> carrier-{shipment.carrier}, Surface</p>
-                  <p>carrier-{shipment.carrier}, Air</p>
+                  <p> Carrier-{shipment.carrier}, Surface</p>
+                  <p>Carrier-{shipment.carrier}, Air</p>
                 </td>
                 <td className="py-2 px-4 border-b  bg-black border-gray-300 text-center"></td>
                 <td className="py-2 px-4 border-b bg-black border-gray-300 text-center"></td>
