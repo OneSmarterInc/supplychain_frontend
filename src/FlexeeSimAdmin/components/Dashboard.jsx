@@ -17,7 +17,7 @@ const Dashboard = () => {
   const { api } = useContext(MyContext);
   const [isLoading, setIsLoading] = useState(false); // Loader state
   const [selectedCourse, setSelectedCourse] = useState(null); // Track selected course
-
+  const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     fetchCourses();
   }, []);
@@ -108,7 +108,7 @@ const Dashboard = () => {
           </div>
         ) : courses.length === 0 ? (
           <div className="text-left text-gray-700 font-semibold">
-            Welcome, John! Currently, there are no active courses or simulations
+            Welcome, {user.first_name}! Currently, there are no active courses or simulations
             in your account. Please check back soon or reach out for assistance.
           </div>
         ) : (
