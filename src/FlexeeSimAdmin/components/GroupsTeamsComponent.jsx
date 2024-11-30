@@ -28,8 +28,6 @@ const GroupsTeamsComponent = () => {
       const teamsData = teamResponse.data;
 
       const studentResponse = await axios.get(`${api}/simulation/${passcode}/subscribers/?format=json`);
-      console.log(studentResponse);
-      
       const studentsData = studentResponse.data.filter((item) => !item.user_detail.is_admin);
 
       const transformedStudents = studentsData.map((student) => {
@@ -154,10 +152,8 @@ const GroupsTeamsComponent = () => {
           </header>
 
           <div className="space-y-0 max-h-[700px] overflow-y-auto">
-            
             {teams?.map((team, index) => (
               <div key={index}>
-                
                 <div
                   className="flex justify-between items-center py-3 cursor-pointer hover:bg-gray-100 px-4 border-b border-gray-200"
                   onClick={() => {
@@ -172,7 +168,6 @@ const GroupsTeamsComponent = () => {
                     </p>
                   </div>
                   <div>
-                    
                     {expandedTeams.includes(team.firm_key) ? (
                       <i className="fa-solid fa-chevron-up text-gray-500"></i>
                     ) : (
@@ -182,9 +177,7 @@ const GroupsTeamsComponent = () => {
                 </div>
 
                 {expandedTeams.includes(team.firm_key) && (
-                  
                   <div className="bg-white p-4 border-b-2 border-red-500">
-                    
                     {team.users.length > 0 ? (
                       team.users.map((member, index) => (
                         <div key={index} className="flex justify-between items-center pb-1">
@@ -335,7 +328,6 @@ const GroupsTeamsComponent = () => {
             </>
           )}
         </div>
-        
       </div>
      
     </div>

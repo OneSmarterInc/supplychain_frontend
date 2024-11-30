@@ -381,7 +381,7 @@ const ReportTable1 = () => {
         <thead className="bg-gray-300 text-white">
           <tr className="py-1">
             <th className="px-6 text-sm py-1 text-red-700 my-auto   text-left ">
-              
+              Metric
             </th>
             <th className="px-6 text-sm py-1 text-red-700    text-right ">
               All Products
