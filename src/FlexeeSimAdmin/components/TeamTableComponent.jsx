@@ -4,6 +4,9 @@ import MyContext from "../../Components/ContextApi/MyContext";
 const TeamTableComponent = ({ selectedTeam }) => {
   const { api1 } = useContext(MyContext);
 
+  console.log("testinggggggggg",selectedTeam);
+  
+
   return (
     <div className="bg-white w-full mx-auto pt-4 bg-[#F2F2F7] h-full">
       <div className=" rounded-lg">
