@@ -13,7 +13,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
+const StudentRequest = () => {
   const [students, setStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All Students");
@@ -22,13 +22,17 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [studentToDelete, setStudentToDelete] = useState(null);
+  const [teams, setTeams] = useState(null);
 
   const { api } = useContext(MyContext);
   const { api1 } = useContext(MyContext);
   const toast = useToast();
   const selectedSimData = JSON.parse(localStorage.getItem("SelectedCourse"));
   const passcode = selectedSimData?.passcode;
+  const [selectedOption, setSelectedOption] = useState("");
+  
   const cancelRef = React.useRef();
+  let teamResponse;
 
   useEffect(() => {
     const fetchSubscribersAndTeams = async () => {
@@ -39,9 +43,11 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
         );
         const data = await response.json();
         const filteredData = data.filter((item) => !item.user_detail.is_admin);
-        const teamResponse = await axios.get(`${api}/get-firms/${passcode}/`);
+        teamResponse = await axios.get(`${api}/get-firms/${passcode}/`);
         const teamData = teamResponse.data;
-
+        setTeams(teamResponse.data);
+        console.log(teamResponse,">>>>>>.......");
+        
         const transformedData = filteredData.map((item) => {
           const assignedTeam = teamData.find((team) =>
             Object.values(team.users).some(
@@ -133,7 +139,7 @@ const StudentRequest = ({ fetchTeams, setSelectedOption, teams }) => {
     });
 
   const addToFirm = async (user_id, user_email, passcode, team) => {
-    fetchTeams();
+    //fetchTeams();
     setSelectedOption(team + user_id);
     try {
       await axios.get(
