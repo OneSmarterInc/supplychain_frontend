@@ -5,6 +5,8 @@ const IT_suppliers = ({
   setSuppliersFromDecision,
   setCareersFromDecision,
   ItData,
+  id1,
+  id2
 }) => {
   const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
   const options = [
@@ -115,7 +117,7 @@ const IT_suppliers = ({
   return (
     <Box>
       <Box
-        id="IT-Synchronization-with-Suppliers"
+        id={id1}
         className="border border-gray rounded-lg"
       >
         <Text className="p-5 py-1 text-xl">
@@ -143,7 +145,7 @@ const IT_suppliers = ({
         </div>
       </Box>
       <Box
-        id="IT-Synchronization-with-Carreers"
+        id={id2}
         className="border border-gray rounded-lg"
       >
         <Text className="p-5 py-1 text-xl">

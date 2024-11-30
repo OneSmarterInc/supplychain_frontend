@@ -4,7 +4,7 @@ import Modal from "react-modal";
 import Inventory from "./Inventory";
 import { Box, Button, Text } from "@chakra-ui/react";
 import quater from "../FlexeeSimAdmin/Assets/quarter.png";
-const InfoImg = ({ decision }) => {
+const InfoImg = ({ decision, id, id2 }) => {
   const location = useLocation();
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -44,13 +44,13 @@ const InfoImg = ({ decision }) => {
       
         <div className="">
           <h2 className="text-xl font-bold text-red-600">{decision.toUpperCase()}</h2>
-          <p className="text-lg text-gray-700">
+          <p className="text-lg text-gray-700" id={id2}>
             COURSE: {selectedSim[0]?.course || "MBA-2024-JUN"}
           </p>
         </div>
 
         {/* Quarter and Deadline Details */}
-        <div className=" flex justify-between items-center">
+        <div className=" flex justify-between items-center" id={id}>
           <div className="text-right">
             <p className=" text-sm text-gray-700">
               <span className="flex font-bold text-red-500">
