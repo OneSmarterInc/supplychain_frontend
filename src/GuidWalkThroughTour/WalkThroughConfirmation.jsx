@@ -3,8 +3,9 @@ import { useLocation } from "react-router-dom";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import "./walkthrough.css";
+import { getSteps } from "./walkthrough"; // Adjust the path as necessary
 
-const WalkThrough = () => {
+const WalkThroughConfirmation = () => {
   const location = useLocation();
   const [showModal, setShowModal] = useState(false);
   const [walkthroughStatus, setWalkthroughStatus] = useState("");
@@ -15,68 +16,10 @@ const WalkThrough = () => {
     );
     setWalkthroughStatus(storedStatus);
 
-    if (!storedStatus && getSteps().length > 0) {
+    if (!storedStatus && getSteps(location.pathname).length > 0) {
       setShowModal(true);
     }
   }, [location]);
-
-  const getSteps = () => {
-    switch (location.pathname) {
-      case "/dashboard":
-        return [
-          {
-            element: "#sidebar-button-dashboard",
-            popover: {
-              title: "Decision Button",
-              description: "Click to open dashboard.",
-              position: "top",
-            },
-          },
-          {
-            element: "#sidebar-button-reports",
-            popover: {
-              title: "Reports Button",
-              description: "Click to open reports.",
-              position: "top",
-            },
-          },
-          {
-            element: "#sidebar-button-member-logs",
-            popover: {
-              title: "Member Logs Button",
-              description: "Click to view logs.",
-              position: "top",
-            },
-          },
-          {
-            element: "#sidebar-button-download-manual",
-            popover: {
-              title: "Download Manual Button",
-              description: "Click to download user manual.",
-              position: "top",
-            },
-          },
-          {
-            element: "#decision-button",
-            popover: {
-              title: "Decision Button",
-              description: "Click to make key decisions for the project.",
-              position: "top",
-            },
-          },
-          {
-            element: "#quarters-button",
-            popover: {
-              title: "Quarters Selector",
-              description: "Select your working quarters here.",
-              position: "top",
-            },
-          },
-        ];
-      default:
-        return [];
-    }
-  };
 
   const startWalkthrough = () => {
     const driverObj = driver({
@@ -91,7 +34,7 @@ const WalkThrough = () => {
       prevBtnText: "Previous",
       showProgress: true,
       theme: "custom-theme",
-      steps: getSteps(),
+      steps: getSteps(location.pathname),
       popoverClass: "driverjs-theme",
     });
 
@@ -170,4 +113,4 @@ const WalkThrough = () => {
   );
 };
 
-export default WalkThrough;
+export default WalkThroughConfirmation;

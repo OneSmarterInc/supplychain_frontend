@@ -328,7 +328,7 @@ const Manufacturing_Decisions = () => {
               </Box>
             ) : (
               <>
-                <Table className="w-30 bg-white rounded-md shadow-sm">
+                <Table id="manufacture-production-table" className="w-30 bg-white rounded-md shadow-sm">
                   <Thead className="bg-gray-100">
                     <Tr>
                       <Th className="text-left"></Th>
@@ -383,6 +383,7 @@ const Manufacturing_Decisions = () => {
              
               <button
                 onClick={submitManufacturing}
+                id="manufacture-submit-button"
                 className={`${
                   selectedQuarter === currentQuarter && !loading
                     ? "bg-red-500 hover:bg-black-700 text-white"

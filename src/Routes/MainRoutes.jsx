@@ -68,8 +68,9 @@ import LayoutWithSidebar from "../FlexeeSimAdmin/components/DashBoardSideBar";
 import CourseSideBar from "../FlexeeSimAdmin/components/CourseSideBar";
 import GroupsLogsSidebar from "../FlexeeSimAdmin/components/GroupsSideBar";
 import UserSideView from "../user/UserSIdeView";
-// import WalkThrough from "../GuidWalkThroughTour/WalkThrough";
+
 import WalkThroughConfirmation from "../GuidWalkThroughTour/WalkThroughConfirmation";
+// import WalkThrough from "../GuidWalkThroughTour/WalkThrough";
 
 const MainRoutes = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
