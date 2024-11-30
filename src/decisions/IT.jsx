@@ -214,9 +214,9 @@ const IT = () => {
 
       <div className="sm:grid grid-cols-1 gap-3 m-1">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
-          <InfoImg decision={"IT"} />
+          <InfoImg decision={"IT"} id="quarter-deadline" id2="course-details"/>
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center pl-5 pt-2 pb-2">
+            <div className="flex items-center pl-5 pt-2 pb-2" id="it-button-load-quarters">
               <Text>Load data Quarterly</Text>
               <div className="pl-4 flex space-x-4">
                 {Array.from(
@@ -237,9 +237,13 @@ const IT = () => {
                 )}
               </div>
             </div>
+            <div id="info">
+
             <InfoButton decision="IT" />
+            </div>
           </div>
           <div
+          id="Load-Previous-Quarter"
             onClick={loadPreviousQuarter}
             className="font-bold py-2 px-4 text-red-400 cursor-pointer"
             disabled={isLoadingLastQuarter || currentQuarter <= 1}
@@ -261,6 +265,8 @@ const IT = () => {
           ) : (
             <>
               <IT_suppliers
+              id1="IT-Synchronization-with-Suppliers"
+              id2="IT-Synchronization-with-Careers"
                 ItData={ItData}
                 CareersData={careers}
                 setSuppliersFromDecision={setSuppliers}
@@ -271,6 +277,7 @@ const IT = () => {
 
           <div className="flex justify-end mt-4">
             <button
+            id="Submit-Service"
               onClick={submitIt}
               className={`${
                 selectedQuarter === currentQuarter && !loading

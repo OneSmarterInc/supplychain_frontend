@@ -256,82 +256,188 @@ export const getSteps = (pathname) => {
     case "/Service":
       return [
         {
-          element: "#service-Smart-Home-Assistance-Retail",
+          element: "#course-details",
           popover: {
-            title: "Smart Home Assistance (Retail)",
-            description:
-              "Specify service values for the retail channel of the Smart Home Assistance product.",
+            title: "Course Details",
             position: "top",
           },
         },
         {
-          element: "#service-Smart-Home-Assistance-Direct",
+          element: "#service-button-load-quarters",
           popover: {
-            title: "Smart Home Assistance (Direct)",
+            title: "Load Data Quarterly",
             description:
-              "Specify service values for the direct channel of the Smart Home Assistance product.",
+              "Click a quarter button to load the service data for the selected quarter.",
             position: "top",
           },
         },
         {
-          element: "#service-Smart-Thermostat-Retail",
+          element: "#service-outsourcing",
           popover: {
-            title: "Smart Thermostat (Retail)",
+            title: "Service Outsourcing (Region View)",
             description:
-              "Specify service values for the retail channel of the Smart Thermostat product.",
+              "Select the appropriate value for outsourcing services in each region. Ensure accurate selection for effective data submission.",
             position: "top",
           },
         },
         {
-          element: "#service-Smart-Thermostat-Direct",
+          element: "#quarter-deadline",
           popover: {
-            title: "Smart Thermostat (Direct)",
+            title: "Quarter Deadline",
             description:
-              "Specify service values for the direct channel of the Smart Thermostat product.",
+              "Keep an eye on the submission deadline for the current quarter.",
             position: "top",
           },
         },
+        {
+          element: "#info",
+          popover: {
+            title: "More information",
+            description:
+              "Click to see more information",
+            position: "top",
+          },
+        },
+        {
+          element: "#Submit-Service",
+          popover: {
+            title: "Submit Service",
+            description:
+              "Once all selections are made, click this button to submit your data. Ensure all dropdowns are filled before submission.",
+            position: "top",
+          },
+        },
+
       ];
 
     case "/IT":
       return [
         {
+          element: "#course-details",
+          popover: {
+            title: "Course Details",
+            position: "top",
+          },
+        },
+        {
+          element: "#it-button-load-quarters",
+          popover: {
+            title: "Load Data Quarterly",
+            description:
+              "Click a quarter button to load the service data for the selected quarter.",
+            position: "top",
+          },
+        },
+        {
+          element: "#Load-Previous-Quarter",
+          popover: {
+            title: "Load Previous Quarter Data",
+            description:
+              "Click here to load inputs from the previous quarter. This option helps you carry forward decisions and make informed choices.",
+            position: "right",
+          },
+        },
+
+        {
+          element: "#quarter-deadline",
+          popover: {
+            title: "Quarter Deadline",
+            description:
+              "Keep an eye on the submission deadline for the current quarter.",
+            position: "top",
+          },
+        },
+        {
+          element: "#info",
+          popover: {
+            title: "More information",
+            description:
+              "Click to see more information",
+            position: "top",
+          },
+        },
+        
+        {
           element: "#IT-Synchronization-with-Suppliers",
           popover: {
-            title: "Smart Home Assistance (Retail)",
+            title: "IT Synchronization with Suppliers",
             description:
-              "Specify service values for the retail channel of the Smart Home Assistance product.",
+              "Configure IT synchronization for suppliers A to G. Use the dropdowns to select Yes or No for each supplier.",
             position: "top",
           },
         },
         {
-          element: "#IT-Synchronization-with-Carreers",
+          element: "#IT-Synchronization-with-Careers",
           popover: {
-            title: "Smart Home Assistance (Direct)",
+            title: "IT Synchronization with Careers",
             description:
-              "Specify service values for the direct channel of the Smart Home Assistance product.",
+              "Configure IT synchronization for careers I to N. Use the dropdowns to select Yes or No for each supplier.",
             position: "top",
           },
         },
         {
-          element: "#service-Smart-Thermostat-Retail",
+          element: "#Submit-Service",
           popover: {
-            title: "Smart Thermostat (Retail)",
+            title: "Submit IT Decisions",
             description:
-              "Specify service values for the retail channel of the Smart Thermostat product.",
-            position: "top",
-          },
-        },
-        {
-          element: "#service-Smart-Thermostat-Direct",
-          popover: {
-            title: "Smart Thermostat (Direct)",
-            description:
-              "Specify service values for the direct channel of the Smart Thermostat product.",
-            position: "top",
+              "Once all values are entered, click here to submit your IT decisions for the current quarter. Ensure the quarter is selected and data is validated.",
+            position: "bottom",
           },
         },
       ];
+
+
+      case "/Transport":
+      return [
+        {
+          element: "#course-details",
+          popover: {
+            title: "Course Details",
+            position: "top",
+          },
+        },
+        {
+          element: "#it-button-load-quarters",
+          popover: {
+            title: "Load Data Quarterly",
+            description:
+              "Click a quarter button to load the service data for the selected quarter.",
+            position: "top",
+          },
+        },
+       
+
+        {
+          element: "#quarter-deadline",
+          popover: {
+            title: "Quarter Deadline",
+            description:
+              "Keep an eye on the submission deadline for the current quarter.",
+            position: "top",
+          },
+        },
+        {
+          element: "#info",
+          popover: {
+            title: "More information",
+            description:
+              "Click to see more information",
+            position: "top",
+          },
+        },
+        
+       
+        {
+          element: "#Submit-Service",
+          popover: {
+            title: "Submit Transport Decisions",
+            description:
+              "Once all values are entered, click here to submit your IT decisions for the current quarter. Ensure the quarter is selected and data is validated.",
+            position: "bottom",
+          },
+        },
+      ];
+
 
     default:
       return [];
