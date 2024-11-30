@@ -9,7 +9,6 @@ import {
   Td,
   Select,
   Input,
- 
 } from "@chakra-ui/react";
 
 const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
@@ -39,11 +38,17 @@ const Demand_meta_ch2 = ({ setMetaCh2ValuetoParent }) => {
 
   return (
     <Box>
-      <Table variant="simple" bg="white" mt="4" className="shadow-md rounded-md">
-      <Thead className="bg-gray-100 text-gray-700 font-semibold">
+      <Table
+        id="demand-Smart-Thermostat-Direct"
+        variant="simple"
+        bg="white"
+        mt="4"
+        className="shadow-md rounded-md"
+      >
+        <Thead className="bg-gray-100 text-gray-700 font-semibold">
           <Tr>
             <Th fontWeight="bold" style={{ color: "#D10000" }}>
-            {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel2}
+              {selectedSim[0]?.renamedMappedData?.ChannelMapp?.channel2}
             </Th>
             <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region1}</Th>
             <Th>{selectedSim[0]?.renamedMappedData?.RegionMapp?.region2}</Th>

@@ -39,7 +39,7 @@ const Demand_meta_ch1 = ({ setMetaCh1ValuetoParent }) => {
 
   return (
     <Box>
-     <Table variant="simple" bg="white" mt="4" className="shadow-md rounded-md">
+     <Table id="demand-Smart-Thermostat-Retail" variant="simple" bg="white" mt="4" className="shadow-md rounded-md">
      <Thead className="bg-gray-100 text-gray-700 font-semibold">
           <Tr>
             <Th fontWeight="bold" style={{ color: "#D10000" }}>

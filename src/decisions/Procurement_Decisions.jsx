@@ -268,6 +268,7 @@ const Procurement_Decisions = () => {
           <div className="flex justify-end mt-4">
             <button
               onClick={submitProcurement}
+              id="procurement-submit"
               className={`${selectedQuarter === currentQuarter && !loading
                 ? "bg-red-500 hover:bg-black-700 text-white"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"

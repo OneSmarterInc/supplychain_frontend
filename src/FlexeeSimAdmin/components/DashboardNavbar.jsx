@@ -26,7 +26,7 @@ const DashboardNavbar = () => {
             <div className="relative cursor-pointer text-lg">
               <p className="font-medium text-gray-700">{`Welcome, ${user.first_name}`}</p>
             </div>
-            <div className="relative">
+            <div  className="relative">
               <div className="flex items-center text-gray-500 cursor-pointer text-lg">
                 {<ProfileDropdown />}
               </div>
