@@ -6,7 +6,7 @@ const BackOfficeNavbar = ({ isSideBarOpen, setIsSideBarOpen }) => {
   const navigate = useNavigate()
 
   const redirect = () => {
-    navigate('/usersidelive')
+    navigate('/flexeesim/dashboard')
   };
 
   return (

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import grid_img from "../Assets/Navbar-grid-img.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProfileDropdown from "../../Components/Profile";
-import { Text } from "@chakra-ui/react";
+import { Button, Text } from "@chakra-ui/react";
+
 
 const DashboardNavbar = () => {
   const location = useLocation();
@@ -23,6 +24,7 @@ const DashboardNavbar = () => {
         </div>
         <div className="w-full">
           <div className="flex w-full justify-end items-center ">
+          <Button className="mx-2" onClick={()=>{ navigate('/createsim')}}>Create Sim</Button>
             <div className="relative cursor-pointer text-lg">
               <p className="font-medium text-gray-700">{`Welcome, ${user.first_name}`}</p>
             </div>
