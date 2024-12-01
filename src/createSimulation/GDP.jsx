@@ -162,7 +162,6 @@ const GDP = () => {
     const randomValue = gdp + Math.random() * drift;
     const percentageAmount = Math.floor((randomValue / 100) * currentItemValue);
     const gdpValue = percentageAmount + currentItemValue;
-    const actualDemand = gdpValue + currentItemValue;
     const growthValue =
       gdpValue +
       Math.floor(Math.random() * (higherDemandRange - lowerDemandRange + 1)) +
