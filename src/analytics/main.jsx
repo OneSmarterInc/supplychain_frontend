@@ -164,8 +164,8 @@ if (selectedSimData[0].current_quarter == selectedSimData[0].total_quarter){
           <tbody>
             {/* Financial Section */}
             <tr
-              onClick={() => handleSectionRedirect("financial")}
-              className="cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-in-out"
+              //onClick={() => handleSectionRedirect("financial")}
+              className="cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-in-out hover:cursor-not-allowed"
             >
               <th
                 colSpan="5"
@@ -206,8 +206,8 @@ if (selectedSimData[0].current_quarter == selectedSimData[0].total_quarter){
 
             {/* Operational Section */}
             <tr
-              onClick={() => handleSectionRedirect("operational")}
-              className="cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-in-out"
+              //onClick={() => handleSectionRedirect("operational")}
+              className="cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-in-out hover:cursor-not-allowed"
             >
               <th
                 colSpan="5"
@@ -249,8 +249,8 @@ if (selectedSimData[0].current_quarter == selectedSimData[0].total_quarter){
 
             {/* Customer Section */}
             <tr
-              onClick={() => handleSectionRedirect("customer")}
-              className="cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-in-out"
+              //onClick={() => handleSectionRedirect("customer")}
+              className="cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-in-out hover:cursor-not-allowed"
             >
               <th
                 colSpan="5"

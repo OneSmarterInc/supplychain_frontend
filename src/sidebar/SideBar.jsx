@@ -225,7 +225,7 @@ const Sidebar = () => {
                   )}
                 </li>
 
-                <li>
+                {/* <li>
                   {loading.cash ? (
                     <button className="flex bg-blue-gray-600 text-white items-center p-2 w-full space-x-2 justify-between">
                       <p> Cash Flow</p> <Loader />
@@ -242,7 +242,7 @@ const Sidebar = () => {
                       Cash Flow
                     </button>
                   )}
-                </li>
+                </li> */}
 
                 <li>
                   {loading.inventory ? (
