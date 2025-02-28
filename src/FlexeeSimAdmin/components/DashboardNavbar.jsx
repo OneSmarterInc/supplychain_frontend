@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ProfileDropdown from "../../Components/Profile";
 import { Button, Text } from "@chakra-ui/react";
 
-
 const DashboardNavbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -18,17 +17,36 @@ const DashboardNavbar = () => {
       <div className="flex w-full items-center justify-start max-w-screen-full mx-auto">
         <div className="flex items-center">
           <div class=" p-4">
-            <h1 class="text-3xl font-bold text-gray-700 cursor-pointer" style={{width:"14rem"}} onClick={()=>{navigate('/flexeesim/dashboard')}}>FLEXEE</h1>
-            <p class="text-sm font-bold text-red-500">SUPPLY CHAIN MANAGEMENT</p>
+            <h1
+              class="text-3xl font-bold text-gray-700 cursor-pointer"
+              style={{ width: "14rem" }}
+              onClick={() => {
+                navigate("/flexeesim/dashboard");
+              }}
+            >
+              FLEXEE
+            </h1>
+            <p class="text-sm font-bold text-red-500">
+              SUPPLY CHAIN MANAGEMENT
+            </p>
           </div>
         </div>
         <div className="w-full">
           <div className="flex w-full justify-end items-center ">
-          <Button className="mx-2" onClick={()=>{ navigate('/createsim')}}>Create Sim</Button>
+            {user.isadmin && (
+              <Button
+                className="mx-2"
+                onClick={() => {
+                  navigate("/createsim");
+                }}
+              >
+                Create Sim
+              </Button>
+            )}
             <div className="relative cursor-pointer text-lg">
               <p className="font-medium text-gray-700">{`Welcome, ${user.first_name}`}</p>
             </div>
-            <div  className="relative">
+            <div className="relative">
               <div className="flex items-center text-gray-500 cursor-pointer text-lg">
                 {<ProfileDropdown />}
               </div>

@@ -18,6 +18,7 @@ const Demand_generation = () => {
   const [hypeCh1Value, setHypeCh1Value] = useState({});
   const [hypeCh2Value, setHypeCh2Value] = useState({});
   const [loading, setLoading] = useState(false); 
+  const [simulation, setSimulation] = useState({}); 
   const [demandData, setDemandData] = useState();
   const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false);
 
@@ -47,7 +48,19 @@ const Demand_generation = () => {
     setLoading(true); 
     getDemand().finally(() => setLoading(false)); 
   }, [selectedQuarter]);
-
+  const getSimulation = async () => {
+    try {
+      const response = await axios.get(
+        `${api}/getsim/${selectedSim[0].simulation_id}`
+      );
+      setSimulation(response.data);
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+  useEffect(() => {
+    getSimulation();
+  }, []);
   const getDemand = async () => {
     try {
       const response = await axios.get(`${api}/previous/`, {
@@ -151,7 +164,7 @@ const Demand_generation = () => {
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
         firm_key: firm_key_new,
-        quarter: selectedSim[0].current_quarter,
+        quarter: simulation[0].current_quarter,
         hyperware_channel_one_active: hypeCh1Value.Active,
         hyperware_channel_one_price: hypeCh1Value.Price,
         hyperware_channel_one_market: hypeCh1Value.MarketSpending,
@@ -171,7 +184,7 @@ const Demand_generation = () => {
         "demand",
         selectedSimData,
         firm_key_new,
-        currentQuarter,
+        simulation[0].current_quarter,
       );
       getDemand();
       toast({
@@ -201,7 +214,7 @@ const Demand_generation = () => {
               <Text>Load data Quarterly</Text>
               <div className="pl-4 flex space-x-4">
                 {Array.from(
-                  { length: selectedSim[0]?.current_quarter || 0 },
+                  { length: simulation[0]?.current_quarter || 0 },
                   (_, i) => (
                     <div
                       key={i + 1}

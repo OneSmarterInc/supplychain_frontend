@@ -11,7 +11,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 
-const SupplyChainTable = ({ setUpdatedDCData }) => {
+const SupplyChainTable = ({ setUpdatedDCData , data}) => {
   const tableRef = useRef(null);
   const [activeDC, setActiveDC] = useState("DC1");
   const [procurementData, setProcurementData] = useState({});
@@ -20,7 +20,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("procurementData"));
     setProcurementData(data || {});
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("selectedSim"));
@@ -32,18 +32,29 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
     "supplierB",
     "supplierC",
     "supplierD",
-    "supplierE",
-    "supplierF",
-    "supplierG",
+    // "supplierE",
+    // "supplierF",
+    // "supplierG",
   ];
   const mediumOptions = ["Air", "Surface"];
-  const nameOptions = ["Audio Module", "Control Interface", "Motherboard"];
-
+  const nameOptions = ["Audio Modal", "Control Interface", "Motherboard"];
+  const supplierMappings = {
+    "Audio Modal": ["supplierA", "supplierB", "supplierC", "supplierD"],
+    "Control Interface": [
+      "supplierB",
+      "supplierC",
+      "supplierD",
+      "supplierE",
+      "supplierF",
+    ],
+    Motherboard: ["supplierD", "supplierE", "supplierF", "supplierG"],
+  };
   const [dcData, setDcData] = useState({});
 
   useEffect(() => {
     if (procurementData?.sac_units) {
       setDcData(procurementData?.sac_units);
+      console.log("procurementData?.sac_units", procurementData?.sac_units);
     } else {
       const defaultData = {
         DC1: Array(3).fill({ name: "", supplier: "", medium: "", units: "" }),
@@ -52,7 +63,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
       };
       setDcData(defaultData);
     }
-  }, [procurementData?.sac_units]);
+  }, [procurementData?.sac_units, data]);
 
   const handleDCClick = (dc) => {
     if (dcData[dc] !== "closed") {
@@ -61,7 +72,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
   };
 
   const handleInputChange = (dc, index, key, value) => {
-    const updatedData = JSON.parse(JSON.stringify(dcData)); // Deep copy to avoid mutating state directly
+    const updatedData = JSON.parse(JSON.stringify(dcData));
     updatedData[dc][index][key] = value;
     setDcData(updatedData);
   };
@@ -81,7 +92,15 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
       tableRef.current.scrollTop = tableRef.current.scrollHeight;
     }
   };
-
+  const onRemoveEntry = (dc) => {
+    if (dcData[activeDC]?.length > 3) {
+      setDcData((prevData) => ({
+        ...prevData,
+        [dc]: prevData[dc].slice(0, prevData[dc].length - 1), 
+      }));
+    }
+  };
+  
   setUpdatedDCData(dcData);
 
   return (
@@ -120,12 +139,11 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                     <Tr key={index} className="border-t">
                       <Td className="p-3" textAlign="left">
                         <Select
-                          value={entry.name} // Show the default value or empty if none
-                          placeholder={
-                            selectedSim[0]?.renamedMappedData?.componentMapp[
+                          value={
+                            selectedSim[0]?.renamedMappedData?.componentMapp?.[
                               entry.name
-                            ] || ""
-                          } // Show the default value or empty if none
+                            ] || entry.name
+                          }
                           onChange={(e) =>
                             handleInputChange(dc, index, "name", e.target.value)
                           }
@@ -142,6 +160,7 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                           ))}
                         </Select>
                       </Td>
+
                       <Td className="p-3">
                         <Select
                           name="supplier"
@@ -160,7 +179,14 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
                               : "border-green-500 outline-green-500"
                           }`}
                         >
-                          {defaultSuppliers.map((option, i) => (
+                          {(
+                            supplierMappings[
+                              selectedSim[0]?.renamedMappedData
+                                ?.componentMapp?.[entry.name]
+                            ] ||
+                            supplierMappings[entry.name] ||
+                            defaultSuppliers
+                          ).map((option, i) => (
                             <option key={i} value={option}>
                               {selectedSim[0]?.renamedMappedData
                                 ?.suppliarMapp?.[option] || option}
@@ -225,7 +251,6 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
           {["DC1", "DC2", "DC3"].map((dc) => (
             <Box
               key={dc}
-              
               onClick={() => handleDCClick(dc)}
               className={`h-10 px-4 text-lg rounded-lg flex justify-center items-center cursor-pointer ${
                 dcData[dc] === "closed"
@@ -253,6 +278,18 @@ const SupplyChainTable = ({ setUpdatedDCData }) => {
           >
             Add Row
           </Box>
+          {dcData[activeDC]?.length > 3 && <Box
+            onClick={() => onRemoveEntry(activeDC)}
+            id="procurement-remove-row"
+            className={`h-10 px-3 bg-red-600 ms-3 text-white hover:bg-red-800 text-lg rounded-lg cursor-pointer flex justify-center items-center ${
+              dcData[activeDC]?.length <= 3
+                ? "cursor-not-allowed opacity-50"
+                : ""
+            }`}
+            disabled={dcData[activeDC]?.length <= 2}
+          >
+            Remove Row
+          </Box>}
         </Box>
       </Box>
     </Box>

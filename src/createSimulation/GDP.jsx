@@ -12,7 +12,7 @@ const GDP = () => {
   const combineSimData = JSON.parse(localStorage.getItem("combineSimData"));
 
   console.log(parseInt(combineSimData.total_quarters) + 3);
-  combineSimData.total_quarters = parseInt(combineSimData.total_quarters) + 3;
+  combineSimData.total_quarters = parseInt(combineSimData.total_quarters);
 
   const toast = useToast();
   const [currentData, setCurrentData] = useState({
@@ -105,10 +105,9 @@ const GDP = () => {
   console.log("RenamedMappedData: ", renamedMappedData);
 
   useEffect(() => {
-    // Calculate and set initial growth data
     const initialGrowthData = calculateGrowthForAll(currentData);
     setGrowthData(initialGrowthData);
-  }, [gdp, drift, lowerDemandRange, higherDemandRange]);
+  }, [gdp, drift, lowerDemandRange, higherDemandRange, currentData]);
 
   const handleInputChange = (e, section, region, channel) => {
     const value = parseInt(e.target.value, 10);
@@ -139,37 +138,43 @@ const GDP = () => {
 
   const calculateGrowthForAll = (data) => {
     const updatedData = {};
+
     for (const section in data) {
       updatedData[section] = {};
+
       for (const region in data[section]) {
         updatedData[section][region] = {};
+
         for (const channel in data[section][region]) {
+          const currentValue = data[section][region][channel]; // Fetch the current value
           updatedData[section][region][channel] = calculateGrowth(
             section,
             region,
             channel,
-            data[section][region][channel]
+            currentValue
           );
         }
       }
     }
+
     return updatedData;
   };
 
-  const calculateGrowth = (section, region, channel, currentItemValue) => {
-   
+  const calculateGrowth = (section, region, channel, currentValue) => {
+    // Example calculation logic
+    const gdpFactor = 1 + gdp / 100; // GDP growth multiplier
+    const driftFactor = drift; // Drift is applied as-is (could be a percentage)
+    const randomFluctuation =
+      Math.random() * (higherDemandRange - lowerDemandRange) + lowerDemandRange; // Random fluctuation
 
-    const randomValue = gdp + Math.random() * drift;
-    const percentageAmount = Math.floor((randomValue / 100) * currentItemValue);
-    const gdpValue = percentageAmount + currentItemValue;
+    // Calculate growth value
     const growthValue =
-      gdpValue +
-      Math.floor(Math.random() * (higherDemandRange - lowerDemandRange + 1)) +
-      lowerDemandRange;
+      currentValue * gdpFactor + driftFactor + randomFluctuation;
 
-    return growthValue;
+    // Return the rounded growth value for better readability
+    return Math.round(growthValue);
   };
- 
+
   const handleSupplierInput = (e) => {
     setSuppliarMapp((prevData) => ({
       ...prevData,
@@ -200,152 +205,427 @@ const GDP = () => {
 
   // sub assembly component section here
 
+  // const [subAssemblyComponents, setSubAssemblyComponents] = useState([
+  //   {
+  //     supplier: "A",
+  //     gamma: {
+  //       cost: 12,
+  //       delivery_inpercent: 80,
+  //       deliveryChange_inpercent: 2,
+  //       failure_inpercent: 2.0,
+  //     },
+  //     delta: {
+  //       cost: "disabled",
+  //       delivery_inpercent: "disabled",
+  //       deliveryChange_inpercent: "disabled",
+  //       failure_inpercent: "disabled",
+  //     },
+  //     epsilon: {
+  //       cost: "disabled",
+  //       delivery_inpercent: "disabled",
+  //       deliveryChange_inpercent: "disabled",
+  //       failure_inpercent: "disabled",
+  //     },
+  //   },
+  //   {
+  //     supplier: "B",
+  //     gamma: {
+  //       cost: 14,
+  //       delivery_inpercent: 85,
+  //       deliveryChange_inpercent: 4,
+  //       failure_inpercent: 1.9,
+  //     },
+  //     delta: {
+  //       cost: 15,
+  //       delivery_inpercent: 75,
+  //       deliveryChange_inpercent: 4,
+  //       failure_inpercent: 2.6,
+  //     },
+  //     epsilon: {
+  //       cost: "disabled",
+  //       delivery_inpercent: "disabled",
+  //       deliveryChange_inpercent: "disabled",
+  //       failure_inpercent: "disabled",
+  //     },
+  //   },
+  //   {
+  //     supplier: "C",
+  //     gamma: {
+  //       cost: 13,
+  //       delivery_inpercent: 85,
+  //       deliveryChange_inpercent: 6,
+  //       failure_inpercent: 2.6,
+  //     },
+  //     delta: {
+  //       cost: 16,
+  //       delivery_inpercent: 78,
+  //       deliveryChange_inpercent: 6,
+  //       failure_inpercent: 2.5,
+  //     },
+  //     epsilon: {
+  //       cost: "disabled",
+  //       delivery_inpercent: "disabled",
+  //       deliveryChange_inpercent: "disabled",
+  //       failure_inpercent: "disabled",
+  //     },
+  //   },
+  //   {
+  //     supplier: "D",
+  //     gamma: {
+  //       cost: 22,
+  //       delivery_inpercent: 90,
+  //       deliveryChange_inpercent: 8,
+  //       failure_inpercent: 1.2,
+  //     },
+  //     delta: {
+  //       cost: 24,
+  //       delivery_inpercent: 80,
+  //       deliveryChange_inpercent: 8,
+  //       failure_inpercent: 1.8,
+  //     },
+  //     epsilon: {
+  //       cost: 29,
+  //       delivery_inpercent: 80,
+  //       deliveryChange_inpercent: 8,
+  //       failure_inpercent: 1.1,
+  //     },
+  //   },
+  //   {
+  //     supplier: "E",
+  //     gamma: {
+  //       cost: "disabled",
+  //       delivery_inpercent: "disabled",
+  //       deliveryChange_inpercent: "disabled",
+  //       failure_inpercent: "disabled",
+  //     },
+  //     delta: {
+  //       cost: 14,
+  //       delivery_inpercent: 70,
+  //       deliveryChange_inpercent: 10,
+  //       failure_inpercent: 2.7,
+  //     },
+  //     epsilon: {
+  //       cost: 20,
+  //       delivery_inpercent: 75,
+  //       deliveryChange_inpercent: 10,
+  //       failure_inpercent: 1.7,
+  //     },
+  //   },
+  //   {
+  //     supplier: "F",
+  //     gamma: {
+  //       cost: "disabled",
+  //       delivery_inpercent: "disabled",
+  //       deliveryChange_inpercent: "disabled",
+  //       failure_inpercent: "disabled",
+  //     },
+  //     delta: {
+  //       cost: 13,
+  //       delivery_inpercent: 70,
+  //       deliveryChange_inpercent: 12,
+  //       failure_inpercent: 2.8,
+  //     },
+  //     epsilon: {
+  //       cost: 19,
+  //       delivery_inpercent: 77,
+  //       deliveryChange_inpercent: 12,
+  //       failure_inpercent: 1.8,
+  //     },
+  //   },
+  //   {
+  //     supplier: "G",
+  //     gamma: {
+  //       cost: "disabled",
+  //       delivery_inpercent: "disabled",
+  //       deliveryChange_inpercent: "disabled",
+  //       failure_inpercent: "disabled",
+  //     },
+  //     delta: {
+  //       cost: "disabled",
+  //       delivery_inpercent: "disabled",
+  //       deliveryChange_inpercent: "disabled",
+  //       failure_inpercent: "disabled",
+  //     },
+  //     epsilon: {
+  //       cost: 21,
+  //       delivery_inpercent: 78,
+  //       deliveryChange_inpercent: 14,
+  //       failure_inpercent: 1.7,
+  //     },
+  //   },
+  // ]);
+  const calculateEconomyAndExpedited = (
+    standardValue,
+    costMultiplier = 0.7,
+    deliveryMultiplier = 0.4,
+    failureChange = 1.0,
+    expeditedMultiplier = 1.25,
+    expeditedDeliveryChange = 0.2,
+    expeditedFailureChange = -0.5
+  ) => {
+    return {
+      economy: {
+        cost: standardValue.cost * costMultiplier,
+        delivery_inpercent:
+          standardValue.delivery_inpercent -
+          standardValue.delivery_inpercent * deliveryMultiplier,
+        deliveryChange_inpercent: standardValue.deliveryChange_inpercent,
+        failure_inpercent: standardValue.failure_inpercent + failureChange,
+      },
+      expedited: {
+        cost: standardValue.cost * expeditedMultiplier,
+        delivery_inpercent:
+          standardValue.delivery_inpercent +
+          standardValue.delivery_inpercent * expeditedDeliveryChange,
+        deliveryChange_inpercent: standardValue.deliveryChange_inpercent,
+        failure_inpercent:
+          standardValue.failure_inpercent + expeditedFailureChange,
+      },
+    };
+  };
+
   const [subAssemblyComponents, setSubAssemblyComponents] = useState([
     {
       supplier: "A",
       gamma: {
-        cost: 12,
-        delivery_inpercent: 80,
-        deliveryChange_inpercent: 2,
-        failure_inpercent: 2.0,
+        standard: {
+          cost: 12,
+          delivery_inpercent: 80,
+          deliveryChange_inpercent: 2,
+          failure_inpercent: 2.0,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 12,
+          delivery_inpercent: 80,
+          deliveryChange_inpercent: 2,
+          failure_inpercent: 2.0,
+        }),
       },
       delta: {
-        cost: "disabled",
-        delivery_inpercent: "disabled",
-        deliveryChange_inpercent: "disabled",
-        failure_inpercent: "disabled",
+        standard: "disabled",
+        economy: "disabled",
+        expedited: "disabled",
       },
       epsilon: {
-        cost: "disabled",
-        delivery_inpercent: "disabled",
-        deliveryChange_inpercent: "disabled",
-        failure_inpercent: "disabled",
+        standard: "disabled",
+        economy: "disabled",
+        expedited: "disabled",
       },
     },
     {
       supplier: "B",
       gamma: {
-        cost: 14,
-        delivery_inpercent: 85,
-        deliveryChange_inpercent: 4,
-        failure_inpercent: 1.9,
+        standard: {
+          cost: 14,
+          delivery_inpercent: 85,
+          deliveryChange_inpercent: 4,
+          failure_inpercent: 1.9,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 14,
+          delivery_inpercent: 85,
+          deliveryChange_inpercent: 4,
+          failure_inpercent: 1.9,
+        }),
       },
       delta: {
-        cost: 15,
-        delivery_inpercent: 75,
-        deliveryChange_inpercent: 4,
-        failure_inpercent: 2.6,
+        standard: {
+          cost: 15,
+          delivery_inpercent: 75,
+          deliveryChange_inpercent: 4,
+          failure_inpercent: 2.6,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 15,
+          delivery_inpercent: 75,
+          deliveryChange_inpercent: 4,
+          failure_inpercent: 2.6,
+        }),
       },
       epsilon: {
-        cost: "disabled",
-        delivery_inpercent: "disabled",
-        deliveryChange_inpercent: "disabled",
-        failure_inpercent: "disabled",
+        standard: "disabled",
+        economy: "disabled",
+        expedited: "disabled",
       },
     },
     {
       supplier: "C",
       gamma: {
-        cost: 13,
-        delivery_inpercent: 85,
-        deliveryChange_inpercent: 6,
-        failure_inpercent: 2.6,
+        standard: {
+          cost: 13,
+          delivery_inpercent: 85,
+          deliveryChange_inpercent: 6,
+          failure_inpercent: 2.6,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 13,
+          delivery_inpercent: 85,
+          deliveryChange_inpercent: 6,
+          failure_inpercent: 2.6,
+        }),
       },
       delta: {
-        cost: 16,
-        delivery_inpercent: 78,
-        deliveryChange_inpercent: 6,
-        failure_inpercent: 2.5,
+        standard: {
+          cost: 16,
+          delivery_inpercent: 78,
+          deliveryChange_inpercent: 6,
+          failure_inpercent: 2.5,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 16,
+          delivery_inpercent: 78,
+          deliveryChange_inpercent: 6,
+          failure_inpercent: 2.5,
+        }),
       },
       epsilon: {
-        cost: "disabled",
-        delivery_inpercent: "disabled",
-        deliveryChange_inpercent: "disabled",
-        failure_inpercent: "disabled",
+        standard: "disabled",
+        economy: "disabled",
+        expedited: "disabled",
       },
     },
     {
       supplier: "D",
       gamma: {
-        cost: 22,
-        delivery_inpercent: 90,
-        deliveryChange_inpercent: 8,
-        failure_inpercent: 1.2,
+        standard: {
+          cost: 22,
+          delivery_inpercent: 90,
+          deliveryChange_inpercent: 8,
+          failure_inpercent: 1.2,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 22,
+          delivery_inpercent: 90,
+          deliveryChange_inpercent: 8,
+          failure_inpercent: 1.2,
+        }),
       },
       delta: {
-        cost: 24,
-        delivery_inpercent: 80,
-        deliveryChange_inpercent: 8,
-        failure_inpercent: 1.8,
+        standard: {
+          cost: 24,
+          delivery_inpercent: 80,
+          deliveryChange_inpercent: 8,
+          failure_inpercent: 1.8,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 24,
+          delivery_inpercent: 80,
+          deliveryChange_inpercent: 8,
+          failure_inpercent: 1.8,
+        }),
       },
       epsilon: {
-        cost: 29,
-        delivery_inpercent: 80,
-        deliveryChange_inpercent: 8,
-        failure_inpercent: 1.1,
+        standard: {
+          cost: 29,
+          delivery_inpercent: 80,
+          deliveryChange_inpercent: 8,
+          failure_inpercent: 1.1,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 29,
+          delivery_inpercent: 80,
+          deliveryChange_inpercent: 8,
+          failure_inpercent: 1.1,
+        }),
       },
     },
     {
       supplier: "E",
       gamma: {
-        cost: "disabled",
-        delivery_inpercent: "disabled",
-        deliveryChange_inpercent: "disabled",
-        failure_inpercent: "disabled",
+        standard: "disabled",
+        economy: "disabled",
+        expedited: "disabled",
       },
       delta: {
-        cost: 14,
-        delivery_inpercent: 70,
-        deliveryChange_inpercent: 10,
-        failure_inpercent: 2.7,
+        standard: {
+          cost: 14,
+          delivery_inpercent: 70,
+          deliveryChange_inpercent: 10,
+          failure_inpercent: 2.7,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 14,
+          delivery_inpercent: 70,
+          deliveryChange_inpercent: 10,
+          failure_inpercent: 2.7,
+        }),
       },
       epsilon: {
-        cost: 20,
-        delivery_inpercent: 75,
-        deliveryChange_inpercent: 10,
-        failure_inpercent: 1.7,
+        standard: {
+          cost: 20,
+          delivery_inpercent: 75,
+          deliveryChange_inpercent: 10,
+          failure_inpercent: 1.7,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 20,
+          delivery_inpercent: 75,
+          deliveryChange_inpercent: 10,
+          failure_inpercent: 1.7,
+        }),
       },
     },
     {
       supplier: "F",
       gamma: {
-        cost: "disabled",
-        delivery_inpercent: "disabled",
-        deliveryChange_inpercent: "disabled",
-        failure_inpercent: "disabled",
+        standard: "disabled",
+        economy: "disabled",
+        expedited: "disabled",
       },
       delta: {
-        cost: 13,
-        delivery_inpercent: 70,
-        deliveryChange_inpercent: 12,
-        failure_inpercent: 2.8,
+        standard: {
+          cost: 13,
+          delivery_inpercent: 70,
+          deliveryChange_inpercent: 12,
+          failure_inpercent: 2.8,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 13,
+          delivery_inpercent: 70,
+          deliveryChange_inpercent: 12,
+          failure_inpercent: 2.8,
+        }),
       },
       epsilon: {
-        cost: 19,
-        delivery_inpercent: 77,
-        deliveryChange_inpercent: 12,
-        failure_inpercent: 1.8,
+        standard: {
+          cost: 19,
+          delivery_inpercent: 77,
+          deliveryChange_inpercent: 12,
+          failure_inpercent: 1.8,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 19,
+          delivery_inpercent: 77,
+          deliveryChange_inpercent: 12,
+          failure_inpercent: 1.8,
+        }),
       },
     },
     {
       supplier: "G",
       gamma: {
-        cost: "disabled",
-        delivery_inpercent: "disabled",
-        deliveryChange_inpercent: "disabled",
-        failure_inpercent: "disabled",
+        standard: "disabled",
+        economy: "disabled",
+        expedited: "disabled",
       },
       delta: {
-        cost: "disabled",
-        delivery_inpercent: "disabled",
-        deliveryChange_inpercent: "disabled",
-        failure_inpercent: "disabled",
+        standard: "disabled",
+        economy: "disabled",
+        expedited: "disabled",
       },
       epsilon: {
-        cost: 21,
-        delivery_inpercent: 78,
-        deliveryChange_inpercent: 14,
-        failure_inpercent: 1.7,
+        standard: {
+          cost: 21,
+          delivery_inpercent: 78,
+          deliveryChange_inpercent: 14,
+          failure_inpercent: 1.7,
+        },
+        ...calculateEconomyAndExpedited({
+          cost: 21,
+          delivery_inpercent: 78,
+          deliveryChange_inpercent: 14,
+          failure_inpercent: 1.7,
+        }),
       },
     },
   ]);
@@ -359,36 +639,51 @@ const GDP = () => {
     field
   ) => {
     const updatedSubAssemblyComponents = [...subAssemblyComponents];
+
+    const newValue = parseFloat(event.target.value);
+
     updatedSubAssemblyComponents[supplierIndex] = {
       ...updatedSubAssemblyComponents[supplierIndex],
       [component]: {
         ...updatedSubAssemblyComponents[supplierIndex][component],
-        [field]: parseFloat(event.target.value),
+        standard: {
+          ...updatedSubAssemblyComponents[supplierIndex][component].standard,
+          [field]: newValue,
+        },
       },
     };
+
     setSubAssemblyComponents(updatedSubAssemblyComponents);
   };
 
-  const renderInput = (componentName, index, field, disabled) => (
-    <input
-      type="number"
-      className={`w-full px-2 py-1 border rounded ${
-        disabled ? "bg-gray-700 cursor-not-allowed" : "bg-white"
-      }`}
-      value={subAssemblyComponents[index][componentName][field]}
-      onChange={(event) =>
-        handleSubAssemblyInputChange(event, index, componentName, field)
-      }
-      disabled={disabled}
-    />
-  );
+  const renderInput = (componentName, index, field, disabled) => {
+    const componentData = subAssemblyComponents[index][componentName];
+
+    const value =
+      componentData && componentData.standard
+        ? componentData.standard[field]
+        : "";
+    return (
+      <input
+        type="number"
+        className={`w-full px-2 py-1 border rounded ${
+          disabled ? "bg-gray-700 cursor-not-allowed" : "bg-white"
+        }`}
+        value={value}
+        onChange={(event) =>
+          handleSubAssemblyInputChange(event, index, componentName, field)
+        }
+        disabled={disabled}
+      />
+    );
+  };
 
   // Sub assembly component ends here
   // ----------------------------------------------------------------------------------------------------
   // Manufacturing component Starts here
   const [manufacturingCosts, setManufacturingCosts] = useState([
     {
-      product: "Postponed Production",
+      product: "Product 0",
       manufacturingPlant: {
         fixedCosts: 20000,
         laborCosts: 22,
@@ -660,13 +955,13 @@ const GDP = () => {
           isClosable: true,
           position: "top",
         });
-        
-        localStorage.setItem("passcode", JSON.stringify(response.data.passcode));
-        
+
+        localStorage.setItem(
+          "passcode",
+          JSON.stringify(response.data.passcode)
+        );
 
         navigate("/createsim?step=4");
-
-
       } catch (error) {
         console.error("Error submitting form:", error);
       }
@@ -973,7 +1268,9 @@ const GDP = () => {
             <table className="w-full h-40 text-center border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="px-4 py-2 border border-gray-200">Channel</th>
+                  <th className="px-4 py-2 border border-gray-200">
+                    Hyperware
+                  </th>
                   <th className="px-4 py-2 border border-gray-200">Region 1</th>
                   <th className="px-4 py-2 border border-gray-200">Region 2</th>
                   <th className="px-4 py-2 border border-gray-200">Region 3</th>
@@ -1018,7 +1315,7 @@ const GDP = () => {
             <table className="w-full h-40 text-center border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="px-4 py-2 border border-gray-200">Channel</th>
+                  <th className="px-4 py-2 border border-gray-200">Metaware</th>
                   <th className="px-4 py-2 border border-gray-200">Region 1</th>
                   <th className="px-4 py-2 border border-gray-200">Region 2</th>
                   <th className="px-4 py-2 border border-gray-200">Region 3</th>
@@ -1272,7 +1569,7 @@ const GDP = () => {
                   className={`${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}
                 >
                   <td className="py-2 px-4 w-28 border-b border-r border-gray-300 text-left">
-                   {component.supplier}
+                    {component.supplier}
                   </td>
 
                   <td className="py-2 px-4 border-b border-r border-gray-300 text-center">
@@ -1282,7 +1579,7 @@ const GDP = () => {
                         "gamma",
                         index,
                         "cost",
-                        component.gamma.cost === "disabled"
+                        component.gamma.standard === "disabled"
                       )}
                     </div>
                   </td>
@@ -1292,14 +1589,14 @@ const GDP = () => {
                         "gamma",
                         index,
                         "delivery_inpercent",
-                        component.gamma.delivery_inpercent === "disabled"
+                        component.gamma.standard === "disabled"
                       )}
                       <p className="text-red-500 mx-1">±</p>
                       {renderInput(
                         "gamma",
                         index,
                         "deliveryChange_inpercent",
-                        component.gamma.deliveryChange_inpercent === "disabled"
+                        component.gamma.standard === "disabled"
                       )}
                     </div>
                   </td>
@@ -1308,7 +1605,7 @@ const GDP = () => {
                       "gamma",
                       index,
                       "failure_inpercent",
-                      component.gamma.failure_inpercent === "disabled"
+                      component.gamma.standard === "disabled"
                     )}
                   </td>
                   <td className="py-2 px-4 border-b border-r border-gray-300 text-center">
@@ -1318,7 +1615,7 @@ const GDP = () => {
                         "delta",
                         index,
                         "cost",
-                        component.delta.cost === "disabled"
+                        component.delta.standard === "disabled"
                       )}
                     </div>
                   </td>
@@ -1328,14 +1625,14 @@ const GDP = () => {
                         "delta",
                         index,
                         "delivery_inpercent",
-                        component.delta.delivery_inpercent === "disabled"
+                        component.delta.standard === "disabled"
                       )}
                       <p className="text-red-500 mx-1">±</p>
                       {renderInput(
                         "delta",
                         index,
                         "deliveryChange_inpercent",
-                        component.delta.deliveryChange_inpercent === "disabled"
+                        component.delta.standard === "disabled"
                       )}
                     </div>
                   </td>
@@ -1344,7 +1641,7 @@ const GDP = () => {
                       "delta",
                       index,
                       "failure_inpercent",
-                      component.delta.failure_inpercent === "disabled"
+                      component.delta.standard === "disabled"
                     )}
                   </td>
                   <td className="py-2 px-4 border-b border-r border-gray-300 text-center">
@@ -1354,7 +1651,7 @@ const GDP = () => {
                         "epsilon",
                         index,
                         "cost",
-                        component.epsilon.cost === "disabled"
+                        component.epsilon.standard === "disabled"
                       )}
                     </div>
                   </td>
@@ -1364,15 +1661,14 @@ const GDP = () => {
                         "epsilon",
                         index,
                         "delivery_inpercent",
-                        component.epsilon.delivery_inpercent === "disabled"
+                        component.epsilon.standard === "disabled"
                       )}
                       <p className="text-red-500 mx-1">±</p>
                       {renderInput(
                         "epsilon",
                         index,
                         "deliveryChange_inpercent",
-                        component.epsilon.deliveryChange_inpercent ===
-                          "disabled"
+                        component.epsilon.standard === "disabled"
                       )}
                     </div>
                   </td>
@@ -1381,7 +1677,7 @@ const GDP = () => {
                       "epsilon",
                       index,
                       "failure_inpercent",
-                      component.epsilon.failure_inpercent === "disabled"
+                      component.epsilon.standard === "disabled"
                     )}
                   </td>
                 </tr>

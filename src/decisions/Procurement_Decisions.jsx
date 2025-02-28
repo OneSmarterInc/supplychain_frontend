@@ -257,9 +257,10 @@ const Procurement_Decisions = () => {
                 procurementData1={JSON.stringify(data)}
                 setAlpha_quantity={setAlpha_quantity}
                 setBeta_quantity={setBeta_quantity}
+                data={data}
               />
               <div className="rounded-lg -2xl h-100vh flex flex-col justify-center">
-                <SupplyChainTable setUpdatedDCData={setUpdatedDCData} />
+                <SupplyChainTable setUpdatedDCData={setUpdatedDCData} data={data}/>
               </div>
             </>
           )}

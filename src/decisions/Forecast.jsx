@@ -16,15 +16,18 @@ const Forecast = () => {
   const toast = useToast();
   const navigate = useNavigate();
 
+  const [simulation, setSimulation] = useState({});
   const [ForecastHyperware, setForecastHyperware] = useState({});
   const [ForecastMetaware, setForecastMetaware] = useState({});
   const [ForecastData, setForecastData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false); // State for last quarter loading
+  const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false);
 
   const selectedSimData =
     JSON.parse(localStorage.getItem("selectedSimData")) || {};
-  const currentQuarter = selectedSimData[0]?.current_quarter || 1;
+  const [currentQuarter, setCurrentQuarter] = useState(
+    selectedSimData[0]?.current_quarter
+  );
   const simulation_id = selectedSimData[0]?.simulation_id;
   const [selectedQuarter, setSelectedQuarter] = useState(currentQuarter);
 
@@ -45,9 +48,18 @@ const Forecast = () => {
       firm_key_new = firm_obj[0].firmName;
     }
   }
-
+  const getSimulation = async () => {
+    try {
+      const response = await axios.get(`${api}/getsim/${simulation_id}`);
+      setSimulation(response.data[0]);
+      setCurrentQuarter(response.data[0]?.current_quarter);
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
   useEffect(() => {
     setLoading(true);
+    getSimulation();
     getForecast().finally(() => setLoading(false));
   }, [selectedQuarter]);
 
@@ -56,8 +68,8 @@ const Forecast = () => {
       const response = await axios.get(`${api}/previous/`, {
         params: {
           user_id: user.userid,
-          sim_id: selectedSimData[0]?.simulation_id || "",
-          admin_id: selectedSimData[0]?.admin_id || "",
+          sim_id: simulation_id,
+          admin_id: simulation?.admin_id,
           current_decision: "Forecast",
           current_quarter: selectedQuarter,
           firm_key: firm_key_new,
@@ -81,8 +93,8 @@ const Forecast = () => {
       const response = await axios.get(`${api}/previous/`, {
         params: {
           user_id: user.userid,
-          sim_id: selectedSimData[0]?.simulation_id || "",
-          admin_id: selectedSimData[0]?.admin_id || "",
+          sim_id: simulation?.simulation_id || "",
+          admin_id: simulation?.admin_id || "",
           current_decision: "Forecast",
           current_quarter: previousQuarter,
           firm_key: firm_key_new,
@@ -201,22 +213,19 @@ const Forecast = () => {
             >
               <Text>Load data Quarterly</Text>
               <div className="pl-4 flex space-x-4 ">
-                {Array.from(
-                  { length: selectedSimData[0]?.current_quarter || 0 },
-                  (_, i) => (
-                    <div
-                      key={i + 1}
-                      onClick={() => setSelectedQuarter(i + 1)}
-                      className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
-                        selectedQuarter === i + 1
-                          ? "bg-red-500 border-red-500 text-white"
-                          : ""
-                      }`}
-                    >
-                      {i + 1}
-                    </div>
-                  )
-                )}
+                {Array.from({ length: currentQuarter || 1 }, (_, i) => (
+                  <div
+                    key={i + 1}
+                    onClick={() => setSelectedQuarter(i + 1)}
+                    className={`flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-gray-100 text-gray-700 cursor-pointer ${
+                      selectedQuarter === i + 1
+                        ? "bg-red-500 border-red-500 text-white"
+                        : ""
+                    }`}
+                  >
+                    {i + 1}
+                  </div>
+                ))}
               </div>
             </div>
 

@@ -41,6 +41,7 @@ const Dashboard = () => {
           passcode: item.simulation.passcode,
           simulation_id: item.simulation_id,
           quarter: item.simulation.current_quarter,
+          firm_data: item.simulation.firm_data || null,
           quarter_data:
             item.simulation.quarter_specific_decisions[
               `quarter${item.simulation.current_quarter}`
@@ -82,7 +83,7 @@ const Dashboard = () => {
       });
 
       if (response.status === 200) {
-        toast.error("already subscribed to this simulation.");
+        toast.error("Already subscribed to this simulation.");
       } else if (response.status === 201) {
         toast.success("Successfully subscribed to the simulation.");
         setCode("");
@@ -108,17 +109,22 @@ const Dashboard = () => {
           </div>
         ) : courses.length === 0 ? (
           <div className="text-left text-gray-700 font-semibold">
-            Welcome, {user.first_name}! Currently, there are no active courses or simulations
-            in your account. Please check back soon or reach out for assistance.
+            Welcome, {user.first_name}! Currently, there are no active courses
+            or simulations in your account. Please check back soon or reach out
+            for assistance.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-1 gap-0">
             <div className="flex space-x-2 mb-2">
-            <span className="text-green-500">All Courses ({courses.length}) </span>
-            <span className="text-green-500">In Progress ({courses.length}) </span>
-            <span className="text-yellow-800">Completed (0) </span>
+              <span className="text-green-500">
+                All Courses ({courses.length}){" "}
+              </span>
+              <span className="text-green-500">
+                In Progress ({courses.length}){" "}
+              </span>
+              <span className="text-yellow-800">Completed (0) </span>
             </div>
-            
+
             {courses.map((course, index) => (
               <div
                 key={index}
@@ -166,7 +172,9 @@ const Dashboard = () => {
                         : "-"}
                     </span>
                   </div>
-                  {selectedCourse === course.simulation_id && <GroupsView />}
+                  {selectedCourse === course?.simulation_id && (
+                    <GroupsView course={course?.firm_data} />
+                  )}
                 </div>
                 <div className="text-[#ED1C24] flex items-start space-x-2 text-right absolute top-5 right-5 ">
                   <span className="text-3xl">

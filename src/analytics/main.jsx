@@ -8,43 +8,43 @@ import { Button } from "@material-tailwind/react";
 
 const Analytics = () => {
   const navigate = useNavigate();
-  const {api}= useContext(MyContext);
+  const { api } = useContext(MyContext);
   const [dashboardData, setDashBoardData] = useState({
-    "financialData": [],
-    "operationalData": [],
-    "customerData": [],
-    "externalData": []
-});
-
-
+    financialData: [],
+    operationalData: [],
+    customerData: [],
+    externalData: [],
+  });
 
   const selectedSimData =
     JSON.parse(localStorage.getItem("selectedSimData")) || {};
-  
-  const [selectedQuarter, setSelectedQuarter] = useState(selectedSimData[0].current_quarter-1);
+
+  const [selectedQuarter, setSelectedQuarter] = useState(
+    selectedSimData[0].current_quarter - 1
+  );
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
 
   const getData = async () => {
     try {
-      const response = await axios.get(`${api}/dashboard/${selectedSimData[0].simulation_id}/${firm_key_new}/${selectedQuarter}/`);
+      const response = await axios.get(
+        `${api}/dashboard/${selectedSimData[0].simulation_id}/${firm_key_new}/${selectedQuarter}/`
+      );
 
       setDashBoardData(response.data);
       console.log(dashboardData.financialData);
-
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
   let firm_key_new = "";
   if (
-
     selectedSimData[0]?.firm_data &&
     Array.isArray(selectedSimData[0].firm_data)
   ) {
     let firm_obj = selectedSimData[0].firm_data.filter((item) => {
       console.log(item.emails, user.email);
-      
+
       return item.emails && item.emails.includes(user.email);
     });
     if (firm_obj.length) {
@@ -58,7 +58,6 @@ const Analytics = () => {
     return "text-red-600";
   };
 
-  
   useEffect(() => {
     getData();
   }, [selectedQuarter]);
@@ -67,7 +66,6 @@ const Analytics = () => {
   const operationalData = dashboardData.operationalData;
   const customerData = dashboardData.customerData;
   const externalData = dashboardData.externalData;
-  
 
   const handleSectionRedirect = (section) => {
     switch (section) {
@@ -87,28 +85,29 @@ const Analytics = () => {
         break;
     }
   };
-const trigger = async () =>{
-const response = await axios.get(`${api}/trigger/?simulation_id=${selectedSimData[0].simulation_id}`);
-selectedSimData[0].current_quarter = response.data;
-if (selectedSimData[0].current_quarter == selectedSimData[0].total_quarter){
-    alert(response.data, "All quarter finished");
-
-}else{
-
-  localStorage.setItem("selectedSimData", JSON.stringify(selectedSimData));
-  alert(response.data,"current quarter");
-  window.location.reload();
-}
-
-}
+  const trigger = async () => {
+    const response = await axios.get(
+      `${api}/trigger/?simulation_id=${selectedSimData[0].simulation_id}`
+    );
+    selectedSimData[0].current_quarter = response.data;
+    if (
+      selectedSimData[0].current_quarter == selectedSimData[0].total_quarter
+    ) {
+      alert(response.data, "All quarter finished");
+    } else {
+      localStorage.setItem("selectedSimData", JSON.stringify(selectedSimData));
+      alert(response.data, "current quarter");
+      window.location.reload();
+    }
+  };
   return (
-    <div className="w-3/5 mx-auto font-sans h-screen mb-4 " >
-      
+    <div className="w-3/5 mx-auto font-sans h-screen mb-4 ">
       <Button onClick={trigger}>Trigger </Button>
 
       <Text className="text-center text-lg text-gray-700 font-semibold mt-0.5">
-        Course : <span className="text-red-600"> {selectedSimData[0].course} </span> | Your Team
-        : <span className="text-red-600">{firm_key_new}</span>
+        Course :{" "}
+        <span className="text-red-600"> {selectedSimData[0].course} </span> |
+        Your Team : <span className="text-red-600">{firm_key_new}</span>
       </Text>
       <hr />
       <p className="text-center text-lg text-gray-700 font-semibold mt-0.5">
@@ -117,24 +116,27 @@ if (selectedSimData[0].current_quarter == selectedSimData[0].total_quarter){
       <hr />
 
       <div className="flex items-center justify-between mt-1">
-        <div   id="quarters-button" className="flex space-x-2">
+        <div id="quarters-button" className="flex space-x-2">
           <p className="text-center text-lg text-gray-700 font-semibold ">
             Quarter :
           </p>
-          {Array.from({ length: selectedSimData[0].current_quarter -1  }, (_, i) => (
-            <div
-              key={i + 1}
-              onClick={() => setSelectedQuarter(i + 1)}
-              className={`flex items-center justify-center w-6 h-6 rounded-full border-2 cursor-pointer  mt-0.8
+          {Array.from(
+            { length: selectedSimData[0].current_quarter - 1 },
+            (_, i) => (
+              <div
+                key={i + 1}
+                onClick={() => setSelectedQuarter(i + 1)}
+                className={`flex items-center justify-center w-6 h-6 rounded-full border-2 cursor-pointer  mt-0.8
           ${
             selectedQuarter === i + 1
               ? "bg-gradient-to-r from-red-500 to-red-700 text-white border-red-600"
               : "bg-gray-100 text-gray-600 border-gray-400"
           } transition-all duration-300 ease-in-out transform hover:scale-105`}
-            >
-              {i + 1}
-            </div>
-          ))}
+              >
+                {i + 1}
+              </div>
+            )
+          )}
         </div>
 
         <button
@@ -213,14 +215,13 @@ if (selectedSimData[0].current_quarter == selectedSimData[0].total_quarter){
                 colSpan="5"
                 className="py-2 px-2 text-red-700 bg-gray-50 font-bold uppercase text-sm "
               >
-                 <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center">
                   <span>
-                  <i className="fas fa-cogs mr-2"></i>
-                  Operational
+                    <i className="fas fa-cogs mr-2"></i>
+                    Operational
                   </span>
                   <i className="fas fa-arrow-up-right-from-square  pr-2"></i>
                 </div>
-               
               </th>
             </tr>
             {operationalData.map((item, index) => (
@@ -256,13 +257,13 @@ if (selectedSimData[0].current_quarter == selectedSimData[0].total_quarter){
                 colSpan="5"
                 className="py-2 px-2 text-red-700 bg-gray-50 font-bold uppercase text-sm "
               >
-              <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center">
                   <span>
-                <i className="fas fa-users mr-2"></i>
-                Customer 
+                    <i className="fas fa-users mr-2"></i>
+                    Customer
                   </span>
                   <i className="fas fa-arrow-up-right-from-square  pr-2"></i>
-                </div> 
+                </div>
               </th>
             </tr>
             {customerData.map((item, index) => (
@@ -299,7 +300,7 @@ if (selectedSimData[0].current_quarter == selectedSimData[0].total_quarter){
                 className="py-2 px-2 text-red-700 bg-gray-50 font-bold uppercase text-sm   text-left align-left"
               >
                 <i className="fas fa-globe mr-2"></i>
-                External 
+                External
               </th>
             </tr>
             {externalData.map((item, index) => (

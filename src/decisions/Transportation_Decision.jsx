@@ -19,6 +19,7 @@ import InfoButton from "../Components/InfoButton";
 import MyContext from "../Components/ContextApi/MyContext";
 import { submitDecisionStatus } from "./DecisionSubmit";
 import StatusBar from "./StatusBar";
+import { use } from "react";
 
 const defaultDc2Data = {
   product0: {
@@ -53,13 +54,16 @@ const defaultDc3Data = {
 const Transportation_Decision = () => {
   const { api } = useContext(MyContext);
   const [TransportationData, setTransportationData] = useState(null);
+  const [inventory, setInventory] = useState(null);
+  const [simulation, setSimulation] = useState({});
   const [Dc2Data, setDc2Data] = useState(defaultDc2Data);
   const [Dc3Data, setDc3Data] = useState(defaultDc3Data);
   const [loading, setLoading] = useState(false); // Add loading state
   const toast = useToast();
   const navigate = useNavigate();
 
-  const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData")) || {};
+  const selectedSimData =
+    JSON.parse(localStorage.getItem("selectedSimData")) || {};
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
   const simulation_id = selectedSimData[0]?.simulation_id;
 
@@ -107,6 +111,19 @@ const Transportation_Decision = () => {
     }));
   };
 
+  const getSimulation = async () => {
+    try {
+      const response = await axios.get(
+        `${api}/getsim/${selectedSim[0].simulation_id}`
+      );
+      setSimulation(response.data);
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+  useEffect(() => {
+    getSimulation();
+  }, []);
   const getTransportation = async () => {
     try {
       const response = await axios.get(`${api}/previous/`, {
@@ -134,17 +151,17 @@ const Transportation_Decision = () => {
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
         firm_key: firm_key_new,
-        quarter: selectedSim[0].current_quarter,
+        quarter: simulation[0]?.current_quarter,
         dc_two: Dc2Data,
         dc_three: Dc3Data,
       });
-      
+
       await submitDecisionStatus(
         api,
         "transport",
         selectedSimData,
         firm_key_new,
-        currentQuarter,
+        simulation[0]?.current_quarter
       );
       getTransportation();
       addUserLogger();
@@ -155,7 +172,6 @@ const Transportation_Decision = () => {
         isClosable: true,
         position: "top",
       });
-    
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
     } finally {
@@ -186,8 +202,12 @@ const Transportation_Decision = () => {
   const renderTable = (data, setDataFunc, title) => {
     const productMapping = {
       product0: "Product 0",
-      product1: selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware || "Product 1",
-      product2: selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware || "Product 2",
+      product1:
+        selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.hyperware ||
+        "Product 1",
+      product2:
+        selectedSim[0]?.renamedMappedData?.dataVariabllesMapp?.metaware ||
+        "Product 2",
     };
 
     return (
@@ -214,7 +234,8 @@ const Transportation_Decision = () => {
                     {productMapping[product]}
                     <br />
                     <span className="text-red-500">
-                      {shipmentType.charAt(0).toUpperCase() + shipmentType.slice(1)}
+                      {shipmentType.charAt(0).toUpperCase() +
+                        shipmentType.slice(1)}
                     </span>
                   </Td>
                   {Object.keys(carriers).map((carrier) => (
@@ -224,7 +245,13 @@ const Transportation_Decision = () => {
                         value={carriers[carrier]}
                         placeholder="Enter Units "
                         onChange={(e) =>
-                          handleChange(setDataFunc, product, shipmentType, carrier, e.target.value)
+                          handleChange(
+                            setDataFunc,
+                            product,
+                            shipmentType,
+                            carrier,
+                            e.target.value
+                          )
                         }
                         border="1px solid black"
                       />
@@ -241,12 +268,21 @@ const Transportation_Decision = () => {
 
   return (
     <div style={{ fontFamily: "ABeeZee" }}>
-      
-     <StatusBar simulation_id={simulation_id} firm_key={firm_key_new} quarter={currentQuarter} api={api} current={"Transport"}/>
-      
+      <StatusBar
+        simulation_id={simulation_id}
+        firm_key={firm_key_new}
+        quarter={currentQuarter}
+        api={api}
+        current={"Transport"}
+      />
+
       <div className="sm:grid grid-cols-1 gap-3 m-1">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
-          <InfoImg decision={"Transport"} id="quarter-deadline" id2="course-details" />
+          <InfoImg
+            decision={"Transport"}
+            id="quarter-deadline"
+            id2="course-details"
+          />
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center pl-5 pt-2 pb-2">
               <Text>Load data Quarterly</Text>
@@ -270,22 +306,38 @@ const Transportation_Decision = () => {
               </div>
             </div>
             <div id="info">
-
-            <InfoButton decision="Transport" />
+              <InfoButton decision="Transport" />
             </div>
           </div>
 
           {/* Show Spinner while loading */}
           {loading ? (
-            <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              mt={4}
+            >
               <Spinner size="xl" />
             </Box>
           ) : (
             <div className="flex gap-1 m-1">
               <div className="m-2 min-w-[700px] rounded-2xl bg-white p-2 flex flex-col space-y-4 justify-start">
-                {TransportationData?.flag_dc2 && renderTable(Dc2Data, setDc2Data, "DC 2")}
-                {TransportationData?.flag_dc3 && renderTable(Dc3Data, setDc3Data, "DC 3")}
-                {!(TransportationData?.flag_dc3 || TransportationData?.flag_dc2) && (
+                {TransportationData?.flag_dc2 &&
+                  renderTable(
+                    Dc2Data ? Dc2Data : defaultDc2Data,
+                    setDc2Data,
+                    "DC 2"
+                  )}
+                {TransportationData?.flag_dc3 &&
+                  renderTable(
+                    Dc3Data ? Dc3Data : defaultDc3Data,
+                    setDc3Data,
+                    "DC 3"
+                  )}
+                {!(
+                  TransportationData?.flag_dc3 || TransportationData?.flag_dc2
+                ) && (
                   <div
                     style={{
                       padding: "20px",
@@ -304,23 +356,50 @@ const Transportation_Decision = () => {
                     >
                       No Distribution Center Available
                     </h2>
-                    <p style={{ color: "#555", fontSize: "16px", lineHeight: "1.6" }}>
-                      Since your firm does not own a distribution center in this market region, all
-                      orders will be serviced from the distribution center associated with your
-                      manufacturing plant in Market Region 1.
+                    <p
+                      style={{
+                        color: "#555",
+                        fontSize: "16px",
+                        lineHeight: "1.6",
+                      }}
+                    >
+                      Since your firm does not own a distribution center in this
+                      market region, all orders will be serviced from the
+                      distribution center associated with your manufacturing
+                      plant in Market Region 1.
                     </p>
-                    <p style={{ color: "#555", fontSize: "16px", lineHeight: "1.6" }}>
-                      To ensure prompt delivery within the current month, your firm will ship via
-                      air, which incurs higher transportation costs.
+                    <p
+                      style={{
+                        color: "#555",
+                        fontSize: "16px",
+                        lineHeight: "1.6",
+                      }}
+                    >
+                      To ensure prompt delivery within the current month, your
+                      firm will ship via air, which incurs higher transportation
+                      costs.
                     </p>
-                    <p style={{ color: "#555", fontSize: "16px", lineHeight: "1.6" }}>
-                      Please note that shipping costs are significantly higher when servicing from a
-                      distant DC, especially for direct-channel orders (Channel 2), which involve
-                      smaller quantities and therefore higher per-unit costs.
+                    <p
+                      style={{
+                        color: "#555",
+                        fontSize: "16px",
+                        lineHeight: "1.6",
+                      }}
+                    >
+                      Please note that shipping costs are significantly higher
+                      when servicing from a distant DC, especially for
+                      direct-channel orders (Channel 2), which involve smaller
+                      quantities and therefore higher per-unit costs.
                     </p>
-                    <p style={{ color: "#555", fontSize: "16px", lineHeight: "1.6" }}>
-                      Consider establishing a local DC in this region in the future to reduce costs
-                      and improve service levels.
+                    <p
+                      style={{
+                        color: "#555",
+                        fontSize: "16px",
+                        lineHeight: "1.6",
+                      }}
+                    >
+                      Consider establishing a local DC in this region in the
+                      future to reduce costs and improve service levels.
                     </p>
                   </div>
                 )}
@@ -331,7 +410,7 @@ const Transportation_Decision = () => {
           {/* Submit Button */}
           <div className="flex justify-end mt-4">
             <button
-            id="Submit-Service"
+              id="Submit-Service"
               onClick={submitTransportation}
               className={`${
                 selectedSim[0].current_quarter && !loading
@@ -340,7 +419,8 @@ const Transportation_Decision = () => {
               } font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out`}
               disabled={!selectedSim[0].current_quarter || loading}
             >
-              {loading ? <Spinner size="sm" /> : "Submit Transportation"} {/* Show Spinner on button */}
+              {loading ? <Spinner size="sm" /> : "Submit Transportation"}{" "}
+              {/* Show Spinner on button */}
             </button>
           </div>
         </div>
