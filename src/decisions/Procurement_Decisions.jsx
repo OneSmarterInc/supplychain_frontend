@@ -165,7 +165,6 @@ const Procurement_Decisions = () => {
         currentQuarter,
       );
       console.log("POST request successful", response.data);
-      getProcurement();
       addUserLogger();
       toast({
         title: "Procurement Submitted Successfully",
@@ -174,7 +173,7 @@ const Procurement_Decisions = () => {
         isClosable: true,
         position: "top",
       });
-      
+      navigate("/Manufacture");
     } catch (error) {
       console.error("Error making POST request:", error.response ? error.response.data : error.message);
     } finally {

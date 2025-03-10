@@ -6,10 +6,8 @@ import { initializeDecisionStatus } from "./DecisionSubmit";
 const StatusBar = ({ simulation_id, firm_key, quarter, api, current }) => {
   const [statusData, setStatusData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [initializeLoading, setInitializeLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch status from the API
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -17,17 +15,8 @@ const StatusBar = ({ simulation_id, firm_key, quarter, api, current }) => {
         const response = await axios.get(
           `${api}/decision-status-get/${simulation_id}/${firm_key}/${quarter}/`
         );
-        if (response.status === 404) {
-          const response2 = initializeDecisionStatus(
-            api,
-            simulation_id,
-            firm_key,
-            quarter
-          );
-          setStatusData(response2.data);
-        } else {
-          setStatusData(response.data);
-        }
+
+        setStatusData(response.data);
       } catch (error) {
         console.error("Error fetching status data:", error);
       } finally {
@@ -37,21 +26,11 @@ const StatusBar = ({ simulation_id, firm_key, quarter, api, current }) => {
 
     fetchStatus();
   }, [simulation_id, firm_key, quarter, api]);
-  useEffect(() => {
-    if (!statusData || statusData.length === 0) {
-      initializeStatus();
-    }
-  }, [statusData]);
-  const initializeStatus = async () => {
-    setInitializeLoading(true);
-    await initializeDecisionStatus(api, simulation_id, firm_key, quarter);
-    setInitializeLoading(false);
-  };
+ 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  // Decision labels
   const decisionLabels = [
     { key: "forecast", label: "Forecast" },
     { key: "procurement", label: "Procurement" },

@@ -195,7 +195,6 @@ const IT = () => {
         firm_key_new,
         simulation[0].current_quarter
       );
-      getIt();
       addUserLogger();
       toast({
         title: "IT Submission successful",
@@ -204,6 +203,7 @@ const IT = () => {
         isClosable: true,
         position: "top",
       });
+      navigate("/Forecast");
     } catch (error) {
       console.error("Error making POST request: IT", error);
       toast({

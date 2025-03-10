@@ -218,8 +218,7 @@ const Distribution_Decision = () => {
         firm_key_new,
         currentQuarter
       );
-      console.log("POST request successful", response.data);
-      getDistribution();
+     
       toast({
         title: "Distribution Submitted Successfully",
         status: "success",
@@ -227,6 +226,7 @@ const Distribution_Decision = () => {
         isClosable: true,
         position: "top",
       });
+      navigate("/Transport");
     } catch (error) {
       console.error("Error making POST request: Distribution", error);
       toast({

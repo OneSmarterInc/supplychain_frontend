@@ -186,7 +186,6 @@ const Demand_generation = () => {
         firm_key_new,
         simulation[0].current_quarter,
       );
-      getDemand();
       toast({
         title: "Demand Decision Submitted Successfully!",
         status: "success",
@@ -194,7 +193,7 @@ const Demand_generation = () => {
         isClosable: true,
         position: "top",
       });
-     
+      navigate("/Service");
     } catch (error) {
       console.error("Error making POST request:", error);
     } finally {

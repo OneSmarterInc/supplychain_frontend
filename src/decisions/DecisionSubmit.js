@@ -18,30 +18,3 @@ export const submitDecisionStatus = async (
     console.error(`Error making POST request: ${decisionType}`, error);
   }
 };
-export const initializeDecisionStatus = async (
-  api,
-  simData,
-  firmKey,
-  quarter
-) => {
-  try {
-    const decisionType = [
-      "forecast",
-      "procurement",
-      "manufacture",
-      "distribution",
-      "transport",
-      "demand",
-      "service",
-      "it",
-    ];
-    const response = await axios.post(`${api}/decision-status/initialize`, {
-      simulation_id: simData,
-      firm_key: firmKey,
-      quarter: quarter,
-      decision: decisionType,
-    });
-  } catch (error) {
-    console.error(`Error making POST request:`, error);
-  }
-};

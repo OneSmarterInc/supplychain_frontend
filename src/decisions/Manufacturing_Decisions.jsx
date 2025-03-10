@@ -260,7 +260,6 @@ const Manufacturing_Decisions = () => {
         firm_key_new,
         currentQuarter
       );
-      getManufacturing();
       addUserLogger();
       toast({
         title: "Manufacturing Submitted Successfully",

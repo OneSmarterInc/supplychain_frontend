@@ -184,7 +184,6 @@ const Service_Decision = () => {
       );
       console.log("POST request successful", response.data);
       addUserLogger();
-      getService();
       toast({
         title: "Service Submitted successfully",
         status: "success",
@@ -192,6 +191,7 @@ const Service_Decision = () => {
         isClosable: true,
         position: "top",
       });
+      navigate("/IT");
     } catch (error) {
       console.error(
         "Error making POST request: Service",

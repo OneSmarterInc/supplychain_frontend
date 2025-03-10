@@ -163,7 +163,6 @@ const Transportation_Decision = () => {
         firm_key_new,
         simulation[0]?.current_quarter
       );
-      getTransportation();
       addUserLogger();
       toast({
         title: "Transportation data submitted successfully",
@@ -172,6 +171,7 @@ const Transportation_Decision = () => {
         isClosable: true,
         position: "top",
       });
+      navigate("/Demand");
     } catch (error) {
       console.error("Error making POST request: Transportation", error);
     } finally {
