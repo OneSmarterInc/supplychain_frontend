@@ -11,13 +11,31 @@ import Loader from "./Loader";
 
 const Sidebar = () => {
   const { api } = useContext(MyContext);
+  const [simulation, setSimulation] = useState({});
   const [activeParent, setActiveParent] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState("1");
   const [activeReport, setActiveReport] = useState(null);
   const [reportData, setReportData] = useState(null);
+  const selectedSimData =
+    JSON.parse(localStorage.getItem("selectedSimData")) || {};
+  const simulation_id = selectedSimData[0]?.simulation_id;
+   const [currentQuarter, setCurrentQuarter] = useState(
+      selectedSimData[0]?.current_quarter
+    );
   const navigate = useNavigate();
   const scrollContainerRef = useRef(null);
-
+  const getSimulation = async () => {
+    try {
+      const response = await axios.get(`${api}/getsim/${simulation_id}`);
+      setSimulation(response.data[0]);
+      setCurrentQuarter(response.data[0]?.current_quarter);
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+  useEffect(() => {
+    getSimulation();
+  }, [simulation_id]);
   let simData = JSON.parse(localStorage.getItem("selectedSim"));
   const selectedSim = JSON.parse(localStorage.getItem("selectedSimData")) || {};
   const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -27,7 +45,7 @@ const Sidebar = () => {
     ) || [];
   const firm_key = firm_obj.length ? firm_obj[0].firmName : "";
 
-  let totalQuarters = parseInt(selectedSim?.[0]?.current_quarter) - 1 || 1;
+  let totalQuarters = parseInt(currentQuarter) - 1 || 1;
 
   const parentOptions = [
     {

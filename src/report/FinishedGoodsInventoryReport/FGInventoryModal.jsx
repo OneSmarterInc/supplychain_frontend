@@ -34,7 +34,7 @@ function NewPageRenderer({ children }) {
     : null;
 }
 
-export default function FGInventoryModal({ setActiveReport }) {
+export default function FGInventoryModal({ setActiveReport, reportData }) {
   const [open, setOpen] = useState(true);
   const [openNewPage, setOpenNewPage] = useState(false);
 
@@ -82,12 +82,11 @@ export default function FGInventoryModal({ setActiveReport }) {
           </Flex>
         </DialogHeader>
         <DialogBody
-          style={{ height: "600px", overflowY: "auto" }}
+          style={{ height: "500px", overflowY: "auto" }}
           className="text-lg overflow-scroll "
         >
-          <FGInventoryTable />
+          <FGInventoryTable reportData={reportData}/>
         </DialogBody>
-        <DialogFooter></DialogFooter>
       </Dialog>
       {openNewPage && (
         <NewPageRenderer>

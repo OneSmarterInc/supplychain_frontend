@@ -1,33 +1,8 @@
 import React, { useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
 
-const BalanceSheetTable = () => {
+const BalanceSheetTable = ({ reportData }) => {
   const reportRef = useRef();
-
-  const reportData = JSON.parse(localStorage.getItem("reportData")) || {
-    finished_goods: {
-      plant_dc1_product0: { units: 0, unit_price: 0, total: 0 },
-      plant_dc1_product1: { units: 0, unit_price: 0, total: 0 },
-      plant_dc1_product2: { units: 0, unit_price: 0, total: 0 },
-    },
-    procurement_inventory: {
-      plant_dc1_gamma: { units: 0, unit_price: 0, total: 0 },
-      plant_dc1_delta: { units: 0, unit_price: 0, total: 0 },
-      plant_dc1_epsilon: { units: 0, unit_price: 0, total: 0 },
-    },
-    total_assets: 0,
-    liabilities_equities: {
-      corporate_capitalization: 0,
-      dividends_current_month: 0,
-      dividends_cumulative: 0,
-      loans: 0,
-      retained_earnings_current_month: 0,
-      total: 0,
-    },
-    notes: {
-      epsilon_order_region1: 0,
-    },
-  };
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -84,6 +59,34 @@ const BalanceSheetTable = () => {
           <tbody className="text-gray-700">
             <tr className="bg-gray-100">
               <td
+                colSpan={3}
+                className="font-bold  text-sm text-gray-900 px-6 py-2"
+              >
+                Cash
+              </td>
+              <td
+                colSpan={1}
+                className="font-bold  text-sm text-gray-900 px-6 py-2"
+              >
+                {reportData.cash.toFixed(2)}
+              </td>
+            </tr>
+            <tr className="bg-gray-100">
+              <td
+                colSpan={3}
+                className="font-bold  text-sm text-gray-900 px-6 py-2"
+              >
+                Marketable Securities
+              </td>
+              <td
+                colSpan={1}
+                className="font-bold  text-sm text-gray-900 px-6 py-2"
+              >
+                {reportData.marketable_securities.toFixed(2)}
+              </td>
+            </tr>
+            <tr className="bg-gray-100">
+              <td
                 colSpan={4}
                 className="font-bold  text-sm text-gray-900 px-6 py-2"
               >
@@ -93,40 +96,39 @@ const BalanceSheetTable = () => {
             <tr>
               <td className="border px-6 text-sm py-1">Units</td>
               <td className="border px-6 text-sm py-1">
-                {reportData.finished_goods.plant_dc1_product0?.units || 0}
+                {reportData.plant_dc1_product_0_units.toFixed(2)}
               </td>
               <td className="border px-6 text-sm py-1">
-                {reportData.finished_goods.plant_dc1_product1?.units || 0}
+                {reportData.plant_dc1_product_1_units.toFixed(2)}
               </td>
               <td className="border px-6 text-sm py-1">
-                {reportData.finished_goods.plant_dc1_product2?.units || 0}
+                {reportData.plant_dc1_product_2_units.toFixed(2)}
               </td>
             </tr>
             <tr>
               <td className="border px-6 text-sm py-1">Unit Price</td>
               <td className="border px-6 text-sm py-1">
-                {reportData.finished_goods.plant_dc1_product0?.unit_price || 0}
+                {reportData.plant_dc1_product_0_cost.toFixed(2)}
               </td>
               <td className="border px-6 text-sm py-1">
-                {reportData.finished_goods.plant_dc1_product1?.unit_price || 0}
+                {reportData.plant_dc1_product_1_cost.toFixed(2)}
               </td>
               <td className="border px-6 text-sm py-1">
-                {reportData.finished_goods.plant_dc1_product2?.unit_price || 0}
+                {reportData.plant_dc1_product_2_cost.toFixed(2)}
               </td>
             </tr>
             <tr>
               <td className="border px-6 text-sm py-1">Total</td>
               <td className="border px-6 text-sm py-1">
-                {reportData.finished_goods.plant_dc1_product0?.total || 0}
+                {reportData.plant_dc1_product_0_total.toFixed(2)}
               </td>
               <td className="border px-6 text-sm py-1">
-                {reportData.finished_goods.plant_dc1_product1?.total || 0}
+                {reportData.plant_dc1_product_1_total.toFixed(2)}
               </td>
               <td className="border px-6 text-sm py-1">
-                {reportData.finished_goods.plant_dc1_product2?.total || 0}
+                {reportData.plant_dc1_product_2_total.toFixed(2)}
               </td>
             </tr>
-            {/* Add more rows for other inventory types */}
             <tr className="bg-gray-100">
               <td
                 colSpan={4}
@@ -138,13 +140,19 @@ const BalanceSheetTable = () => {
             <tr>
               <td className="border px-6 text-sm py-1">Plastics</td>
               <td colSpan={3} className="border px-6 text-sm py-1">
-                3453 units @ 3.00/unit: {3453 * 3}
+                {reportData.procurement_alpha_units.toFixed(2)} units @{" "}
+                {reportData.procurement_alpha_cost.toFixed(2)}/unit:{" "}
+                {reportData.procurement_alpha_units.toFixed(2) *
+                  reportData.procurement_alpha_cost.toFixed(2)}
               </td>
             </tr>
             <tr>
               <td className="border px-6 text-sm py-1">Casing</td>
               <td colSpan={3} className="border px-6 text-sm py-1">
-                3453 units @ 4.00/unit: {3453 * 4}
+                {reportData.procurement_beta_units.toFixed(2)} units @
+                {reportData.procurement_beta_cost.toFixed(2)}/unit:{" "}
+                {reportData.procurement_beta_units.toFixed(2) *
+                  reportData.procurement_beta_cost.toFixed(2)}
               </td>
             </tr>
             <tr className="bg-gray-200">
@@ -161,12 +169,11 @@ const BalanceSheetTable = () => {
                 Audio Control (Plant & DC1)
               </td>
               <td colSpan={3} className="border px-6 text-sm py-1">
-                {reportData.procurement_inventory.plant_dc1_gamma?.units || 0}{" "}
-                units @{" "}
-                {reportData.procurement_inventory.plant_dc1_gamma?.unit_price ||
-                  0}
+                {reportData.procurement_gamma_units.toFixed(2)} units @{" "}
+                {reportData.procurement_gamma_cost.toFixed(2)}
                 /unit:{" "}
-                {reportData.procurement_inventory.plant_dc1_gamma?.total || 0}
+                {reportData.procurement_gamma_units.toFixed(2) *
+                  reportData.procurement_gamma_cost.toFixed(2)}
               </td>
             </tr>
             <tr>
@@ -174,12 +181,11 @@ const BalanceSheetTable = () => {
                 Control Interface (Plant & DC1)
               </td>
               <td colSpan={3} className="border px-6 text-sm py-1">
-                {reportData.procurement_inventory.plant_dc1_delta?.units || 0}{" "}
-                units @{" "}
-                {reportData.procurement_inventory.plant_dc1_delta?.unit_price ||
-                  0}
+                {reportData.procurement_delta_units.toFixed(2)} units @{" "}
+                {reportData.procurement_delta_cost.toFixed(2)}
                 /unit:{" "}
-                {reportData.procurement_inventory.plant_dc1_delta?.total || 0}
+                {reportData.procurement_delta_units.toFixed(2) *
+                  reportData.procurement_delta_cost.toFixed(2)}
               </td>
             </tr>
             <tr>
@@ -187,21 +193,18 @@ const BalanceSheetTable = () => {
                 Motherboard (Plant & DC1)
               </td>
               <td colSpan={3} className="border px-6 text-sm py-1">
-                {reportData.procurement_inventory.plant_dc1_epsilon?.units || 0}{" "}
-                units @{" "}
-                {reportData.procurement_inventory.plant_dc1_epsilon
-                  ?.unit_price || 0}
+                {reportData.procurement_epsilon_units.toFixed(2)} units @{" "}
+                {reportData.procurement_epsilon_cost.toFixed(2)}
                 /unit:{" "}
-                {reportData.procurement_inventory.plant_dc1_epsilon?.total || 0}
+                {reportData.procurement_epsilon_units.toFixed(2) *
+                  reportData.procurement_epsilon_cost.toFixed(2)}
               </td>
             </tr>
           </tbody>
         </table>
 
         <div className="my-6 flex justify-center">
-          <h3 className="font-bold text-xl">
-            Total Assets: {reportData.total_assets}
-          </h3>
+          <h3 className="font-bold text-xl">Total Assets: {reportData.total_assets.toFixed(2)}</h3>
         </div>
 
         {/* Liabilities and Equities Table */}
@@ -224,7 +227,7 @@ const BalanceSheetTable = () => {
                 Corporate Capitalization
               </td>
               <td className="border px-6 text-sm py-1">
-                {reportData.liabilities_equities.corporate_capitalization}
+                {reportData.corporate_capitalization.toFixed(2)}
               </td>
             </tr>
             <tr>
@@ -232,21 +235,13 @@ const BalanceSheetTable = () => {
                 Dividends, Current Month
               </td>
               <td className="border px-6 text-sm py-1">
-                {reportData.liabilities_equities.dividends_current_month}
-              </td>
-            </tr>
-            <tr>
-              <td className="border px-6 text-sm py-1">
-                Dividends, Cumulative
-              </td>
-              <td className="border px-6 text-sm py-1">
-                {reportData.liabilities_equities.dividends_cumulative}
+                {reportData.dividends.toFixed(2)}
               </td>
             </tr>
             <tr>
               <td className="border px-6 text-sm py-1">Loans</td>
               <td className="border px-6 text-sm py-1">
-                {reportData.liabilities_equities.loans}
+                {reportData.loans.toFixed(2)}
               </td>
             </tr>
             <tr>
@@ -254,20 +249,19 @@ const BalanceSheetTable = () => {
                 Retained Earnings, Current Month
               </td>
               <td className="border px-6 text-sm py-1">
-                {
-                  reportData.liabilities_equities
-                    .retained_earnings_current_month
-                }
+                {reportData.retained_earnings.toFixed(2)}
               </td>
             </tr>
             <tr>
               <td className="border px-6 text-sm py-1">Plant and SMT</td>
-              <td className="border px-6 text-sm py-1">45,000,000</td>
+              <td className="border px-6 text-sm py-1">
+                {reportData.plant_investment.toFixed(2)}
+              </td>
             </tr>
             <tr>
               <td className="border px-6 text-sm py-1">Total</td>
               <td className="border px-6 text-sm py-1">
-                {reportData.liabilities_equities.total}
+                {reportData.total_liabilities_equities.toFixed(2)}
               </td>
             </tr>
           </tbody>
@@ -282,7 +276,15 @@ const BalanceSheetTable = () => {
           <p>
             These Motherboard components are on-order, for delivery next month:
           </p>
-          <p>Region 1: {reportData.notes.epsilon_order_region1}</p>
+          <p className="ms-3">
+            {reportData.on_order_components &&
+            Object.keys(reportData.on_order_components).length > 0
+              ? Object.entries(reportData.on_order_components)
+                  .map(([key, value]) => `${key}: ${value} `)
+                  .join(" ")
+              : "No data available"}
+          </p>
+
           {/* Add more regions if needed */}
         </div>
       </div>
