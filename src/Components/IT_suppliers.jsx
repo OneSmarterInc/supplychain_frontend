@@ -118,7 +118,7 @@ const IT_suppliers = ({
     <Box>
       <Box
         id={id1}
-        className="border border-gray rounded-lg"
+        className="border border-gray rounded-lg mb-5"
       >
         <Text className="p-5 py-1 text-xl">
           <strong>IT Synchronization with Suppliers</strong>

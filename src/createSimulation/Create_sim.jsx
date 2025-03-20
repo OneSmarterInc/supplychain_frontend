@@ -88,31 +88,7 @@ const CreateSim = ({ setNoOfQuarters, setSimulationDataFromSteps }) => {
     }
   };
 
-  // Set updated firm data
-  const handleFirmDataChange = (index, field, value) => {
-    const updatedFirmData = [...simulationData.firm_data];
-    updatedFirmData[index][field] = value;
-    setSimulationData((prev) => ({ ...prev, firm_data: updatedFirmData }));
-  };
 
-  // Add email to the firm's data
-  const handleAddEmail = (index) => {
-    const updatedFirmData = [...simulationData.firm_data];
-    updatedFirmData[index].emails.push(updatedFirmData[index].email);
-    updatedFirmData[index].email = ""; // Clear the email input
-    setSimulationData((prev) => ({ ...prev, firm_data: updatedFirmData }));
-  };
-
-  // Remove email from the firm's data
-  const handleRemoveEmail = (firmIndex, emailIndex) => {
-    setSimulationData((prev) => {
-      const newFirmData = [...prev.firm_data];
-      newFirmData[firmIndex].emails.splice(emailIndex, 1);
-      return { ...prev, firm_data: newFirmData };
-    });
-  };
-
-  // Pass simulation data to the parent component
   useEffect(() => {
     setSimulationDataFromSteps(simulationData);
   }, [simulationData, setSimulationDataFromSteps]);

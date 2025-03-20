@@ -42,6 +42,7 @@ const Service_Decision = () => {
   });
   const [loading, setLoading] = useState(false); // Add loading state
   const [ServiceData, setServiceData] = useState();
+  const [simulation, setSimulation] = useState({});
   const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false); // Add loading state for previous quarter
 
   const handleChange = (region, value) => {
@@ -64,7 +65,19 @@ const Service_Decision = () => {
     setLoading(true); // Start loading before fetching service data
     getService().finally(() => setLoading(false)); // Stop loading after data is fetched
   }, [selectedQuarter]);
-
+  const getSimulation = async () => {
+    try {
+      const response = await axios.get(
+        `${api}/getsim/${selectedSim[0].simulation_id}`
+      );
+      setSimulation(response.data);
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+  useEffect(() => {
+    getSimulation();
+  }, []);
   useEffect(() => {
     if (ServiceData) {
       setServiceValue({
@@ -156,7 +169,7 @@ const Service_Decision = () => {
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
         firm_key: firm_key_new,
-        quarter: selectedSim[0].current_quarter,
+        quarter: simulation[0].current_quarter,
         service_region_one: serviceValue.region1,
         service_region_two: serviceValue.region2,
         service_region_three: serviceValue.region3,
@@ -171,7 +184,6 @@ const Service_Decision = () => {
       );
       console.log("POST request successful", response.data);
       addUserLogger();
-      getService();
       toast({
         title: "Service Submitted successfully",
         status: "success",
@@ -179,6 +191,7 @@ const Service_Decision = () => {
         isClosable: true,
         position: "top",
       });
+      navigate("/IT");
     } catch (error) {
       console.error(
         "Error making POST request: Service",

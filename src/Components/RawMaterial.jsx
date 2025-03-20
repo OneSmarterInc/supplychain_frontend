@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, Input, Box } from "@chakra-ui/react";
 
-const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) => {
+const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 ,data}) => {
   const procurementData = JSON.parse(localStorage.getItem("procurementData"));
   console.log("ProcurementDataRaw-", procurementData);
 
@@ -18,7 +18,7 @@ const RawMaterial = ({ setAlpha_quantity, setBeta_quantity, procurementData1 }) 
         beta_quantity: procurementData?.beta_quantity || "",
       });
     }
-  }, []);
+  }, [data]);
 
   // Keep the parent component informed of the changes in alpha and beta quantities
   useEffect(() => {

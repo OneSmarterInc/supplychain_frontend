@@ -37,17 +37,17 @@ const Distribution_Decision = () => {
   const [loading, setLoading] = useState(false);
 
   const [values, setValues] = useState({
-    distribution_center: { region1: "", region2: "", region3: "" },
-    rfid: { region1: "", region2: "", region3: "" },
-    emergency_carrier: { region1: "", region2: "", region3: "" },
+    distribution_center: { region1: "", region2: "0", region3: "0" },
+    rfid: { region1: "0", region2: "0", region3: "0" },
+    emergency_carrier: { region1: "I", region2: "I", region3: "I" },
     cross_docking: {
-      carrier_k: { region1: "", region2: "", region3: "" },
-      carrier_l: { region1: "", region2: "", region3: "" },
-      carrier_m: { region1: "", region2: "", region3: "" },
-      carrier_n: { region1: "", region2: "", region3: "" },
+      carrier_k: { region1: "0", region2: "0", region3: "0" },
+      carrier_l: { region1: "0", region2: "0", region3: "0" },
+      carrier_m: { region1: "0", region2: "0", region3: "0" },
+      carrier_n: { region1: "0", region2: "0", region3: "0" },
     },
-    fgi_surface_shipping: { region1: "", region2: "", region3: "" },
-    sac_surface_shipping: { region1: "", region2: "", region3: "" },
+    fgi_surface_shipping: { region1: "1", region2: "1", region3: "1" },
+    sac_surface_shipping: { region1: "2", region2: "2", region3: "2" },
   });
 
   const handleInputChange = (category, region, value, carrier = null) => {
@@ -218,8 +218,7 @@ const Distribution_Decision = () => {
         firm_key_new,
         currentQuarter
       );
-      console.log("POST request successful", response.data);
-      getDistribution();
+     
       toast({
         title: "Distribution Submitted Successfully",
         status: "success",
@@ -227,6 +226,7 @@ const Distribution_Decision = () => {
         isClosable: true,
         position: "top",
       });
+      navigate("/Transport");
     } catch (error) {
       console.error("Error making POST request: Distribution", error);
       toast({

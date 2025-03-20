@@ -36,7 +36,7 @@ function NewPageRenderer({ children }) {
     : null;
 }
 
-export default function ReportModal({ setActiveReport }) {
+export default function ReportModal({ setActiveReport, reportData }) {
   const [open, setOpen] = useState(true);
   const [openNewPage, setOpenNewPage] = useState(false);
 
@@ -51,48 +51,57 @@ export default function ReportModal({ setActiveReport }) {
 
   return (
     <>
-      <Dialog size="lg" open={open} handler={handleOpen}>
+      <Dialog
+        size="lg"
+        className="m-4 sm:m-6 md:m-10 mb-6 w-full max-w-4xl"
+        open={open}
+        handler={handleOpen}
+      >
         <DialogHeader>
-          <Flex width={"100%"} justifyContent={"space-between"}>
-            <Text>Report : Corporate P&L</Text>
-            <Box>
+          <div className="flex justify-between items-center w-full">
+            <span className="text-base sm:text-lg md:text-xl font-semibold">
+              Report : Corporate P&L
+            </span>
+            <div className="flex items-center space-x-2">
               <Button
                 variant="gradient"
                 color="none"
                 onClick={handleExplode}
-                className="ml-4 bg-none text-yellow-800"
+                className="text-yellow-800 bg-transparent hover:bg-yellow-100 transition duration-300"
               >
                 Explode{" "}
                 <span>
-                  <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                  <i className="fa-solid fa-up-right-and-down-left-from-center"></i>
                 </span>
               </Button>
               <Button
                 variant="text"
                 color="red"
                 onClick={handleClose}
-                className="m-1"
+                className="p-1"
               >
-                <span className=" text-red-500 px-1 text-xl">
-                  <i class="fa-solid fa-xmark"></i>
+                <span className="text-red-500 text-lg">
+                  <i className="fa-solid fa-xmark"></i>
                 </span>
               </Button>
-            </Box>
-          </Flex>
+            </div>
+          </div>
         </DialogHeader>
+
         <DialogBody
           style={{ height: "80vh", overflowY: "auto" }}
-          className="text-lg overflow-scroll "
+          className="text-base sm:text-lg overflow-y-auto"
         >
-          <ReportTable1 />
+          <ReportTable1 reportData={reportData} />
         </DialogBody>
-        <DialogFooter></DialogFooter>
+
       </Dialog>
+
       {openNewPage && (
         <NewPageRenderer>
           <div>
             <h1 className="text-2xl font-bold mb-4">Report : Corporate P&L</h1>
-            <ReportTable1 />
+            <ReportTable1 reportData={reportData} />
           </div>
         </NewPageRenderer>
       )}

@@ -3,11 +3,8 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Button } from "@material-tailwind/react";
 import FGInventorySalesPDF from "./FGInventorySalesPDF";
 import html2pdf from "html2pdf.js";
-const FGInventoryTable = () => {
+const FGInventoryTable = ({ reportData }) => {
   const reportRef = useRef();
-  const Data = JSON.parse(localStorage.getItem("reportData"));
-  const selectedSim = JSON.parse(localStorage.getItem("selectedSim"));
-  const reportData = Data[0];
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,14 +38,7 @@ const FGInventoryTable = () => {
   return (
     <div>
       <div className="heading flex justify-between font-bold">
-        <div className="flex justify-end w-full my-2">
-          {/* <PDFDownloadLink
-            document={<FGInventorySalesPDF reportData={reportData} />}
-            fileName="Product_report_sales.pdf"
-          >
-            <Button className="bg-red-500">Download PDF</Button>
-          </PDFDownloadLink> */}
-
+        <div className="flex justify-end w-full my-2 mb-10">
           <button
             className={`p-1 rounded-sm text-base text-white hover:bg-red-700 ${
               isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-red-400"
@@ -84,7 +74,7 @@ const FGInventoryTable = () => {
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="mb-10">
           <tr className="bg-gray-100">
             <td colSpan={4} className="font-bold  px-6 py-2 text-sm  ">
               PLANT/DC1 FG INVENTORY
@@ -95,13 +85,13 @@ const FGInventoryTable = () => {
               Beginning Inventory
             </td>
             <td className="border px-6 py-1 text-sm pl-8  text-right">
-              {reportData?.beginning_inventory_product_1_0}
+              {reportData?.product0_beginning_inventory}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.beginning_inventory_product_1_1}
+              {reportData?.product1_beginning_inventory}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.beginning_inventory_product_1_2}
+              {reportData?.product2_beginning_inventory}
             </td>
           </tr>
           <tr>
@@ -109,13 +99,13 @@ const FGInventoryTable = () => {
               + Regular Production
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.regular_production_product_1_0}
+              {reportData?.product0_regular_production}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.regular_production_product_1_1}
+              {reportData?.product1_regular_production}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.regular_production_product_1_2}
+              {reportData?.product2_regular_production}
             </td>
           </tr>
           <tr>
@@ -123,13 +113,13 @@ const FGInventoryTable = () => {
               + Emergency Production
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.emergency_production_product_1_0}
+              {reportData?.product0_emergency_production}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.emergency_production_product_1_1}
+              {reportData?.product1_emergency_production}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.emergency_production_product_1_2}
+              {reportData?.product2_emergency_production}
             </td>
           </tr>
           <tr>
@@ -137,13 +127,13 @@ const FGInventoryTable = () => {
               Postponed Production
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.postponed_production_product_1_0}
+              {reportData?.product0_postpone_production}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.postponed_production_product_1_1}
+              {reportData?.product1_postpone_production}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.postponed_production_product_1_2}
+              {reportData?.product2_postpone_production}
             </td>
           </tr>
           <tr>
@@ -151,13 +141,13 @@ const FGInventoryTable = () => {
               = Available Inventory
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.available_inventory_product_1_0}
+              {reportData?.product0_available_inventory}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.available_inventory_product_1_1}
+              {reportData?.product1_available_inventory}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.available_inventory_product_1_2}
+              {reportData?.product2_available_inventory}
             </td>
           </tr>
           <tr>
@@ -165,13 +155,13 @@ const FGInventoryTable = () => {
               Shipments To DC2: Surface
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_to_dc2_surface_product_1_0}
+              {reportData?.product0_shipment_to_dc2_surface}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_to_dc2_surface_product_1_1}
+              {reportData?.product1_shipment_to_dc2_surface}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_to_dc2_surface_product_1_2}
+              {reportData?.product2_shipment_to_dc2_surface}
             </td>
           </tr>
           <tr>
@@ -179,13 +169,13 @@ const FGInventoryTable = () => {
               Shipments To DC2: Air
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_to_dc2_air_product_1_0}
+              {reportData?.product0_shipment_to_dc2_air}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_to_dc2_air_product_1_1}
+              {reportData?.product1_shipment_to_dc2_air}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_to_dc2_air_product_1_2}
+              {reportData?.product2_shipment_to_dc2_air}
             </td>
           </tr>
           <tr>
@@ -193,39 +183,77 @@ const FGInventoryTable = () => {
               Shipments To DC2: Emergency
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_to_dc2_emergency_product_1_0}
+              {reportData?.product0_emergency_shipment_to_dc2}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_to_dc2_emergency_product_1_1}
+              {reportData?.product1_emergency_shipment_to_dc2}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_to_dc2_emergency_product_1_2}
+              {reportData?.product2_emergency_shipment_to_dc2}
+            </td>
+          </tr>
+          <tr>
+            <td className="border px-6 py-1 text-sm pl-8  ">
+              Shipments To DC3: Surface
+            </td>
+            <td className="border px-6 py-1 text-sm pl-8 text-right ">
+              {reportData?.product0_shipment_to_dc3_surface}
+            </td>
+            <td className="border px-6 py-1 text-sm pl-8 text-right ">
+              {reportData?.product1_shipment_to_dc3_surface}
+            </td>
+            <td className="border px-6 py-1 text-sm pl-8 text-right ">
+              {reportData?.product2_shipment_to_dc3_surface}
+            </td>
+          </tr>
+          <tr>
+            <td className="border px-6 py-1 text-sm pl-8 ">
+              Shipments To DC3: Air
+            </td>
+            <td className="border px-6 py-1 text-sm pl-8 text-right ">
+              {reportData?.product0_shipment_to_dc3_air}
+            </td>
+            <td className="border px-6 py-1 text-sm pl-8 text-right ">
+              {reportData?.product1_shipment_to_dc3_air}
+            </td>
+            <td className="border px-6 py-1 text-sm pl-8 text-right ">
+              {reportData?.product2_shipment_to_dc3_air}
+            </td>
+          </tr>
+          <tr>
+            <td className="border px-6 py-1 text-sm pl-8  ">
+              Shipments To DC3: Emergency
+            </td>
+            <td className="border px-6 py-1 text-sm pl-8 text-right ">
+              {reportData?.product0_emergency_shipment_to_dc3}
+            </td>
+            <td className="border px-6 py-1 text-sm pl-8 text-right ">
+              {reportData?.product1_emergency_shipment_to_dc3}
+            </td>
+            <td className="border px-6 py-1 text-sm pl-8 text-right ">
+              {reportData?.product2_emergency_shipment_to_dc3}
             </td>
           </tr>
           <tr>
             <td className="border px-6 py-1 text-sm pl-8  ">Sales, Region 1</td>
+            <td className="border px-6 py-1 text-sm pl-8 text-right ">{"-"}</td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_region_1_product_1_0}
+              {reportData?.product1_sales_region1}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_region_1_product_1_1}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_region_1_product_1_2}
+              {reportData?.product2_sales_region1}
             </td>
           </tr>
           <tr>
             <td className="border px-6 py-1 text-sm pl-8  ">
               Sales, Other Regions
             </td>
+            <td className="border px-6 py-1 text-sm pl-8 text-right ">{"-"}</td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_other_regions_product_1_0}
+              {reportData?.product1_sales_other_region}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_other_regions_product_1_1}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_other_regions_product_1_2}
+              {reportData?.product2_sales_other_region}
             </td>
           </tr>
           <tr>
@@ -233,144 +261,257 @@ const FGInventoryTable = () => {
               = Ending Inventory
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.ending_inventory_product_1_0}
+              {reportData?.product0_ending_inventory}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.ending_inventory_product_1_1}
+              {reportData?.product1_ending_inventory}
             </td>
             <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.ending_inventory_product_1_2}
+              {reportData?.product2_ending_inventory}
             </td>
           </tr>
-          <tr className="bg-gray-100">
-            <td colSpan={4} className="font-bold  px-6 py-2 text-sm ">
-              DC2 FG INVENTORY
-            </td>
-          </tr>
-          <tr>
-            <td className="border px-6 py-1 text-sm pl-8  ">
-              Beginning Inventory
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.dc2_beginning_inventory_product_1_0}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.dc2_beginning_inventory_product_1_1}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.dc2_beginning_inventory_product_1_2}
-            </td>
-          </tr>
-          <tr>
-            <td className="border px-6 py-1 text-sm pl-8  ">
-              Shipments From DC1: Surface
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_from_dc1_surface_product_1_0}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_from_dc1_surface_product_1_1}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_from_dc1_surface_product_1_2}
-            </td>
-          </tr>
-          <tr>
-            <td className="border px-6 py-1 text-sm pl-8  ">
-              Shipments From DC1: Air
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_from_dc1_air_product_1_0}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_from_dc1_air_product_1_1}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_from_dc1_air_product_1_2}
-            </td>
-          </tr>
-          <tr>
-            <td className="border px-6 py-1 text-sm pl-8 ">
-              Shipments From DC1: Emergency
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_from_dc1_emergency_product_1_0}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_from_dc1_emergency_product_1_1}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.shipments_from_dc1_emergency_product_1_2}
-            </td>
-          </tr>
-          <tr>
-            <td className="border px-6 py-1 text-sm pl-8  ">
-              + Other Shipments
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.other_shipments_product_1_0}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.other_shipments_product_1_1}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.other_shipments_product_1_2}
-            </td>
-          </tr>
-          <tr>
-            <td className="border px-6 py-1 text-sm pl-8 ">
-              = Available Inventory
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.dc2_available_inventory_product_1_0}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.dc2_available_inventory_product_1_1}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.dc2_available_inventory_product_1_2}
-            </td>
-          </tr>
-          <tr>
-            <td className="border px-6 py-1 text-sm pl-8  ">Sales, Region 2</td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_region_2_product_1_0}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_region_2_product_1_1}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_region_2_product_1_2}
-            </td>
-          </tr>
-          <tr>
-            <td className="border px-6 py-1 text-sm pl-8  ">
-              Sales, Other Regions
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_other_regions_product_1_0}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_other_regions_product_1_1}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.sales_other_regions_product_1_2}
-            </td>
-          </tr>
-          <tr>
-            <td className="border px-6 py-1 text-sm pl-8 ">
-              = Ending Inventory
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.dc2_ending_inventory_product_1_0}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.dc2_ending_inventory_product_1_1}
-            </td>
-            <td className="border px-6 py-1 text-sm pl-8 text-right ">
-              {reportData?.dc2_ending_inventory_product_1_2}
-            </td>
-          </tr>
+          {reportData?.dc2_flag && (
+            <>
+              <tr className="bg-gray-100">
+                <td colSpan={4} className="font-bold  px-6 py-2 text-sm ">
+                  DC2 FG INVENTORY
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8  ">
+                  Beginning Inventory
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_beginning_inventory_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_beginning_inventory_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_beginning_inventory_dc2}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8  ">
+                  Shipments From DC1: Surface
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_shipment_from_dc1_surface_to_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_shipment_from_dc1_surface_to_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_shipment_from_dc1_surface_to_dc2}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8  ">
+                  Shipments From DC1: Air
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_shipment_from_dc1_air_to_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_shipment_from_dc1_air_to_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_shipment_from_dc1_air_to_dc2}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8 ">
+                  Shipments From DC1: Emergency
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_emergency_shipment_from_dc1_to_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_emergency_shipment_from_dc1_to_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_emergency_shipment_from_dc1_to_dc2}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8 ">
+                  = Available Inventory
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_available_inventory_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_available_inventory_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_available_inventory_dc2}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8  ">
+                  Sales, Region 2
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {"-"}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_sales_region2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_sales_region2}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8  ">
+                  Delayed Shipments
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_delayed_shipments_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_delayed_shipments_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_delayed_shipments_dc2}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8 ">
+                  = Ending Inventory
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_ending_inventory_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_ending_inventory_dc2}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_ending_inventory_dc2}
+                </td>
+              </tr>
+            </>
+          )}
+          {reportData?.dc3_flag && (
+            <>
+              <tr className="bg-gray-100">
+                <td colSpan={4} className="font-bold  px-6 py-2 text-sm ">
+                  DC3 FG INVENTORY
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8  ">
+                  Beginning Inventory
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_beginning_inventory_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_beginning_inventory_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_beginning_inventory_dc3}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8  ">
+                  Shipments From DC1: Surface
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_shipment_from_dc1_surface_to_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_shipment_from_dc1_surface_to_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_shipment_from_dc1_surface_to_dc3}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8  ">
+                  Shipments From DC1: Air
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_shipment_from_dc1_air_to_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_shipment_from_dc1_air_to_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_shipment_from_dc1_air_to_dc3}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8 ">
+                  Shipments From DC1: Emergency
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_emergency_shipment_from_dc1_to_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_emergency_shipment_from_dc1_to_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_emergency_shipment_from_dc1_to_dc3}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8 ">
+                  = Available Inventory
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_available_inventory_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_available_inventory_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_available_inventory_dc3}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8  ">
+                  Sales, Region 2
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {"-"}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_sales_region3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_sales_region3}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8  ">
+                  Delayed Shipments
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_delayed_shipments_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_delayed_shipments_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_delayed_shipments_dc3}
+                </td>
+              </tr>
+              <tr>
+                <td className="border px-6 py-1 text-sm pl-8 ">
+                  = Ending Inventory
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product0_ending_inventory_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product1_ending_inventory_dc3}
+                </td>
+                <td className="border px-6 py-1 text-sm pl-8 text-right ">
+                  {reportData?.product2_ending_inventory_dc3}
+                </td>
+              </tr>
+            </>
+          )}
         </tbody>
       </table>
     </div>

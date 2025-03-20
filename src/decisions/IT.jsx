@@ -15,8 +15,16 @@ const IT = () => {
   const selectedSimData = JSON.parse(localStorage.getItem("selectedSimData"));
   const [suppliers, setSuppliers] = useState({});
   const [careers, setCareers] = useState({});
-
+  const [reportDecision, setReportDecision] = useState({
+    "Procurement Transactions Report?": "",
+    "Product Cost Report?": "",
+    "Replacement Parts Demand Report?": "",
+    "Retail Pipeline Report?": "",
+    "Transportation Cost Report?": "",
+    "Transportation Report?": "",
+  });
   const [ItData, setItData] = useState({});
+  const [simulation, setSimulation] = useState({});
   const [loading, setLoading] = useState(false);
   const [isLoadingLastQuarter, setIsLoadingLastQuarter] = useState(false);
   const currentQuarter = selectedSimData[0]?.current_quarter || 1;
@@ -42,7 +50,19 @@ const IT = () => {
     setLoading(true);
     getIt().finally(() => setLoading(false));
   }, [selectedQuarter]);
-
+  const getSimulation = async () => {
+    try {
+      const response = await axios.get(
+        `${api}/getsim/${selectedSim[0].simulation_id}`
+      );
+      setSimulation(response.data);
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+  useEffect(() => {
+    getSimulation();
+  }, []);
   const getIt = async () => {
     try {
       const response = await axios.get(`${api}/previous/`, {
@@ -58,6 +78,14 @@ const IT = () => {
       const { careers: careersData, ...itData } = response.data;
       setItData(itData);
       setCareers(careersData || {});
+      setReportDecision({
+        "Procurement Transactions Report?": itData.ptr ? "Yes" : "No",
+        "Product Cost Report?": itData.pcr ? "Yes" : "No",
+        "Replacement Parts Demand Report?": itData.rpdr ? "Yes" : "No",
+        "Retail Pipeline Report?": itData.rpr ? itData.rpr : "No",
+        "Transportation Cost Report?": itData.tcr ? "Yes" : "No",
+        "Transportation Report?": itData.tr ? "Yes" : "No",
+      });
       localStorage.setItem("ItData", JSON.stringify(itData));
     } catch (error) {
       console.error(
@@ -132,7 +160,7 @@ const IT = () => {
         admin_id: selectedSim[0].admin_id,
         user_id: user.userid,
         firm_key: firm_key_new,
-        quarter: selectedSim[0].current_quarter,
+        quarter: simulation[0].current_quarter,
         sync_a: suppliers.A,
         sync_b: suppliers.B,
         sync_c: suppliers.C,
@@ -147,6 +175,17 @@ const IT = () => {
         sync_l: careers.L,
         sync_m: careers.M,
         sync_n: careers.N,
+        // Convert "Yes" to true, otherwise false
+        ptr: reportDecision["Procurement Transactions Report?"] === "Yes",
+        pcr: reportDecision["Product Cost Report?"] === "Yes",
+        rpdr: reportDecision["Replacement Parts Demand Report?"] === "Yes",
+        rpr:
+          reportDecision["Retail Pipeline Report?"] === "1" ||
+          reportDecision["Retail Pipeline Report?"] === "2"
+            ? parseInt(reportDecision["Retail Pipeline Report?"], 10) // Convert "1" or "2" to number
+            : 0, // Default to 0 if not selected
+        tcr: reportDecision["Transportation Cost Report?"] === "Yes",
+        tr: reportDecision["Transportation Report?"] === "Yes",
       });
 
       await submitDecisionStatus(
@@ -154,9 +193,8 @@ const IT = () => {
         "it",
         selectedSimData,
         firm_key_new,
-        currentQuarter
+        simulation[0].current_quarter
       );
-      getIt();
       addUserLogger();
       toast({
         title: "IT Submission successful",
@@ -165,6 +203,7 @@ const IT = () => {
         isClosable: true,
         position: "top",
       });
+      navigate("/Forecast");
     } catch (error) {
       console.error("Error making POST request: IT", error);
       toast({
@@ -214,13 +253,16 @@ const IT = () => {
 
       <div className="sm:grid grid-cols-1 gap-3 m-1">
         <div className="m-3 rounded-2xl bg-white p-2 flex flex-col justify-start custom-shadow">
-          <InfoImg decision={"IT"} id="quarter-deadline" id2="course-details"/>
+          <InfoImg decision={"IT"} id="quarter-deadline" id2="course-details" />
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center pl-5 pt-2 pb-2" id="it-button-load-quarters">
+            <div
+              className="flex items-center pl-5 pt-2 pb-2"
+              id="it-button-load-quarters"
+            >
               <Text>Load data Quarterly</Text>
               <div className="pl-4 flex space-x-4">
                 {Array.from(
-                  { length: selectedSimData[0]?.current_quarter || 0 },
+                  { length: simulation[0]?.current_quarter || 0 },
                   (_, i) => (
                     <div
                       key={i + 1}
@@ -238,12 +280,11 @@ const IT = () => {
               </div>
             </div>
             <div id="info">
-
-            <InfoButton decision="IT" />
+              <InfoButton decision="IT" />
             </div>
           </div>
           <div
-          id="Load-Previous-Quarter"
+            id="Load-Previous-Quarter"
             onClick={loadPreviousQuarter}
             className="font-bold py-2 px-4 text-red-400 cursor-pointer"
             disabled={isLoadingLastQuarter || currentQuarter <= 1}
@@ -265,8 +306,8 @@ const IT = () => {
           ) : (
             <>
               <IT_suppliers
-              id1="IT-Synchronization-with-Suppliers"
-              id2="IT-Synchronization-with-Careers"
+                id1="IT-Synchronization-with-Suppliers"
+                id2="IT-Synchronization-with-Careers"
                 ItData={ItData}
                 CareersData={careers}
                 setSuppliersFromDecision={setSuppliers}
@@ -274,10 +315,57 @@ const IT = () => {
               />
             </>
           )}
-
+          {loading ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              mt={4}
+            >
+              <Spinner size="xl" />
+            </Box>
+          ) : (
+            <>
+              <div className="flex flex-col border border-gray rounded-lg items-center justify-center mt-4">
+                <Text className="text-xl font-bold mt-3">Reports</Text>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl mt-4 mb-4">
+                  {Object.keys(reportDecision).map((report) => (
+                    <div key={report} className="flex flex-col items-center">
+                      <Text className="text-lg font-bold">{report}</Text>
+                      <Select
+                        id={report.replace(/\s+/g, "-")}
+                        value={reportDecision[report]}
+                        onChange={(e) =>
+                          setReportDecision({
+                            ...reportDecision,
+                            [report]: e.target.value,
+                          })
+                        }
+                        className="w-3/4"
+                      >
+                        <option value="">Select</option>
+                        {report === "Retail Pipeline Report?" ? (
+                          <>
+                            <option value="0">No Report</option>
+                            <option value="1">Previous Month (Option 1)</option>
+                            <option value="2">Current Month (Option 2)</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                          </>
+                        )}
+                      </Select>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
           <div className="flex justify-end mt-4">
             <button
-            id="Submit-Service"
+              id="Submit-Service"
               onClick={submitIt}
               className={`${
                 selectedQuarter === currentQuarter && !loading
