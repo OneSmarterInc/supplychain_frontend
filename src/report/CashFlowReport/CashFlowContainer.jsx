@@ -87,14 +87,8 @@ const CashFlowContainer = ({ reportData, setActiveReport }) => {
           style={{ height: "600px", overflowY: "auto" }}
           className="text-lg overflow-scroll"
         >
-          <CashFlowTable data={reportData} />{" "}
-          {/* Pass `reportData` as prop to the table */}
+          <CashFlowTable data={reportData} />
         </DialogBody>
-        <DialogFooter>
-          <Button onClick={handleOpen} variant="gradient" color="red">
-            Close
-          </Button>
-        </DialogFooter>
       </Dialog>
       {openNewPage && (
         <NewPageRenderer>
@@ -102,7 +96,7 @@ const CashFlowContainer = ({ reportData, setActiveReport }) => {
             <h1 className="text-2xl font-bold mb-4">
               Cash Flow Analysis Reports
             </h1>
-            <CashFlowTable data={reportData} />{" "}
+            <CashFlowTable data={reportData} />
             {/* Render report in new page */}
           </div>
         </NewPageRenderer>

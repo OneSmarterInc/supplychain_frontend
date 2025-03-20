@@ -9,6 +9,8 @@ import { Button } from "@material-tailwind/react";
 const Analytics = () => {
   const navigate = useNavigate();
   const { api } = useContext(MyContext);
+  const [simulation, setSimulation] = useState({});
+  const [selectedQuarter, setSelectedQuarter] = useState("1");
   const [dashboardData, setDashBoardData] = useState({
     financialData: [],
     operationalData: [],
@@ -18,13 +20,21 @@ const Analytics = () => {
 
   const selectedSimData =
     JSON.parse(localStorage.getItem("selectedSimData")) || {};
-
-  const [selectedQuarter, setSelectedQuarter] = useState(
-    selectedSimData[0].current_quarter - 1
+  const simulation_id = selectedSimData[0]?.simulation_id;
+  const [currentQuarter, setCurrentQuarter] = useState(
+    selectedSimData[0]?.current_quarter
   );
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
-
+  const getSimulation = async () => {
+    try {
+      const response = await axios.get(`${api}/getsim/${simulation_id}`);
+      setSimulation(response.data[0]);
+      setCurrentQuarter(response.data[0]?.current_quarter);
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
   const getData = async () => {
     try {
       const response = await axios.get(
@@ -57,7 +67,9 @@ const Analytics = () => {
     if (value >= worst && value < avg) return "text-orange-500";
     return "text-red-600";
   };
-
+  useEffect(() => {
+    getSimulation();
+  }, [simulation_id]);
   useEffect(() => {
     getData();
   }, [selectedQuarter]);
@@ -87,7 +99,7 @@ const Analytics = () => {
   };
   const trigger = async () => {
     const response = await axios.get(
-      `${api}/trigger/?simulation_id=${selectedSimData[0].simulation_id}`
+      `${api}/trigger/?simulation_id=${simulation_id}`
     );
     selectedSimData[0].current_quarter = response.data;
     if (
